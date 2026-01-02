@@ -1,0 +1,912 @@
+[
+  {
+    "query": "Substack publication logo or thumbnail",
+    "image_info": {
+      "url": "https://substack.com/img/substack.png",
+      "img_format": "PNG",
+      "mode": "RGBA",
+      "file_size": 8071,
+      "width": 1000,
+      "height": 1000,
+      "total_pixels": 1000000,
+      "basic_score": 0.9075989869506285,
+      "file_name": "substack-logo-orange-icon-black-background.png"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 100.0,
+      "watermark_score": 100.0,
+      "overall_score": 98.0,
+      "explanation": "The image features a high-resolution, pixel-perfect representation of the official Substack logo. It matches the search query directly, is completely free of watermarks, and is presented on a clean black background suitable for dark mode interfaces.",
+      "file_name": "substack-logo-orange-icon-black-background.png",
+      "caption": "The official Substack logo icon in bright orange, featuring two horizontal bars above a bookmark shape, set against a solid black background.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Substack publication logo or thumbnail",
+    "image_info": {
+      "url": "https://iamjeremie.me/post/2023-06/how-to-setup-substack-publication-for-2-languages-in-2023/images/2023-06-06-substack-logo_hu_c122534e7b28d637.webp",
+      "img_format": "WEBP",
+      "mode": "RGB",
+      "file_size": 2836,
+      "width": 600,
+      "height": 300,
+      "total_pixels": 180000,
+      "basic_score": 0.732198135002291,
+      "file_name": "substack-official-logo-orange-background.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 100.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 98.0,
+      "explanation": "The image features the official Substack logo and wordmark against the brand's signature orange background. It is the definitive image for the search query, offering high contrast, sharp digital quality, and no external watermarks. It is a perfect asset for representing the platform.",
+      "file_name": "substack-official-logo-orange-background.jpg",
+      "caption": "The official Substack logo featuring the stylized white icon and lowercase wordmark centered on a solid orange background.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Substack publication logo or thumbnail",
+    "image_info": {
+      "url": "https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8e249852-da03-4839-9022-b708b417f4d4_1080x1080.png",
+      "img_format": "PNG",
+      "mode": "RGB",
+      "file_size": 61041,
+      "width": 1080,
+      "height": 1080,
+      "total_pixels": 1166400,
+      "basic_score": 0.9064475949615856,
+      "file_name": "substack-publication-logo-style-design.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 100.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 92.0,
+      "explanation": "The image is perfectly relevant as it represents a logo/thumbnail specifically designed for a Substack publication. The text is sharp, legible, and professionally laid out with a pleasing color palette. It serves as an excellent example or template for the search query.",
+      "file_name": "substack-publication-logo-style-design.jpg",
+      "caption": "A digital graphic logo for a Substack publication featuring the word 'Style' in large green cursive with a pink shadow, subtitled 'Your Beautiful' in green and 'Substack Publication' in pink against a cream background.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Substack publication logo or thumbnail",
+    "image_info": {
+      "url": "https://preview.redd.it/publication-logo-icon-is-so-small-v0-eov1l6xp4v9e1.png?width=1528&format=png&auto=webp&s=653083e4971cf6fbd7495d49f5f7c3f5e1b7f92d",
+      "img_format": "PNG",
+      "mode": "P",
+      "file_size": 225148,
+      "width": 1528,
+      "height": 938,
+      "total_pixels": 1433264,
+      "basic_score": 0.8881524253841141,
+      "file_name": "substack_publication_homepage_social_deficit_layout.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 90.0,
+      "clarity_score": 85.0,
+      "watermark_score": 100.0,
+      "overall_score": 88.0,
+      "explanation": "The image acts as a perfect reference for the search query, displaying both a Substack publication logo (top left) and a post thumbnail within the context of the actual user interface. This is highly useful for visualizing design implementation.",
+      "file_name": "substack_publication_homepage_social_deficit_layout.jpg",
+      "caption": "A screenshot of the 'Social Deficit' Substack publication homepage, featuring a stylized orange text logo in the header and a featured post titled 'i don't celebrate thanksgiving' with a custom architectural photo thumbnail.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Drone technology innovation thumbnail",
+    "image_info": {
+      "url": "https://www.unmannedsystemstechnology.com/wp-content/uploads/2025/01/T-150-UAS.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 74039,
+      "width": 1012,
+      "height": 675,
+      "total_pixels": 683100,
+      "basic_score": 0.8973636746947444,
+      "file_name": "autonomous-cargo-delivery-drone-innovation.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 90.0,
+      "watermark_score": 100.0,
+      "overall_score": 92.0,
+      "explanation": "The image perfectly illustrates 'drone technology innovation' by depicting a heavy-lift drone engaged in cargo transport, a key area of autonomous development. The subject is sharp and well-separated from the blurred background, making it visually distinct and ideal for use as a thumbnail. There are no watermarks or distracting elements.",
+      "file_name": "autonomous-cargo-delivery-drone-innovation.jpg",
+      "caption": "A heavy-lift autonomous drone hovers low over a grassy field transporting a black cargo bag suspended from its frame.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Drone technology innovation thumbnail",
+    "image_info": {
+      "url": "https://cmr.berkeley.edu/assets/images/blog/josh-sorenson-ouuigywbxli-unsplash.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 62995,
+      "width": 1200,
+      "height": 800,
+      "total_pixels": 960000,
+      "basic_score": 0.9293609061028861,
+      "file_name": "white-quadcopter-drone-flying-over-water-technology.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 90.0,
+      "watermark_score": 100.0,
+      "overall_score": 92.0,
+      "explanation": "The image is an excellent match for the search query, clearly depicting a modern drone in flight which effectively represents technology and innovation. The shallow depth of field isolates the subject well, making it perfect for a thumbnail. The motion blur on the propellers adds a realistic and dynamic touch without sacrificing the sharpness of the main body.",
+      "file_name": "white-quadcopter-drone-flying-over-water-technology.jpg",
+      "caption": "A white quadcopter drone with a camera gimbal hovering in flight against a soft-focus background of sky and water.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Drone technology innovation thumbnail",
+    "image_info": {
+      "url": "https://www.flysight.it/wp-content/uploads/2024/10/241104_fs_drones.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 79469,
+      "width": 1040,
+      "height": 652,
+      "total_pixels": 678080,
+      "basic_score": 0.8943100332950212,
+      "file_name": "autonomous-drone-technology-innovation-composite.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 85.0,
+      "watermark_score": 100.0,
+      "overall_score": 90.0,
+      "explanation": "The image is an excellent match for the search query, combining both fixed-wing and multi-rotor drone types to represent the breadth of the technology. The blue, digital overlay background effectively communicates 'innovation' and 'autonomous systems'. It is composed well for use as a thumbnail.",
+      "file_name": "autonomous-drone-technology-innovation-composite.jpg",
+      "caption": "A digital composite illustration featuring an industrial multi-rotor drone and a fixed-wing UAV flying against a blue abstract background with binary code and tech motifs.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Drone technology innovation thumbnail",
+    "image_info": {
+      "url": "https://s41721.pcdn.co/wp-content/uploads/2021/06/feature-image-Drones-Enhanced-1248x702-1.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 79040,
+      "width": 1248,
+      "height": 702,
+      "total_pixels": 876096,
+      "basic_score": 0.9243056054289409,
+      "file_name": "drone-technology-sunset-flight-innovation.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 80.0,
+      "clarity_score": 85.0,
+      "watermark_score": 100.0,
+      "overall_score": 85.0,
+      "explanation": "The image features a high-quality composition with a drone in flight against a vibrant sunset, making it visually striking and excellent for a thumbnail. While the blurred remote controller in the foreground suggests manual operation rather than fully 'autonomous' technology, the image effectively represents the broader concept of drone innovation and aerial tech.",
+      "file_name": "drone-technology-sunset-flight-innovation.jpg",
+      "caption": "A white quadcopter drone hovers in mid-air against a warm sunset sky, with a blurred operator holding a remote control tablet in the foreground.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Drone technology innovation thumbnail",
+    "image_info": {
+      "url": "https://cdn.sanity.io/images/mgxz50fq/production-v3-red/0e8054b2e37f48ae218bb61585adcc51c7e80f27-1024x1024.jpg?w=3000&fit=max&auto=format",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 56810,
+      "width": 1024,
+      "height": 1024,
+      "total_pixels": 1048576,
+      "basic_score": 0.9223206817885634,
+      "file_name": "autonomous-drone-ces-innovation-award-2021.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 90.0,
+      "watermark_score": 20.0,
+      "overall_score": 85.0,
+      "explanation": "The image is exceptionally relevant to the query 'technology innovation' due to the prominent inclusion of the CES Innovation Awards badge directly alongside a high-tech drone. The image quality is professional and sharp. The watermark score is low because of the large award badge overlay, but in the context of a 'thumbnail' for innovation, this graphic element actually enhances the message rather than detracting from it.",
+      "file_name": "autonomous-drone-ces-innovation-award-2021.jpg",
+      "caption": "A high-tech autonomous drone with carbon fiber arms and advanced optical sensors, showcased against a dark background with a CES 2021 Best of Innovation Awards badge overlay.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "The Hindu newspaper publication logo",
+    "image_info": {
+      "url": "https://images.seeklogo.com/logo-png/41/1/the-hindu-newspaper-logo-png_seeklogo-410159.png",
+      "img_format": "PNG",
+      "mode": "P",
+      "file_size": 8789,
+      "width": 600,
+      "height": 600,
+      "total_pixels": 360000,
+      "basic_score": 0.7939275566673076,
+      "file_name": "the_hindu_newspaper_official_logo.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 100.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 95.0,
+      "explanation": "The image is an exact match for the search query, displaying a high-resolution, sharp version of 'The Hindu' newspaper logo. The typography and the intricate crest are clear, and the image is on a clean white background suitable for immediate use. There are no watermarks or artifacts.",
+      "file_name": "the_hindu_newspaper_official_logo.jpg",
+      "caption": "The official logo of The Hindu, India's national newspaper since 1878, featuring the publication's name in bold red serif typography flanking the detailed central crest.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "The Hindu newspaper publication logo",
+    "image_info": {
+      "url": "https://th-i.thgim.com/public/news/national/bmf2k7/article53388090.ece/alternates/FREE_1200/NKV-TheHinduLogo",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 76075,
+      "width": 1200,
+      "height": 900,
+      "total_pixels": 1080000,
+      "basic_score": 0.9308625950116266,
+      "file_name": "the-hindu-newspaper-traditional-crest-logo.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 90.0,
+      "watermark_score": 100.0,
+      "overall_score": 92.0,
+      "explanation": "The image clearly depicts the traditional crest/emblem used in The Hindu newspaper's masthead. It matches the search query perfectly as the graphical component of the brand's identity. The line art is sharp, high-contrast, and free of any watermarks.",
+      "file_name": "the-hindu-newspaper-traditional-crest-logo.jpg",
+      "caption": "The traditional emblem of The Hindu newspaper, featuring a central shield with a conch shell and map of India, flanked by the mythical Kamadhenu on the left and an elephant on the right.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "The Hindu newspaper publication logo",
+    "image_info": {
+      "url": "https://www.pngkey.com/png/detail/800-8009174_the-hindu-logo-logo-of-the-hindu-newspaper.png",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 196410,
+      "width": 820,
+      "height": 436,
+      "total_pixels": 357520,
+      "basic_score": 0.8222258824192303,
+      "file_name": "the-hindu-group-official-logo-crest.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 90.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 92.0,
+      "explanation": "The image provides a pristine, high-resolution version of The Hindu Group's logo. Although the text reads 'THE HINDU GROUP' rather than just the newspaper masthead 'THE HINDU', it features the identical iconic crest used by the publication, making it highly relevant for brand identification purposes. The graphic is sharp with no artifacts.",
+      "file_name": "the-hindu-group-official-logo-crest.jpg",
+      "caption": "The official black and white logo of The Hindu Group, displaying the traditional crest with a winged mythical creature and an elephant flanking a central emblem containing a conch shell and map of India.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "The Hindu newspaper publication logo",
+    "image_info": {
+      "url": "https://cdn.brandfetch.io/idH57NE6od/w/1500/h/500/idCXB0OXsS.jpeg?c=1bxid64Mup7aczewSAYMX&t=1764397346818",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 42564,
+      "width": 1500,
+      "height": 500,
+      "total_pixels": 750000,
+      "basic_score": 0.8417911993781261,
+      "file_name": "the-hindu-newspaper-logo-banner.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 85.0,
+      "watermark_score": 100.0,
+      "overall_score": 90.0,
+      "explanation": "The image clearly displays the requested logo with high accuracy, including the specific typography and the central crest/emblem associated with 'The Hindu'. The text is sharp and legible. It appears to be formatted as a web banner or header with a faint grid background and some additional contact details on the right, but the primary subject is distinct and professional.",
+      "file_name": "the-hindu-newspaper-logo-banner.jpg",
+      "caption": "The official logo of The Hindu newspaper, featuring its classic serif typography and central crest emblem stating 'India's National Newspaper Since 1878', displayed on a horizontal banner layout.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Professional news media publication thumbnail",
+    "image_info": {
+      "url": "https://miro.medium.com/v2/resize:fit:601/1%2Ap5B9M6PdOP6gYSJhIOKX_g.png",
+      "img_format": "PNG",
+      "mode": "P",
+      "file_size": 8166,
+      "width": 601,
+      "height": 601,
+      "total_pixels": 361201,
+      "basic_score": 0.7942378048793934,
+      "file_name": "bbc-news-graphics-logo-branding.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 90.0,
+      "clarity_score": 100.0,
+      "watermark_score": 100.0,
+      "overall_score": 95.0,
+      "explanation": "The image is an exact match for professional media branding. It features the official-style BBC News typography and logo on the correct brand color. The clarity is perfect as it is a digital graphic. It serves excellently as a publication thumbnail.",
+      "file_name": "bbc-news-graphics-logo-branding.jpg",
+      "caption": "The official-style logo for BBC News Graphics features the iconic three-block emblem and white typography against a deep red background.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Professional news media publication thumbnail",
+    "image_info": {
+      "url": "https://www.fitzroyandfinn.co.uk/files/styles/full_width_phone_x2_/public/BBCNewsMagazine.png?itok=wEEWoGMY&timestamp=1435159140",
+      "img_format": "PNG",
+      "mode": "RGB",
+      "file_size": 39706,
+      "width": 720,
+      "height": 446,
+      "total_pixels": 321120,
+      "basic_score": 0.7802339658463113,
+      "file_name": "bbc-news-magazine-official-logo.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 90.0,
+      "explanation": "The image is an exact match for the search query, displaying the official branding for the BBC News Magazine. The graphic is high-resolution, sharp, and clean, making it ideal for use as a publication thumbnail or header. There are no obstructive watermarks.",
+      "file_name": "bbc-news-magazine-official-logo.jpg",
+      "caption": "The logo for BBC News Magazine, featuring the standard black BBC News branding on the left and the word 'Magazine' in a prominent red serif font on the right, set against a plain off-white background.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Professional news media publication thumbnail",
+    "image_info": {
+      "url": "https://i.ytimg.com/vi/Bjne-t92JBw/maxresdefault.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 86703,
+      "width": 1280,
+      "height": 720,
+      "total_pixels": 921600,
+      "basic_score": 0.9285756583214586,
+      "file_name": "bbc_news_red_globe_graphic_background.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 98.0,
+      "clarity_score": 80.0,
+      "watermark_score": 100.0,
+      "overall_score": 90.0,
+      "explanation": "The image is an exact match for the search query, featuring the iconic BBC News branding and globe motif. The composition provides ample negative space on the left, making it highly suitable for use as a thumbnail where text overlays might be added. While the resolution appears to be a still from a video feed (exhibiting slight softness), it is perfectly adequate for web publication dimensions.",
+      "file_name": "bbc_news_red_globe_graphic_background.jpg",
+      "caption": "A classic BBC News broadcast graphic featuring a stylized, rotating red and white globe with connecting lines to major cities such as London, Cairo, and Baghdad, anchored by the official BBC News logo in the bottom left corner.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Professional news media publication thumbnail",
+    "image_info": {
+      "url": "https://www.shutterstock.com/image-vector/vinnytsia-ukraine-january-12-2024-600nw-2412001711.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 27555,
+      "width": 600,
+      "height": 600,
+      "total_pixels": 360000,
+      "basic_score": 0.8064589795610664,
+      "file_name": "bbc_news_official_logo_red_square.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 100.0,
+      "clarity_score": 95.0,
+      "watermark_score": 50.0,
+      "overall_score": 80.0,
+      "explanation": "The image is an exact match for the query, displaying the official BBC News logo with perfect sharpness and contrast. However, the presence of a black footer bar with the text 'VECTOR LOGO' acts as an intrusive label that requires cropping before professional use.",
+      "file_name": "bbc_news_official_logo_red_square.jpg",
+      "caption": "The official square logo of BBC News, featuring the iconic white letter blocks and typography on a signature red background.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Environmental cleanup water technology",
+    "image_info": {
+      "url": "https://www.waterindustryjournal.co.uk/wp-content/uploads/2024/09/iStock-1051867736.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 899876,
+      "width": 1365,
+      "height": 768,
+      "total_pixels": 1048320,
+      "basic_score": 0.969891788987729,
+      "file_name": "ocean_cleanup_barrier_system_plastic_removal.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 100.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 95.0,
+      "explanation": "The image is an outstanding representation of water cleanup technology, specifically depicting an ocean plastic retrieval system (likely a render of The Ocean Cleanup project). It perfectly matches the search intent. The image is sharp, high-resolution, and free of watermarks.",
+      "file_name": "ocean_cleanup_barrier_system_plastic_removal.jpg",
+      "caption": "Aerial view of a large-scale floating environmental cleanup barrier collecting a massive patch of plastic waste from the ocean surface, accompanied by a support vessel.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Environmental cleanup water technology",
+    "image_info": {
+      "url": "https://nlplatform.com/sites/default/files/styles/article_header_nlplatform_desktop/public/articles/image/TOCPrototypeHD_new_0.jpg?h=c64ac3f2&itok=6-xqO0Ih",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 252340,
+      "width": 1440,
+      "height": 780,
+      "total_pixels": 1123200,
+      "basic_score": 0.9427358042247985,
+      "file_name": "ocean-cleanup-barrier-tow-ship.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 85.0,
+      "watermark_score": 100.0,
+      "overall_score": 90.0,
+      "explanation": "The image is an excellent representation of the search query, showcasing a large-scale ocean cleanup system in action. The composition effectively uses the leading line of the floating barrier to draw the eye to the towing vessel. The lighting is natural and even, and there are no visible watermarks.",
+      "file_name": "ocean-cleanup-barrier-tow-ship.jpg",
+      "caption": "A large offshore supply vessel towing a segmented floating barrier system designed for ocean plastic cleanup and environmental protection.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Environmental cleanup water technology",
+    "image_info": {
+      "url": "https://www.ecomaxglobal.com/wp-content/uploads/2023/07/Non-Chemical-Water-Treatment.jpeg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 280532,
+      "width": 1280,
+      "height": 800,
+      "total_pixels": 1024000,
+      "basic_score": 0.9477362337610067,
+      "file_name": "aerial-view-wastewater-treatment-plant-environmental-technology.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 85.0,
+      "watermark_score": 100.0,
+      "overall_score": 90.0,
+      "explanation": "The image provides a clear and direct representation of environmental water technology, specifically showing the infrastructure of a water treatment plant. The aerial perspective effectively demonstrates the scale of the cleanup operations. The image is free of watermarks and has good resolution.",
+      "file_name": "aerial-view-wastewater-treatment-plant-environmental-technology.jpg",
+      "caption": "An aerial view of a municipal wastewater treatment plant featuring large circular clarifier tanks and filtration systems surrounded by greenery, highlighting environmental cleanup infrastructure.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Environmental cleanup water technology",
+    "image_info": {
+      "url": "https://assets.theoceancleanup.com/scaled/900x/app/uploads/2021/08/Medium-210823-Oceans-System-002-Trip-1-Inspection-Drone-DvdK-1.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 114497,
+      "width": 900,
+      "height": 600,
+      "total_pixels": 540000,
+      "basic_score": 0.8694211188609028,
+      "file_name": "ocean_cleanup_system_floating_barrier_technology.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 85.0,
+      "watermark_score": 100.0,
+      "overall_score": 90.0,
+      "explanation": "The image is an excellent match for the search query, accurately depicting large-scale ocean cleanup technology in action. The composition uses the curve of the barrier to lead the eye, providing a clear sense of scale and function. The image is sharp, clear, and free of visible watermarks.",
+      "file_name": "ocean_cleanup_system_floating_barrier_technology.jpg",
+      "caption": "A high-angle view of a marine environmental cleanup system deployed in the open ocean, featuring a U-shaped floating barrier and net retention zone designed to collect plastic debris, with a support ship visible on the horizon.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Environmental cleanup water technology",
+    "image_info": {
+      "url": "https://cdn.trendhunterstatic.com/thumbs/594/watercleanup-technology.jpeg?auto=webp",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 104352,
+      "width": 800,
+      "height": 600,
+      "total_pixels": 480000,
+      "basic_score": 0.8523312329697837,
+      "file_name": "solar-powered-water-cleanup-technology-lake.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 80.0,
+      "watermark_score": 100.0,
+      "overall_score": 85.0,
+      "explanation": "The image is highly relevant, clearly depicting a piece of solar-powered technology deployed in a water body, likely for aeration, treatment, or monitoring. The context of the surrounding vegetation (possibly an algal bloom or overgrowth) strengthens the environmental cleanup narrative. The image is clear and free of watermarks, though the overcast lighting makes it slightly flat.",
+      "file_name": "solar-powered-water-cleanup-technology-lake.jpg",
+      "caption": "A solar-powered hexagonal water treatment or monitoring device floating on a lake, situated next to a shoreline dense with aquatic plants and yellow flowers under a cloudy sky.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Corporate car rental fleet business solution",
+    "image_info": {
+      "url": "https://www.enterprise.com/en/about/driving-business/mobility-fleet-services-business-transportation-needs/_jcr_content/root/container/container/container_copy/container_346527803_/container_copy_1542076067/teaser.coreimg.png/1710265209650/mobility-solutions-1920x1080.png",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 71043,
+      "width": 1280,
+      "height": 720,
+      "total_pixels": 921600,
+      "basic_score": 0.9269864394278193,
+      "file_name": "corporate-car-rental-fleet-variety.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 90.0,
+      "watermark_score": 100.0,
+      "overall_score": 95.0,
+      "explanation": "The image perfectly matches the search query for a corporate car rental fleet. It showcases a diverse range of vehicles—from a moving truck to SUVs and a luxury sports car—demonstrating a comprehensive business solution. The clean white background creates a professional aesthetic suitable for corporate presentations or websites. The visible Enterprise branding reinforces the context of a rental business.",
+      "file_name": "corporate-car-rental-fleet-variety.jpg",
+      "caption": "A diverse lineup of corporate rental vehicles featuring an Enterprise box truck, a silver Jeep SUV, a dark grey crossover, and a white luxury sports car against a clean white background.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Corporate car rental fleet business solution",
+    "image_info": {
+      "url": "https://img.sixt.com/1600/a58475de-1da1-429c-819e-31721300ffee.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 65060,
+      "width": 1600,
+      "height": 686,
+      "total_pixels": 1097600,
+      "basic_score": 0.8803552796673698,
+      "file_name": "premium-corporate-car-fleet-bmw-lineup.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 95.0,
+      "explanation": "The image creates a strong visual representation of a premium corporate fleet with a cohesive lineup of BMW vehicles. The studio lighting and professional composition, which includes significant negative space at the bottom for text overlays, make it perfect for a 'business solution' web banner or marketing header. It effectively conveys the professionalism and luxury expected by corporate clients.",
+      "file_name": "premium-corporate-car-fleet-bmw-lineup.jpg",
+      "caption": "A professional studio lineup of three premium BMW vehicles, including a white sedan flanked by two grey models, set against a dark, moody background representing a high-end corporate car rental fleet.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Corporate car rental fleet business solution",
+    "image_info": {
+      "url": "https://media.sortly.com/wp-content/uploads/2022/07/20042108/Commercial-Fleet-Management.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 135804,
+      "width": 1110,
+      "height": 576,
+      "total_pixels": 639360,
+      "basic_score": 0.887454564741656,
+      "file_name": "corporate-fleet-white-vans-parking-lot.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 85.0,
+      "watermark_score": 100.0,
+      "overall_score": 90.0,
+      "explanation": "The image perfectly illustrates the concept of a 'fleet' with a repetitive line of identical commercial vehicles. This visual directly supports the search query regarding corporate rental or business logistics. The diagonal composition is strong and professional, and the image is free of watermarks.",
+      "file_name": "corporate-fleet-white-vans-parking-lot.jpg",
+      "caption": "A diagonal row of identical white commercial utility vans parked in a gravel lot, representing a corporate fleet or vehicle leasing inventory.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Corporate car rental fleet business solution",
+    "image_info": {
+      "url": "https://www.ecorentacar.com/wp-content/uploads/2024/12/corporate-car-rental.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 135225,
+      "width": 1000,
+      "height": 750,
+      "total_pixels": 750000,
+      "basic_score": 0.915294755081634,
+      "file_name": "corporate-executive-chauffeur-car-service.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 90.0,
+      "clarity_score": 90.0,
+      "watermark_score": 100.0,
+      "overall_score": 90.0,
+      "explanation": "The image excellently depicts the service aspect of a corporate car rental solution, featuring a professional chauffeur and a business executive with luggage. The setting and attire align perfectly with the 'corporate business' query. Although it shows a single vehicle rather than a full 'fleet', it effectively illustrates the premium end-user experience provided by such fleets. The image is sharp, well-composed, and free of watermarks.",
+      "file_name": "corporate-executive-chauffeur-car-service.jpg",
+      "caption": "A professional chauffeur in a suit opens the rear door of a black luxury sedan for a businessman carrying a suitcase and jacket outside a modern corporate building.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Corporate car rental fleet business solution",
+    "image_info": {
+      "url": "https://capitalexotic.com/wp-content/uploads/2024/06/Car-Rental-Business-Capital-Exotic.webp",
+      "img_format": "WEBP",
+      "mode": "RGB",
+      "file_size": 86242,
+      "width": 1200,
+      "height": 628,
+      "total_pixels": 753600,
+      "basic_score": 0.9143767205722562,
+      "file_name": "luxury-corporate-car-rental-fleet-showroom.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 80.0,
+      "clarity_score": 90.0,
+      "watermark_score": 100.0,
+      "overall_score": 85.0,
+      "explanation": "The image features high-end luxury vehicles (Ferrari, Lamborghini, Corvette), which aligns well with the concept of a 'car rental fleet' but specifically targets the premium or executive tier rather than standard economy corporate travel. The image quality is excellent, with sharp focus and professional lighting that enhances the 'business solution' aesthetic.",
+      "file_name": "luxury-corporate-car-rental-fleet-showroom.jpg",
+      "caption": "A lineup of luxury sports cars, including a red Ferrari, orange Lamborghini, and red Corvette, parked on a polished floor in an indoor showroom, illustrating a premium car rental fleet.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "IoT tracking system warehouse logistics",
+    "image_info": {
+      "url": "https://acropolium.com/img/articles/warehouse-management-systems/img04.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 65190,
+      "width": 980,
+      "height": 630,
+      "total_pixels": 617400,
+      "basic_score": 0.8816757330775156,
+      "file_name": "benefits-of-warehouse-management-system-infographic.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 90.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 92.0,
+      "explanation": "The image is a high-quality, professional infographic that directly addresses the concept of warehouse management and tracking. It explicitly lists 'Real-Time Tracking' as a benefit, making it highly relevant to the search query. The text is crisp, legible, and the design is modern.",
+      "file_name": "benefits-of-warehouse-management-system-infographic.jpg",
+      "caption": "A circular infographic diagram detailing the 'Benefits of Warehouse Management System,' highlighting key features such as Real-Time Tracking, Streamlined Order Fulfillment, Reduced Expenses, Effective Workforce Management, and Enhanced Visibility and Reporting.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "IoT tracking system warehouse logistics",
+    "image_info": {
+      "url": "https://www.bizbloqs.com/wp-content/uploads/2021/09/4.-Warehouse_management_System.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 40798,
+      "width": 623,
+      "height": 563,
+      "total_pixels": 350749,
+      "basic_score": 0.8019883567691667,
+      "file_name": "isometric-warehouse-logistics-wms-infographic.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 90.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 92.0,
+      "explanation": "The image effectively visualizes the search query by displaying a 'WMS' (Warehouse Management System) isometric diagram, which is central to logistics tracking. It details the flow of goods from transportation to storage, perfectly matching the logistics and system aspects of the prompt. The graphic is clean, high-resolution, and free of obtrusive watermarks.",
+      "file_name": "isometric-warehouse-logistics-wms-infographic.jpg",
+      "caption": "A detailed isometric infographic illustrating a Warehouse Management System (WMS) ecosystem, featuring cargo trucks, forklifts, pallet racking, and data flow lines connecting various logistical stages.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "IoT tracking system warehouse logistics",
+    "image_info": {
+      "url": "http://www.iotphils.com/wp-content/uploads/2020/08/IOT_WALTS_Solutions-Image.png",
+      "img_format": "PNG",
+      "mode": "P",
+      "file_size": 66413,
+      "width": 960,
+      "height": 806,
+      "total_pixels": 773760,
+      "basic_score": 0.8954862302286335,
+      "file_name": "iot-rfid-warehouse-logistics-tracking-system-infographic.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 85.0,
+      "watermark_score": 100.0,
+      "overall_score": 90.0,
+      "explanation": "The image is an excellent match for the search query, providing a structured visual diagram of an IoT and RFID-based warehouse tracking system. The circular flowchart clearly outlines every step of the logistics process from tagging to dispatching. The graphics are clean, professional, and free of watermarks, making it ideal for educational or business presentations.",
+      "file_name": "iot-rfid-warehouse-logistics-tracking-system-infographic.jpg",
+      "caption": "Infographic diagram of an IOT WALTS (RFID Warehouse and Logistics Tracking System) displaying the cyclical workflow of warehouse operations, including enrolling & tagging, incoming/outgoing, inspection, sorting, storage, picking lists, verification, and dispatching.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "IoT tracking system warehouse logistics",
+    "image_info": {
+      "url": "https://static.wixstatic.com/media/544b09_65d49cfc474b4eecb46f8a2977430136~mv2.png/v1/fill/w_568,h_570,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/544b09_65d49cfc474b4eecb46f8a2977430136~mv2.png",
+      "img_format": "PNG",
+      "mode": "RGB",
+      "file_size": 219016,
+      "width": 568,
+      "height": 570,
+      "total_pixels": 323760,
+      "basic_score": 0.8088499544289833,
+      "file_name": "cloud-warehouse-management-system-logistics-infographic.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 95.0,
+      "watermark_score": 60.0,
+      "overall_score": 85.0,
+      "explanation": "The image is highly relevant as an infographic explicitly detailing the components of a warehouse logistics tracking system (RF scanning, inventory tracking, cloud WMS). Text and graphics are sharp. However, it contains specific corporate branding (AC² logo) and third-party logos (Lazada, Shopee), making it promotional material rather than a generic conceptual illustration.",
+      "file_name": "cloud-warehouse-management-system-logistics-infographic.jpg",
+      "caption": "A detailed infographic explaining the features of a Warehouse Management System (WMS), illustrating workflows such as RF scanning, cycle counting, picking strategies, and inventory tracking.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "AI NLP machine learning technology",
+    "image_info": {
+      "url": "https://doimages.nyc3.cdn.digitaloceanspaces.com/Artificial%20Intelligence.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 87570,
+      "width": 1024,
+      "height": 1024,
+      "total_pixels": 1048576,
+      "basic_score": 0.925392942277223,
+      "file_name": "ai_technologies_venn_diagram_nlp_ml.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 92.0,
+      "explanation": "The image is an excellent, clear diagram that perfectly maps the relationships between AI, Machine Learning, Deep Learning, and NLP, directly addressing the specific terms in the search query. The design is clean, professional, and free of watermarks, making it ideal for educational or business presentations.",
+      "file_name": "ai_technologies_venn_diagram_nlp_ml.jpg",
+      "caption": "A Venn diagram titled 'AI Technologies' illustrating the hierarchical relationship between Artificial Intelligence, Machine Learning, Natural Language Processing, and Deep Learning against a white background.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "AI NLP machine learning technology",
+    "image_info": {
+      "url": "https://cdn.prod.website-files.com/5ec6a20095cdf182f108f666/5f22908f09f2341721cd8901_AI%20poster.webp",
+      "img_format": "WEBP",
+      "mode": "RGB",
+      "file_size": 30492,
+      "width": 1600,
+      "height": 862,
+      "total_pixels": 1379200,
+      "basic_score": 0.901726159629085,
+      "file_name": "ai-ml-nlp-deep-learning-relationship-venn-diagram.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 90.0,
+      "watermark_score": 100.0,
+      "overall_score": 92.0,
+      "explanation": "The image is an excellent visualization of the search query, accurately mapping the relationships between AI, NLP, Machine Learning, and Deep Learning via a clean Venn diagram. The text is sharp and legible, the color coding is distinct with a helpful legend, and the white background makes it versatile for presentations or articles. There are no watermarks.",
+      "file_name": "ai-ml-nlp-deep-learning-relationship-venn-diagram.jpg",
+      "caption": "A detailed Venn diagram illustrating the hierarchical and overlapping relationships between Artificial Intelligence (AI), Machine Learning (ML), Deep Learning (DL), and Natural Language Processing (NLP), accompanied by a color-coded legend.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "AI NLP machine learning technology",
+    "image_info": {
+      "url": "https://bernardmarr.com/img/What%20is%20NLP%20AI.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 462583,
+      "width": 1000,
+      "height": 667,
+      "total_pixels": 667000,
+      "basic_score": 0.9278527623517822,
+      "file_name": "abstract-ai-machine-learning-wireframe-head.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 90.0,
+      "watermark_score": 100.0,
+      "overall_score": 92.0,
+      "explanation": "The image is an excellent representation of the search query, utilizing the common visual metaphor of a wireframe head to depict AI and cognitive computing. The quality is sharp, the color palette matches standard tech aesthetics (blues and purples), and the composition is professional with no watermarks.",
+      "file_name": "abstract-ai-machine-learning-wireframe-head.jpg",
+      "caption": "An abstract digital illustration of a human head profile formed by glowing blue and teal polygonal lines and nodes, symbolizing artificial intelligence and neural networks, disintegrating into purple pixels against a dark tech-grid background.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "AI NLP machine learning technology",
+    "image_info": {
+      "url": "https://media.geeksforgeeks.org/wp-content/uploads/20240524132821/nlp-working.webp",
+      "img_format": "WEBP",
+      "mode": "RGB",
+      "file_size": 64496,
+      "width": 1043,
+      "height": 746,
+      "total_pixels": 778078,
+      "basic_score": 0.9212104515655744,
+      "file_name": "nlp_machine_learning_workflow_infographic.jpg"
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 90.0,
+      "clarity_score": 95.0,
+      "watermark_score": 60.0,
+      "overall_score": 70.0,
+      "explanation": "The image is highly relevant as an educational infographic detailing the NLP pipeline. The clarity and layout are excellent. However, the presence of a corporate logo (GeeksforGeeks) in the corner and a spelling error in step 7 ('Evauation' instead of 'Evaluation') reduce its professional score.",
+      "file_name": "nlp_machine_learning_workflow_infographic.jpg",
+      "caption": "An infographic titled 'Natural Language Processing' detailing an 8-step workflow cycle for NLP working, including text preprocessing, feature selection, and model deployment.",
+      "recommend": true,
+      "error": ""
+    }
+  }
+]

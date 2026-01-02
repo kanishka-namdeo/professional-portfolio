@@ -1,0 +1,46 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.*
+
+# Next.js build output
+.next
+out
+deployment
+
+# Next.js caches
+.next/cache
+.vercel
+.turbo
+.swc
+.vercel/output
+
+# Env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs and diagnostics
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs
+*.log
+*.tsbuildinfo
+.eslintcache
+.stylelintcache
+.nyc_output
+
+# Editors and system files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.pnpm-store/
+
+# Misc
+coverage
+package-lock.json
