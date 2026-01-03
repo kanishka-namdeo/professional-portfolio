@@ -2,33 +2,48 @@
 
 import { useState } from 'react';
 
-const certifications = [
+interface Credential {
+  name: string;
+  organization: string;
+  date: string;
+  icon: string;
+  type: 'education' | 'certification';
+}
+
+const certifications: Omit<Credential, 'type'>[] = [
   {
-    title: 'Certified Scrum Product Owner (CSPO)',
-    org: 'Scrum Alliance',
+    name: 'Certified Scrum Product Owner (CSPO)',
+    organization: 'Scrum Alliance',
     date: 'November 2024',
     icon: '🏆',
   },
   {
-    title: 'Autonomous Mobile Robots',
-    org: 'EDX',
+    name: 'Autonomous Mobile Robots',
+    organization: 'EDX',
     date: 'Robot Perception, Locomotion, Localization and Planning',
     icon: '🤖',
   },
   {
-    title: 'Advanced Robot Programmer',
-    org: 'KUKA College',
+    name: 'Advanced Robot Programmer',
+    organization: 'KUKA College',
     date: 'KRL Programming, SIMPRO Simulation',
     icon: '🦾',
   },
 ];
 
-const education = [
+const education: Omit<Credential, 'type'>[] = [
   {
-    degree: 'Bachelor of Engineering',
-    school: 'UIT-RGPV',
+    name: 'Bachelor of Engineering',
+    organization: 'UIT-RGPV',
     date: 'Mechanical Engineering • June 2015',
+    icon: '🎓',
   },
+];
+
+// Combined credentials data for unified display
+const credentials: Credential[] = [
+  ...education.map(edu => ({ ...edu, type: 'education' as const })),
+  ...certifications.map(cert => ({ ...cert, type: 'certification' as const })),
 ];
 
 const skillCategories = [
@@ -54,7 +69,7 @@ const skillCategories = [
   },
 ];
 
-type TabId = 'skills' | 'education' | 'certifications';
+type TabId = 'credentials' | 'skills';
 
 const tabConfigs = {
   skills: {
@@ -62,40 +77,26 @@ const tabConfigs = {
     bgColor: '#ccfbf1',
     label: 'Skills',
   },
-  education: {
+  credentials: {
     color: 'var(--accent-navy)',
     bgColor: '#dbeafe',
-    label: 'Education',
-  },
-  certifications: {
-    color: 'var(--accent-amber)',
-    bgColor: '#fef3c7',
-    label: 'Certifications',
+    label: 'Education & Certifications',
   },
 };
 
 export default function SkillsAndEducation() {
-  const [activeTab, setActiveTab] = useState<TabId>('education');
+  const [activeTab, setActiveTab] = useState<TabId>('credentials');
 
   const tabs: { id: TabId; label: string; icon: React.ReactNode; color: string }[] = [
     {
-      id: 'education',
-      label: 'Education',
+      id: 'credentials',
+      label: 'Education & Certifications',
       color: 'var(--accent-navy)',
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-        </svg>
-      ),
-    },
-    {
-      id: 'certifications',
-      label: 'Certifications',
-      color: 'var(--accent-amber)',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4" />
         </svg>
       ),
     },
@@ -112,12 +113,12 @@ export default function SkillsAndEducation() {
   ];
 
   return (
-    <section id="skills" aria-labelledby="skills-title">
+    <section id="skills" className="section-full-width" aria-labelledby="skills-title" role="region" aria-label="Skills, Education, and Certifications">
       <div className="container">
-        <div className="section-header">
+        <header className="section-header">
           <h2 id="skills-title" className="section-title">Skills & Qualifications</h2>
           <p className="section-subtitle">Technical capabilities and core competencies</p>
-        </div>
+        </header>
 
         {/* Archival Folder Container */}
         <div className="archival-folder">
@@ -139,36 +140,27 @@ export default function SkillsAndEducation() {
 
           {/* Folder Body */}
           <div className="folder-body">
-            {/* Education Tab Content */}
-            <div className={`folder-content ${activeTab === 'education' ? 'active' : ''}`}>
-              <div className="education-folder-list">
-                {education.map((edu, index) => (
-                  <div key={index} className="education-folder-card">
-                    <div className="education-folder-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="28" height="28">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                      </svg>
+            {/* Education & Certifications Tab Content */}
+            <div className={`folder-content ${activeTab === 'credentials' ? 'active' : ''}`}>
+              <div className="credentials-folder-grid">
+                {credentials.map((item, index) => (
+                  <div 
+                    key={index} 
+                    className={`credential-folder-card ${item.type}`}
+                  >
+                    <div className="credential-folder-icon">
+                      {item.type === 'education' ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="28" height="28">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                      ) : (
+                        <span className="credential-icon-emoji">{item.icon}</span>
+                      )}
                     </div>
-                    <div className="education-folder-content">
-                      <h4 className="education-folder-degree">{edu.degree}</h4>
-                      <p className="education-folder-school">{edu.school}</p>
-                      <p className="education-folder-date">{edu.date}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Certifications Tab Content */}
-            <div className={`folder-content ${activeTab === 'certifications' ? 'active' : ''}`}>
-              <div className="certs-folder-grid">
-                {certifications.map((cert, index) => (
-                  <div key={index} className="cert-folder-card">
-                    <div className="cert-folder-badge">{cert.icon}</div>
-                    <div className="cert-folder-content">
-                      <h4 className="cert-folder-title">{cert.title}</h4>
-                      <p className="cert-folder-org">{cert.org}</p>
-                      <p className="cert-folder-date">{cert.date}</p>
+                    <div className="credential-folder-content">
+                      <h4 className="credential-folder-title">{item.name}</h4>
+                      <p className="credential-folder-org">{item.organization}</p>
+                      <p className="credential-folder-date">{item.date}</p>
                     </div>
                   </div>
                 ))}

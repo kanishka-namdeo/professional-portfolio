@@ -68,7 +68,7 @@ export default function FAQ() {
   };
 
   return (
-    <section id="faq" className="faq-section" aria-labelledby="faq-title">
+    <section id="faq" className="faq-section section-full-width" aria-labelledby="faq-title">
       <div className="container">
         <div className="section-header animate-on-scroll">
           <h2 id="faq-title" className="section-title">Frequently Asked Questions</h2>

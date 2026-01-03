@@ -79,7 +79,7 @@ export default function Qualifications() {
   }, []);
 
   return (
-    <section id="qualifications" aria-labelledby="qualifications-title">
+    <section id="qualifications" className="section-full-width" aria-labelledby="qualifications-title">
       <div className="container">
         <div className="section-header animate-on-scroll">
           <h2 id="qualifications-title" className="section-title">Qualifications</h2>

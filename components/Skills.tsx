@@ -136,7 +136,7 @@ export default function Skills() {
   }, [handleScroll]);
 
   return (
-    <section id="skills" style={{ background: 'var(--color-bg)' }} aria-labelledby="skills-title">
+    <section id="skills" className="section-full-width" aria-labelledby="skills-title">
       <div className="container">
         <div className="section-header animate-on-scroll">
           <h2 id="skills-title" className="section-title">Skills & Expertise</h2>

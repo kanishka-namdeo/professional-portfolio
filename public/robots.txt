@@ -1,0 +1,49 @@
+# Robots.txt for Kanishka Namdeo Portfolio
+# https://kanishkanamdeo.com
+
+User-agent: *
+Allow: /
+Allow: /#*
+Disallow: /api/
+Disallow: /_next/
+
+# Sitemap locations
+Sitemap: https://kanishkanamdeo.com/sitemap.xml
+Sitemap: https://kanishkanamdeo.com/rss.xml
+
+# Crawl delay for polite crawling
+Crawl-delay: 10
+
+# Host directive
+Host: https://kanishkanamdeo.com
+
+# Hreflang alternate links (if applicable)
+# Link: <https://kanishkanamdeo.com>; rel="alternate"
+
+# Image crawling
+User-agent: Googlebot-Image
+Allow: /
+
+# Video crawling
+User-agent: Googlebot-Video
+Allow: /
+
+# News crawler
+User-agent: Googlebot-News
+Allow: /
+
+# Social media bots
+User-agent: Twitterbot
+Allow: /
+User-agent: Facebookexternalhit
+Allow: /
+
+# Apple bots
+User-agent: Applebot
+Allow: /
+
+# Microsoft bots
+User-agent: bingbot
+Allow: /
+User-agent: msnbot
+Allow: /

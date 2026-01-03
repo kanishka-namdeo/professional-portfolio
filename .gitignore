@@ -1,26 +1,25 @@
-# Dependencies
-node_modules
-.pnp
-.pnp.*
+# Dependencies (root)
+/node_modules
+/.pnp
+/.pnp.*
 
 # Next.js build output
-.next
-out
-deployment
+/.next
+/out
+/deployment
 
 # Next.js caches
-.next/cache
 .vercel
 .turbo
 .swc
 .vercel/output
 
 # Env files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+/.env
+/.env.local
+/.env.development.local
+/.env.test.local
+/.env.production.local
 
 # Logs and diagnostics
 npm-debug.log*
@@ -33,6 +32,9 @@ logs
 .eslintcache
 .stylelintcache
 .nyc_output
+*.swp
+*.swo
+*~
 
 # Editors and system files
 .DS_Store
@@ -44,3 +46,4 @@ Thumbs.db
 # Misc
 coverage
 package-lock.json
+yarn.lock

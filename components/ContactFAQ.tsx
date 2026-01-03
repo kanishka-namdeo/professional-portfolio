@@ -32,9 +32,9 @@ export default function ContactFAQ() {
   };
 
   return (
-    <section id="contact" aria-labelledby="contact-title">
+    <section id="contact" className="section-full-width" aria-labelledby="contact-title" role="region" aria-label="Contact Information and Frequently Asked Questions">
       <div className="container">
-        <div className="section-header animate-on-scroll">
+        <header className="section-header animate-on-scroll">
           <h2 id="contact-title" className="section-title">
             {activeTab === 'contact' ? 'Get In Touch' : 'Frequently Asked Questions'}
           </h2>
@@ -43,7 +43,7 @@ export default function ContactFAQ() {
               ? 'Let\'s discuss how we can work together'
               : 'Common questions about my work and expertise'}
           </p>
-        </div>
+        </header>
 
         {/* Tab Navigation */}
         <div className="tab-navigation animate-on-scroll">
@@ -110,7 +110,7 @@ export default function ContactFAQ() {
               </div>
               <div className="contact-cta">
                 <h3>Building Something That Needs Better Product-Market Fit?</h3>
-                <p>Whether you're scaling a B2B SaaS platform, leading a mobility product, or building AI-powered solutions, let's discuss how I can help accelerate your growth.</p>
+                <p>Whether you're scaling a B2B SaaS platform, leading a new product, or building AI-powered solutions, let's discuss how I can help accelerate your growth.</p>
                 <div className="cta-buttons">
                   <a href="mailto:kanishkanamdeo@hotmail.com" className="btn btn-primary">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
@@ -122,7 +122,7 @@ export default function ContactFAQ() {
                 <div className="opportunity-preferences">
                   <h4>Currently Seeking</h4>
                   <p>Senior Product Manager & Product Leadership roles in B2B SaaS, Mobility, and AI/ML companies</p>
-                  <p className="response-time">Response time: Within 48 hours</p>
+                  <p className="response-time">Response time: ASAP</p>
                 </div>
               </div>
             </div>

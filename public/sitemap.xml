@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://kanishkanamdeo.com</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <lastmod>2026-01-03</lastmod>
+  </url>
+  <url>
+    <loc>https://kanishkanamdeo.com/#products-contributed</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-01-03</lastmod>
+  </url>
+  <url>
+    <loc>https://kanishkanamdeo.com/#products</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-01-03</lastmod>
+  </url>
+  <url>
+    <loc>https://kanishkanamdeo.com/#experience</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-01-03</lastmod>
+  </url>
+  <url>
+    <loc>https://kanishkanamdeo.com/#about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-01-03</lastmod>
+  </url>
+  <url>
+    <loc>https://kanishkanamdeo.com/#skills</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-01-03</lastmod>
+  </url>
+  <url>
+    <loc>https://kanishkanamdeo.com/#contact</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-01-03</lastmod>
+  </url>
+</urlset>

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 
 type ResponsibilityCategory = 'Strategy & Leadership' | 'Product Growth' | 'Technical Collaboration' | 'Research & Innovation';
+type ExpandedSkillsState = Record<number, boolean>;
 
 interface CategorizedResponsibility {
   category: ResponsibilityCategory;
@@ -33,9 +34,8 @@ const highlightText = (text: string): React.ReactNode => {
     { regex: /\b(AI|LLM|NLP|ML|ROS|API|OM[S,S]|SaaS|Growth|Strategy|Leadership)\b/g, className: 'highlight-skill' },
   ];
 
-  let spanKey = 0;
   let result: React.ReactNode[] = [text];
-  
+
   patterns.forEach(({ regex, className }) => {
     const newResult: React.ReactNode[] = [];
     result.forEach((part) => {
@@ -44,7 +44,7 @@ const highlightText = (text: string): React.ReactNode => {
         parts.forEach((p, i) => {
           if (p) {
             if (i % 2 === 1) {
-              newResult.push(<span key={`${regex.source}-${spanKey++}`} className={className}>{p}</span>);
+              newResult.push(<span key={`${regex.source}-${i}`} className={className}>{p}</span>);
             } else {
               newResult.push(p);
             }
@@ -129,224 +129,155 @@ const experiences: Experience[] = [
     company: 'Cognium',
     url: 'https://www.cogniuminc.com/',
     date: 'Jul 2025 - Oct 2025',
-    summary: 'Led 0-to-1 AI-native wealth platform strategy—secured beta customer before prototype completion',
+    summary: 'Cognium is building AI-native workflow optimization software for private banking and wealth management firms.',
     responsibilities: [
       {
-        category: 'Product Growth',
+        category: 'Product Strategy & MVP Execution',
         items: [
-          'Secured commitment of first beta customer prior to prototype completion, ensuring immediate feedback and validating market demand early.',
-          'Conducted 20+ user interviews to identify critical industry pain points; translated insights into PRDs and wireframes for 0-to-1 product strategy.',
-          'Built foundational engineering team of 4 to run technical experiments and execute product roadmap.',
-        ],
-      },
-      {
-        category: 'Strategy & Leadership',
-        items: [
-          'Architected LLM-agent framework for AI-driven investment suggestions and automated portfolio rebalancing, enabling hyper-contextualized client engagement at scale.',
-          'Defined product vision and aligned stakeholders on go-to-market strategy for AI-native wealth platform.',
+          "Conducted 20+ user interviews to identify workflow gaps, enabling a clear 0-to-1 product direction.", 
+          "Defined MVP scope and LLM-agent architecture, ensuring delivery of personalized investment insights.", 
+          "Secured the first beta customer before prototype completion, validating early market demand.", 
+          "Created PRDs and wireframes to align engineering and business teams, speeding execution.", 
+          "Hired and guided a 4-member engineering team, accelerating technical experiments and roadmap delivery."
         ],
       },
     ],
-    skills: ['User Interviews', 'PRDs', 'Wireframes', 'LLM-agent Framework', 'AI-driven Investment', 'Team Building', 'MVP Strategy'],
-    achievements: ['✓ 0-to-1 Product Strategy', '✓ Beta Customer Pre-Launch', '✓ AI-Native Wealth Platform'],
+    skills: ["Product strategy", "User research", "MVP definition", "LLM-agent design", "Workflow architecture", "Team building", "Cross-functional alignment", "Wireframing", "Customer validation", "Early-stage product development"],
+    achievements: ["Delivered the 0-to-1 product strategy for the platform", "Secured the first beta customer before prototype completion", "Designed the core system enabling personalized investment workflows", "Built and led the initial engineering team", "Established early feedback loops for rapid iteration"],
   },
   {
     title: 'Product Consultant',
     company: 'Flipr Innovation Labs',
     url: 'https://flipr.ai/',
     date: 'Oct 2024 - Jan 2025',
-    summary: 'Delivered high-volume video dispute MVP—50K daily orders, optimized cloud infrastructure',
+    summary: 'Flipr Innovation Labs specializes in tailored software development for e-commerce and logistics companies.',
     responsibilities: [
       {
-        category: 'Technical Collaboration',
-        items: [
-          'Scoped core functionalities including automated tagging, retrieval, and storage optimization for high-volume processing handling ~50K daily orders.',
-          'Integrated with OMS and support tools for seamless dispute resolution workflow with low-latency video retrieval.',
-          'Optimized storage efficiency through compression and archival strategies, reducing cloud costs while maintaining performance.',
-        ],
-      },
-      {
-        category: 'Research & Innovation',
-        items: [
-          'Designed ML-driven video analysis pipeline to automate dispute classification and reduce manual review time by 60%.',
-          'Implemented real-time streaming architecture for instant video playback across distributed cloud infrastructure.',
-        ],
+        category: 'MVP Execution & Technical Collaboration',
+        items: ["Scoped core MVP features for a video intelligence system, ensuring smooth client deployment.", "Integrated with OMS and support tools, improving dispute resolution speed.", "Designed storage optimization workflows, reducing cloud costs through compression and archival.", "Enabled high-volume processing of ~50K daily orders, ensuring system reliability.", "Coordinated with client teams to ensure adoption and seamless workflow integration."]
       },
     ],
-    skills: ['MVP Delivery', 'Automated Tagging', 'Storage Optimization', 'OMS Integration', 'Cloud Architecture', 'ML Pipeline', 'Real-time Streaming'],
-    achievements: ['✓ High-volume MVP Delivery', '✓ Optimized Cloud Costs', '✓ 50K Daily Orders Processed', '✓ 60% Manual Review Reduction'],
+    skills: ["MVP delivery", "Video intelligence systems", "Storage optimization", "Cloud cost reduction", "Low-latency workflow design", "OMS integration", "Automated tagging", "Retrieval system design", "Client onboarding", "High-volume system design"],
+    achievements: ["Delivered a high-volume video intelligence MVP", "Reduced cloud costs through optimized storage and compression", "Built fast retrieval workflows for operational teams", "Integrated seamlessly with client OMS and support tools", "Launched automated tagging and retrieval features", "Enabled smooth adoption of the MVP by client teams"],
   },
   {
     title: 'Senior Product Manager',
     company: 'MoveInSync',
     url: 'https://moveinsync.com/',
-    date: 'Apr 2022 - Present',
-    summary: 'Scaled corporate mobility vertical to market leader—8x ARR growth, 30K+ users, 50+ locations',
+    date: 'Apr 2022 - Oct 2024',
+    summary: 'MoveInSync is the world’s largest transport-as-a-service provider for enterprises, simplifying employee commute and business travel management.',
     responsibilities: [
       {
-        category: 'Product Growth',
-        items: [
-          'Onboarded 8 new enterprise clients in FY 2022-23, driving 7x product usage growth and 4x topline revenue across 25+ cities in India, Philippines, and South Africa.',
-          'Increased app adoption by 20% through mobile app enhancements; VoIP calling and self-onboarding features achieved 70% active user adoption.',
-          'Led team of 8 engineers; onboarded 15+ new clients adding 30,000+ unique monthly users while ensuring robust feature development and client enablement.',
-        ],
-      },
-      {
-        category: 'Technical Collaboration',
-        items: [
-          'Managed 5-8 person sprints using Scrum methodologies; increased productivity 2x through enhanced task prioritization and developer grooming.',
-          'Rolled out first user payment integration with Razorpay; collaborated with 4+ teams to facilitate payments to 7+ vendor partners.',
-          'Formulated unified APIs integrating 5+ fleet providers controlling 75% of vehicles; reduced implementation time by 20% through cohesive system integration.',
-        ],
+        category: 'Product Growth & Strategy',
+        items:
+          ["Defined product vision and roadmap, driving 10x ARR growth and 15% usage increase.", "Expanded operations to 50+ new locations, enabling international market growth.", "Improved mobile app experience, increasing adoption by 20%.", "Rolled out invoicing, ERP integrations, and payments, adding 6+ clients to the upsell pipeline.", "Managed an 8-person sprint team, doubling productivity through better prioritization."]
       },
     ],
-    skills: ['UX Flows', 'Epics', 'User Stories', 'Product Roadmap', 'Market Research', 'Competitive Analysis', 'Trend Analysis', 'VoIP', 'ERP Integration', 'APIs', 'Razorpay', 'Scrum', 'UI/UX', 'System Design'],
-    achievements: ['✓ 8x ARR Increase', '✓ 12x Product Usage Growth', '✓ 15+ New Clients', '✓ 30,000+ New Monthly Users', '✓ 50+ New Locations', '✓ 20% App Adoption Increase', '✓ 70% VoIP Feature Adoption', '✓ 20% Implementation Time Reduction'],
+    skills: ["Product scaling", "Client onboarding", "International expansion", "Feature rollout", "API integrations", "Payments and invoicing", "User experience improvement", "Market research", "Product roadmap planning", "Cross-functional leadership"],
+    achievements: ["Drove ~10x ARR growth and 15x product usage", "Onboarded 15+ enterprise clients and 60,000+ monthly users", "Expanded operations to 70+ new locations across 3 countries", "Launched features that improved user adoption and experience", "Built integrations that reduced implementation time by 40%", "Introduced payments and invoicing features to strengthen monetization"],
   },
   {
-    title: 'Team Lead / Software Team Lead',
+    title: 'Software Team Lead',
     company: 'TekIP Knowledge Consulting',
     url: 'https://www.tekip.com/',
     date: 'Dec 2020 - Apr 2022',
-    summary: 'Launched NLP MVP improving patent analysis productivity by 10x—led 6-person Agile team',
+    summary: 'TekIP is a patent consulting firm specializing in SaaS solutions for IP search, analysis, and portfolio management.',
     responsibilities: [
       {
-        category: 'Strategy & Leadership',
+        category: 'Technical Collaboration & New Product Development',
         items: [
-          'Managed 3 legacy and 2 ongoing MEAN stack projects; served as primary stakeholder contact point between business and development teams.',
-          'Pitched new product verticals to C-Suite; secured budget allocation for stealth MVP through strategic presentations.',
-          'Recruited and mentored in-house resources; developed approaches to adopt new technologies across the organization.',
-        ],
-      },
-      {
-        category: 'Technical Collaboration',
-        items: [
-          'Formulated software architecture and UX for 2 hybrid NLP solutions using MEAN Stack and Python microservices.',
-          'Led Agile team of 6 developers; delivered 30+ features across 5 enterprise projects on time and within scope.',
+          "Led an Agile team of 6 developers across 5 enterprise projects, delivering 40+ features on time.", "Designed software architecture and UX for NLP-based solutions using MEAN stack and Python microservices.", "Launched an NLP product leveraging LLMs, improving patent analysis productivity by 10x.", "Mentored developers and improved team capability by introducing modern technologies."
         ],
       },
     ],
-    skills: ['MEAN Stack', 'Software Architecture', 'UX', 'NLP', 'Python Microservices', 'LLM', 'Market Research', 'Agile', 'AngularJS', 'FastAPI', 'Huggingface'],
-    achievements: ['✓ 10x Productivity Increase', '✓ 2 New Enterprise Projects', '✓ 30+ Features Delivered', '✓ Budget Allocation for MVP'],
+    skills: ["NLP product development", "Software architecture", "Agile delivery", "Team leadership", "Technical pitching", "UX design", "LLM integration", "Market research", "Hybrid system design", "Developer mentoring"],
+    achievements: ["Launched an NLP MVP that improved analysis productivity by 10x", "Delivered 30+ features across multiple enterprise projects", "Secured budget approval for a new product initiative", "Added 2 enterprise projects through technical demos", "Designed architecture and UX for new product concepts", "Mentored developers and improved team capabilities"],
   },
   {
-    title: 'Product Manager',
+    title: 'Technical Consultant',
     company: 'Intugine Technologies',
     url: 'https://www.intugine.com/',
-    date: 'Jun 2019 - Dec 2020',
-    summary: 'Built flagship multimodal logistics platform—improved workflow adoption, enhanced tracking accuracy',
+    date: 'Feb 2020 - Dec 2020',
+    summary: 'Intugine is a leading SaaS platform specializing in logistics and supply chain visibility solutions. ',
     responsibilities: [
       {
         category: 'Product Growth',
         items: [
-          'Improved platform adoption through workflow redesign; gathered client feedback to translate insights into actionable product improvements.',
-          'Integrated external data sources via third-party partnerships; designed alerting systems for delays, exceptions, and critical events.',
-        ],
-      },
-      {
-        category: 'Strategy & Leadership',
-        items: [
-          'Led development of flagship multimodal logistics platform; collaborated with engineering, design, and operations to deliver scalable enterprise solutions.',
-          'Conducted market research and competitive analysis; defined product requirements, user stories, and backlog to ensure timely feature delivery.',
-          'Managed stakeholder communication; conducted product demos and aligned teams on vision and roadmap while defining KPIs and success metrics.',
+          "Led development of a multimodal logistics platform, delivering scalable solutions for enterprise clients.", "Defined product requirements and managed the backlog, ensuring timely delivery of high-impact features.", "Improved tracking accuracy across road, rail and air by enhancing system performance and data quality.", "Designed dashboards and alerting systems to provide real-time logistics visibility.", "Collaborated with clients and cross-functional teams to improve workflows and increase platform adoption."
         ],
       },
     ],
-    skills: ['Market Research', 'Competitive Analysis', 'User Stories', 'Product Backlog', 'Dashboards', 'Reporting Tools', 'Analytics', 'UI/UX', 'KPIs', 'Multimodal Tracking', 'Alerting Systems'],
+    skills: ["Logistics product development", "Workflow optimization", "Tracking systems", "Dashboard design", "Requirements definition", "Data accuracy improvement", "Cross-functional collaboration", "User experience design", "Operational analytics", "Product backlog management"],
     achievements: ['✓ Improved Platform Adoption', '✓ Enhanced Tracking Accuracy', '✓ Enterprise Scale Features', '✓ Real-time Analytics Dashboard'],
   },
   {
-    title: 'Product Manager',
+    title: 'Senior Technical Consultant',
     company: 'Medulla.AI',
     url: '',
-    date: 'Jan 2019 - Jun 2019',
-    summary: 'Defined AI-driven healthcare analytics vision—designed ML modules for anomaly detection',
-    responsibilities: [
-      {
-        category: 'Strategy & Leadership',
-        items: [
-          'Defined product vision with founding team; shaped go-to-market strategy for healthcare AI platform.',
-          'Analyzed competitor products and emerging medical AI trends; identified differentiation opportunities for market positioning.',
-          'Coordinated with UI/UX designers to create intuitive dashboards; defined KPIs for model performance and product adoption.',
-        ],
-      },
-      {
-        category: 'Research & Innovation',
-        items: [
-          'Conducted extensive research on hospital workflows and diagnostic processes; designed ML-driven modules for anomaly detection and predictive analytics.',
-          'Conducted user interviews with doctors and radiologists; designed workflows for automated report generation and clinical decision support.',
-        ],
-      },
-    ],
-    skills: ['User Stories', 'Acceptance Criteria', 'UI/UX', 'Predictive Analytics', 'Anomaly Detection', 'Wireframes', 'Prototypes', 'KPIs', 'Healthcare Data Standards'],
-    achievements: ['✓ AI Healthcare Platform Vision', '✓ ML-driven Analytics Modules', '✓ Early Customer Validation', '✓ Healthcare Workflow Automation'],
-  },
-  {
-    title: 'Robotics Engineer',
-    company: 'Sagar Defence Engineering',
-    url: 'https://www.sagardefence.com/',
-    date: 'Jun 2017 - Dec 2018',
-    summary: 'Developed autonomous USVs for defense—multi-sensor fusion, navigation algorithms, field trials',
+    date: 'Apr 2020 - Aug 2020',
+    summary: 'Medulla,AI develops custom Ai-driven solutions for healthcare and enterprise clients.',
     responsibilities: [
       {
         category: 'Technical Collaboration',
         items: [
-          'Developed autonomous unmanned surface vehicles (USVs) for defense and industrial applications; integrated sensors, actuators, and embedded systems.',
-          'Created ROS-based modules for sensor fusion, localization, and mission execution; developed control systems for stable maneuvering in marine environments.',
-          'Integrated GPS, IMU, and marine radar data to improve navigation accuracy; supported teleoperation interface development for remote vehicle control.',
-        ],
-      },
-      {
-        category: 'Research & Innovation',
-        items: [
-          'Designed and implemented navigation algorithms for autonomous path planning and obstacle avoidance.',
-          'Conducted field tests and validation trials with defense and industrial partners; designed simulation environments for mission scenario testing.',
+          'Defined the vision for an AI‑based healthcare analytics product.',
+
+          'Designed early ML features for prediction and anomaly detection.',
+
+          'Created prototypes that were used by early pilot customers.',
+
+          'Studied hospital workflows to identify automation opportunities.',
+          'Built dashboards that supported clinical decision‑making.',
+
+          'Ensured the product met healthcare data standards.'
         ],
       },
     ],
-    skills: ['Navigation Algorithms', 'Autonomous Path Planning', 'Obstacle Avoidance', 'Sensor Fusion', 'ROS', 'GPS', 'IMU', 'Marine Radar', 'Simulation Environments', 'Teleoperation Interfaces', 'Power Management'],
+    skills: ["Healthcare product strategy", "Predictive analytics", "Anomaly detection", "Prototyping", "Workflow research", "Clinical dashboard design", "User interviews", "Compliance and standards", "Feature specification", "ML-driven product design"],
+    achievements: ['✓ AI Healthcare Platform Vision', '✓ ML-driven Analytics Modules', '✓ Early Customer Validation', '✓ Healthcare Workflow Automation'],
+  },
+  {
+    title: 'Co-founding member & Chief Technical Officer',
+    company: 'Sagar Defence Engineering',
+    url: 'https://www.sagardefence.com/',
+    date: 'Jun 2016 - Jan 2020',
+    summary: 'Sagar Defence develops unmanned aerial and maritime solutions for several defence and paramilitary agencies.',
+    responsibilities: [
+      {
+        category: 'Technical Collaboration',
+        items: [
+          "Developed autonomous navigation algorithms for unmanned surface vehicles used in defense applications.", "Integrated sensors and embedded systems to improve navigation accuracy through multi-sensor fusion.", "Conducted field trials with defense and industrial partners to validate system performance.", "Built simulation environments to test mission scenarios before deployment.", "Collaborated with cross-functional teams to enhance power management and marine safety compliance."
+        ],
+      },
+    ],
+    skills: ["Autonomous navigation", "Sensor fusion", "Path planning", "Obstacle avoidance", "Simulation design", "Field testing", "Embedded systems integration", "Marine robotics", "Control systems", "Hardware-software integration"],
     achievements: ['✓ Autonomous USV Development', '✓ Multi-Sensor Fusion', '✓ Successful Field Trials', '✓ Navigation Accuracy Improvement'],
   },
 ];
 
-type TabType = 'all' | 'Product Growth' | 'Strategy & Leadership' | 'Technical Collaboration' | 'Research & Innovation';
+// Extract unique companies for filter tabs
+const uniqueCompanies = Array.from(new Set(experiences.map(exp => exp.company))).sort();
 
-const tabConfig: { id: TabType; label: string }[] = [
-  { id: 'all', label: 'All Experience' },
-  { id: 'Product Growth', label: 'Product Growth' },
-  { id: 'Strategy & Leadership', label: 'Strategy & Leadership' },
-  { id: 'Technical Collaboration', label: 'Technical' },
-  { id: 'Research & Innovation', label: 'Research' },
+type TabType = 'all' | string;
+
+const getTabConfig = () => [
+  { id: 'all', label: 'All Companies' },
+  ...uniqueCompanies.map(company => ({ id: company, label: company })),
 ];
 
 export default function Experience() {
   const [activeTab, setActiveTab] = useState<TabType>('all');
+  const [expandedSkills, setExpandedSkills] = useState<ExpandedSkillsState>({});
   const experienceRef = useRef<HTMLElement>(null);
   const isInitialMount = useRef(true);
-  const [isExperienceVisible, setIsExperienceVisible] = useState(true);
+  const tabConfig = getTabConfig();
 
-  // Detect when Experience section is in view
-  useEffect(() => {
-    if (!experienceRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // Show menu when Experience section is intersecting (in view)
-        setIsExperienceVisible(entry.isIntersecting);
-      },
-      {
-        // Start detecting when the section enters the viewport
-        rootMargin: '0px',
-        threshold: 0
-      }
-    );
-
-    observer.observe(experienceRef.current);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
+  const toggleSkillsExpand = (experienceIndex: number) => {
+    setExpandedSkills(prev => ({
+      ...prev,
+      [experienceIndex]: !prev[experienceIndex]
+    }));
+  };
 
   // Scroll to start of experience section when filter changes (not on initial load)
   useEffect(() => {
@@ -354,9 +285,9 @@ export default function Experience() {
       isInitialMount.current = false;
       return;
     }
-    
+
     if (experienceRef.current) {
-      const headerOffset = 140; // Account for fixed navigation (70px) + bottom sticky menu (70px)
+      const headerOffset = 80; // Account for fixed navigation only
       const elementPosition = experienceRef.current.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -368,23 +299,26 @@ export default function Experience() {
   }, [activeTab]);
 
   return (
-    <section id="experience" ref={experienceRef} style={{ background: 'var(--color-bg)' }} aria-labelledby="experience-title">
+    <section id="experience" ref={experienceRef} className="section-full-width" aria-labelledby="experience-title" role="region" aria-label="Work Experience">
       <div className="container">
-        <div className="section-header animate-on-scroll">
+        <header className="section-header animate-on-scroll">
           <h2 id="experience-title" className="section-title">Experience</h2>
           <p className="section-subtitle">9+ years building and scaling products across mobility, SaaS, robotics, and AI</p>
-        </div>
+        </header>
 
-        {/* Tab Navigation - Sticky */}
-        {/* Tab Navigation - Bottom Sticky (only visible when Experience section is in view) */}
-        <div className={`experience-tab-navigation ${isExperienceVisible ? 'visible' : 'hidden'}`}>
+        {/* Tab Navigation - Filter Bar */}
+        <div className="experience-tab-navigation">
           {tabConfig.map((tab) => (
             <button
               key={tab.id}
               className={`experience-tab-button ${activeTab === tab.id ? 'active' : ''}`}
               onClick={() => setActiveTab(tab.id)}
             >
-              <span className="tab-icon">{getCategoryIcon(tab.id)}</span>
+              {tab.id === 'all' && (
+                <span className="tab-icon">
+                  <CategoryIconAll />
+                </span>
+              )}
               {tab.label}
             </button>
           ))}
@@ -393,66 +327,93 @@ export default function Experience() {
         {/* Tab Content */}
         <div className="experience-tab-content animate-on-scroll animate-delay-1">
           {tabConfig.map((tab) => {
-            // Filter experiences for this specific tab
-            const tabExperiences = tab.id === 'all' 
-              ? experiences 
-              : experiences.filter(exp =>
-                  exp.responsibilities.some(resp => resp.category === tab.id)
-                );
-            
+            // Filter experiences by company name
+            const tabExperiences = tab.id === 'all'
+              ? experiences
+              : experiences.filter(exp => exp.company === tab.id);
+
             return (
               <div
                 key={tab.id}
                 className={`experience-tab-panel ${activeTab === tab.id ? 'active' : ''}`}
               >
                 <div className="experience-timeline">
-                  {tabExperiences.map((exp, index) => (
-                    <div key={index} className={`experience-item animate-on-scroll ${index >= 3 ? 'animate-delay-1' : ''}`}>
-                      <div className="experience-card">
-                        <div className="experience-header">
-                          <div>
-                            <h3 className="experience-title">{exp.title}</h3>
-                            <span className="experience-company">{exp.company}</span>
-                            {exp.url && (
-                              <a href={exp.url} target="_blank" rel="noopener noreferrer" className="experience-link" aria-label={`Visit ${exp.company} website`}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                </svg>
-                                Visit
-                              </a>
-                            )}
-                          </div>
-                          <span className="experience-date">{exp.date}</span>
-                        </div>
-                        <p className="experience-summary">{highlightText(exp.summary)}</p>
-                        <div className="experience-description">
-                          {exp.responsibilities.map((respCategory, catIndex) => (
-                            <div key={catIndex} className={`responsibility-category ${getCategoryColorClass(respCategory.category)}`}>
-                              <h4 className="category-title">
-                                <span className="category-icon">{getCategoryIcon(respCategory.category)}</span>
-                                {respCategory.category}
-                              </h4>
-                              <ul className="experience-responsibilities">
-                                {respCategory.items.map((item, itemIndex) => (
-                                  <li key={itemIndex}>{highlightText(item)}</li>
-                                ))}
-                              </ul>
+                  {tabExperiences.map((exp, index) => {
+                    // Get the stable index of this experience in the full experiences array
+                    const stableIndex = experiences.findIndex(e => e.company === exp.company && e.title === exp.title && e.date === exp.date);
+                    const uniqueKey = `${activeTab}-${stableIndex}`;
+                    return (
+                      <div key={uniqueKey} className="experience-item">
+                        <div className="experience-card">
+                          <div className="experience-header">
+                            <div>
+                              <h3 className="experience-title">{exp.title}</h3>
+                              <span className="experience-company">{exp.company}</span>
+                              {exp.url && (
+                                <a href={exp.url} target="_blank" rel="noopener noreferrer" className="experience-link" aria-label={`Visit ${exp.company} website`}>
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                  </svg>
+                                  Visit
+                                </a>
+                              )}
                             </div>
-                          ))}
-                          <div className="experience-skills">
-                            {exp.skills.map((skill, skillIndex) => (
-                              <span key={skillIndex} className="skill-tag">{skill}</span>
-                            ))}
+                            <span className="experience-date">{exp.date}</span>
                           </div>
-                          <div className="experience-achievements">
-                            {exp.achievements.map((achievement, achIndex) => (
-                              <span key={achIndex} className="achievement-badge">{achievement}</span>
+                          <p className="experience-summary">{highlightText(exp.summary)}</p>
+                          <div className="experience-description">
+                            {exp.responsibilities.map((respCategory, catIndex) => (
+                              <div key={catIndex} className={`responsibility-category ${getCategoryColorClass(respCategory.category)}`}>
+                                <h4 className="category-title">
+                                  <span className="category-icon">{getCategoryIcon(respCategory.category)}</span>
+                                  {respCategory.category}
+                                </h4>
+                                <ul className="experience-responsibilities">
+                                  {respCategory.items.map((item, itemIndex) => (
+                                    <li key={itemIndex}>{highlightText(item)}</li>
+                                  ))}
+                                </ul>
+                              </div>
                             ))}
+                            <div className="experience-skills">
+                              {exp.skills.slice(0, expandedSkills[stableIndex] ? exp.skills.length : 4).map((skill, skillIndex) => (
+                                <span key={skillIndex} className="skill-tag">{skill}</span>
+                              ))}
+                              {exp.skills.length > 4 && (
+                                <button
+                                  onClick={() => toggleSkillsExpand(stableIndex)}
+                                  className="view-all-skills-button"
+                                  aria-expanded={expandedSkills[stableIndex] || false}
+                                  aria-label={expandedSkills[stableIndex] ? 'Show less skills' : `Show ${exp.skills.length - 4} more skills`}
+                                >
+                                  {expandedSkills[stableIndex] ? (
+                                    <>
+                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                                      </svg>
+                                      Show less
+                                    </>
+                                  ) : (
+                                    <>
+                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                      </svg>
+                                      View all skills
+                                    </>
+                                  )}
+                                </button>
+                              )}
+                            </div>
+                            <div className="experience-achievements">
+                              {exp.achievements.map((achievement, achIndex) => (
+                                <span key={achIndex} className="achievement-badge">{achievement}</span>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             );

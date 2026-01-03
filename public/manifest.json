@@ -1,0 +1,29 @@
+{
+  "name": "Kanishka Namdeo Portfolio",
+  "short_name": "Kanishka Portfolio",
+  "description": "Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products. Expert in product strategy, NLP/LLM, and enterprise solutions.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "technology"],
+  "lang": "en",
+  "dir": "ltr",
+  "prefer_related_applications": false
+}

@@ -31,7 +31,7 @@ const education = [
 
 export default function EducationCredentials() {
   return (
-    <section id="education-credentials" aria-labelledby="education-credentials-title">
+    <section id="education-credentials" className="section-full-width" aria-labelledby="education-credentials-title">
       <div className="container">
         <div className="section-header animate-on-scroll">
           <h2 id="education-credentials-title" className="section-title">Education & Credentials</h2>

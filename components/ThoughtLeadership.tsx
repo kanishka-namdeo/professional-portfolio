@@ -2,7 +2,7 @@
 
 export default function ThoughtLeadership() {
   return (
-    <section id="thought-leadership" aria-labelledby="thought-leadership-title">
+    <section id="thought-leadership" className="section-full-width" aria-labelledby="thought-leadership-title">
       <div className="container">
         <div className="section-header animate-on-scroll">
           <h2 id="thought-leadership-title" className="section-title">What I'm Thinking About</h2>

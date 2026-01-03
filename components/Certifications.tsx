@@ -8,22 +8,22 @@ const certifications = [
     icon: '🏆',
   },
   {
-    title: 'Autonomous Mobile Robots',
-    org: 'EDX',
-    date: 'Robot Perception, Locomotion, Localization and Planning',
-    icon: '🤖',
-  },
-  {
     title: 'Advanced Robot Programmer',
     org: 'KUKA College',
     date: 'KRL Programming, SIMPRO Simulation',
     icon: '🦾',
   },
+  {
+    title: 'Autonomous Mobile Robots',
+    org: 'EDX',
+    date: 'Robot Perception, Locomotion, Localization and Planning',
+    icon: '🤖',
+  }
 ];
 
 export default function Certifications() {
   return (
-    <section id="certifications" aria-labelledby="certifications-title">
+    <section id="certifications" className="section-full-width" aria-labelledby="certifications-title">
       <div className="container">
         <div className="section-header animate-on-scroll">
           <h2 id="certifications-title" className="section-title">Certifications</h2>

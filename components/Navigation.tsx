@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 import ThemeToggle from './ThemeToggle';
 
 const navLinks = [
-  { href: '#about', label: 'About' },
-  { href: '#products', label: 'Products' },
+  { href: '#products-contributed', label: 'Products' },
+  { href: '#products', label: 'Code' },
   { href: '#experience', label: 'Experience' },
+  { href: '#about', label: 'About' },
   { href: '#skills', label: 'Skills' },
-  { href: '#press', label: 'Press' },
   { href: '#contact', label: 'Contact' },
 ];
 

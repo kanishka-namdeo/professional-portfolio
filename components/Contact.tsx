@@ -2,7 +2,7 @@
 
 export default function Contact() {
   return (
-    <section className="contact" id="contact" aria-labelledby="contact-title">
+    <section className="contact section-full-width" id="contact" aria-labelledby="contact-title">
       <div className="container">
         <div className="contact-grid">
           <div className="contact-info animate-on-scroll">

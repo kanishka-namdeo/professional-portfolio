@@ -2,7 +2,7 @@
 
 export default function Education() {
   return (
-    <section id="education" aria-labelledby="education-title">
+    <section id="education" className="section-full-width" aria-labelledby="education-title">
       <div className="container">
         <div className="section-header animate-on-scroll">
           <h2 id="education-title" className="section-title">Education</h2>
