@@ -24,12 +24,15 @@ export interface Product {
   media?: MediaItem[]; // Optional media coverage
 }
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+const withBasePath = (path: string) => `${basePath}${path}`;
+
 export const products: Product[] = [
   {
     title: 'MoveInSync Business Travel Solution',
     role: 'Led',
     description: 'Corporate car rental SaaS platform driving 8x ARR increase and 12x product usage growth with 30K+ users across 50+ locations.',
-    image: '/imgs/corporate-car-rental-fleet-variety.jpg',
+    image: withBasePath('/imgs/corporate-car-rental-fleet-variety.jpg'),
     altText: 'Diverse fleet of corporate rental cars representing the MoveInSync business travel solution',
     category: 'SaaS, Mobility',
     tags: ['8x ARR Increase', '30K+ Users', '50+ Locations'],
@@ -55,7 +58,7 @@ export const products: Product[] = [
     title: 'Spectre Modular Drone / UAV Control Software',
     role: 'Built',
     description: 'UAV control software and drone swarm algorithm achieving 15% cost savings. India\'s first modular drone with 50-minute endurance.',
-    image: '/imgs/autonomous-drone-ces-innovation-award-2021.jpg',
+    image: withBasePath('/imgs/autonomous-drone-ces-innovation-award-2021.jpg'),
     altText: 'Spectre modular drone at CES 2021 showcasing India\'s first modular UAV',
     category: 'Robotics, Defense',
     tags: ['15% Cost Savings', '50-min Endurance', 'India\'s First Modular Drone'],
@@ -68,7 +71,7 @@ export const products: Product[] = [
     title: 'Natural Language Processing MVP',
     role: 'Led',
     description: 'NLP solution using LLMs for patent analysis, increasing productivity by 10x.',
-    image: '/imgs/ai-ml-nlp-deep-learning-relationship-venn-diagram.jpg',
+    image: withBasePath('/imgs/ai-ml-nlp-deep-learning-relationship-venn-diagram.jpg'),
     altText: 'Venn diagram illustrating AI, machine learning, and natural language processing relationships',
     category: 'AI/ML, NLP',
     tags: ['10x Productivity', 'LLM Integration', 'Patent Analysis'],
@@ -81,7 +84,7 @@ export const products: Product[] = [
     title: 'In-plant Tracking System',
     role: 'Shaped',
     description: 'IoT-based tracking system for efficient vehicle movement in warehouses using smart sensing technology.',
-    image: '/imgs/isometric-warehouse-logistics-wms-infographic.jpg',
+    image: withBasePath('/imgs/isometric-warehouse-logistics-wms-infographic.jpg'),
     altText: 'Isometric warehouse layout demonstrating IoT-based vehicle tracking',
     category: 'IoT, Logistics',
     tags: ['IoT-based', 'Smart Sensing', 'Enterprise'],
@@ -94,7 +97,7 @@ export const products: Product[] = [
     title: 'Trashfin / Wasteshark Water Cleaning Drone',
     role: 'Built',
     description: 'Autonomous water surface cleaning drone capable of collecting 350kg garbage in 8 hours.',
-    image: '/imgs/ocean_cleanup_barrier_system_plastic_removal.jpg',
+    image: withBasePath('/imgs/ocean_cleanup_barrier_system_plastic_removal.jpg'),
     altText: 'Ocean cleanup barrier system removing plastic waste from water surface',
     category: 'Robotics, Environmental',
     tags: ['350kg Capacity', '8 Hours Operation', 'Autonomous'],
@@ -127,7 +130,7 @@ export const products: Product[] = [
     title: 'Wildlife Surveillance & Anti-Poaching System',
     role: 'Built',
     description: 'Government-installed surveillance system for wildlife protection in Rajasthan\'s tiger reserves including Ranthambore and Sariska.',
-    image: '/imgs/wildlife-surveillance.png',
+    image: withBasePath('/imgs/wildlife-surveillance.png'),
     altText: 'Wildlife surveillance dashboard for anti-poaching monitoring in Rajasthan tiger reserves',
     category: 'Government, Conservation',
     tags: ['Rajasthan Gov', 'Tiger Reserves', 'Surveillance'],

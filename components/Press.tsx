@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import Image from 'next/image';
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+const withBasePath = (path: string) => `${basePath}${path}`;
+
 interface PressItem {
   title: string;
   description: string;
@@ -17,7 +20,7 @@ const pressItems: PressItem[] = [
   {
     title: 'Wildlife Surveillance and Anti-poaching System Installed by Rajasthan Government',
     description: 'Coverage of the wildlife surveillance and anti-poaching system developed for Rajasthan\'s tiger reserves including Ranthambore and Sariska.',
-    image: '/imgs/wildlife-surveillance.png',
+    image: withBasePath('/imgs/wildlife-surveillance.png'),
     altText: 'Screenshot of the wildlife surveillance system interface for Rajasthan\'s tiger reserves showing anti-poaching monitoring dashboard',
     source: 'BBC Referenced',
     date: 'June 2018',
@@ -26,7 +29,7 @@ const pressItems: PressItem[] = [
   {
     title: 'Waste Collection Drones',
     description: 'Featured coverage of innovative waste collection drone technology for water bodies and coastal areas.',
-    image: '/imgs/white-quadcopter-drone-flying-over-water-technology.jpg',
+    image: withBasePath('/imgs/white-quadcopter-drone-flying-over-water-technology.jpg'),
     altText: 'White quadcopter drone flying over water demonstrating waste collection technology for lakes and coastal areas',
     source: 'BBC Featured',
     date: '2018',
@@ -35,7 +38,7 @@ const pressItems: PressItem[] = [
   {
     title: 'Robots Are No Threat But An Aide To Support Production',
     description: 'Perspective on robotics as productivity enhancers rather than threats to employment in modern manufacturing.',
-    image: '/imgs/autonomous-cargo-delivery-drone-innovation.jpg',
+    image: withBasePath('/imgs/autonomous-cargo-delivery-drone-innovation.jpg'),
     altText: 'Autonomous cargo delivery drone in industrial setting illustrating robotics innovation in manufacturing support',
     source: 'Replica Substack',
     date: 'Article',
@@ -44,7 +47,7 @@ const pressItems: PressItem[] = [
   {
     title: 'Maharashtra Embraces Startups, Signs Pacts for Works Worth ₹15 Lakh',
     description: 'Coverage of Maharashtra government\'s initiative to collaborate with startups including Trashfin marine drone.',
-    image: '/imgs/autonomous-drone-technology-innovation-composite.jpg',
+    image: withBasePath('/imgs/autonomous-drone-technology-innovation-composite.jpg'),
     altText: 'Composite image showcasing autonomous drone technology innovation for government and industrial applications',
     source: 'The Hindu',
     date: 'July 2018',
@@ -53,7 +56,7 @@ const pressItems: PressItem[] = [
   {
     title: 'Welcome Trashfin, The Water Bodies Cleaner',
     description: 'Feature on Trashfin, the innovative water surface cleaning drone capable of collecting 350kg garbage in 8 hours.',
-    image: '/imgs/drone-technology-sunset-flight-innovation.jpg',
+    image: withBasePath('/imgs/drone-technology-sunset-flight-innovation.jpg'),
     altText: 'Trashfin water surface cleaning drone flying at sunset, demonstrating innovative marine waste collection technology',
     source: 'Mumbai Mirror',
     date: '2018',
@@ -62,7 +65,7 @@ const pressItems: PressItem[] = [
   {
     title: 'Indian Startup Develops Wasteshark Water Surface Cleaning Drone',
     description: 'Technical coverage of the Wasteshark autonomous water surface cleaning drone innovation for environmental cleanup.',
-    image: '/imgs/autonomous-drone-ces-innovation-award-2021.jpg',
+    image: withBasePath('/imgs/autonomous-drone-ces-innovation-award-2021.jpg'),
     altText: 'Wasteshark autonomous water surface cleaning drone at CES 2021 showcasing Indian innovation in environmental technology',
     source: 'Future Entech',
     date: 'Article',
@@ -73,13 +76,13 @@ const pressItems: PressItem[] = [
 // Duplicate items for infinite scroll effect (3 sets)
 const infinitePressItems = [...pressItems, ...pressItems, ...pressItems];
 
-function ArticleModal({ 
-  isOpen, 
-  onClose, 
-  article 
-}: { 
-  isOpen: boolean; 
-  onClose: () => void; 
+function ArticleModal({
+  isOpen,
+  onClose,
+  article
+}: {
+  isOpen: boolean;
+  onClose: () => void;
   article: PressItem | null;
 }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -177,8 +180,8 @@ function ArticleModal({
   };
 
   return (
-    <div 
-      className="article-modal-overlay" 
+    <div
+      className="article-modal-overlay"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -193,7 +196,7 @@ function ArticleModal({
             <span className="article-modal-source">{article.source}</span>
           </div>
           <div className="article-modal-actions">
-            <button 
+            <button
               className="article-modal-external-btn"
               onClick={openInNewTab}
               aria-label="Open in new tab"
@@ -203,7 +206,7 @@ function ArticleModal({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
             </button>
-            <button 
+            <button
               className="article-modal-close-btn"
               onClick={onClose}
               aria-label="Close modal"
@@ -331,18 +334,18 @@ export default function Press() {
   const handleMouseUp = useCallback((e: React.MouseEvent) => {
     if (!isDragging || !scrollRef.current) return;
     setIsDragging(false);
-    
+
     const x = e.clientX;
     const walk = x - startX; // Reversed direction
     const threshold = cardWidth * 0.3; // Drag threshold to change slide
-    
+
     let newIndex = currentIndex;
     if (walk > threshold) {
       newIndex = currentIndex - 1; // Drag right goes to previous
     } else if (walk < -threshold) {
       newIndex = currentIndex + 1; // Drag left goes to next
     }
-    
+
     setCurrentIndex(newIndex);
     scrollTo(newIndex);
   }, [isDragging, startX, currentIndex, cardWidth, scrollTo]);
@@ -375,18 +378,18 @@ export default function Press() {
 
   return (
     <section id="press" aria-labelledby="press-title">
-      <ArticleModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+      <ArticleModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
         article={selectedArticle}
       />
-      
+
       <div className="container">
         <div className="section-header animate-on-scroll">
           <h2 id="press-title" className="section-title">Press & Media</h2>
           <p className="section-subtitle">Featured articles and media coverage</p>
         </div>
-        
+
         <div className="press-carousel-container">
           <button
             className="carousel-btn carousel-prev"
@@ -397,16 +400,16 @@ export default function Press() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          
-          <div 
-            className="press-carousel" 
+
+          <div
+            className="press-carousel"
             ref={scrollRef}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseLeave}
             style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
-            role="list" 
+            role="list"
             aria-label="Press and media coverage"
           >
             {infinitePressItems.map((item, index) => (
@@ -439,7 +442,7 @@ export default function Press() {
               </button>
             ))}
           </div>
-          
+
           <button
             className="carousel-btn carousel-next"
             onClick={() => scroll('right')}
@@ -450,7 +453,7 @@ export default function Press() {
             </svg>
           </button>
         </div>
-        
+
         <div className="carousel-indicators" role="tablist" aria-label="Press carousel pagination">
           {pressItems.map((_, index) => (
             <div
