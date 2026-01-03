@@ -5,6 +5,8 @@ import Image from 'next/image';
 
 export default function About() {
   const [isVisible, setIsVisible] = useState(false);
+  const basePath = (process.env.NEXT_PUBLIC_BASE_PATH || '').replace(/\/$/, '');
+  const profileSrc = `${basePath}/profile.jpg`;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -32,10 +34,10 @@ export default function About() {
 
         {/* Option 1 + 5: Balanced Layout with Journey Card + CTA in Left Column */}
         <div className={`about-balanced-grid ${isVisible ? 'visible' : ''}`}>
-          
+
           {/* Main Content Column (Left) */}
           <div className="about-main-col">
-            
+
             {/* Hero Tagline */}
             <div className="about-hero-card animate-on-scroll">
               <div className="about-hero-icon">🚀</div>
@@ -94,13 +96,13 @@ export default function About() {
 
           {/* Sidebar Column (Right) - Now includes Competencies */}
           <div className="about-sidebar-col">
-            
+
             {/* Profile Card with Photo */}
             <div className="about-profile-card animate-on-scroll animate-delay-1">
               <div className="about-profile-image">
                 <div className="profile-image-wrapper">
                   <Image
-                    src="/profile.jpg"
+                    src={profileSrc}
                     alt="Kanishka Namdeo"
                     width={100}
                     height={100}
@@ -127,7 +129,7 @@ export default function About() {
                 <span className="about-power-icon">📈</span>
                 <span>Growth</span>
               </div>
-  
+
               <div className="about-power-card">
                 <span className="about-power-icon">🌍</span>
                 <span>Scale</span>
