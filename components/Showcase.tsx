@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 interface ShowcaseItem {
   type: 'github' | 'medium';
@@ -77,32 +77,36 @@ export default function Showcase() {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(true);
+  const [cardStride, setCardStride] = useState(0);
 
-  const scrollToCard = (index: number) => {
-    if (scrollRef.current) {
-      const cardWidth = 380 + 32; // card width + gap
-      scrollRef.current.scrollTo({
-        left: index * cardWidth,
-        behavior: 'smooth',
-      });
-    }
-  };
+  const calculateStride = useCallback(() => {
+    if (!scrollRef.current) return;
+    const firstCard = scrollRef.current.querySelector('.showcase-card') as HTMLElement | null;
+    if (!firstCard) return;
 
-  const handleScroll = () => {
+    const cardRect = firstCard.getBoundingClientRect();
+    const scrollStyles = getComputedStyle(scrollRef.current);
+    const gapValue = (scrollStyles.gap || scrollStyles.columnGap || '0').split(' ')[0];
+    const gap = parseFloat(gapValue) || 0;
+
+    setCardStride(Math.round(cardRect.width + gap));
+  }, []);
+
+  const scrollTo = useCallback((index: number, smooth: boolean = true) => {
+    const stride = cardStride || 412; // fallback matches legacy width + gap
     if (scrollRef.current) {
-      const cardWidth = 380 + 32;
-      const scrollLeft = scrollRef.current.scrollLeft;
-      const newIndex = Math.round(scrollLeft / cardWidth);
-      setCurrentIndex(newIndex % showcaseItems.length);
+      scrollRef.current.style.transition = smooth ? 'transform 0.3s ease-out' : 'none';
+      scrollRef.current.style.transform = `translateX(-${index * stride}px)`;
     }
-  };
+  }, [cardStride]);
 
   const scroll = (direction: 'left' | 'right') => {
-    const newIndex = direction === 'left' 
+    const newIndex = direction === 'left'
       ? (currentIndex - 1 + showcaseItems.length) % showcaseItems.length
       : (currentIndex + 1) % showcaseItems.length;
     setCurrentIndex(newIndex);
-    scrollToCard(newIndex);
+    scrollTo(newIndex);
   };
 
   useEffect(() => {
@@ -127,12 +131,15 @@ export default function Showcase() {
   }, []);
 
   useEffect(() => {
-    const container = scrollRef.current;
-    if (container) {
-      container.addEventListener('scroll', handleScroll, { passive: true });
-      return () => container.removeEventListener('scroll', handleScroll);
-    }
-  }, []);
+    // Initialize position
+    scrollTo(0, false);
+    calculateStride();
+
+    const handleResize = () => calculateStride();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, [scrollTo, calculateStride]);
 
   return (
     <section className="showcase section-full-width" id="products" aria-labelledby="showcase-title">
@@ -157,12 +164,13 @@ export default function Showcase() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          
-          <div 
-            className="showcase-carousel" 
+
+          <div
+            className="showcase-carousel"
             ref={scrollRef}
-            role="list" 
+            role="list"
             aria-label="Code and open source projects"
+            style={{ display: 'flex', gap: 'var(--space-lg)', willChange: 'transform' }}
           >
             {showcaseItems.map((item, index) => (
               <a
@@ -178,11 +186,11 @@ export default function Showcase() {
                   <div className={`card-icon ${item.type}`}>
                     {item.type === 'github' ? (
                       <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
                       </svg>
                     ) : (
                       <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24">
-                        <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+                        <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
                       </svg>
                     )}
                   </div>
@@ -223,7 +231,7 @@ export default function Showcase() {
               </a>
             ))}
           </div>
-          
+
           <button
             className="carousel-btn carousel-next"
             onClick={() => scroll('right')}
@@ -235,7 +243,7 @@ export default function Showcase() {
             </svg>
           </button>
         </div>
-        
+
         <div className="carousel-indicators" role="tablist" aria-label="Carousel pagination">
           {showcaseItems.map((_, index) => (
             <button
@@ -245,7 +253,7 @@ export default function Showcase() {
               aria-label={`Go to project ${index + 1}`}
               onClick={() => {
                 setCurrentIndex(index);
-                scrollToCard(index);
+                scrollTo(index);
               }}
             />
           ))}

@@ -596,6 +596,7 @@ p,
 /* Showcase Section */
 .showcase {
   background: var(--color-bg);
+  padding: var(--space-2xl) 0;
 }
 
 /* Embla Carousel Container - Neobrutalist Theme */
@@ -630,6 +631,8 @@ p,
   overflow: hidden;
   height: 100%;
   -webkit-tap-highlight-color: transparent;
+  width: clamp(300px, 32vw, 360px);
+  min-height: clamp(480px, 65vh, 640px);
 }
 
 .showcase-card:focus {
@@ -875,6 +878,21 @@ p,
   position: relative;
   display: flex;
   flex-direction: column;
+}
+
+.showcase-carousel-container {
+  position: relative;
+  overflow: hidden;
+  padding: 0 calc(var(--space-xl) + 60px);
+}
+
+.showcase-carousel {
+  display: flex;
+  gap: var(--space-lg);
+  width: max-content;
+  padding: var(--space-sm) 0;
+  will-change: transform;
+  align-items: stretch;
 }
 
 .showcase-carousel-controls {
@@ -4515,6 +4533,8 @@ section {
 
   .showcase-card {
     padding: var(--space-lg);
+    width: 100%;
+    min-height: auto;
   }
 
   .embla__dots {
