@@ -2,7 +2,15 @@
 
 import { useState, useEffect, useRef } from 'react';
 
-type ResponsibilityCategory = 'Strategy & Leadership' | 'Product Growth' | 'Technical Collaboration' | 'Research & Innovation';
+type ResponsibilityCategory =
+  | 'Strategy & Leadership'
+  | 'Product Growth'
+  | 'Technical Collaboration'
+  | 'Research & Innovation'
+  | 'Product Strategy & MVP Execution'
+  | 'MVP Execution & Technical Collaboration'
+  | 'Product Growth & Strategy'
+  | 'Technical Collaboration & New Product Development';
 type ExpandedSkillsState = Record<number, boolean>;
 
 interface CategorizedResponsibility {
@@ -93,6 +101,14 @@ const CategoryIconAll = () => (
 
 const getCategoryIcon = (category: string) => {
   switch (category) {
+    case 'Product Strategy & MVP Execution':
+      return <CategoryIconStrategy />;
+    case 'MVP Execution & Technical Collaboration':
+      return <CategoryIconTech />;
+    case 'Product Growth & Strategy':
+      return <CategoryIconStrategy />;
+    case 'Technical Collaboration & New Product Development':
+      return <CategoryIconTech />;
     case 'Product Growth':
       return <CategoryIconGrowth />;
     case 'Strategy & Leadership':
@@ -110,6 +126,14 @@ const getCategoryIcon = (category: string) => {
 
 const getCategoryColorClass = (category: string): string => {
   switch (category) {
+    case 'Product Strategy & MVP Execution':
+      return 'category-strategy';
+    case 'MVP Execution & Technical Collaboration':
+      return 'category-tech';
+    case 'Product Growth & Strategy':
+      return 'category-strategy';
+    case 'Technical Collaboration & New Product Development':
+      return 'category-tech';
     case 'Product Growth':
       return 'category-growth';
     case 'Strategy & Leadership':
@@ -134,10 +158,10 @@ const experiences: Experience[] = [
       {
         category: 'Product Strategy & MVP Execution',
         items: [
-          "Conducted 20+ user interviews to identify workflow gaps, enabling a clear 0-to-1 product direction.", 
-          "Defined MVP scope and LLM-agent architecture, ensuring delivery of personalized investment insights.", 
-          "Secured the first beta customer before prototype completion, validating early market demand.", 
-          "Created PRDs and wireframes to align engineering and business teams, speeding execution.", 
+          "Conducted 20+ user interviews to identify workflow gaps, enabling a clear 0-to-1 product direction.",
+          "Defined MVP scope and LLM-agent architecture, ensuring delivery of personalized investment insights.",
+          "Secured the first beta customer before prototype completion, validating early market demand.",
+          "Created PRDs and wireframes to align engineering and business teams, speeding execution.",
           "Hired and guided a 4-member engineering team, accelerating technical experiments and roadmap delivery."
         ],
       },
