@@ -75,6 +75,11 @@ const highlightText = (text: string): React.ReactNode => {
   return <>{result}</>;
 };
 
+// Get company initial for logo
+const getCompanyInitial = (company: string): string => {
+  return company.charAt(0).toUpperCase();
+};
+
 // Category icon components
 const CategoryIconGrowth = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
@@ -138,14 +143,8 @@ const getCategoryColorClass = (category: string): string => {
   }
 };
 
-const BriefcaseIcon = () => (
+const ChevronIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-5 h-5">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-  </svg>
-);
-
-const ChevronIcon = ({ expanded }: { expanded: boolean }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className={`w-5 h-5 chevron-icon ${expanded ? 'expanded' : ''}`}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
   </svg>
 );
@@ -392,130 +391,118 @@ export default function Experience() {
           ))}
         </div>
 
-        {/* Accordion Experience Cards */}
+        {/* Accordion Stack Cards */}
         <div className="experience-accordion animate-on-scroll animate-delay-1">
           {filteredExperiences.map((exp, index) => {
             const originalIndex = experiences.findIndex(e => e.company === exp.company && e.title === exp.title && e.date === exp.date);
             const isExpanded = expandedCards.has(originalIndex);
 
             return (
-              <div key={originalIndex} className={`experience-accordion-item ${isExpanded ? 'expanded' : ''}`}>
-                {/* Accordion Header */}
+              <div key={originalIndex} className={`accordion-card ${isExpanded ? 'expanded' : ''}`}>
+                {/* Card Header */}
+                <div className="accordion-header">
+                  <div className="company-logo">{getCompanyInitial(exp.company)}</div>
+                  <div className="header-info">
+                    <h3>{exp.title}</h3>
+                    <span className="company-name">{exp.company}</span>
+                    <div className="header-meta">
+                      <span>{exp.date}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Preview Section */}
+                <div className="accordion-preview">
+                  <p className="summary-text">{highlightText(exp.summary)}</p>
+                  <div className="achievements-row">
+                    {exp.achievements.slice(0, 3).map((achievement, achIndex) => (
+                      <span key={achIndex} className="achievement-badge">{achievement}</span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Trigger Button */}
                 <button
-                  className="experience-accordion-header"
+                  className={`accordion-trigger ${isExpanded ? 'active' : ''}`}
                   onClick={() => toggleCard(originalIndex)}
                   aria-expanded={isExpanded}
-                  aria-controls={`experience-content-${originalIndex}`}
+                  aria-controls={`accordion-content-${originalIndex}`}
                 >
-                  <div className="accordion-header-left">
-                    <div className="accordion-company-icon">
-                      <BriefcaseIcon />
-                    </div>
-                    <div className="accordion-company-info">
-                      <h3 className="accordion-company-name">{exp.company}</h3>
-                      <span className="accordion-role-title">{exp.title}</span>
-                    </div>
-                  </div>
-                  <div className="accordion-header-right">
-                    <span className="accordion-date">{exp.date}</span>
-                    <ChevronIcon expanded={isExpanded} />
-                  </div>
+                  <span>{isExpanded ? 'Hide Case Study & Details' : 'View Case Study & Details'}</span>
+                  <ChevronIcon />
                 </button>
 
-                {/* Accordion Content */}
+                {/* Expanded Content */}
                 <div
-                  id={`experience-content-${originalIndex}`}
-                  className="experience-accordion-content"
-                  style={{ maxHeight: isExpanded ? '2000px' : '0' }}
+                  id={`accordion-content-${originalIndex}`}
+                  className={`accordion-content ${isExpanded ? 'open' : ''}`}
                   role="region"
-                  aria-labelledby={`experience-header-${originalIndex}`}
+                  aria-labelledby={`accordion-header-${originalIndex}`}
                 >
-                  <div className="accordion-content-inner">
-                    {/* Summary */}
-                    <p className="experience-summary">{highlightText(exp.summary)}</p>
-
-                    {/* Responsibilities */}
-                    <div className="experience-responsibilities-section">
-                      {exp.responsibilities.map((respCategory, catIndex) => (
-                        <div key={catIndex} className={`responsibility-category ${getCategoryColorClass(respCategory.category)}`}>
-                          <h4 className="category-title">
-                            <span className="category-icon">{getCategoryIcon(respCategory.category)}</span>
-                            {respCategory.category}
-                          </h4>
-                          <ul className="experience-responsibilities">
-                            {respCategory.items.map((item, itemIndex) => (
-                              <li key={itemIndex}>{highlightText(item)}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Skills */}
-                    <div className="experience-skills-section">
-                      <h4 className="skills-section-label">SKILLS UTILIZED</h4>
-                      <div className="experience-skills">
-                        {exp.skills.map((skill, skillIndex) => (
-                          <span key={skillIndex} className="skill-tag">{skill}</span>
+                  <div className="accordion-body">
+                    {/* Left Column - Responsibilities */}
+                    <div className="responsibilities-col">
+                      <h4 className="section-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        Key Responsibilities
+                      </h4>
+                      <ul className="responsibility-list">
+                        {exp.responsibilities.flatMap(resp => resp.items).map((item, itemIndex) => (
+                          <li key={itemIndex}>{highlightText(item)}</li>
                         ))}
+                      </ul>
+                      
+                      {/* Skills Section */}
+                      <div className="tech-stack-section">
+                        <h4 className="section-title">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                          </svg>
+                          Skills Utilized
+                        </h4>
+                        <div className="tech-stack">
+                          {exp.skills.map((skill, skillIndex) => (
+                            <span key={skillIndex} className="skill-tag">{skill}</span>
+                          ))}
+                        </div>
                       </div>
                     </div>
 
-                    {/* Achievements */}
-                    <div className="experience-achievements">
-                      {exp.achievements.map((achievement, achIndex) => (
-                        <span key={achIndex} className="achievement-badge">{achievement}</span>
-                      ))}
-                    </div>
-
-                    {/* Case Study */}
-                    {exp.caseStudy && (
-                      <div className="case-study-section">
-                        <div className="case-study-header">
-                          <span className="case-study-icon">
-                            <DocumentIcon />
-                          </span>
-                          <h4 className="case-study-title">CASE STUDY</h4>
-                        </div>
-                        <div className="case-study-content">
-                          <div className="case-study-main">
-                            <div className="case-study-block">
-                              <h5 className="case-study-block-title">CHALLENGE</h5>
-                              <p className="case-study-block-text">{exp.caseStudy.challenge}</p>
-                            </div>
-                            <div className="case-study-block">
-                              <h5 className="case-study-block-title">SOLUTION</h5>
-                              <p className="case-study-block-text">{exp.caseStudy.solution}</p>
-                            </div>
-                            <div className="case-study-block">
-                              <h5 className="case-study-block-title">IMPACT</h5>
-                              <p className="case-study-block-text">{exp.caseStudy.impact}</p>
-                            </div>
+                    {/* Right Column - Case Study */}
+                    <div className="case-study-col">
+                      {exp.caseStudy ? (
+                        <>
+                          <div className="case-study-section-block">
+                            <h4 className="case-study-block-title">THE CHALLENGE</h4>
+                            <p>{exp.caseStudy.challenge}</p>
                           </div>
-                          {exp.caseStudy.metrics && exp.caseStudy.metrics.length > 0 && (
-                            <div className="case-study-metrics">
-                              <h5 className="case-study-metrics-title">KEY METRICS</h5>
-                              <ul className="case-study-metrics-list">
-                                {exp.caseStudy.metrics.map((metric, metricIndex) => (
-                                  <li key={metricIndex} className="case-study-metric-item">
-                                    <span className="metric-bullet">▸</span>
-                                    <span>{highlightText(metric)}</span>
-                                  </li>
+                          <div className="case-study-section-block">
+                            <h4 className="case-study-block-title">THE SOLUTION</h4>
+                            <p>{exp.caseStudy.solution}</p>
+                          </div>
+                          <div className="case-study-section-block">
+                            <h4 className="case-study-block-title">RESULTS</h4>
+                            <p>{exp.caseStudy.impact}</p>
+                            {exp.caseStudy.metrics && exp.caseStudy.metrics.length > 0 && (
+                              <div className="metrics-grid">
+                                {exp.caseStudy.metrics.slice(0, 4).map((metric, metricIndex) => (
+                                  <div key={metricIndex} className="metric-item">
+                                    <div className="metric-value">{metric.split(' ')[0]}</div>
+                                    <div className="metric-label">{metric.split(' ').slice(1).join(' ')}</div>
+                                  </div>
                                 ))}
-                              </ul>
-                            </div>
-                          )}
+                              </div>
+                            )}
+                          </div>
+                        </>
+                      ) : (
+                        <div className="case-study-empty">
+                          <p>No case study available for this role.</p>
                         </div>
-                      </div>
-                    )}
-
-                    {/* Website Link */}
-                    {exp.url && (
-                      <a href={exp.url} target="_blank" rel="noopener noreferrer" className="experience-website-link">
-                        <span>Visit Website</span>
-                        <ExternalLinkIcon />
-                      </a>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

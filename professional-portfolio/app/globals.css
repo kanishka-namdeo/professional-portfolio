@@ -6426,17 +6426,17 @@ section {
   }
 }
 
-/* Experience Accordion Layout - Vertical Stack Expansion */
+/* Experience Accordion Stack Layout - Vertical Stack Expansion */
 
 /* Company Filter Tabs - ContactFAQ Style */
-.experience-filter-tabs {
+.experience-tab-navigation {
   display: flex;
   gap: var(--space-sm);
   margin-bottom: var(--space-xl);
   flex-wrap: wrap;
 }
 
-.experience-filter-tab {
+.experience-tab-button {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
@@ -6453,14 +6453,14 @@ section {
   box-shadow: var(--shadow-hard);
 }
 
-.experience-filter-tab:hover {
+.experience-tab-button:hover {
   background: var(--color-bg);
   color: var(--color-text);
   transform: translate(-2px, -2px);
   box-shadow: var(--shadow-hover);
 }
 
-.experience-filter-tab.active {
+.experience-tab-button.active {
   background: var(--accent-navy);
   color: white;
   border-color: var(--color-border);
@@ -6468,35 +6468,30 @@ section {
   transform: translate(0, 2px);
 }
 
-.experience-filter-tab-icon {
+.experience-tab-button svg {
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.2s ease;
 }
 
-.experience-filter-tab.active .experience-filter-tab-icon {
+.experience-tab-button.active svg {
   color: white;
 }
 
-.experience-filter-tab:hover .experience-filter-tab-icon {
+.experience-tab-button:hover svg {
   transform: scale(1.1);
-}
-
-.experience-filter-tab-label {
-  font-weight: 700;
-  letter-spacing: 0.02em;
 }
 
 /* Accordion Container */
 .experience-accordion {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: var(--space-lg);
 }
 
-/* Accordion Item */
-.experience-accordion-item {
+/* Accordion Card */
+.accordion-card {
   background: var(--color-surface);
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
@@ -6505,526 +6500,371 @@ section {
   transition: all 0.3s ease;
 }
 
-.experience-accordion-item:hover {
+.accordion-card:hover {
   box-shadow: var(--shadow-hover);
 }
 
-.experience-accordion-item.expanded {
+.accordion-card.expanded {
   box-shadow: 6px 6px 0 0 var(--color-border);
 }
 
 /* Accordion Header */
-.experience-accordion-header {
+.accordion-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-md);
   padding: var(--space-lg);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  user-select: none;
+  border-bottom: var(--border-width) solid var(--color-border);
 }
 
-.experience-accordion-header:hover {
-  background: var(--color-bg);
-}
-
-.experience-accordion-header-content {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  flex: 1;
-  min-width: 0;
-}
-
-.experience-accordion-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.company-logo {
   width: 56px;
   height: 56px;
   background: var(--accent-navy);
   color: white;
   border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-md);
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-}
-
-.experience-accordion-icon svg {
-  width: 28px;
-  height: 28px;
-}
-
-.experience-accordion-item.expanded .experience-accordion-icon {
-  background: var(--accent-teal);
-  transform: rotate(5deg);
-}
-
-.experience-accordion-info {
+  border-radius: var(--radius-sm);
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  flex-shrink: 0;
 }
 
-.experience-accordion-company {
+.header-info {
+  flex: 1;
+}
+
+.header-info h3 {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 1.25rem;
   font-weight: 700;
+  margin-bottom: 4px;
   color: var(--color-text);
-  line-height: 1.2;
 }
 
-.experience-accordion-role {
-  font-size: 1rem;
-  color: var(--color-text-muted);
-  font-weight: 500;
-}
-
-.experience-accordion-meta {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  flex-shrink: 0;
-}
-
-.experience-accordion-date {
-  padding: var(--space-xs) var(--space-md);
-  background: var(--color-bg);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  font-family: 'Monaco', 'Courier New', monospace;
-  font-size: 0.85rem;
+.header-info .company-name {
+  color: var(--accent-navy);
   font-weight: 600;
-  color: var(--color-text-muted);
-}
-
-.experience-accordion-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: var(--color-bg);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  color: var(--color-text-muted);
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-}
-
-.experience-accordion-toggle:hover {
-  background: var(--accent-navy);
-  color: white;
-  border-color: var(--accent-navy);
-  transform: rotate(90deg);
-}
-
-.experience-accordion-item.expanded .experience-accordion-toggle {
-  background: var(--accent-navy);
-  color: white;
-  border-color: var(--accent-navy);
-  transform: rotate(180deg);
-}
-
-.experience-accordion-toggle svg {
-  width: 20px;
-  height: 20px;
-  transition: transform 0.3s ease;
-}
-
-/* Accordion Body */
-.experience-accordion-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
-}
-
-.experience-accordion-item.expanded .experience-accordion-body {
-  max-height: 2000px;
-}
-
-.experience-accordion-content {
-  padding: var(--space-lg);
-  padding-top: 0;
-  border-top: 1px solid transparent;
-}
-
-/* Content Tabs within Accordion */
-.accordion-content-tabs {
-  display: flex;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-lg);
-  padding-bottom: var(--space-md);
-  border-bottom: 2px solid var(--color-border);
-}
-
-.accordion-content-tab {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-sm) var(--space-md);
-  background: var(--color-bg);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.accordion-content-tab:hover {
-  background: var(--color-surface);
-  color: var(--color-text);
-}
-
-.accordion-content-tab.active {
-  background: var(--accent-navy);
-  color: white;
-  border-color: var(--accent-navy);
-}
-
-.accordion-content-tab-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.accordion-content-tab.active .accordion-content-tab-icon {
-  color: white;
-}
-
-/* Panel Content */
-.accordion-panel {
-  animation: accordionPanelFadeIn 0.3s ease;
-}
-
-@keyframes accordionPanelFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Experience Panel */
-.accordion-experience-panel {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
-}
-
-.accordion-experience-summary {
-  font-size: 1.05rem;
-  color: var(--color-text-muted);
-  line-height: 1.7;
-  padding: var(--space-md);
-  background: var(--color-bg);
-  border-left: 4px solid var(--accent-teal);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-}
-
-.accordion-responsibilities-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-}
-
-.accordion-responsibility {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-md);
-  padding: var(--space-md);
-  background: var(--color-bg);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-sm);
-}
-
-.accordion-responsibility-bullet {
-  color: var(--accent-teal);
-  font-weight: 700;
-  flex-shrink: 0;
-  font-size: 1.1rem;
-  margin-top: 2px;
-}
-
-.accordion-responsibility-text {
   font-size: 1rem;
-  color: var(--color-text);
+  background: none;
+  border: none;
+  padding: 0;
+  width: auto;
+  height: auto;
+}
+
+.header-meta {
+  display: flex;
+  gap: var(--space-md);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+/* Accordion Preview */
+.accordion-preview {
+  padding: var(--space-lg);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.summary-text {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-md);
   line-height: 1.6;
 }
 
-/* Skills Section */
-.accordion-skills-section {
-  padding: var(--space-md) 0;
-}
-
-.accordion-skills-label {
-  display: inline-block;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--accent-navy);
-  margin-bottom: var(--space-md);
-  padding: 6px 12px;
-  background: var(--color-bg);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-sm);
-}
-
-.accordion-skills-list {
+.achievements-row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-xs);
-}
-
-/* Case Study Panel */
-.accordion-case-study-panel {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
-}
-
-.accordion-case-study-header {
-  padding-bottom: var(--space-md);
-  border-bottom: 2px dashed var(--color-border);
-}
-
-.accordion-case-study-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--color-text);
-  line-height: 1.3;
-}
-
-.accordion-case-study-blocks {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-}
-
-.accordion-case-study-block {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: var(--space-md);
-  background: var(--color-bg);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-sm);
-}
-
-.accordion-case-study-block-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--accent-navy);
-}
-
-.accordion-case-study-block-text {
-  font-size: 1rem;
-  color: var(--color-text);
-  line-height: 1.7;
-}
-
-/* Case Study Metrics */
-.accordion-case-study-metrics {
-  background: var(--color-bg);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  padding: var(--space-md);
-}
-
-.accordion-case-study-metrics-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--accent-teal);
-  margin-bottom: var(--space-sm);
-}
-
-.accordion-case-study-metrics-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.accordion-case-study-metric-item {
-  display: flex;
-  align-items: flex-start;
   gap: var(--space-sm);
+}
+
+/* Accordion Trigger Button */
+.accordion-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--color-bg);
+  border: none;
+  border-bottom: var(--border-width) solid var(--color-border);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--color-text);
+}
+
+.accordion-trigger:hover {
+  background: var(--accent-coral);
+  color: white;
+}
+
+.accordion-trigger svg {
+  transition: transform 0.3s ease;
+}
+
+.accordion-trigger.active svg {
+  transform: rotate(180deg);
+}
+
+.accordion-trigger.active {
+  background: var(--accent-coral);
+  color: white;
+}
+
+/* Accordion Content */
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  background: var(--color-surface);
+}
+
+.accordion-content.open {
+  max-height: 2000px;
+}
+
+.accordion-body {
+  padding: var(--space-lg);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+}
+
+@media (max-width: 768px) {
+  .accordion-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Section Title */
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 2px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-text);
+}
+
+.section-title svg {
+  color: var(--accent-navy);
+  flex-shrink: 0;
+}
+
+/* Responsibilities List */
+.responsibility-list {
+  list-style: none;
+}
+
+.responsibility-list li {
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
   font-size: 0.95rem;
+  display: flex;
+  gap: var(--space-sm);
   color: var(--color-text);
   line-height: 1.5;
 }
 
-.accordion-metric-bullet {
-  color: var(--accent-teal);
+.responsibility-list li::before {
+  content: '→';
+  color: var(--accent-coral);
   font-weight: 700;
   flex-shrink: 0;
-  font-size: 1.1rem;
 }
 
-/* Empty State */
-.accordion-case-study-empty {
+/* Tech Stack Section */
+.tech-stack-section {
+  margin-top: var(--space-lg);
+}
+
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+}
+
+.skill-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--color-bg);
+  border: 2px solid var(--color-border);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+/* Case Study Section */
+.case-study-section-block {
+  background: var(--color-bg);
+  padding: var(--space-md);
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--color-border);
+  margin-bottom: var(--space-md);
+}
+
+.case-study-section-block:last-child {
+  margin-bottom: 0;
+}
+
+.case-study-block-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent-navy);
+  margin-bottom: var(--space-sm);
+}
+
+.case-study-section-block p {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.metric-item {
+  background: var(--color-surface);
+  padding: var(--space-sm);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.metric-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--accent-coral);
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+/* Case Study Empty State */
+.case-study-empty {
   padding: var(--space-xl);
   text-align: center;
   color: var(--color-text-muted);
   font-size: 1rem;
 }
 
-/* Mobile Styles for Experience Accordion */
+/* Achievement Badge */
+.achievement-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--accent-teal);
+  color: white;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
-  .experience-filter-tabs {
-    margin-bottom: var(--space-lg);
-  }
-
-  .experience-filter-tab {
-    padding: var(--space-sm) var(--space-md);
-    font-size: 0.85rem;
-  }
-
-  .experience-accordion-header {
+  .accordion-header {
     padding: var(--space-md);
     flex-wrap: wrap;
   }
 
-  .experience-accordion-header-content {
-    flex: 1;
-    min-width: 200px;
-  }
-
-  .experience-accordion-icon {
+  .company-logo {
     width: 48px;
     height: 48px;
+    font-size: 1.25rem;
   }
 
-  .experience-accordion-icon svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  .experience-accordion-company {
+  .header-info h3 {
     font-size: 1.1rem;
   }
 
-  .experience-accordion-role {
+  .header-info .company-name {
     font-size: 0.9rem;
   }
 
-  .experience-accordion-meta {
+  .header-meta {
     width: 100%;
-    justify-content: space-between;
     margin-top: var(--space-sm);
   }
 
-  .experience-accordion-date {
-    font-size: 0.8rem;
-    padding: 4px 8px;
+  .summary-text {
+    font-size: 0.95rem;
   }
 
-  .experience-accordion-toggle {
-    width: 36px;
-    height: 36px;
-    position: absolute;
-    right: var(--space-md);
-    top: 50%;
-    transform: translateY(-50%);
+  .accordion-trigger {
+    padding: var(--space-sm);
+    font-size: 0.9rem;
   }
 
-  .experience-accordion-header {
-    position: relative;
-    padding-right: calc(var(--space-md) + 48px);
-  }
-
-  .experience-accordion-content {
+  .accordion-body {
     padding: var(--space-md);
-    padding-top: 0;
+    gap: var(--space-md);
   }
 
-  .accordion-content-tabs {
-    margin-bottom: var(--space-md);
+  .section-title {
+    font-size: 0.9rem;
   }
 
-  .accordion-content-tab {
-    padding: var(--space-xs) var(--space-sm);
-    font-size: 0.8rem;
+  .responsibility-list li {
+    font-size: 0.9rem;
+    padding: var(--space-xs) 0;
   }
 
-  .accordion-experience-summary {
-    font-size: 1rem;
-    padding: var(--space-sm);
+  .case-study-block-title {
+    font-size: 0.85rem;
   }
 
-  .accordion-responsibility {
-    padding: var(--space-sm);
+  .case-study-section-block p {
+    font-size: 0.85rem;
   }
 
-  .accordion-responsibility-text {
-    font-size: 0.95rem;
-  }
-
-  .accordion-case-study-title {
-    font-size: 1.15rem;
-  }
-
-  .accordion-case-study-block {
-    padding: var(--space-sm);
-  }
-
-  .accordion-case-study-block-text {
-    font-size: 0.95rem;
+  .metrics-grid {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 480px) {
-  .experience-filter-tab {
+  .experience-tab-button {
     padding: var(--space-xs) var(--space-sm);
     font-size: 0.8rem;
   }
 
-  .experience-filter-tab-label {
-    font-size: 0.75rem;
-  }
-
-  .experience-accordion-icon {
+  .company-logo {
     width: 40px;
     height: 40px;
-  }
-
-  .experience-accordion-icon svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .experience-accordion-company {
     font-size: 1rem;
   }
 
-  .experience-accordion-role {
-    font-size: 0.85rem;
-  }
-
-  .experience-accordion-date {
-    font-size: 0.75rem;
-  }
-
-  .accordion-content-tabs {
+  .achievements-row {
     gap: var(--space-xs);
   }
 
-  .accordion-content-tab-icon {
-    display: none;
+  .achievement-badge {
+    padding: 4px 8px;
+    font-size: 0.7rem;
   }
 }
