@@ -6897,3 +6897,205 @@ button[class*="icon"],
 .skip-link:focus {
   top: 0;
 }
+
+/* ============================================
+   PARTICLE MESH HERO ANIMATION
+   ============================================ */
+
+.particle-mesh-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.particle-mesh {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: particleFloat 8s ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(30px, -30px);
+  }
+  50% {
+    transform: translate(-20px, 20px);
+  }
+  75% {
+    transform: translate(40px, 10px);
+  }
+}
+
+/* Particle positions and colors */
+.particle:nth-child(1) {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+  background: var(--accent-coral);
+}
+
+.particle:nth-child(2) {
+  top: 30%;
+  left: 30%;
+  animation-delay: 1s;
+  background: var(--accent-navy);
+}
+
+.particle:nth-child(3) {
+  top: 15%;
+  left: 50%;
+  animation-delay: 2s;
+  background: var(--accent-teal);
+}
+
+.particle:nth-child(4) {
+  top: 50%;
+  left: 15%;
+  animation-delay: 3s;
+  background: var(--accent-coral);
+}
+
+.particle:nth-child(5) {
+  top: 40%;
+  left: 60%;
+  animation-delay: 4s;
+  background: var(--accent-indigo);
+}
+
+.particle:nth-child(6) {
+  top: 60%;
+  left: 40%;
+  animation-delay: 5s;
+  background: var(--accent-teal);
+}
+
+.particle:nth-child(7) {
+  top: 70%;
+  left: 20%;
+  animation-delay: 0.5s;
+  background: var(--accent-coral);
+}
+
+.particle:nth-child(8) {
+  top: 55%;
+  left: 70%;
+  animation-delay: 1.5s;
+  background: var(--accent-navy);
+}
+
+.particle:nth-child(9) {
+  top: 80%;
+  left: 50%;
+  animation-delay: 2.5s;
+  background: var(--accent-teal);
+}
+
+.particle:nth-child(10) {
+  top: 25%;
+  left: 80%;
+  animation-delay: 3.5s;
+  background: var(--accent-coral);
+}
+
+.particle:nth-child(11) {
+  top: 65%;
+  left: 85%;
+  animation-delay: 4.5s;
+  background: var(--accent-indigo);
+}
+
+.particle:nth-child(12) {
+  top: 45%;
+  left: 90%;
+  animation-delay: 5.5s;
+  background: var(--accent-navy);
+}
+
+/* Mesh connection lines */
+.particle-mesh-lines {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.mesh-line {
+  stroke: var(--color-border);
+  stroke-width: 0.5;
+  opacity: 0.15;
+  animation: meshPulse 4s ease-in-out infinite;
+}
+
+@keyframes meshPulse {
+  0%, 100% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.mesh-line:nth-child(1) { animation-delay: 0s; }
+.mesh-line:nth-child(2) { animation-delay: 0.2s; }
+.mesh-line:nth-child(3) { animation-delay: 0.4s; }
+.mesh-line:nth-child(4) { animation-delay: 0.6s; }
+.mesh-line:nth-child(5) { animation-delay: 0.8s; }
+.mesh-line:nth-child(6) { animation-delay: 1s; }
+.mesh-line:nth-child(7) { animation-delay: 1.2s; }
+.mesh-line:nth-child(8) { animation-delay: 1.4s; }
+.mesh-line:nth-child(9) { animation-delay: 1.6s; }
+.mesh-line:nth-child(10) { animation-delay: 1.8s; }
+.mesh-line:nth-child(11) { animation-delay: 2s; }
+.mesh-line:nth-child(12) { animation-delay: 2.2s; }
+
+/* Ensure hero content stays above particles */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-content-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .particle {
+    width: 6px;
+    height: 6px;
+  }
+
+  .mesh-line {
+    stroke-width: 0.3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particle {
+    animation: none;
+    transform: none;
+  }
+
+  .mesh-line {
+    animation: none;
+    opacity: 0.1;
+  }
+}
