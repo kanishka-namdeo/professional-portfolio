@@ -48,6 +48,14 @@
   --shadow-offset: 4px;
   --shadow-hard: 4px 4px 0px 0px var(--color-border);
   --shadow-hover: 6px 6px 0px 0px var(--color-border);
+
+  /* Interactive Elements - Standardized Sizes */
+  --btn-height-sm: 32px;
+  --btn-height-md: 44px;
+  --btn-height-lg: 48px;
+  --btn-height-xl: 56px;
+  --btn-padding-x: 1.5rem;
+  /* 24px horizontal padding */
   --radius-sm: 4px;
   --radius-md: 8px;
 
@@ -6738,4 +6746,154 @@ section {
     padding: 4px 8px;
     font-size: 0.7rem;
   }
+}
+
+/* ============================================
+   BUTTON STANDARDIZATION - UX Consistency
+   ============================================ */
+
+/* Base Button Styles */
+button,
+.btn,
+[type="button"],
+[type="submit"],
+[class*="button"] {
+  min-height: var(--btn-height-lg);
+  /* 48px minimum for good touch targets */
+  padding: var(--space-sm) var(--btn-padding-x);
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+
+/* Small Buttons (for inline actions) */
+button.sm,
+.btn-sm,
+.btn-small {
+  min-height: var(--btn-height-md);
+  /* 44px minimum */
+  padding: var(--space-xs) var(--space-md);
+  font-size: 0.875rem;
+}
+
+/* Large Buttons (for CTAs) */
+button.lg,
+.btn-lg,
+.btn-large {
+  min-height: var(--btn-height-xl);
+  /* 56px for primary CTAs */
+  padding: var(--space-md) var(--space-xl);
+  font-size: 1.125rem;
+}
+
+/* Icon-only buttons */
+button[class*="icon"],
+.icon-button {
+  min-height: var(--btn-height-md);
+  min-width: var(--btn-height-md);
+  /* Ensure square touch target */
+  padding: var(--space-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================
+   ACCESSIBILITY - Reduced Motion Support
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Disable scroll animations */
+  html.smooth-scroll {
+    scroll-behavior: auto !important;
+  }
+
+  /* Reduce animation effects */
+  .animate-on-scroll,
+  [class*="animate"] {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  /* Hover effects */
+  .showcase-card:hover,
+  .product-card:hover,
+  .foundation-card:hover,
+  .btn:hover,
+  button:hover {
+    transform: none !important;
+    box-shadow: var(--shadow-hard) !important;
+  }
+
+  /* Tab transitions */
+  .tab-panel,
+  .tab-content,
+  [class*="tab"] {
+    transition: none !important;
+  }
+
+  /* Accordion animations */
+  .accordion-content,
+  .accordion-body,
+  .faq-answer {
+    transition: none !important;
+  }
+
+  /* Fade effects */
+  .fade-in,
+  [class*="fade"] {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  /* Scroll nav slide animation */
+  .scroll-nav {
+    animation: none !important;
+  }
+
+  /* Hero animations */
+  .hero-content > * {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY - Focus Visible Support
+   ============================================ */
+
+:focus-visible {
+  outline: 3px solid var(--accent-navy);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Skip to main content link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-text);
+  color: var(--color-bg);
+  padding: var(--space-sm) var(--space-md);
+  z-index: 9999;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
 }
