@@ -189,7 +189,7 @@ const experiences: Experience[] = [
     company: 'MoveInSync',
     url: 'https://moveinsync.com/',
     date: 'Apr 2022 - Oct 2024',
-    summary: 'MoveInSync is the world’s largest transport-as-a-service provider for enterprises, simplifying employee commute and business travel management.',
+    summary: "MoveInSync is the world's largest transport-as-a-service provider for enterprises, simplifying employee commute and business travel management.",
     responsibilities: [
       {
         category: 'Product Growth & Strategy',
@@ -279,22 +279,16 @@ const experiences: Experience[] = [
   },
 ];
 
-// Extract unique companies for filter tabs
+// Extract unique companies for tabs
 const uniqueCompanies = Array.from(new Set(experiences.map(exp => exp.company))).sort();
 
 type TabType = 'all' | string;
-
-const getTabConfig = () => [
-  { id: 'all', label: 'All Companies' },
-  ...uniqueCompanies.map(company => ({ id: company, label: company })),
-];
 
 export default function Experience() {
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [expandedSkills, setExpandedSkills] = useState<ExpandedSkillsState>({});
   const experienceRef = useRef<HTMLElement>(null);
   const isInitialMount = useRef(true);
-  const tabConfig = getTabConfig();
 
   const toggleSkillsExpand = (experienceIndex: number) => {
     setExpandedSkills(prev => ({
@@ -303,7 +297,7 @@ export default function Experience() {
     }));
   };
 
-  // Scroll to start of experience section when filter changes (not on initial load)
+  // Scroll to start of experience section when tab changes (not on initial load)
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
@@ -322,6 +316,14 @@ export default function Experience() {
     }
   }, [activeTab]);
 
+  // Filter experiences based on active tab
+  const getFilteredExperiences = () => {
+    if (activeTab === 'all') {
+      return experiences;
+    }
+    return experiences.filter(exp => exp.company === activeTab);
+  };
+
   return (
     <section id="experience" ref={experienceRef} className="section-full-width" aria-labelledby="experience-title" role="region" aria-label="Work Experience">
       <div className="container">
@@ -330,118 +332,109 @@ export default function Experience() {
           <p className="section-subtitle">9+ years building and scaling products across mobility, SaaS, robotics, and AI</p>
         </header>
 
-        {/* Tab Navigation - Filter Bar */}
-        <div className="experience-tab-navigation">
-          {tabConfig.map((tab) => (
+        {/* Tab Navigation */}
+        <div className="tab-navigation animate-on-scroll">
+          <button
+            className={`tab-button ${activeTab === 'all' ? 'active' : ''}`}
+            onClick={() => setActiveTab('all')}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+            All Companies
+          </button>
+          {uniqueCompanies.map((company) => (
             <button
-              key={tab.id}
-              className={`experience-tab-button ${activeTab === tab.id ? 'active' : ''}`}
-              onClick={() => setActiveTab(tab.id)}
+              key={company}
+              className={`tab-button ${activeTab === company ? 'active' : ''}`}
+              onClick={() => setActiveTab(company)}
             >
-              {tab.id === 'all' && (
-                <span className="tab-icon">
-                  <CategoryIconAll />
-                </span>
-              )}
-              {tab.label}
+              {company}
             </button>
           ))}
         </div>
 
         {/* Tab Content */}
-        <div className="experience-tab-content animate-on-scroll animate-delay-1">
-          {tabConfig.map((tab) => {
-            // Filter experiences by company name
-            const tabExperiences = tab.id === 'all'
-              ? experiences
-              : experiences.filter(exp => exp.company === tab.id);
-
-            return (
-              <div
-                key={tab.id}
-                className={`experience-tab-panel ${activeTab === tab.id ? 'active' : ''}`}
-              >
-                <div className="experience-timeline">
-                  {tabExperiences.map((exp, index) => {
-                    // Get the stable index of this experience in the full experiences array
-                    const stableIndex = experiences.findIndex(e => e.company === exp.company && e.title === exp.title && e.date === exp.date);
-                    const uniqueKey = `${activeTab}-${stableIndex}`;
-                    return (
-                      <div key={uniqueKey} className="experience-item">
-                        <div className="experience-card">
-                          <div className="experience-header">
-                            <div>
-                              <h3 className="experience-title">{exp.title}</h3>
-                              <span className="experience-company">{exp.company}</span>
-                              {exp.url && (
-                                <a href={exp.url} target="_blank" rel="noopener noreferrer" className="experience-link" aria-label={`Visit ${exp.company} website`}>
-                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        <div className="tab-content animate-on-scroll animate-delay-1">
+          <div className="tab-panel active">
+            <div className="experience-timeline">
+              {getFilteredExperiences().map((exp, index) => {
+                // Get the stable index of this experience in the full experiences array
+                const stableIndex = experiences.findIndex(e => e.company === exp.company && e.title === exp.title && e.date === exp.date);
+                return (
+                  <div key={stableIndex} className="experience-item">
+                    <div className="experience-card">
+                      <div className="experience-header">
+                        <div>
+                          <h3 className="experience-title">{exp.title}</h3>
+                          <span className="experience-company">{exp.company}</span>
+                          {exp.url && (
+                            <a href={exp.url} target="_blank" rel="noopener noreferrer" className="experience-link" aria-label={`Visit ${exp.company} website`}>
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                              </svg>
+                              Visit
+                            </a>
+                          )}
+                        </div>
+                        <span className="experience-date">{exp.date}</span>
+                      </div>
+                      <p className="experience-summary">{highlightText(exp.summary)}</p>
+                      <div className="experience-description">
+                        {exp.responsibilities.map((respCategory, catIndex) => (
+                          <div key={catIndex} className={`responsibility-category ${getCategoryColorClass(respCategory.category)}`}>
+                            <h4 className="category-title">
+                              <span className="category-icon">{getCategoryIcon(respCategory.category)}</span>
+                              {respCategory.category}
+                            </h4>
+                            <ul className="experience-responsibilities">
+                              {respCategory.items.map((item, itemIndex) => (
+                                <li key={itemIndex}>{highlightText(item)}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                        <div className="experience-skills">
+                          {exp.skills.slice(0, expandedSkills[stableIndex] ? exp.skills.length : 4).map((skill, skillIndex) => (
+                            <span key={skillIndex} className="skill-tag">{skill}</span>
+                          ))}
+                          {exp.skills.length > 4 && (
+                            <button
+                              onClick={() => toggleSkillsExpand(stableIndex)}
+                              className="view-all-skills-button"
+                              aria-expanded={expandedSkills[stableIndex] || false}
+                              aria-label={expandedSkills[stableIndex] ? 'Show less skills' : `Show ${exp.skills.length - 4} more skills`}
+                            >
+                              {expandedSkills[stableIndex] ? (
+                                <>
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
                                   </svg>
-                                  Visit
-                                </a>
+                                  Show less
+                                </>
+                              ) : (
+                                <>
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                  </svg>
+                                  View all skills
+                                </>
                               )}
-                            </div>
-                            <span className="experience-date">{exp.date}</span>
-                          </div>
-                          <p className="experience-summary">{highlightText(exp.summary)}</p>
-                          <div className="experience-description">
-                            {exp.responsibilities.map((respCategory, catIndex) => (
-                              <div key={catIndex} className={`responsibility-category ${getCategoryColorClass(respCategory.category)}`}>
-                                <h4 className="category-title">
-                                  <span className="category-icon">{getCategoryIcon(respCategory.category)}</span>
-                                  {respCategory.category}
-                                </h4>
-                                <ul className="experience-responsibilities">
-                                  {respCategory.items.map((item, itemIndex) => (
-                                    <li key={itemIndex}>{highlightText(item)}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                            ))}
-                            <div className="experience-skills">
-                              {exp.skills.slice(0, expandedSkills[stableIndex] ? exp.skills.length : 4).map((skill, skillIndex) => (
-                                <span key={skillIndex} className="skill-tag">{skill}</span>
-                              ))}
-                              {exp.skills.length > 4 && (
-                                <button
-                                  onClick={() => toggleSkillsExpand(stableIndex)}
-                                  className="view-all-skills-button"
-                                  aria-expanded={expandedSkills[stableIndex] || false}
-                                  aria-label={expandedSkills[stableIndex] ? 'Show less skills' : `Show ${exp.skills.length - 4} more skills`}
-                                >
-                                  {expandedSkills[stableIndex] ? (
-                                    <>
-                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-                                      </svg>
-                                      Show less
-                                    </>
-                                  ) : (
-                                    <>
-                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                      </svg>
-                                      View all skills
-                                    </>
-                                  )}
-                                </button>
-                              )}
-                            </div>
-                            <div className="experience-achievements">
-                              {exp.achievements.map((achievement, achIndex) => (
-                                <span key={achIndex} className="achievement-badge">{achievement}</span>
-                              ))}
-                            </div>
-                          </div>
+                            </button>
+                          )}
+                        </div>
+                        <div className="experience-achievements">
+                          {exp.achievements.map((achievement, achIndex) => (
+                            <span key={achIndex} className="achievement-badge">{achievement}</span>
+                          ))}
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </section>
