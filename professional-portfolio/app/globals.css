@@ -1265,7 +1265,7 @@ p,
 
 /* Section Styles - Factory AI Optimized */
 section {
-  padding: var(--space-xl) 0;
+  padding: var(--space-2xl) 0;
   scroll-margin-top: 80px;
   width: 100%;
 }
@@ -1518,6 +1518,7 @@ section {
   text-decoration: none;
   color: var(--color-text);
   transition: all 0.2s ease;
+  padding: var(--space-lg);
 }
 
 .product-card:hover {
@@ -6527,19 +6528,7 @@ section {
   }
 }
 
-/* Section Title */
-.section-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  margin-bottom: var(--space-md);
-  padding-bottom: var(--space-sm);
-  border-bottom: 2px solid var(--color-border);
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  color: var(--color-text);
-}
+/* Section Title - Duplicate removed, using main definition at line 1283 */
 
 .section-title svg {
   color: var(--accent-navy);
