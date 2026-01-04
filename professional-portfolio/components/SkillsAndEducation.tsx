@@ -105,12 +105,12 @@ export default function SkillsAndEducation() {
           <p className="section-subtitle">Technical capabilities and core competencies</p>
         </header>
 
-        {/* Tab Navigation */}
-        <div className="skills-tab-navigation">
+        {/* Tab Navigation - Using exact same classes as ContactFAQ */}
+        <div className="tab-navigation">
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              className={`skills-tab-button ${activeTab === tab.id ? 'active' : ''}`}
+              className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
               onClick={() => setActiveTab(tab.id)}
               aria-label={`Switch to ${tab.label} tab`}
               aria-pressed={activeTab === tab.id}
@@ -121,59 +121,57 @@ export default function SkillsAndEducation() {
           ))}
         </div>
 
-        {/* Tab Content */}
-        <div className="skills-folder-container">
-          <div className="skills-folder-body">
-            {/* Credentials Tab Content */}
-            <div className={`skills-folder-content ${activeTab === 'credentials' ? 'active' : ''}`}>
-              <div className="credentials-folder-grid">
-                {credentials.map((item, index) => (
-                  <div
-                    key={index}
-                    className={`credential-folder-card ${item.type}`}
-                  >
-                    <div className="credential-folder-icon">
-                      {item.type === 'education' ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="28" height="28">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                      ) : (
-                        <span className="credential-icon-emoji">{item.icon}</span>
-                      )}
-                    </div>
-                    <div className="credential-folder-content">
-                      <h4 className="credential-folder-title">{item.name}</h4>
-                      <p className="credential-folder-org">{item.organization}</p>
-                      <p className="credential-folder-date">{item.date}</p>
-                    </div>
+        {/* Tab Content - Using exact same structure as ContactFAQ */}
+        <div className="tab-content">
+          {/* Credentials Tab Content */}
+          <div className={`tab-panel ${activeTab === 'credentials' ? 'active' : ''}`}>
+            <div className="credentials-folder-grid">
+              {credentials.map((item, index) => (
+                <div
+                  key={index}
+                  className={`credential-folder-card ${item.type}`}
+                >
+                  <div className="credential-folder-icon">
+                    {item.type === 'education' ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="28" height="28">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                      </svg>
+                    ) : (
+                      <span className="credential-icon-emoji">{item.icon}</span>
+                    )}
                   </div>
-                ))}
-              </div>
+                  <div className="credential-folder-content">
+                    <h4 className="credential-folder-title">{item.name}</h4>
+                    <p className="credential-folder-org">{item.organization}</p>
+                    <p className="credential-folder-date">{item.date}</p>
+                  </div>
+                </div>
+              ))}
             </div>
+          </div>
 
-            {/* Skills Tab Content */}
-            <div className={`skills-folder-content ${activeTab === 'skills' ? 'active' : ''}`}>
-              <div className="skills-folder-grid">
-                {skillCategories.map((category, index) => (
-                  <div
-                    key={index}
-                    className="skill-folder-card"
-                    style={{ '--skill-color': category.color } as React.CSSProperties}
-                  >
-                    <div className="skill-folder-header">
-                      <span className="skill-folder-indicator"></span>
-                      <h4 className="skill-folder-title">{category.title}</h4>
-                    </div>
-                    <div className="skill-folder-tags">
-                      {category.skills.map((skill, skillIndex) => (
-                        <span key={skillIndex} className="skill-folder-tag">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
+          {/* Skills Tab Content */}
+          <div className={`tab-panel ${activeTab === 'skills' ? 'active' : ''}`}>
+            <div className="skills-folder-grid">
+              {skillCategories.map((category, index) => (
+                <div
+                  key={index}
+                  className="skill-folder-card"
+                  style={{ '--skill-color': category.color } as React.CSSProperties}
+                >
+                  <div className="skill-folder-header">
+                    <span className="skill-folder-indicator"></span>
+                    <h4 className="skill-folder-title">{category.title}</h4>
                   </div>
-                ))}
-              </div>
+                  <div className="skill-folder-tags">
+                    {category.skills.map((skill, skillIndex) => (
+                      <span key={skillIndex} className="skill-folder-tag">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

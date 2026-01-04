@@ -4759,44 +4759,6 @@ section {
   margin-bottom: var(--space-xl);
 }
 
-.skills-tab-navigation {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-lg);
-}
-
-.skills-tab-button {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-lg);
-  background: var(--color-bg);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.skills-tab-button:hover {
-  color: var(--color-text);
-  background: var(--color-surface);
-}
-
-.skills-tab-button.active {
-  background: var(--accent-navy);
-  color: #ffffff;
-  border-color: var(--accent-navy);
-}
-
-.skills-tab-button svg {
-  flex-shrink: 0;
-}
-
 .folder-body {
   background: var(--color-surface);
   padding: var(--space-xl);
