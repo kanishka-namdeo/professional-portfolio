@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merged Experience + Case Study Cards - 6 Options</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #fafafa;
+            --color-surface: #ffffff;
+            --color-border: #0a0a0a;
+            --color-text: #0a0a0a;
+            --color-text-muted: #525252;
+            --accent-navy: #1e3a5f;
+            --accent-teal: #0d9488;
+            --accent-coral: #f97316;
+            --accent-indigo: #4f46e5;
+            --accent-amber: #d97706;
+            --accent-purple: #7c3aed;
+            --border-width: 3px;
+            --shadow-offset: 4px;
+            --shadow-hard: 4px 4px 0px 0px var(--color-border);
+            --shadow-hover: 6px 6px 0px 0px var(--color-border);
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --space-xs: 0.5rem;
+            --space-sm: 0.75rem;
+            --space-md: 1.5rem;
+            --space-lg: 2rem;
+            --space-xl: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            padding: var(--space-xl);
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            text-align: center;
+            margin-bottom: var(--space-xs);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-xl);
+            font-size: 1.1rem;
+        }
+
+        .option-section {
+            margin-bottom: var(--space-3xl);
+            padding-top: var(--space-xl);
+            border-top: var(--border-width) solid var(--color-border);
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-lg);
+            flex-wrap: wrap;
+            gap: var(--space-md);
+        }
+
+        .option-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-navy);
+        }
+
+        .option-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            padding: var(--space-xs) var(--space-md);
+            background: var(--color-text);
+            color: var(--color-surface);
+            border-radius: var(--radius-sm);
+        }
+
+        /* Shared Components */
+        .neo-card {
+            background: var(--color-surface);
+            border: var(--border-width) solid var(--color-border);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-hard);
+        }
+
+        .neo-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-sm) var(--space-md);
+            background: var(--accent-navy);
+            color: white;
+            border: var(--border-width) solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .neo-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .neo-btn.secondary {
+            background: var(--color-surface);
+            color: var(--color-text);
+        }
+
+        .skill-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background: var(--color-bg);
+            border: 2px solid var(--color-border);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .achievement-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--accent-teal);
+            color: white;
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .category-label {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-xs) var(--space-sm);
+            background: var(--color-bg);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .category-label svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ===== OPTION 1: ACCORDION STACK ===== */
+        .accordion-card {
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-lg);
+            border-bottom: var(--border-width) solid var(--color-border);
+        }
+
+        .company-logo {
+            width: 56px;
+            height: 56px;
+            background: var(--accent-navy);
+            color: white;
+            border: var(--border-width) solid var(--color-border);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .header-info {
+            flex: 1;
+        }
+
+        .header-info h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .company-name {
+            color: var(--accent-navy);
+            font-weight: 600;
+        }
+
+        .header-meta {
+            display: flex;
+            gap: var(--space-md);
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            margin-top: var(--space-xs);
+        }
+
+        .accordion-preview {
+            padding: var(--space-lg);
+            border-bottom: var(--border-width) solid var(--color-border);
+        }
+
+        .summary-text {
+            font-size: 1rem;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-md);
+        }
+
+        .achievements-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+
+        .accordion-trigger {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            width: 100%;
+            padding: var(--space-md);
+            background: var(--color-bg);
+            border: none;
+            border-bottom: var(--border-width) solid var(--color-border);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .accordion-trigger:hover {
+            background: var(--accent-amber);
+        }
+
+        .accordion-trigger svg {
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-trigger.active svg {
+            transform: rotate(180deg);
+        }
+
+        .accordion-trigger.active {
+            background: var(--accent-amber);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: var(--color-surface);
+        }
+
+        .accordion-content.open {
+            max-height: 2000px;
+        }
+
+        .accordion-body {
+            padding: var(--space-lg);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-xl);
+        }
+
+        @media (max-width: 768px) {
+            .accordion-body {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-sm);
+            border-bottom: 2px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .section-title svg {
+            color: var(--accent-navy);
+        }
+
+        .responsibility-list {
+            list-style: none;
+        }
+
+        .responsibility-list li {
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 0.9rem;
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .responsibility-list li::before {
+            content: '→';
+            color: var(--accent-coral);
+            font-weight: 700;
+        }
+
+        .case-study-section {
+            background: var(--color-bg);
+            padding: var(--space-md);
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--color-border);
+        }
+
+        .case-study-section h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--accent-navy);
+            margin-bottom: var(--space-sm);
+        }
+
+        .case-study-section p {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+        }
+
+        .metric-item {
+            background: var(--color-surface);
+            padding: var(--space-sm);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .metric-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-coral);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+            margin-top: var(--space-md);
+        }
+
+        /* ===== OPTION 2: MANILA FOLDER TABS ===== */
+        .folder-card {
+            overflow: hidden;
+        }
+
+        .folder-tabs {
+            display: flex;
+            gap: 0;
+            background: var(--color-bg);
+            border-bottom: var(--border-width) solid var(--color-border);
+            padding: 0 var(--space-sm) 0 var(--space-sm);
+        }
+
+        .folder-tab {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-md) var(--space-lg);
+            background: var(--color-bg);
+            border: var(--border-width) solid var(--color-border);
+            border-bottom: none;
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: calc(-1 * var(--border-width));
+            position: relative;
+            z-index: 1;
+        }
+
+        .folder-tab:hover {
+            color: var(--color-text);
+            background: var(--color-surface);
+        }
+
+        .folder-tab.active {
+            background: var(--color-surface);
+            color: var(--color-text);
+            border-color: var(--color-border);
+            border-bottom-color: var(--color-surface);
+            margin-bottom: 0;
+            padding-bottom: calc(var(--space-md) + var(--border-width));
+            z-index: 10;
+        }
+
+        .folder-tab.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-coral);
+        }
+
+        .folder-body {
+            background: var(--color-surface);
+            padding: var(--space-xl);
+        }
+
+        .folder-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .folder-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-xl);
+        }
+
+        @media (max-width: 900px) {
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card-highlight {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            background: var(--accent-navy);
+            color: white;
+            border: var(--border-width) solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: var(--space-md);
+            width: fit-content;
+        }
+
+        .case-study-flow {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .flow-item {
+            display: flex;
+            gap: var(--space-md);
+            align-items: flex-start;
+        }
+
+        .flow-number {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-coral);
+            color: white;
+            border: 2px solid var(--color-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .flow-content h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .flow-content p {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        .results-row {
+            display: flex;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        /* ===== OPTION 3: SPLIT SCREEN ===== */
+        .split-card {
+            display: flex;
+            overflow: hidden;
+        }
+
+        .split-left {
+            flex: 1;
+            padding: var(--space-xl);
+            border-right: var(--border-width) solid var(--color-border);
+            background: var(--color-surface);
+        }
+
+        .split-right {
+            flex: 1;
+            padding: var(--space-xl);
+            background: var(--accent-amber);
+            position: relative;
+        }
+
+        .split-right::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle at 2px 2px, rgba(0,0,0,0.1) 1px, transparent 0);
+            background-size: 8px 8px;
+            pointer-events: none;
+        }
+
+        .split-label {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-xs) var(--space-sm);
+            background: var(--color-border);
+            color: var(--color-surface);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--space-md);
+        }
+
+        .split-left .split-label {
+            background: var(--accent-navy);
+        }
+
+        .split-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .split-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+        }
+
+        .split-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: var(--color-surface);
+            border: var(--border-width) solid var(--color-border);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: -24px;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        .split-divider svg {
+            color: var(--color-text);
+        }
+
+        .impact-statement {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: var(--space-lg);
+            color: var(--color-text);
+        }
+
+        .impact-highlight {
+            color: var(--accent-navy);
+            background: var(--color-surface);
+            padding: 2px 8px;
+            border: 2px solid var(--color-border);
+        }
+
+        @media (max-width: 900px) {
+            .split-card {
+                flex-direction: column;
+            }
+            .split-left {
+                border-right: none;
+                border-bottom: var(--border-width) solid var(--color-border);
+            }
+            .split-divider {
+                display: none;
+            }
+        }
+
+        /* ===== OPTION 4: SIDE DRAWER ===== */
+        .drawer-card {
+            display: flex;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .drawer-main {
+            flex: 1;
+            padding: var(--space-xl);
+            background: var(--color-surface);
+            transition: margin-right 0.4s ease;
+        }
+
+        .drawer-strip {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            background: var(--accent-indigo);
+            border-left: var(--border-width) solid var(--color-border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        .drawer-strip:hover {
+            background: var(--accent-navy);
+        }
+
+        .drawer-label {
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            padding: var(--space-md) 0;
+        }
+
+        .drawer-panel {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: var(--color-text);
+            color: var(--color-surface);
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+            overflow-y: auto;
+        }
+
+        .drawer-panel.open {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-lg);
+            background: var(--accent-indigo);
+            border-bottom: var(--border-width) solid var(--color-surface);
+        }
+
+        .drawer-header h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .drawer-close {
+            width: 36px;
+            height: 36px;
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .drawer-close:hover {
+            background: var(--accent-coral);
+            color: white;
+        }
+
+        .drawer-content {
+            padding: var(--space-lg);
+        }
+
+        .drawer-section {
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .drawer-section:last-child {
+            border-bottom: none;
+        }
+
+        .drawer-section h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--accent-amber);
+            margin-bottom: var(--space-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .drawer-section p {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        .drawer-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+        }
+
+        .drawer-metric {
+            background: rgba(255,255,255,0.1);
+            padding: var(--space-md);
+            border-radius: var(--radius-sm);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .drawer-metric-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-amber);
+        }
+
+        .drawer-metric-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .drawer-panel {
+                width: 100%;
+                left: 0;
+            }
+        }
+
+        /* ===== OPTION 5: OS WINDOW ===== */
+        .window-card {
+            position: relative;
+        }
+
+        .window-base {
+            padding: var(--space-xl);
+            background: var(--color-surface);
+            border: var(--border-width) solid var(--color-border);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-hard);
+        }
+
+        .window-trigger {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-lg);
+            background: var(--color-bg);
+            border: 2px dashed var(--color-border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .window-trigger:hover {
+            background: var(--accent-teal);
+            color: white;
+            border-style: solid;
+        }
+
+        .window-trigger-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-teal);
+            color: white;
+            border: var(--border-width) solid var(--color-border);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .window-trigger-text h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .window-trigger-text p {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        .window-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: var(--space-lg);
+        }
+
+        .window-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .window-modal {
+            background: var(--color-surface);
+            border: var(--border-width) solid var(--color-border);
+            border-radius: var(--radius-md);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .window-overlay.open .window-modal {
+            transform: scale(1);
+        }
+
+        .window-titlebar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-md) var(--space-lg);
+            background: var(--accent-navy);
+            border-bottom: var(--border-width) solid var(--color-border);
+        }
+
+        .window-titlebar h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .window-controls {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .window-btn {
+            width: 32px;
+            height: 32px;
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .window-btn:hover {
+            background: var(--accent-coral);
+            color: white;
+        }
+
+        .window-body {
+            padding: var(--space-xl);
+        }
+
+        .story-section {
+            margin-bottom: var(--space-xl);
+        }
+
+        .story-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .story-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+
+        .story-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--color-bg);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-navy);
+        }
+
+        .story-header h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .story-content {
+            padding-left: calc(40px + var(--space-sm));
+        }
+
+        .story-content p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--color-text-muted);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        @media (max-width: 600px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .result-card {
+            background: var(--color-bg);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            padding: var(--space-md);
+            text-align: center;
+        }
+
+        .result-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent-coral);
+        }
+
+        .result-label {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            margin-top: 4px;
+        }
+
+        /* ===== OPTION 6: Z-INDEX STACK ===== */
+        .stack-container {
+            position: relative;
+            height: 400px;
+            perspective: 1000px;
+        }
+
+        .stack-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: var(--space-xl);
+            background: var(--color-surface);
+            border: var(--border-width) solid var(--color-border);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-hard);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+        }
+
+        .stack-card.back {
+            background: var(--accent-purple);
+            color: white;
+            transform: translate(16px, 16px);
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .stack-card.back:hover {
+            transform: translate(12px, 12px);
+        }
+
+        .stack-card.front {
+            transform: translate(0, 0);
+            z-index: 2;
+        }
+
+        .stack-card.hidden {
+            display: none;
+        }
+
+        .stack-switch-hint {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm);
+            background: var(--color-bg);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-md);
+        }
+
+        .stack-card.back .stack-switch-hint {
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7);
+        }
+
+        .stack-card.back h3,
+        .stack-card.back h4,
+        .stack-card.back p {
+            color: white;
+        }
+
+        .stack-card.back .category-label {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .stack-card.back .responsibility-list li {
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .case-study-hero {
+            background: var(--color-bg);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+
+        .case-study-hero h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+            color: var(--accent-navy);
+        }
+
+        .case-study-hero p {
+            font-size: 0.95rem;
+            color: var(--color-text-muted);
+        }
+
+        .case-study-hero.back {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .case-study-hero.back h3 {
+            color: var(--accent-amber);
+        }
+
+        .case-study-hero.back p {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .impact-list {
+            list-style: none;
+            margin-top: var(--space-md);
+        }
+
+        .impact-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-sm);
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .stack-card.back .impact-list li {
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .impact-list li::before {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--accent-teal);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .stack-card.back .impact-list li::before {
+            background: var(--accent-amber);
+            color: var(--color-text);
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+            margin-top: var(--space-md);
+        }
+
+        .tech-tag {
+            padding: 4px 12px;
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .stack-card.back .tech-tag {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+            color: white;
+        }
+
+        /* Utility */
+        .flex-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+
+        .mb-sm { margin-bottom: var(--space-sm); }
+        .mb-md { margin-bottom: var(--space-md); }
+        .mb-lg { margin-bottom: var(--space-lg); }
+    </style>
+</head>
+<body>
+    <h1>Merged Experience + Case Study Cards</h1>
+    <p class="subtitle">6 Distinct Layout Options - MoveInSync Case Study Example</p>
+
+    <!-- OPTION 1: ACCORDION STACK -->
+    <section class="option-section">
+        <div class="option-header">
+            <h2 class="option-title">Option 1: Accordion Stack</h2>
+            <span class="option-badge">VERTICAL EXPANSION</span>
+        </div>
+        <div class="neo-card accordion-card">
+            <div class="accordion-header">
+                <div class="company-logo">M</div>
+                <div class="header-info">
+                    <h3>Senior Product Manager</h3>
+                    <span class="company-name">MoveInSync</span>
+                    <div class="header-meta">
+                        <span>Apr 2022 - Oct 2024</span>
+                        <span>Dubai, UAE</span>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-preview">
+                <p class="summary-text">World's largest transport-as-a-service provider for enterprises, simplifying employee commute and business travel management across 70+ locations.</p>
+                <div class="achievements-row">
+                    <span class="achievement-badge">10x ARR Growth</span>
+                    <span class="achievement-badge">60,000+ Users</span>
+                    <span class="achievement-badge">3 Countries</span>
+                </div>
+            </div>
+            <button class="accordion-trigger" onclick="toggleAccordion(this)">
+                <span>View Case Study & Details</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div class="accordion-content">
+                <div class="accordion-body">
+                    <div class="responsibilities-col">
+                        <h4 class="section-title">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            Key Responsibilities
+                        </h4>
+                        <ul class="responsibility-list">
+                            <li>Defined product vision and roadmap, driving 10x ARR growth</li>
+                            <li>Expanded operations to 50+ new locations across 3 countries</li>
+                            <li>Improved mobile app experience, increasing adoption by 20%</li>
+                            <li>Rolled out invoicing, ERP integrations, and payments features</li>
+                            <li>Managed an 8-person sprint team, doubling productivity</li>
+                        </ul>
+                    </div>
+                    <div class="case-study-col">
+                        <div class="case-study-section mb-md">
+                            <h4>🎯 The Challenge</h4>
+                            <p>Enterprise clients struggled with fragmented commute management across multiple locations, leading to 35% higher costs and poor employee satisfaction scores.</p>
+                        </div>
+                        <div class="case-study-section mb-md">
+                            <h4>💡 The Solution</h4>
+                            <p>Built a unified platform integrating route optimization, real-time tracking, and payment processing with existing ERP systems.</p>
+                        </div>
+                        <div class="case-study-section">
+                            <h4>📊 Results</h4>
+                            <div class="metrics-grid">
+                                <div class="metric-item">
+                                    <div class="metric-value">10x</div>
+                                    <div class="metric-label">ARR Growth</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-value">60K+</div>
+                                    <div class="metric-label">Monthly Users</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-value">40%</div>
+                                    <div class="metric-label">Faster Implementation</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-value">70+</div>
+                                    <div class="metric-label">Locations</div>
+                                </div>
+                            </div>
+                            <div class="tech-stack">
+                                <span class="skill-tag">React Native</span>
+                                <span class="skill-tag">Node.js</span>
+                                <span class="skill-tag">PostgreSQL</span>
+                                <span class="skill-tag">Redis</span>
+                                <span class="skill-tag">AWS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OPTION 2: MANILA FOLDER TABS -->
+    <section class="option-section">
+        <div class="option-header">
+            <h2 class="option-title">Option 2: Manila Folder Tabs</h2>
+            <span class="option-badge">TABBED INTERFACE</span>
+        </div>
+        <div class="neo-card folder-card">
+            <div class="folder-tabs">
+                <button class="folder-tab active" onclick="switchTab(this, 'overview')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    Overview
+                </button>
+                <button class="folder-tab" onclick="switchTab(this, 'casestudy')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                    </svg>
+                    Case Study
+                </button>
+            </div>
+            <div class="folder-body">
+                <div id="overview" class="folder-content active">
+                    <div class="overview-grid">
+                        <div>
+                            <span class="card-highlight">Apr 2022 - Oct 2024</span>
+                            <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: var(--space-sm);">Senior Product Manager</h3>
+                            <p style="color: var(--accent-navy); font-weight: 600; font-size: 1.1rem; margin-bottom: var(--space-md);">MoveInSync</p>
+                            <p class="summary-text mb-lg">World's largest transport-as-a-service provider for enterprises, simplifying employee commute and business travel management across 70+ locations globally.</p>
+                            
+                            <span class="category-label mb-sm" style="background: var(--accent-teal); color: white;">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                                Product Growth & Strategy
+                            </span>
+                            
+                            <ul class="responsibility-list">
+                                <li>Defined product vision and roadmap, driving 10x ARR growth</li>
+                                <li>Expanded operations to 50+ new locations across 3 countries</li>
+                                <li>Improved mobile app experience, increasing adoption by 20%</li>
+                                <li>Rolled out invoicing, ERP integrations, and payments features</li>
+                                <li>Managed an 8-person sprint team, doubling productivity</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="neo-card" style="padding: var(--space-md); background: var(--color-bg);">
+                                <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: var(--space-md);">Key Achievements</h4>
+                                <div class="flex-wrap">
+                                    <span class="achievement-badge">10x ARR</span>
+                                    <span class="achievement-badge">60K Users</span>
+                                    <span class="achievement-badge">3 Countries</span>
+                                </div>
+                                <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; margin: var(--space-md) 0 var(--space-sm);">Skills</h4>
+                                <div class="flex-wrap">
+                                    <span class="skill-tag">Product Strategy</span>
+                                    <span class="skill-tag">User Research</span>
+                                    <span class="skill-tag">API Integrations</span>
+                                    <span class="skill-tag">Team Leadership</span>
+                                    <span class="skill-tag">Agile/Scrum</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="casestudy" class="folder-content">
+                    <div class="case-study-flow">
+                        <div class="flow-item">
+                            <div class="flow-number">1</div>
+                            <div class="flow-content">
+                                <h4>🎯 The Challenge</h4>
+                                <p>Enterprise clients struggled with fragmented commute management across multiple locations. Legacy systems couldn't scale, resulting in 35% higher operational costs and declining employee satisfaction scores.</p>
+                            </div>
+                        </div>
+                        <div class="flow-item">
+                            <div class="flow-number">2</div>
+                            <div class="flow-content">
+                                <h4>💡 My Approach</h4>
+                                <p>Conducted 50+ user interviews to identify pain points. Built a unified platform with route optimization, real-time tracking, and seamless ERP integrations. Implemented A/B testing to iterate on key flows.</p>
+                            </div>
+                        </div>
+                        <div class="flow-item">
+                            <div class="flow-number">3</div>
+                            <div class="flow-content">
+                                <h4>🚀 Results Delivered</h4>
+                                <p>Achieved 10x ARR growth through product-led expansion. Scaled from 20 to 70+ locations. Reduced client implementation time by 40% through standardized onboarding flows.</p>
+                                <div class="results-row">
+                                    <span class="achievement-badge">$2M+ Revenue</span>
+                                    <span class="achievement-badge">60K MAU</span>
+                                    <span class="achievement-badge">40% Faster</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: var(--space-lg); padding-top: var(--space-lg); border-top: 2px solid var(--color-border);">
+                        <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: var(--space-sm);">Technologies & Tools</h4>
+                        <div class="flex-wrap">
+                            <span class="skill-tag">React Native</span>
+                            <span class="skill-tag">Node.js</span>
+                            <span class="skill-tag">PostgreSQL</span>
+                            <span class="skill-tag">Redis</span>
+                            <span class="skill-tag">AWS</span>
+                            <span class="skill-tag">Mixpanel</span>
+                            <span class="skill-tag">Jira</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OPTION 3: SPLIT SCREEN -->
+    <section class="option-section">
+        <div class="option-header">
+            <h2 class="option-title">Option 3: Split Screen</h2>
+            <span class="option-badge">50/50 LAYOUT</span>
+        </div>
+        <div class="neo-card split-card">
+            <div class="split-left">
+                <span class="split-label">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    EXPERIENCE
+                </span>
+                <div class="split-content">
+                    <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: var(--space-sm);">Senior Product Manager</h3>
+                    <p style="color: var(--accent-navy); font-weight: 600; font-size: 1.1rem; margin-bottom: var(--space-md);">MoveInSync | Apr 2022 - Oct 2024</p>
+                    <p class="summary-text mb-lg">Led the product strategy for the world's largest transport-as-a-service platform, managing a cross-functional team of 8 engineers and driving growth across 70+ locations.</p>
+                    
+                    <span class="category-label mb-md" style="background: var(--accent-teal); color: white;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                        Product Growth & Strategy
+                    </span>
+                    
+                    <ul class="responsibility-list">
+                        <li>Defined product vision and roadmap, driving 10x ARR growth</li>
+                        <li>Expanded operations to 50+ new locations across 3 countries</li>
+                        <li>Improved mobile app experience, increasing adoption by 20%</li>
+                        <li>Rolled out invoicing, ERP integrations, and payments</li>
+                    </ul>
+                    
+                    <div class="flex-wrap" style="margin-top: var(--space-lg);">
+                        <span class="skill-tag">Product Strategy</span>
+                        <span class="skill-tag">User Research</span>
+                        <span class="skill-tag">Agile/Scrum</span>
+                        <span class="skill-tag">API Design</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="split-divider">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+            </div>
+            
+            <div class="split-right">
+                <span class="split-label">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    CASE STUDY
+                </span>
+                <div class="split-content">
+                    <p class="impact-statement">How I <span class="impact-highlight">10x'd ARR</span> and scaled to 70+ locations by reimagining enterprise commute management.</p>
+                    
+                    <div class="case-study-section" style="background: var(--color-surface); padding: var(--space-md); border-radius: var(--radius-sm); border: 2px solid var(--color-border); margin-bottom: var(--space-md);">
+                        <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: var(--space-sm); color: var(--color-text);">The Problem</h4>
+                        <p style="font-size: 0.9rem; color: var(--color-text-muted);">Enterprise clients struggled with fragmented commute management across multiple locations, leading to 35% higher costs and poor employee satisfaction.</p>
+                    </div>
+                    
+                    <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: var(--space-sm);">Impact Metrics</h4>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-sm);">
+                        <div class="metric-item" style="background: var(--color-surface);">
+                            <div class="metric-value" style="color: var(--color-text);">10x</div>
+                            <div class="metric-label">ARR Growth</div>
+                        </div>
+                        <div class="metric-item" style="background: var(--color-surface);">
+                            <div class="metric-value" style="color: var(--color-text);">60K+</div>
+                            <div class="metric-label">Monthly Users</div>
+                        </div>
+                        <div class="metric-item" style="background: var(--color-surface);">
+                            <div class="metric-value" style="color: var(--color-text);">40%</div>
+                            <div class="metric-label">Faster Setup</div>
+                        </div>
+                        <div class="metric-item" style="background: var(--color-surface);">
+                            <div class="metric-value" style="color: var(--color-text);">70+</div>
+                            <div class="metric-label">Locations</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OPTION 4: SIDE DRAWER -->
+    <section class="option-section">
+        <div class="option-header">
+            <h2 class="option-title">Option 4: Side Drawer</h2>
+            <span class="option-badge">SLIDE-OUT PANEL</span>
+        </div>
+        <div class="neo-card drawer-card">
+            <div class="drawer-main">
+                <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg);">
+                    <div class="company-logo" style="width: 48px; height: 48px; font-size: 1rem;">M</div>
+                    <div>
+                        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: 700;">Senior Product Manager</h3>
+                        <p style="color: var(--accent-navy); font-weight: 600; font-size: 0.95rem;">MoveInSync | 2022-2024</p>
+                    </div>
+                </div>
+                <p class="summary-text mb-lg">Led product strategy for the world's largest transport-as-a-service platform serving 60,000+ monthly users across 70+ locations.</p>
+                <span class="category-label mb-md" style="background: var(--accent-teal); color: white;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                    Product Growth & Strategy
+                </span>
+                <ul class="responsibility-list mb-lg">
+                    <li>Defined product vision and roadmap, driving 10x ARR growth</li>
+                    <li>Expanded operations to 50+ new locations across 3 countries</li>
+                    <li>Improved mobile app experience, increasing adoption by 20%</li>
+                    <li>Rolled out invoicing, ERP integrations, and payments features</li>
+                </ul>
+                <div class="flex-wrap">
+                    <span class="achievement-badge">10x ARR</span>
+                    <span class="achievement-badge">60K Users</span>
+                    <span class="achievement-badge">3 Countries</span>
+                </div>
+            </div>
+            <div class="drawer-strip" onclick="toggleDrawer()">
+                <span class="drawer-label">CASE STUDY →</span>
+            </div>
+            <div class="drawer-panel" id="drawerPanel">
+                <div class="drawer-header">
+                    <h3>Case Study Deep Dive</h3>
+                    <button class="drawer-close" onclick="toggleDrawer()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="drawer-content">
+                    <div class="drawer-section">
+                        <h4>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            The Challenge
+                        </h4>
+                        <p>Enterprise clients struggled with fragmented commute management across multiple locations. Legacy systems couldn't scale, resulting in 35% higher operational costs and declining employee satisfaction scores.</p>
+                    </div>
+                    <div class="drawer-section">
+                        <h4>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                            My Solution
+                        </h4>
+                        <p>Conducted 50+ user interviews to identify pain points. Built a unified platform with route optimization, real-time tracking, and seamless ERP integrations. Implemented A/B testing to iterate on key flows.</p>
+                    </div>
+                    <div class="drawer-section">
+                        <h4>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                            </svg>
+                            Results
+                        </h4>
+                        <div class="drawer-metrics">
+                            <div class="drawer-metric">
+                                <div class="drawer-metric-value">10x</div>
+                                <div class="drawer-metric-label">ARR Growth</div>
+                            </div>
+                            <div class="drawer-metric">
+                                <div class="drawer-metric-value">60K+</div>
+                                <div class="drawer-metric-label">Monthly Users</div>
+                            </div>
+                            <div class="drawer-metric">
+                                <div class="drawer-metric-value">40%</div>
+                                <div class="drawer-metric-label">Faster Setup</div>
+                            </div>
+                            <div class="drawer-metric">
+                                <div class="drawer-metric-value">70+</div>
+                                <div class="drawer-metric-label">Locations</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                            </svg>
+                            Technologies
+                        </h4>
+                        <div class="flex-wrap">
+                            <span class="skill-tag" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3);">React Native</span>
+                            <span class="skill-tag" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3);">Node.js</span>
+                            <span class="skill-tag" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3);">PostgreSQL</span>
+                            <span class="skill-tag" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3);">AWS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OPTION 5: OS WINDOW -->
+    <section class="option-section">
+        <div class="option-header">
+            <h2 class="option-title">Option 5: OS Window</h2>
+            <span class="option-badge">MODAL INTERFACE</span>
+        </div>
+        <div class="neo-card window-card">
+            <div class="window-base">
+                <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg);">
+                    <div class="company-logo" style="width: 48px; height: 48px; font-size: 1rem;">M</div>
+                    <div>
+                        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: 700;">Senior Product Manager</h3>
+                        <p style="color: var(--accent-navy); font-weight: 600; font-size: 0.95rem;">MoveInSync | Apr 2022 - Oct 2024</p>
+                    </div>
+                </div>
+                <p class="summary-text mb-md">World's largest transport-as-a-service provider for enterprises. Led product strategy driving 10x ARR growth across 70+ locations.</p>
+                <div class="flex-wrap mb-lg">
+                    <span class="achievement-badge">10x ARR</span>
+                    <span class="achievement-badge">60K Users</span>
+                    <span class="achievement-badge">3 Countries</span>
+                </div>
+                <button class="neo-btn" onclick="openWindow()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                    </svg>
+                    Open Full Case Study
+                </button>
+            </div>
+        </div>
+        
+        <div class="window-overlay" id="windowOverlay" onclick="closeWindow(event)">
+            <div class="window-modal" onclick="event.stopPropagation()">
+                <div class="window-titlebar">
+                    <h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                        </svg>
+                        MoveInSync: 10x ARR Growth Case Study
+                    </h3>
+                    <div class="window-controls">
+                        <button class="window-btn" onclick="closeWindow(event)">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="window-body">
+                    <div class="story-section">
+                        <div class="story-header">
+                            <div class="story-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                            <h4>The Challenge</h4>
+                        </div>
+                        <div class="story-content">
+                            <p>Enterprise clients struggled with fragmented commute management across multiple locations. Legacy systems couldn't scale, resulting in 35% higher operational costs and declining employee satisfaction scores. The company needed a unified solution that could handle complex enterprise requirements while maintaining a seamless user experience.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="story-section">
+                        <div class="story-header">
+                            <div class="story-icon" style="color: var(--accent-coral);">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                </svg>
+                            </div>
+                            <h4>My Approach</h4>
+                        </div>
+                        <div class="story-content">
+                            <p>I conducted 50+ user interviews with enterprise admins and commuters to identify pain points. Based on insights, I defined the product vision and built a unified platform with route optimization, real-time tracking, and seamless ERP integrations. I implemented A/B testing to iterate on key flows and worked closely with engineering to deliver features on time.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="story-section">
+                        <div class="story-header">
+                            <div class="story-icon" style="color: var(--accent-teal);">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                                </svg>
+                            </div>
+                            <h4>Results Delivered</h4>
+                        </div>
+                        <div class="story-content">
+                            <p>Achieved 10x ARR growth through product-led expansion. Scaled from 20 to 70+ locations across 3 countries. Reduced client implementation time by 40% through standardized onboarding flows.</p>
+                            <div class="results-grid">
+                                <div class="result-card">
+                                    <div class="result-value">10x</div>
+                                    <div class="result-label">ARR Growth</div>
+                                </div>
+                                <div class="result-card">
+                                    <div class="result-value">60K+</div>
+                                    <div class="result-label">Monthly Users</div>
+                                </div>
+                                <div class="result-card">
+                                    <div class="result-value">40%</div>
+                                    <div class="result-label">Faster Setup</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="story-section" style="margin-top: var(--space-xl); padding-top: var(--space-lg); border-top: 2px solid var(--color-border);">
+                        <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: var(--space-md);">Technologies & Tools</h4>
+                        <div class="flex-wrap">
+                            <span class="skill-tag">React Native</span>
+                            <span class="skill-tag">Node.js</span>
+                            <span class="skill-tag">PostgreSQL</span>
+                            <span class="skill-tag">Redis</span>
+                            <span class="skill-tag">AWS</span>
+                            <span class="skill-tag">Mixpanel</span>
+                            <span class="skill-tag">Jira</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OPTION 6: Z-INDEX STACK -->
+    <section class="option-section">
+        <div class="option-header">
+            <h2 class="option-title">Option 6: Z-Index Stack</h2>
+            <span class="option-badge">TOGGLE CARD</span>
+        </div>
+        <div class="neo-card stack-container">
+            <!-- Front Card - Experience -->
+            <div class="stack-card front" id="stackFront">
+                <div class="stack-switch-hint">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                    </svg>
+                    Click to flip • Click "Case Study" to toggle
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg);">
+                    <div class="company-logo" style="width: 48px; height: 48px; font-size: 1rem;">M</div>
+                    <div>
+                        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: 700;">Senior Product Manager</h3>
+                        <p style="color: var(--accent-navy); font-weight: 600; font-size: 0.95rem;">MoveInSync | Apr 2022 - Oct 2024</p>
+                    </div>
+                </div>
+                <p class="summary-text mb-md">World's largest transport-as-a-service provider for enterprises. Led product strategy driving 10x ARR growth across 70+ locations.</p>
+                <span class="category-label mb-md" style="background: var(--accent-teal); color: white;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                    Product Growth & Strategy
+                </span>
+                <ul class="responsibility-list mb-lg">
+                    <li>Defined product vision and roadmap, driving 10x ARR growth</li>
+                    <li>Expanded operations to 50+ new locations across 3 countries</li>
+                    <li>Improved mobile app experience, increasing adoption by 20%</li>
+                    <li>Rolled out invoicing, ERP integrations, and payments features</li>
+                </ul>
+                <div class="flex-wrap">
+                    <span class="achievement-badge">10x ARR</span>
+                    <span class="achievement-badge">60K Users</span>
+                    <span class="achievement-badge">3 Countries</span>
+                </div>
+                <button class="neo-btn secondary" style="margin-top: var(--space-lg); width: 100%; justify-content: center;" onclick="flipStack()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                    </svg>
+                    View Case Study ↔
+                </button>
+            </div>
+            
+            <!-- Back Card - Case Study -->
+            <div class="stack-card back" id="stackBack" onclick="flipStack()">
+                <div class="stack-switch-hint">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Click to flip back
+                </div>
+                <div class="case-study-hero back">
+                    <h3>MoveInSync: 10x ARR Growth</h3>
+                    <p>How I scaled enterprise commute management from 20 to 70+ locations while driving exponential revenue growth.</p>
+                </div>
+                
+                <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: var(--space-sm);">Key Results</h4>
+                <ul class="impact-list">
+                    <li>Achieved 10x ARR growth through product-led expansion</li>
+                    <li>Scaled from 20 to 70+ locations across 3 countries</li>
+                    <li>Reduced client implementation time by 40%</li>
+                    <li>Grew monthly active users from 10K to 60K+</li>
+                </ul>
+                
+                <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; margin: var(--space-lg) 0 var(--space-sm);">Technologies</h4>
+                <div class="tech-tags">
+                    <span class="tech-tag">React Native</span>
+                    <span class="tech-tag">Node.js</span>
+                    <span class="tech-tag">PostgreSQL</span>
+                    <span class="tech-tag">AWS</span>
+                </div>
+                
+                <button class="neo-btn" style="margin-top: var(--space-lg); width: 100%; justify-content: center; background: var(--accent-amber); color: var(--color-text);" onclick="event.stopPropagation(); flipStack()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    Back to Experience ↔
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Accordion functionality
+        function toggleAccordion(button) {
+            button.classList.toggle('active');
+            const content = button.nextElementSibling;
+            content.classList.toggle('open');
+        }
+
+        // Tab functionality
+        function switchTab(button, tabId) {
+            const card = button.closest('.folder-card');
+            card.querySelectorAll('.folder-tab').forEach(tab => tab.classList.remove('active'));
+            card.querySelectorAll('.folder-content').forEach(content => content.classList.remove('active'));
+            
+            button.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Drawer functionality
+        function toggleDrawer() {
+            const drawer = document.getElementById('drawerPanel');
+            drawer.classList.toggle('open');
+        }
+
+        // Window modal functionality
+        function openWindow() {
+            document.getElementById('windowOverlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeWindow(event) {
+            if (!event || event.target === event.currentTarget) {
+                document.getElementById('windowOverlay').classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeWindow();
+            }
+        });
+
+        // Stack flip functionality
+        function flipStack() {
+            const front = document.getElementById('stackFront');
+            const back = document.getElementById('stackBack');
+            
+            if (front.classList.contains('front')) {
+                front.classList.remove('front');
+                front.classList.add('hidden');
+                back.classList.remove('hidden');
+                back.classList.add('front');
+            } else {
+                back.classList.remove('front');
+                back.classList.add('hidden');
+                front.classList.remove('hidden');
+                front.classList.add('front');
+            }
+        }
+    </script>
+</body>
+</html>
