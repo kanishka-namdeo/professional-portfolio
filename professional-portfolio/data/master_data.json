@@ -1,0 +1,308 @@
+{
+  "education": [
+    {
+      "institution": "UIT-RGPV",
+      "degree": "Bachelor of Engineering",
+      "field_of_study": "Mechanical Engineering",
+      "graduation_date": "June 2015"
+    }
+  ],
+  "contact_information": {
+    "location": "Dubai, UAE",
+    "phone": "+971-509741739",
+    "email": "kanishkanamdeo@hotmail.com",
+    "linkedin": "Linkedin",
+    "portfolio": "Portfolio",
+    "github": "GitHub"
+  },
+  "summary": [
+    "Entrepreneurial and results-driven professional with over 8 years of experience spanning from application development to product management across multiple domains. Proven history in leading cross-functional teams to develop and launch successful products.",
+    "Experienced professional with 9+ years of combined experience across Product Management and Software Development. Proven track record in leading cross-functional teams to build scalable solutions across mobility, robotics and AI SaaS domains.",
+    "I'm an entrepreneurial product manager with around 9 years of experience in product strategy and application development. I've led teams to build and scale products across mobility, SaaS and Robotics. I focus on growth, user adoption, and solving complex challenges with intuitive solutions."
+  ],
+  "certifications": [
+    "Certified Scrum Product Owner (CSPO), Scrum Alliance (Credential ID 001703779), November 2024",
+    "EDX: Autonomous Mobile Robots — Successfully completed exercises in Robot Perception, Locomotion, Localization and Planning.",
+    "KUKA College: Advance Robot Programmer — Learnt KRL programming, FOLD concepts, SIMPRO simulation; created and executed programs for KUKA industrial robots.",
+    "Certified Scrum Product Owner (CSPOR), November 2024, Credential ID-001703779"
+  ],
+  "interests_and_activities": [
+    "2015: Top 75 finalists amongst 19,000 participants in the ET Power of Ideas 2015 conducted by the Centre for Innovation Incubation and Entrepreneurship, IIMA.",
+    "2012: Vice-captain; Amongst Top 20 amongst 800 teams in Effi-Cycle 2012 hosted by the Society of Automobile Engineers (SAE).",
+    "2009: State level General Knowledge Quiz player; stood 2nd among 40 teams."
+  ],
+  "experience": {
+    "Cognium": {
+      "roles": [
+        {
+          "title": "Senior Product Manager",
+          "duration": "Jul 2025 - Oct 2025",
+          "responsibilities": [
+            "Spearheaded the 0-to-1 product strategy by conducting 20+ user interviews, identifying critical industry pain points and translated insights into PRDs and wireframes.",
+            "Defined the MVP scope and architected the foundational LLM-agent framework to deliver core features like AI-driven investment suggestions and automated portfolio rebalancing, enabling personalized, hyper-contextualized client engagement at scale.",
+            "Drove early market validation by securing the commitment of the first beta customer prior to prototype completion, ensuring immediate feedback upon launch.",
+            "Built foundational engineering team, hiring an initial team of 4 to run technical experiments and execution of the product roadmap."
+          ],
+          "skills": [
+            "user interviews",
+            "PRDs",
+            "wireframes",
+            "LLM-agent framework",
+            "AI-driven investment suggestions",
+            "automated portfolio rebalancing"
+          ],
+          "achievements": [
+            "Delivered 0-to-1 product strategy for AI-native wealth management workflow platform.",
+            "Secured beta customer before prototype completion."
+          ]
+        }
+      ]
+    },
+    "Flipr Innovation Labs": {
+      "roles": [
+        {
+          "title": "Product Consultant",
+          "duration": "Oct 2024 - Jan 2025",
+          "responsibilities": [
+            "Scoped core functionalities (automated tagging, retrieval, storage optimization) and ensured smooth MVP deployment with client's operations.",
+            "Integrated with OMS and support tools for seamless dispute resolution, prioritizing low-latency video retrieval.",
+            "Optimized storage efficiency (compression, archival) to reduce cloud costs while designing for high-volume processing (~50K daily orders)."
+          ],
+          "skills": [
+            "automated tagging",
+            "retrieval",
+            "storage optimization",
+            "OMS",
+            "compression",
+            "archival"
+          ],
+          "achievements": [
+            "Delivered high-volume MVP with optimized cloud storage costs."
+          ]
+        }
+      ]
+    },
+    "MoveInSync": {
+      "roles": [
+        {
+          "title": "Senior Product Manager",
+          "duration": "April 2022 - Present",
+          "responsibilities": [
+            "Leading the company's young corporate cab rentals vertical with new feature development, stakeholder communication and implementation; working with clients and understanding their requirements and business process.",
+            "Enabled and onboarded 8 new clients in FY 2022-23 which engendered an improvement of over 7x in terms of product usage and 4x in topline revenue across 25+ cities in India, Philippines and South Africa.",
+            "Holding monthly product demos for the Customer Success and Pre-Sales teams on new feature developments.",
+            "Conducting international landscape analysis and cohort analysis to align to product roadmap for evaluating global solution readiness and GTM strategies.",
+            "Managing a 5-person product sprint; solutioning and prioritizing tasks; creating UX flows to aid developer grooming and overseeing sprint progress; concluding the sprint with sanity checks and release communication.",
+            "Working with product leadership & cross-functional stakeholders to define product vision & roadmap. Managed and prioritized the product backlog together with rest of the product management team.",
+            "Document management of requirements in Epics, User Stories and tasks; additionally taking up experimental investigative tasks for potential feature development.",
+            "Architected the product roadmap; collaborated with sales and leadership to determine areas of development and expansion; increased Annual Recurring Revenue (ARR) by over 8x and product usage by over 12x.",
+            "Led a team of 8 engineers to develop robust, user-friendly features effectively ensuring client enablement. Onboarded 15+ new clients adding 30,000+ new unique monthly users.",
+            "Devised market research, conducted competitive and trend analysis to improve go-to-market; expanded product operations to over 50+ new locations across India, the Philippines and South Africa.",
+            "Identified customer pain points and problems, augmented mobile app experience; increased overall app adoption by 20%.",
+            "Enhanced international user experience; introduced support for VoIP calling and user self-onboarding. Feature adopted by over 70% active users.",
+            "Collaborated with 3+ teams to rollout digital invoicing and taxation module, added support for external ERP integration, significantly improving product traction whilst adding 6+ clients in the upsell pipeline.",
+            "Formulated general-purpose APIs; enabled cohesive system integration with 5+ fleet providers controlling 75% of vehicles. Boosted product adoption by reduced implementation time by 20%.",
+            "Rolled out company's first user payment integration with Razorpay, collaborated with 4+ teams, facilitating payments to 7+ vendor partners.",
+            "Managed 8-person sprint, incorporated Scrum methodologies, enhanced task prioritization, supervised grooming to developers, productivity increased by 2x.",
+            "Formulated 20+ Product Requirement Documents, incorporated proper UI/UX and system design flows, aligned internal stakeholders, ensured timely delivery.",
+            "Reinforced on client feedback to lead a 4-person team to hasten issue resolutions, conduct POCs & aide implementation effort, reduced support ticket count by 15%."
+          ],
+          "skills": [
+            "UX flows",
+            "Epics",
+            "User Stories",
+            "product roadmap",
+            "market research",
+            "competitive analysis",
+            "trend analysis",
+            "VoIP",
+            "ERP integration",
+            "APIs",
+            "Razorpay",
+            "Scrum",
+            "UI/UX",
+            "system design"
+          ],
+          "achievements": [
+            "8x increase in ARR",
+            "12x increase in product usage",
+            "Onboarded 15+ new clients and 30,000+ new monthly users",
+            "Expanded operations to 50+ new locations across India, Philippines and South Africa",
+            "20% increase in mobile app adoption",
+            "70% adoption of VoIP and self-onboarding features",
+            "Reduced implementation time by 20% through unified APIs",
+            "Reduced support tickets by 15%"
+          ]
+        }
+      ]
+    },
+    "TekIP Knowledge Consulting": {
+      "roles": [
+        {
+          "title": "Team Lead / Software Team Lead",
+          "duration": "December 2020 - April 2022",
+          "responsibilities": [
+            "Management of 3 legacy projects and 2 ongoing projects on the MEAN stack. Serving as the point of contact between stakeholders and development teams.",
+            "Formulated the software architecture and UX; led development for 2 hybrid NLP based solutions on the MEAN Stack and Python microservices.",
+            "Leading the company's new initiatives; pitched new ideas, proposed and presented development strategies to the C-Suite and the business team for potential product verticals, one of which is currently being developed as a product.",
+            "Recruitment and mentoring in-house resources by developing approaches to adopt new technologies.",
+            "Managed 5 enterprise projects, led an Agile team of 6 developers, ensuring timely delivery of 30+ features.",
+            "Launched Natural Language Processing MVP, leveraged LLM (large-scale language models), conducted market research, increased patent analysis and productivity by 10X.",
+            "Collaborated with business development team to pitch to potential customers; added 2 projects to the business.",
+            "Pitched and presented development strategies for new product verticals to C-Suite; led to budget allocation for stealth MVP."
+          ],
+          "skills": [
+            "MEAN stack",
+            "software architecture",
+            "UX",
+            "NLP",
+            "Python microservices",
+            "LLM",
+            "market research",
+            "Agile",
+            "AngularJS",
+            "FastAPI",
+            "Huggingface"
+          ],
+          "achievements": [
+            "Launched NLP MVP improving patent analysis productivity by 10x.",
+            "Added 2 new enterprise projects through technical pitching.",
+            "Secured budget allocation for stealth MVP."
+          ]
+        }
+      ]
+    },
+    "Intugine Technologies": {
+      "roles": [
+        {
+          "title": "Product Manager",
+          "duration": "June 2019 - December 2020",
+          "responsibilities": [
+            "Led the development of the company's flagship multimodal logistics platform, collaborating with engineering, design, and operations teams to deliver scalable solutions for enterprise clients.",
+            "Conducted market research and competitive analysis to identify opportunities for product differentiation and expansion.",
+            "Defined product requirements, created user stories, and managed the product backlog to ensure timely delivery of features.",
+            "Worked closely with clients to gather feedback, understand operational workflows, and translate insights into actionable product improvements.",
+            "Collaborated with engineering teams to improve system performance, reduce latency, and enhance platform reliability.",
+            "Designed dashboards and reporting tools to provide real-time visibility into logistics operations.",
+            "Implemented analytics-driven decision-making by integrating data insights into product roadmap planning.",
+            "Coordinated with cross-functional teams to ensure seamless onboarding and implementation for enterprise customers.",
+            "Managed stakeholder communication, conducted product demos, and aligned internal teams on product vision and roadmap.",
+            "Improved user experience by redesigning key workflows, resulting in increased platform adoption.",
+            "Worked with the operations team to streamline supply chain processes and reduce manual intervention.",
+            "Collaborated with third-party partners to integrate external data sources and expand platform capabilities.",
+            "Defined KPIs and success metrics to evaluate product performance and guide future iterations.",
+            "Supported sales and customer success teams with product knowledge, documentation, and solutioning for enterprise deals.",
+            "Conducted training sessions for internal teams and clients to ensure smooth product usage.",
+            "Led cross-functional initiatives to improve data accuracy and reduce operational discrepancies.",
+            "Worked on improving multimodal tracking accuracy across road, rail, and air logistics.",
+            "Designed and implemented alerting systems to notify users of delays, exceptions, and critical events.",
+            "Collaborated with UI/UX designers to create intuitive interfaces for logistics managers and operations teams.",
+            "Participated in strategic planning discussions to shape long-term product direction."
+          ],
+          "skills": [
+            "market research",
+            "competitive analysis",
+            "user stories",
+            "product backlog",
+            "dashboards",
+            "reporting tools",
+            "analytics",
+            "UI/UX",
+            "KPIs",
+            "multimodal tracking",
+            "alerting systems"
+          ],
+          "achievements": [
+            "Improved platform adoption through redesigned workflows.",
+            "Enhanced tracking accuracy across multimodal logistics.",
+            "Delivered scalable features for enterprise clients."
+          ]
+        }
+      ]
+    },
+    "Medulla.AI": {
+      "roles": [
+        {
+          "title": "Product Manager",
+          "duration": "January 2019 - June 2019",
+          "responsibilities": [
+            "Worked with the founding team to define the product vision for an AI-driven healthcare analytics platform.",
+            "Conducted extensive research on hospital workflows, patient data systems, and diagnostic processes to identify automation opportunities.",
+            "Collaborated with data science and engineering teams to design ML-driven modules for anomaly detection and predictive analytics.",
+            "Defined product requirements, user stories, and acceptance criteria for core platform features.",
+            "Coordinated with UI/UX designers to create intuitive dashboards for clinicians and hospital administrators.",
+            "Conducted user interviews with doctors, radiologists, and hospital staff to validate product hypotheses.",
+            "Designed workflows for automated report generation and clinical decision support.",
+            "Worked with engineering teams to ensure compliance with healthcare data standards and privacy requirements.",
+            "Created prototypes and wireframes to demonstrate product capabilities to early customers.",
+            "Participated in client meetings and demos to gather feedback and refine product direction.",
+            "Collaborated with the founding team to shape the go-to-market strategy for the healthcare AI platform.",
+            "Analyzed competitor products and emerging trends in medical AI to identify differentiation opportunities.",
+            "Defined KPIs and success metrics for evaluating model performance and product adoption.",
+            "Supported the engineering team in testing and validating ML models with real-world datasets.",
+            "Documented workflows, feature specifications, and technical requirements for internal and external stakeholders."
+          ],
+          "skills": [
+            "user stories",
+            "acceptance criteria",
+            "UI/UX",
+            "predictive analytics",
+            "anomaly detection",
+            "wireframes",
+            "prototypes",
+            "KPIs",
+            "healthcare data standards"
+          ],
+          "achievements": [
+            "Defined product vision for AI-driven healthcare analytics platform.",
+            "Designed ML-driven modules for anomaly detection and predictive analytics.",
+            "Created prototypes and workflows adopted by early pilot customers."
+          ]
+        }
+      ]
+    },
+    "Sagar Defence Engineering": {
+      "roles": [
+        {
+          "title": "Robotics Engineer",
+          "duration": "June 2017 - December 2018",
+          "responsibilities": [
+            "Worked on the development of autonomous unmanned surface vehicles (USVs) for defense and industrial applications.",
+            "Designed and implemented navigation algorithms for autonomous path planning and obstacle avoidance.",
+            "Collaborated with mechanical and electronics teams to integrate sensors, actuators, and embedded systems into robotic platforms.",
+            "Developed control systems for stable maneuvering of USVs in dynamic marine environments.",
+            "Conducted field tests and validation trials to evaluate system performance and reliability.",
+            "Worked on ROS-based modules for sensor fusion, localization, and mission execution.",
+            "Integrated GPS, IMU, and marine radar data to improve navigation accuracy.",
+            "Designed simulation environments to test mission scenarios before deployment.",
+            "Collaborated with naval teams and end-users to gather feedback and refine system capabilities.",
+            "Documented system architecture, testing procedures, and performance reports for internal and external stakeholders.",
+            "Supported the development of teleoperation interfaces for remote vehicle control.",
+            "Worked on improving battery efficiency and power management for long-duration missions.",
+            "Participated in design reviews and contributed to hardware-software integration decisions.",
+            "Developed prototypes for new robotic subsystems and evaluated feasibility for production.",
+            "Collaborated with cross-functional teams to ensure compliance with marine safety standards."
+          ],
+          "skills": [
+            "navigation algorithms",
+            "autonomous path planning",
+            "obstacle avoidance",
+            "sensor fusion",
+            "ROS",
+            "GPS",
+            "IMU",
+            "marine radar",
+            "simulation environments",
+            "teleoperation interfaces",
+            "power management"
+          ],
+          "achievements": [
+            "Developed autonomous navigation modules for unmanned surface vehicles.",
+            "Improved navigation accuracy through multi-sensor fusion.",
+            "Conducted successful field trials with defense and industrial partners."
+          ]
+        }
+      ]
+    }
+  }
+}

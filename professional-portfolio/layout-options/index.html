@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Layout Options - Quick Comparison</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f5; color: #0a0a0a; line-height: 1.6; padding: 40px; }
+    h1 { font-family: 'Space Grotesk', sans-serif; font-size: 28px; margin-bottom: 8px; }
+    .subtitle { color: #525252; margin-bottom: 40px; }
+    
+    :root {
+      --color-bg: #fafafa;
+      --color-surface: #ffffff;
+      --color-border: #0a0a0a;
+      --color-text: #0a0a0a;
+      --color-text-muted: #525252;
+      --accent-navy: #1e3a5f;
+      --accent-teal: #0d9488;
+      --accent-coral: #f97316;
+      --border-width: 3px;
+      --shadow-hard: 4px 4px 0px 0px #0a0a0a;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --space-sm: 12px;
+      --space-md: 24px;
+      --space-lg: 32px;
+    }
+    
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: var(--space-lg);
+    }
+    
+    .option-wrapper {
+      background: var(--color-surface);
+      border: 1px solid #e5e5e5;
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+    }
+    
+    .option-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-coral);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+    
+    .option-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .option-desc {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid #e5e5e5;
+    }
+    
+    .option-preview {
+      display: flex;
+      justify-content: center;
+    }
+    
+    .pros-cons {
+      display: flex;
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px solid #e5e5e5;
+      font-size: 12px;
+    }
+    
+    .pros, .cons { flex: 1; }
+    .pros h4, .cons h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+    .pros h4 { color: #0d9488; }
+    .cons h4 { color: #f97316; }
+    .pros ul, .cons ul { list-style: none; }
+    .pros li::before { content: '✓ '; color: #0d9488; }
+    .cons li::before { content: '✗ '; color: #f97316; }
+  </style>
+</head>
+<body>
+  <h1>Products + Media Layout Options</h1>
+  <p class="subtitle">5 different approaches to showcase products with their media coverage</p>
+  
+  <div class="options-grid">
+    <!-- Option 1 -->
+    <div class="option-wrapper">
+      <div class="option-number">Option 1</div>
+      <div class="option-name">Media Badge Overlay + Expandable</div>
+      <p class="option-desc">Media source badges overlaid on product image, expandable section reveals article list</p>
+      <div class="option-preview">
+        <iframe src="option1-overlay.html" width="380" height="500" frameborder="0" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></iframe>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>Pros</h4>
+          <ul>
+            <li>Clean, compact</li>
+            <li>Users choose to expand</li>
+            <li>Media badges visible immediately</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>Cons</h4>
+          <ul>
+            <li>Extra click needed</li>
+            <li>Image partially obscured</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Option 2 -->
+    <div class="option-wrapper">
+      <div class="option-number">Option 2</div>
+      <div class="option-name">Split Card Layout</div>
+      <p class="option-desc">Left side shows product, right side (dark background) shows media coverage list</p>
+      <div class="option-preview">
+        <iframe src="option2-split.html" width="380" height="350" frameborder="0" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></iframe>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>Pros</h4>
+          <ul>
+            <li>Media immediately visible</li>
+            <li>Balanced visual hierarchy</li>
+            <li>Clear content separation</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>Cons</h4>
+          <ul>
+            <li>More vertical space</li>
+            <li>Less product focus</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Option 3 -->
+    <div class="option-wrapper">
+      <div class="option-number">Option 3</div>
+      <div class="option-name">Media Carousel Below</div>
+      <p class="option-desc">Product card with horizontal scrolling carousel for media mentions</p>
+      <div class="option-preview">
+        <iframe src="option3-carousel.html" width="380" height="420" frameborder="0" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></iframe>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>Pros</h4>
+          <ul>
+            <li>Interactive experience</li>
+            <li>Showcases multiple mentions</li>
+            <li>Clean separation</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>Cons</h4>
+          <ul>
+            <li>Requires interaction</li>
+            <li>Carousel discovery</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Option 4 -->
+    <div class="option-wrapper">
+      <div class="option-number">Option 4</div>
+      <div class="option-name">Media Sources Row (Compact)</div>
+      <p class="option-desc">Compact row of media source links below product tags</p>
+      <div class="option-preview">
+        <iframe src="option4-compact.html" width="380" height="320" frameborder="0" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></iframe>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>Pros</h4>
+          <ul>
+            <li>Very compact</li>
+            <li>All info visible at once</li>
+            <li>No scrolling needed</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>Cons</h4>
+          <ul>
+            <li>May feel cluttered</li>
+            <li>Limited article details</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Option 5 -->
+    <div class="option-wrapper">
+      <div class="option-number">Option 5</div>
+      <div class="option-name">Side Panel Layout (Recommended)</div>
+      <p class="option-desc">Product card with dedicated media sidebar - best for portfolio overview</p>
+      <div class="option-preview">
+        <iframe src="option5-sidebar.html" width="380" height="420" frameborder="0" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></iframe>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>Pros</h4>
+          <ul>
+            <li>Visual hierarchy</li>
+            <li>Consistent sidebar</li>
+            <li>Professional look</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>Cons</h4>
+          <ul>
+            <li>Requires wider screen</li>
+            <li>More complex layout</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
