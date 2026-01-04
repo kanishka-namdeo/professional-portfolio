@@ -2226,36 +2226,6 @@ section {
   border-top: 2px dashed var(--color-border);
 }
 
-/* Bold Text for Important Information */
-.highlight-text {
-  background: none;
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-/* No underline effect on hover (removed empty ruleset) */
-
-/* Alternate bold style for achievements */
-.highlight-achievement {
-  background: none;
-  font-weight: 700;
-  color: var(--accent-navy);
-}
-
-/* Summary bold text */
-.highlight-summary {
-  background: none;
-  font-weight: 600;
-  color: var(--accent-coral);
-}
-
-/* Skill bold text */
-.highlight-skill {
-  background: none;
-  font-weight: 500;
-  color: var(--accent-indigo);
-}
-
 .achievement-badge {
   display: inline-flex;
   align-items: center;

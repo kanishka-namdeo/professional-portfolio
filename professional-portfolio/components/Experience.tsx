@@ -37,44 +37,6 @@ interface Experience {
   caseStudy?: CaseStudy;
 }
 
-// Utility function to highlight important metrics and key phrases
-const highlightText = (text: string): React.ReactNode => {
-  const patterns = [
-    { regex: /\b(\d+[Kkx\+]\s*(?:ARR|Growth|Users?|Locations?|Products?|Features?|Clients?|Projects?|Team|Orders|Daily|Minutes?)\b)/gi, className: 'highlight-text' },
-    { regex: /\b(\d+%\s*(?:\w+(?:\s+\w+)*)?)\b/g, className: 'highlight-text' },
-    { regex: /\b(\d+\+\s*(?:\w+(?:\s+\w+)*)?)\b/g, className: 'highlight-text' },
-    { regex: /\b(\d+x\s*(?:\w+(?:\s+\w+)*)?)\b/g, className: 'highlight-text' },
-    { regex: /\b(\d+\s*(?:Countries?|Enterprises?|Features?|Teams?|Developers?|Years?|Months?))\b/gi, className: 'highlight-text' },
-    { regex: /\b(First|Beta|Pre-|MVP|0-to-1)\b/g, className: 'highlight-achievement' },
-    { regex: /\b(AI|LLM|NLP|ML|ROS|API|OM[S,S]|SaaS|Growth|Strategy|Leadership)\b/g, className: 'highlight-skill' },
-  ];
-
-  let result: React.ReactNode[] = [text];
-
-  patterns.forEach(({ regex, className }) => {
-    const newResult: React.ReactNode[] = [];
-    result.forEach((part) => {
-      if (typeof part === 'string') {
-        const parts = part.split(regex);
-        parts.forEach((p, i) => {
-          if (p) {
-            if (i % 2 === 1) {
-              newResult.push(<span key={`${regex.source}-${i}`} className={className}>{p}</span>);
-            } else {
-              newResult.push(p);
-            }
-          }
-        });
-      } else {
-        newResult.push(part);
-      }
-    });
-    result = newResult;
-  });
-
-  return <>{result}</>;
-};
-
 // Get company initial for logo
 const getCompanyInitial = (company: string): string => {
   return company.charAt(0).toUpperCase();
@@ -146,12 +108,6 @@ const getCategoryColorClass = (category: string): string => {
 const ChevronIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-5 h-5">
     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-  </svg>
-);
-
-const DocumentIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-4 h-4">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
   </svg>
 );
 
@@ -413,7 +369,7 @@ export default function Experience() {
 
                 {/* Preview Section */}
                 <div className="accordion-preview">
-                  <p className="summary-text">{highlightText(exp.summary)}</p>
+                  <p className="summary-text">{exp.summary}</p>
                   <div className="achievements-row">
                     {exp.achievements.slice(0, 3).map((achievement, achIndex) => (
                       <span key={achIndex} className="achievement-badge">{achievement}</span>
@@ -450,7 +406,7 @@ export default function Experience() {
                       </h4>
                       <ul className="responsibility-list">
                         {exp.responsibilities.flatMap(resp => resp.items).map((item, itemIndex) => (
-                          <li key={itemIndex}>{highlightText(item)}</li>
+                          <li key={itemIndex}>{item}</li>
                         ))}
                       </ul>
                       
