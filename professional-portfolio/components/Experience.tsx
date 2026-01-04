@@ -149,12 +149,18 @@ const getCategoryColorClass = (category: string): string => {
 };
 
 const FolderIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-5 h-5">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-4 h-4">
     <path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
   </svg>
 );
 
-const CaseStudyIcon = () => (
+const BriefcaseIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-4 h-4">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+  </svg>
+);
+
+const DocumentIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-4 h-4">
     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
   </svg>
@@ -340,10 +346,12 @@ const experiences: Experience[] = [
 // Extract unique companies for tabs
 const uniqueCompanies = Array.from(new Set(experiences.map(exp => exp.company))).sort();
 
-type TabType = 'all' | string;
+type CompanyTabType = string;
+type ContentTabType = 'experience' | 'case-study';
 
 export default function Experience() {
-  const [activeTab, setActiveTab] = useState<TabType>('all');
+  const [activeCompany, setActiveCompany] = useState<string>(uniqueCompanies[0] || '');
+  const [activeContentTab, setActiveContentTab] = useState<ContentTabType>('experience');
   const [expandedSkills, setExpandedSkills] = useState<ExpandedSkillsState>({});
   const experienceRef = useRef<HTMLElement>(null);
   const isInitialMount = useRef(true);
@@ -355,7 +363,7 @@ export default function Experience() {
     }));
   };
 
-  // Scroll to start of experience section when tab changes (not on initial load)
+  // Scroll to start of experience section when company changes (not on initial load)
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
@@ -363,7 +371,7 @@ export default function Experience() {
     }
 
     if (experienceRef.current) {
-      const headerOffset = 80; // Account for fixed navigation only
+      const headerOffset = 80;
       const elementPosition = experienceRef.current.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -372,15 +380,11 @@ export default function Experience() {
         behavior: 'smooth'
       });
     }
-  }, [activeTab]);
+  }, [activeCompany]);
 
-  // Filter experiences based on active tab
-  const getFilteredExperiences = () => {
-    if (activeTab === 'all') {
-      return experiences;
-    }
-    return experiences.filter(exp => exp.company === activeTab);
-  };
+  // Get current experience
+  const currentExperience = experiences.find(exp => exp.company === activeCompany);
+  const stableIndex = currentExperience ? experiences.findIndex(e => e.company === currentExperience.company && e.title === currentExperience.title && e.date === currentExperience.date) : 0;
 
   return (
     <section id="experience" ref={experienceRef} className="section-full-width" aria-labelledby="experience-title" role="region" aria-label="Work Experience">
@@ -390,178 +394,161 @@ export default function Experience() {
           <p className="section-subtitle">9+ years building and scaling products across mobility, SaaS, robotics, and AI</p>
         </header>
 
-        {/* Manila Folder Tabs Container */}
-        <div className="manila-folder-container animate-on-scroll animate-delay-1">
-          {/* Folder Tabs */}
-          <div className="manila-folder-tabs">
+        {/* Company Folder Tabs */}
+        <div className="company-folder-tabs animate-on-scroll animate-delay-1">
+          {uniqueCompanies.map((company) => (
             <button
-              className={`manila-folder-tab ${activeTab === 'all' ? 'active' : ''}`}
-              onClick={() => setActiveTab('all')}
+              key={company}
+              className={`company-folder-tab ${activeCompany === company ? 'active' : ''}`}
+              onClick={() => {
+                setActiveCompany(company);
+                setActiveContentTab('experience');
+              }}
             >
               <span className="folder-tab-icon"><FolderIcon /></span>
-              <span className="folder-tab-label">ALL</span>
+              <span className="folder-tab-label">{company}</span>
             </button>
-            {uniqueCompanies.map((company) => (
-              <button
-                key={company}
-                className={`manila-folder-tab ${activeTab === company ? 'active' : ''}`}
-                onClick={() => setActiveTab(company)}
-              >
-                <span className="folder-tab-icon"><FolderIcon /></span>
-                <span className="folder-tab-label">{company.toUpperCase()}</span>
-              </button>
-            ))}
-          </div>
+          ))}
+        </div>
 
-          {/* Folder Body */}
-          <div className="manila-folder-body">
-            <div className="manila-folder-content">
-              {/* Decorative Folder Label */}
-              <div className="folder-label-stamp">
-                <span className="folder-stamp-text">WORK EXPERIENCE FILE</span>
+        {/* Company Folder Body */}
+        {currentExperience && (
+          <div className="company-folder-body">
+            {/* Company Header */}
+            <div className="company-folder-header">
+              <div className="company-info">
+                <div className="company-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                </div>
+                <div className="company-details">
+                  <h3 className="company-name">{currentExperience.company}</h3>
+                  <span className="company-role">{currentExperience.title}</span>
+                </div>
+              </div>
+              <div className="company-meta">
+                <span className="company-date">{currentExperience.date}</span>
+                {currentExperience.url && (
+                  <a href={currentExperience.url} target="_blank" rel="noopener noreferrer" className="company-website" aria-label={`Visit ${currentExperience.company} website`}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    Website
+                  </a>
+                )}
+              </div>
+            </div>
+
+            {/* Content Tabs - Experience | Case Study */}
+            <div className="content-tabs-container">
+              <div className="content-tabs">
+                <button
+                  className={`content-tab ${activeContentTab === 'experience' ? 'active' : ''}`}
+                  onClick={() => setActiveContentTab('experience')}
+                >
+                  <span className="content-tab-icon"><BriefcaseIcon /></span>
+                  <span className="content-tab-label">EXPERIENCE</span>
+                </button>
+                <button
+                  className={`content-tab ${activeContentTab === 'case-study' ? 'active' : ''}`}
+                  onClick={() => setActiveContentTab('case-study')}
+                >
+                  <span className="content-tab-icon"><DocumentIcon /></span>
+                  <span className="content-tab-label">CASE STUDY</span>
+                </button>
               </div>
 
-              {getFilteredExperiences().map((exp, index) => {
-                // Get the stable index of this experience in the full experiences array
-                const stableIndex = experiences.findIndex(e => e.company === exp.company && e.title === exp.title && e.date === exp.date);
-                return (
-                  <div key={stableIndex} className="manila-experience-folder">
-                    {/* Folder Header */}
-                    <div className="experience-folder-header">
-                      <div className="folder-company-badge">
-                        <span className="folder-company-icon">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                          </svg>
-                        </span>
-                        <span className="folder-company-name">{exp.company}</span>
-                      </div>
-                      <div className="folder-meta-info">
-                        <span className="folder-meta-badge">{exp.date}</span>
-                      </div>
+              {/* Tab Content */}
+              <div className="content-tab-panels">
+                {/* Experience Panel */}
+                {activeContentTab === 'experience' && (
+                  <div className="content-panel experience-panel">
+                    <p className="experience-summary">{highlightText(currentExperience.summary)}</p>
+
+                    <div className="experience-responsibilities-section">
+                      {currentExperience.responsibilities.map((respCategory, catIndex) => (
+                        <div key={catIndex} className={`responsibility-category ${getCategoryColorClass(respCategory.category)}`}>
+                          <h4 className="category-title">
+                            <span className="category-icon">{getCategoryIcon(respCategory.category)}</span>
+                            {respCategory.category}
+                          </h4>
+                          <ul className="experience-responsibilities">
+                            {respCategory.items.map((item, itemIndex) => (
+                              <li key={itemIndex}>{highlightText(item)}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
                     </div>
 
-                    {/* Work Experience Section */}
-                    <div className="folder-work-section">
-                      <div className="work-header-row">
-                        <div className="work-title-group">
-                          <h3 className="folder-work-title">{exp.title}</h3>
-                          {exp.url && (
-                            <a href={exp.url} target="_blank" rel="noopener noreferrer" className="folder-work-link" aria-label={`Visit ${exp.company} website`}>
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                              </svg>
-                              Visit
-                            </a>
-                          )}
-                        </div>
-                      </div>
-
-                      <p className="folder-work-summary">{highlightText(exp.summary)}</p>
-
-                      <div className="folder-responsibilities">
-                        {exp.responsibilities.map((respCategory, catIndex) => (
-                          <div key={catIndex} className={`responsibility-category ${getCategoryColorClass(respCategory.category)}`}>
-                            <h4 className="category-title">
-                              <span className="category-icon">{getCategoryIcon(respCategory.category)}</span>
-                              {respCategory.category}
-                            </h4>
-                            <ul className="experience-responsibilities">
-                              {respCategory.items.map((item, itemIndex) => (
-                                <li key={itemIndex}>{highlightText(item)}</li>
-                              ))}
-                            </ul>
-                          </div>
+                    <div className="experience-skills-section">
+                      <h4 className="skills-section-label">SKILLS UTILIZED</h4>
+                      <div className="experience-skills">
+                        {currentExperience.skills.map((skill, skillIndex) => (
+                          <span key={skillIndex} className="skill-tag">{skill}</span>
                         ))}
                       </div>
-
-                      <div className="folder-skills-section">
-                        <h4 className="skills-section-label">SKILLS UTILIZED</h4>
-                        <div className="experience-skills">
-                          {exp.skills.slice(0, expandedSkills[stableIndex] ? exp.skills.length : 5).map((skill, skillIndex) => (
-                            <span key={skillIndex} className="skill-tag">{skill}</span>
-                          ))}
-                          {exp.skills.length > 5 && (
-                            <button
-                              onClick={() => toggleSkillsExpand(stableIndex)}
-                              className="view-all-skills-button"
-                              aria-expanded={expandedSkills[stableIndex] || false}
-                              aria-label={expandedSkills[stableIndex] ? 'Show less skills' : `Show ${exp.skills.length - 5} more skills`}
-                            >
-                              {expandedSkills[stableIndex] ? (
-                                <>
-                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-                                  </svg>
-                                  Show less
-                                </>
-                              ) : (
-                                <>
-                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                  </svg>
-                                  +{exp.skills.length - 5} more
-                                </>
-                              )}
-                            </button>
-                          )}
-                        </div>
-                      </div>
                     </div>
 
-                    {/* Case Study Section - Only show if case study exists */}
-                    {exp.caseStudy && (
-                      <div className="folder-case-study-section">
-                        <div className="case-study-header">
-                          <span className="case-study-icon">
-                            <CaseStudyIcon />
-                          </span>
-                          <h4 className="case-study-title">CASE STUDY</h4>
-                        </div>
-                        <div className="case-study-content">
-                          <div className="case-study-main">
-                            <div className="case-study-block">
-                              <h5 className="case-study-block-title">CHALLENGE</h5>
-                              <p className="case-study-block-text">{exp.caseStudy.challenge}</p>
-                            </div>
-                            <div className="case-study-block">
-                              <h5 className="case-study-block-title">SOLUTION</h5>
-                              <p className="case-study-block-text">{exp.caseStudy.solution}</p>
-                            </div>
-                            <div className="case-study-block">
-                              <h5 className="case-study-block-title">IMPACT</h5>
-                              <p className="case-study-block-text">{exp.caseStudy.impact}</p>
-                            </div>
-                          </div>
-                          {exp.caseStudy.metrics && exp.caseStudy.metrics.length > 0 && (
-                            <div className="case-study-metrics">
-                              <h5 className="case-study-metrics-title">KEY METRICS</h5>
-                              <ul className="case-study-metrics-list">
-                                {exp.caseStudy.metrics.map((metric, metricIndex) => (
-                                  <li key={metricIndex} className="case-study-metric-item">
-                                    <span className="metric-bullet">▸</span>
-                                    <span>{highlightText(metric)}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Achievements */}
-                    <div className="folder-achievements">
-                      {exp.achievements.map((achievement, achIndex) => (
+                    <div className="experience-achievements">
+                      {currentExperience.achievements.map((achievement, achIndex) => (
                         <span key={achIndex} className="achievement-badge">{achievement}</span>
                       ))}
                     </div>
                   </div>
-                );
-              })}
+                )}
+
+                {/* Case Study Panel */}
+                {activeContentTab === 'case-study' && currentExperience.caseStudy && (
+                  <div className="content-panel case-study-panel">
+                    <div className="case-study-header">
+                      <h4 className="case-study-title">{currentExperience.caseStudy.title}</h4>
+                    </div>
+
+                    <div className="case-study-blocks">
+                      <div className="case-study-block">
+                        <h5 className="case-study-block-title">CHALLENGE</h5>
+                        <p className="case-study-block-text">{currentExperience.caseStudy.challenge}</p>
+                      </div>
+
+                      <div className="case-study-block">
+                        <h5 className="case-study-block-title">SOLUTION</h5>
+                        <p className="case-study-block-text">{currentExperience.caseStudy.solution}</p>
+                      </div>
+
+                      <div className="case-study-block">
+                        <h5 className="case-study-block-title">IMPACT</h5>
+                        <p className="case-study-block-text">{currentExperience.caseStudy.impact}</p>
+                      </div>
+                    </div>
+
+                    {currentExperience.caseStudy.metrics && currentExperience.caseStudy.metrics.length > 0 && (
+                      <div className="case-study-metrics">
+                        <h5 className="case-study-metrics-title">KEY METRICS</h5>
+                        <ul className="case-study-metrics-list">
+                          {currentExperience.caseStudy.metrics.map((metric, metricIndex) => (
+                            <li key={metricIndex} className="case-study-metric-item">
+                              <span className="metric-bullet">▸</span>
+                              <span>{highlightText(metric)}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Case Study Empty State */}
+                {activeContentTab === 'case-study' && !currentExperience.caseStudy && (
+                  <div className="content-panel case-study-empty">
+                    <p>No case study available for this role.</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

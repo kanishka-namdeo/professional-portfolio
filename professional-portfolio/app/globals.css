@@ -5841,36 +5841,33 @@ section {
   }
 }
 
-/* Manila Folder Experience Section - Neobrutalist Design */
-.manila-folder-container {
-  margin-top: var(--space-lg);
-}
+/* Manila Folder Experience Section - Split Card Design */
 
-/* Folder Tabs */
-.manila-folder-tabs {
+/* Company Folder Tabs */
+.company-folder-tabs {
   display: flex;
   gap: 0;
-  padding: 0 var(--space-sm) 0 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: var(--color-border) transparent;
+  padding-bottom: var(--space-sm);
 }
 
-.manila-folder-tabs::-webkit-scrollbar {
+.company-folder-tabs::-webkit-scrollbar {
   height: 6px;
 }
 
-.manila-folder-tabs::-webkit-scrollbar-track {
+.company-folder-tabs::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.manila-folder-tabs::-webkit-scrollbar-thumb {
+.company-folder-tabs::-webkit-scrollbar-thumb {
   background-color: var(--color-border);
   border-radius: 3px;
 }
 
-.manila-folder-tab {
+.company-folder-tab {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
@@ -5892,12 +5889,12 @@ section {
   flex-shrink: 0;
 }
 
-.manila-folder-tab:hover {
+.company-folder-tab:hover {
   background: #E6D5B8;
   transform: translateY(-2px);
 }
 
-.manila-folder-tab.active {
+.company-folder-tab.active {
   background: #F0E6D2;
   color: var(--color-text);
   border-color: var(--color-border);
@@ -5908,7 +5905,7 @@ section {
   box-shadow: 0 -4px 0 0 var(--accent-navy) inset;
 }
 
-.folder-tab-icon {
+.company-folder-tab .folder-tab-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5918,207 +5915,245 @@ section {
   transition: all 0.2s ease;
 }
 
-.manila-folder-tab.active .folder-tab-icon {
+.company-folder-tab.active .folder-tab-icon {
   color: var(--accent-navy);
 }
 
-.manila-folder-tab:hover .folder-tab-icon {
+.company-folder-tab:hover .folder-tab-icon {
   transform: scale(1.1);
   color: var(--accent-navy);
 }
 
-.folder-tab-label {
+.company-folder-tab .folder-tab-label {
   font-weight: 700;
 }
 
-/* Folder Body */
-.manila-folder-body {
+/* Company Folder Body */
+.company-folder-body {
   background: #F0E6D2;
   border: var(--border-width) solid var(--color-border);
   border-radius: 0 var(--radius-md) var(--radius-md) var(--radius-md);
   box-shadow: 8px 8px 0 0 var(--color-border);
   position: relative;
-  z-index: 5;
   overflow: hidden;
 }
 
-.manila-folder-content {
-  padding: var(--space-xl);
-  position: relative;
-}
-
-/* Decorative Folder Label Stamp */
-.folder-label-stamp {
-  position: absolute;
-  top: var(--space-md);
-  right: var(--space-md);
-  opacity: 0.15;
-  pointer-events: none;
-}
-
-.folder-stamp-text {
-  display: inline-block;
-  padding: var(--space-xs) var(--space-sm);
-  border: 3px solid var(--color-text);
-  border-radius: var(--radius-sm);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--color-text);
-  transform: rotate(12deg);
-}
-
-/* Individual Experience Folder Card */
-.manila-experience-folder {
-  background: var(--color-surface);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-md);
-  box-shadow: 4px 4px 0 0 var(--color-border);
-  padding: var(--space-lg);
-  margin-bottom: var(--space-lg);
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-.manila-experience-folder:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 0 var(--color-border);
-}
-
-.manila-experience-folder:last-child {
-  margin-bottom: 0;
-}
-
-/* Experience Folder Header */
-.experience-folder-header {
+/* Company Folder Header */
+.company-folder-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--space-sm);
-  padding-bottom: var(--space-md);
-  border-bottom: 2px dashed var(--color-border);
-  margin-bottom: var(--space-md);
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--color-surface);
+  border-bottom: var(--border-width) solid var(--color-border);
 }
 
-.folder-company-badge {
+.company-info {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: var(--space-md);
 }
 
-.folder-company-icon {
+.company-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 56px;
+  height: 56px;
   background: var(--accent-navy);
   color: white;
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
 }
 
-.folder-company-icon svg {
-  width: 18px;
-  height: 18px;
+.company-icon svg {
+  width: 28px;
+  height: 28px;
 }
 
-.folder-company-name {
+.company-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.company-name {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--color-text);
+  line-height: 1.2;
 }
 
-.folder-meta-info {
+.company-role {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.company-meta {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: var(--space-md);
 }
 
-.folder-meta-badge {
-  padding: var(--space-xs) var(--space-sm);
+.company-date {
+  padding: var(--space-xs) var(--space-md);
   background: var(--color-bg);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-sm);
   font-family: 'Monaco', 'Courier New', monospace;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--color-text-muted);
 }
 
-/* Work Section */
-.folder-work-section {
-  margin-bottom: var(--space-lg);
-}
-
-.work-header-row {
-  margin-bottom: var(--space-sm);
-}
-
-.work-title-group {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-}
-
-.folder-work-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--color-text);
-  line-height: 1.3;
-}
-
-.folder-work-link {
+.company-website {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  background: var(--color-bg);
+  gap: 6px;
+  padding: var(--space-xs) var(--space-md);
+  background: var(--accent-navy);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-sm);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: var(--accent-navy);
+  color: white;
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
-.folder-work-link:hover {
-  background: var(--accent-navy);
-  color: white;
-  transform: translate(-1px, -1px);
+.company-website:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 0 var(--color-border);
 }
 
-.folder-work-link svg {
-  width: 14px;
-  height: 14px;
+.company-website svg {
+  width: 16px;
+  height: 16px;
 }
 
-.folder-work-summary {
-  font-size: 1rem;
+/* Content Tabs Container */
+.content-tabs-container {
+  padding: 0;
+}
+
+/* Content Tabs */
+.content-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 var(--space-lg);
+  background: var(--color-bg);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.content-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-bg);
+  border: var(--border-width) solid var(--color-border);
+  border-bottom: none;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
   color: var(--color-text-muted);
-  line-height: 1.6;
-  margin-bottom: var(--space-md);
-  padding-left: var(--space-md);
-  border-left: 3px solid var(--accent-teal);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: calc(-1 * var(--border-width));
+  position: relative;
+  z-index: 1;
 }
 
-/* Folder Responsibilities */
-.folder-responsibilities {
+.content-tab:hover {
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.content-tab.active {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
+  border-bottom-color: var(--color-surface);
+  margin-bottom: 0;
+  padding-bottom: calc(var(--space-md) + var(--border-width));
+  z-index: 10;
+}
+
+.content-tab-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  transition: all 0.2s ease;
+}
+
+.content-tab.active .content-tab-icon {
+  color: var(--accent-navy);
+}
+
+.content-tab:hover .content-tab-icon {
+  transform: scale(1.1);
+  color: var(--accent-navy);
+}
+
+.content-tab-label {
+  letter-spacing: 0.05em;
+}
+
+/* Content Tab Panels */
+.content-tab-panels {
+  background: var(--color-surface);
+  padding: var(--space-xl);
+}
+
+.content-panel {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Experience Panel */
+.experience-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.experience-summary {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  padding: var(--space-md);
+  background: var(--color-bg);
+  border-left: 4px solid var(--accent-teal);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.experience-responsibilities-section {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
-  margin-bottom: var(--space-md);
 }
 
-/* Folder Skills Section */
-.folder-skills-section {
-  margin-bottom: var(--space-md);
+/* Experience Skills Section */
+.experience-skills-section {
+  padding: var(--space-md) 0;
 }
 
 .skills-section-label {
@@ -6128,98 +6163,102 @@ section {
   font-weight: 700;
   letter-spacing: 0.1em;
   color: var(--accent-navy);
-  margin-bottom: var(--space-sm);
-  padding: 4px 10px;
+  margin-bottom: var(--space-md);
+  padding: 6px 12px;
   background: var(--color-bg);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-sm);
 }
 
-/* Case Study Section */
-.folder-case-study-section {
+.experience-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+/* Experience Achievements */
+.experience-achievements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  padding-top: var(--space-md);
+  border-top: 2px dashed var(--color-border);
+}
+
+.achievement-badge {
+  padding: 6px 12px;
   background: var(--color-bg);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-sm);
-  padding: var(--space-md);
-  margin-bottom: var(--space-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+/* Case Study Panel */
+.case-study-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
 }
 
 .case-study-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  margin-bottom: var(--space-md);
-  padding-bottom: var(--space-sm);
+  padding-bottom: var(--space-md);
   border-bottom: 2px dashed var(--color-border);
-}
-
-.case-study-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  background: var(--accent-coral);
-  color: white;
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-sm);
 }
 
 .case-study-title {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--color-text);
-  letter-spacing: 0.05em;
+  line-height: 1.3;
 }
 
-.case-study-content {
+.case-study-blocks {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
 }
 
-.case-study-main {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-}
-
 .case-study-block {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
+  padding: var(--space-md);
+  background: var(--color-bg);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
 }
 
 .case-study-block-title {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--accent-navy);
   letter-spacing: 0.1em;
+  color: var(--accent-navy);
 }
 
 .case-study-block-text {
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--color-text);
-  line-height: 1.6;
-  padding-left: var(--space-sm);
-  border-left: 3px solid var(--accent-coral);
+  line-height: 1.7;
 }
 
+/* Case Study Metrics */
 .case-study-metrics {
-  background: var(--color-surface);
+  background: var(--color-bg);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-sm);
-  padding: var(--space-sm);
+  padding: var(--space-md);
 }
 
 .case-study-metrics-title {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--accent-teal);
   letter-spacing: 0.1em;
+  color: var(--accent-teal);
   margin-bottom: var(--space-sm);
 }
 
@@ -6227,14 +6266,14 @@ section {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .case-study-metric-item {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-xs);
-  font-size: 0.9rem;
+  gap: var(--space-sm);
+  font-size: 0.95rem;
   color: var(--color-text);
   line-height: 1.5;
 }
@@ -6243,128 +6282,146 @@ section {
   color: var(--accent-teal);
   font-weight: 700;
   flex-shrink: 0;
+  font-size: 1.1rem;
 }
 
-/* Folder Achievements */
-.folder-achievements {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
+/* Case Study Empty State */
+.case-study-empty {
+  padding: var(--space-xl);
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 1rem;
 }
 
-.achievement-badge {
-  padding: 4px 10px;
-  background: var(--color-bg);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-/* Mobile Styles for Manila Folder */
+/* Mobile Styles */
 @media (max-width: 768px) {
-  .manila-folder-tabs {
-    padding: 0 var(--space-xs) 0 0;
-  }
-
-  .manila-folder-tab {
+  .company-folder-tab {
     padding: var(--space-sm) var(--space-md);
     font-size: 0.85rem;
   }
 
-  .manila-folder-tab.active {
+  .company-folder-tab.active {
     padding-bottom: calc(var(--space-sm) + var(--border-width));
   }
 
-  .folder-tab-icon {
+  .company-folder-tab .folder-tab-icon {
     width: 18px;
     height: 18px;
   }
 
-  .manila-folder-content {
-    padding: var(--space-md);
-  }
-
-  .folder-stamp-text {
-    font-size: 0.65rem;
-    padding: 2px 6px;
-  }
-
-  .manila-experience-folder {
-    padding: var(--space-md);
-    margin-bottom: var(--space-md);
-  }
-
-  .experience-folder-header {
+  .company-folder-header {
     flex-direction: column;
     align-items: flex-start;
+    padding: var(--space-md);
   }
 
-  .folder-company-icon {
-    width: 32px;
-    height: 32px;
+  .company-icon {
+    width: 48px;
+    height: 48px;
   }
 
-  .folder-company-name {
-    font-size: 1.1rem;
+  .company-icon svg {
+    width: 24px;
+    height: 24px;
   }
 
-  .folder-work-title {
-    font-size: 1.15rem;
+  .company-name {
+    font-size: 1.25rem;
   }
 
-  .folder-work-summary {
-    font-size: 0.95rem;
-    padding-left: var(--space-sm);
+  .company-meta {
+    width: 100%;
+    justify-content: space-between;
   }
 
-  .folder-case-study-section {
+  .content-tabs {
+    padding: 0 var(--space-md);
+  }
+
+  .content-tab {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.85rem;
+  }
+
+  .content-tab.active {
+    padding-bottom: calc(var(--space-sm) + var(--border-width));
+  }
+
+  .content-tab-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .content-tab-panels {
+    padding: var(--space-md);
+  }
+
+  .experience-summary {
+    font-size: 1rem;
     padding: var(--space-sm);
   }
 
   .case-study-title {
-    font-size: 0.9rem;
+    font-size: 1.15rem;
+  }
+
+  .case-study-block {
+    padding: var(--space-sm);
   }
 
   .case-study-block-text {
-    font-size: 0.9rem;
-  }
-
-  .case-study-metrics {
-    padding: var(--space-sm);
+    font-size: 0.95rem;
   }
 }
 
 @media (max-width: 480px) {
-  .manila-folder-tab {
+  .company-folder-tab {
     padding: var(--space-xs) var(--space-sm);
     font-size: 0.8rem;
   }
 
-  .folder-tab-label {
+  .company-folder-tab .folder-tab-label {
     font-size: 0.75rem;
   }
 
-  .manila-experience-folder {
-    padding: var(--space-sm);
+  .company-info {
+    gap: var(--space-sm);
   }
 
-  .folder-company-badge {
-    gap: var(--space-xs);
+  .company-icon {
+    width: 40px;
+    height: 40px;
   }
 
-  .folder-company-icon {
-    width: 28px;
-    height: 28px;
+  .company-icon svg {
+    width: 20px;
+    height: 20px;
   }
 
-  .folder-company-name {
-    font-size: 1rem;
+  .company-name {
+    font-size: 1.1rem;
   }
 
-  .folder-meta-badge {
+  .company-role {
+    font-size: 0.9rem;
+  }
+
+  .company-date {
     font-size: 0.75rem;
-    padding: 2px 6px;
+    padding: 4px 8px;
+  }
+
+  .company-website {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+
+  .content-tab {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.75rem;
+  }
+
+  .content-tab-label {
+    font-size: 0.7rem;
   }
 }
