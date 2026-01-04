@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 
 type ResponsibilityCategory =
   | 'Strategy & Leadership'
@@ -11,7 +11,6 @@ type ResponsibilityCategory =
   | 'MVP Execution & Technical Collaboration'
   | 'Product Growth & Strategy'
   | 'Technical Collaboration & New Product Development';
-type ExpandedSkillsState = Record<number, boolean>;
 
 interface CaseStudy {
   title: string;
@@ -40,7 +39,6 @@ interface Experience {
 
 // Utility function to highlight important metrics and key phrases
 const highlightText = (text: string): React.ReactNode => {
-  // Patterns to highlight: numbers with K/+/x prefixes, percentages, key metrics
   const patterns = [
     { regex: /\b(\d+[Kkx\+]\s*(?:ARR|Growth|Users?|Locations?|Products?|Features?|Clients?|Projects?|Team|Orders|Daily|Minutes?)\b)/gi, className: 'highlight-text' },
     { regex: /\b(\d+%\s*(?:\w+(?:\s+\w+)*)?)\b/g, className: 'highlight-text' },
@@ -105,19 +103,15 @@ const CategoryIconResearch = () => (
 const getCategoryIcon = (category: string) => {
   switch (category) {
     case 'Product Strategy & MVP Execution':
+    case 'Product Growth & Strategy':
+    case 'Strategy & Leadership':
       return <CategoryIconStrategy />;
     case 'MVP Execution & Technical Collaboration':
-      return <CategoryIconTech />;
-    case 'Product Growth & Strategy':
-      return <CategoryIconStrategy />;
     case 'Technical Collaboration & New Product Development':
+    case 'Technical Collaboration':
       return <CategoryIconTech />;
     case 'Product Growth':
       return <CategoryIconGrowth />;
-    case 'Strategy & Leadership':
-      return <CategoryIconStrategy />;
-    case 'Technical Collaboration':
-      return <CategoryIconTech />;
     case 'Research & Innovation':
       return <CategoryIconResearch />;
     default:
@@ -128,19 +122,15 @@ const getCategoryIcon = (category: string) => {
 const getCategoryColorClass = (category: string): string => {
   switch (category) {
     case 'Product Strategy & MVP Execution':
+    case 'Product Growth & Strategy':
+    case 'Strategy & Leadership':
       return 'category-strategy';
     case 'MVP Execution & Technical Collaboration':
-      return 'category-tech';
-    case 'Product Growth & Strategy':
-      return 'category-strategy';
     case 'Technical Collaboration & New Product Development':
+    case 'Technical Collaboration':
       return 'category-tech';
     case 'Product Growth':
       return 'category-growth';
-    case 'Strategy & Leadership':
-      return 'category-strategy';
-    case 'Technical Collaboration':
-      return 'category-tech';
     case 'Research & Innovation':
       return 'category-research';
     default:
@@ -148,21 +138,27 @@ const getCategoryColorClass = (category: string): string => {
   }
 };
 
-const FolderIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-4 h-4">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+const BriefcaseIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
   </svg>
 );
 
-const BriefcaseIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-4 h-4">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+const ChevronIcon = ({ expanded }: { expanded: boolean }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className={`w-5 h-5 chevron-icon ${expanded ? 'expanded' : ''}`}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
   </svg>
 );
 
 const DocumentIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-4 h-4">
     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+  </svg>
+);
+
+const ExternalLinkIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-4 h-4">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
   </svg>
 );
 
@@ -269,7 +265,7 @@ const experiences: Experience[] = [
     company: 'Intugine Technologies',
     url: 'https://www.intugine.com/',
     date: 'Feb 2020 - Dec 2020',
-    summary: 'Intugine is a leading SaaS platform specializing in logistics and supply chain visibility solutions. ',
+    summary: 'Intugine is a leading SaaS platform specializing in logistics and supply chain visibility solutions.',
     responsibilities: [
       {
         category: 'Product Growth',
@@ -279,7 +275,7 @@ const experiences: Experience[] = [
       },
     ],
     skills: ["Logistics product development", "Workflow optimization", "Tracking systems", "Dashboard design", "Requirements definition", "Data accuracy improvement", "Cross-functional collaboration", "User experience design", "Operational analytics", "Product backlog management"],
-    achievements: ['✓ Improved Platform Adoption', '✓ Enhanced Tracking Accuracy', '✓ Enterprise Scale Features', '✓ Real-time Analytics Dashboard'],
+    achievements: ['Improved Platform Adoption', 'Enhanced Tracking Accuracy', 'Enterprise Scale Features', 'Real-time Analytics Dashboard'],
     caseStudy: {
       title: "Multi-Modal Logistics Visibility Platform",
       challenge: "Enterprise logistics teams struggled with fragmented visibility across road, rail, and air transport modes, leading to delayed decisions.",
@@ -308,7 +304,7 @@ const experiences: Experience[] = [
       },
     ],
     skills: ["Healthcare product strategy", "Predictive analytics", "Anomaly detection", "Prototyping", "Workflow research", "Clinical dashboard design", "User interviews", "Compliance and standards", "Feature specification", "ML-driven product design"],
-    achievements: ['✓ AI Healthcare Platform Vision', '✓ ML-driven Analytics Modules', '✓ Early Customer Validation', '✓ Healthcare Workflow Automation'],
+    achievements: ['AI Healthcare Platform Vision', 'ML-driven Analytics Modules', 'Early Customer Validation', 'Healthcare Workflow Automation'],
     caseStudy: {
       title: "AI-Driven Healthcare Analytics Platform",
       challenge: "Healthcare providers lacked actionable insights from patient data, limiting their ability to predict outcomes and optimize operations.",
@@ -332,7 +328,7 @@ const experiences: Experience[] = [
       },
     ],
     skills: ["Autonomous navigation", "Sensor fusion", "Path planning", "Obstacle avoidance", "Simulation design", "Field testing", "Embedded systems integration", "Marine robotics", "Control systems", "Hardware-software integration"],
-    achievements: ['✓ Autonomous USV Development', '✓ Multi-Sensor Fusion', '✓ Successful Field Trials', '✓ Navigation Accuracy Improvement'],
+    achievements: ['Autonomous USV Development', 'Multi-Sensor Fusion', 'Successful Field Trials', 'Navigation Accuracy Improvement'],
     caseStudy: {
       title: "Autonomous Maritime Defense Systems",
       challenge: "Defense agencies needed reliable autonomous surface vehicles capable of operating in challenging marine environments with minimal human intervention.",
@@ -343,131 +339,104 @@ const experiences: Experience[] = [
   },
 ];
 
-// Extract unique companies for tabs
+// Extract unique companies for filter tabs
 const uniqueCompanies = Array.from(new Set(experiences.map(exp => exp.company))).sort();
 
-type CompanyTabType = string;
-type ContentTabType = 'experience' | 'case-study';
-
 export default function Experience() {
-  const [activeCompany, setActiveCompany] = useState<string>(uniqueCompanies[0] || '');
-  const [activeContentTab, setActiveContentTab] = useState<ContentTabType>('experience');
-  const [expandedSkills, setExpandedSkills] = useState<ExpandedSkillsState>({});
-  const experienceRef = useRef<HTMLElement>(null);
-  const isInitialMount = useRef(true);
+  const [activeCompany, setActiveCompany] = useState<string | null>(null);
+  const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
 
-  const toggleSkillsExpand = (experienceIndex: number) => {
-    setExpandedSkills(prev => ({
-      ...prev,
-      [experienceIndex]: !prev[experienceIndex]
-    }));
+  const toggleCard = (index: number) => {
+    setExpandedCards(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
   };
 
-  // Scroll to start of experience section when company changes (not on initial load)
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      return;
-    }
-
-    if (experienceRef.current) {
-      const headerOffset = 80;
-      const elementPosition = experienceRef.current.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
-  }, [activeCompany]);
-
-  // Get current experience
-  const currentExperience = experiences.find(exp => exp.company === activeCompany);
-  const stableIndex = currentExperience ? experiences.findIndex(e => e.company === currentExperience.company && e.title === currentExperience.title && e.date === currentExperience.date) : 0;
+  const filteredExperiences = activeCompany === null 
+    ? experiences 
+    : experiences.filter(exp => exp.company === activeCompany);
 
   return (
-    <section id="experience" ref={experienceRef} className="section-full-width" aria-labelledby="experience-title" role="region" aria-label="Work Experience">
+    <section id="experience" className="section-full-width" aria-labelledby="experience-title" role="region" aria-label="Work Experience">
       <div className="container">
         <header className="section-header animate-on-scroll">
           <h2 id="experience-title" className="section-title">Experience</h2>
           <p className="section-subtitle">9+ years building and scaling products across mobility, SaaS, robotics, and AI</p>
         </header>
 
-        {/* Company Folder Tabs */}
-        <div className="company-folder-tabs animate-on-scroll animate-delay-1">
+        {/* Company Filter Tabs - Contact FAQ Style */}
+        <div className="experience-tab-navigation animate-on-scroll">
+          <button
+            className={`experience-tab-button ${activeCompany === null ? 'active' : ''}`}
+            onClick={() => setActiveCompany(null)}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+            All Companies
+          </button>
           {uniqueCompanies.map((company) => (
             <button
               key={company}
-              className={`company-folder-tab ${activeCompany === company ? 'active' : ''}`}
-              onClick={() => {
-                setActiveCompany(company);
-                setActiveContentTab('experience');
-              }}
+              className={`experience-tab-button ${activeCompany === company ? 'active' : ''}`}
+              onClick={() => setActiveCompany(company)}
             >
-              <span className="folder-tab-icon"><FolderIcon /></span>
-              <span className="folder-tab-label">{company}</span>
+              {company}
             </button>
           ))}
         </div>
 
-        {/* Company Folder Body */}
-        {currentExperience && (
-          <div className="company-folder-body">
-            {/* Company Header */}
-            <div className="company-folder-header">
-              <div className="company-info">
-                <div className="company-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                </div>
-                <div className="company-details">
-                  <h3 className="company-name">{currentExperience.company}</h3>
-                  <span className="company-role">{currentExperience.title}</span>
-                </div>
-              </div>
-              <div className="company-meta">
-                <span className="company-date">{currentExperience.date}</span>
-                {currentExperience.url && (
-                  <a href={currentExperience.url} target="_blank" rel="noopener noreferrer" className="company-website" aria-label={`Visit ${currentExperience.company} website`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                    Website
-                  </a>
-                )}
-              </div>
-            </div>
+        {/* Accordion Experience Cards */}
+        <div className="experience-accordion animate-on-scroll animate-delay-1">
+          {filteredExperiences.map((exp, index) => {
+            const originalIndex = experiences.findIndex(e => e.company === exp.company && e.title === exp.title && e.date === exp.date);
+            const isExpanded = expandedCards.has(originalIndex);
 
-            {/* Content Tabs - Experience | Case Study */}
-            <div className="content-tabs-container">
-              <div className="content-tabs">
+            return (
+              <div key={originalIndex} className={`experience-accordion-item ${isExpanded ? 'expanded' : ''}`}>
+                {/* Accordion Header */}
                 <button
-                  className={`content-tab ${activeContentTab === 'experience' ? 'active' : ''}`}
-                  onClick={() => setActiveContentTab('experience')}
+                  className="experience-accordion-header"
+                  onClick={() => toggleCard(originalIndex)}
+                  aria-expanded={isExpanded}
+                  aria-controls={`experience-content-${originalIndex}`}
                 >
-                  <span className="content-tab-icon"><BriefcaseIcon /></span>
-                  <span className="content-tab-label">EXPERIENCE</span>
+                  <div className="accordion-header-left">
+                    <div className="accordion-company-icon">
+                      <BriefcaseIcon />
+                    </div>
+                    <div className="accordion-company-info">
+                      <h3 className="accordion-company-name">{exp.company}</h3>
+                      <span className="accordion-role-title">{exp.title}</span>
+                    </div>
+                  </div>
+                  <div className="accordion-header-right">
+                    <span className="accordion-date">{exp.date}</span>
+                    <ChevronIcon expanded={isExpanded} />
+                  </div>
                 </button>
-                <button
-                  className={`content-tab ${activeContentTab === 'case-study' ? 'active' : ''}`}
-                  onClick={() => setActiveContentTab('case-study')}
+
+                {/* Accordion Content */}
+                <div
+                  id={`experience-content-${originalIndex}`}
+                  className="experience-accordion-content"
+                  style={{ maxHeight: isExpanded ? '2000px' : '0' }}
+                  role="region"
+                  aria-labelledby={`experience-header-${originalIndex}`}
                 >
-                  <span className="content-tab-icon"><DocumentIcon /></span>
-                  <span className="content-tab-label">CASE STUDY</span>
-                </button>
-              </div>
+                  <div className="accordion-content-inner">
+                    {/* Summary */}
+                    <p className="experience-summary">{highlightText(exp.summary)}</p>
 
-              {/* Tab Content */}
-              <div className="content-tab-panels">
-                {/* Experience Panel */}
-                {activeContentTab === 'experience' && (
-                  <div className="content-panel experience-panel">
-                    <p className="experience-summary">{highlightText(currentExperience.summary)}</p>
-
+                    {/* Responsibilities */}
                     <div className="experience-responsibilities-section">
-                      {currentExperience.responsibilities.map((respCategory, catIndex) => (
+                      {exp.responsibilities.map((respCategory, catIndex) => (
                         <div key={catIndex} className={`responsibility-category ${getCategoryColorClass(respCategory.category)}`}>
                           <h4 className="category-title">
                             <span className="category-icon">{getCategoryIcon(respCategory.category)}</span>
@@ -482,73 +451,77 @@ export default function Experience() {
                       ))}
                     </div>
 
+                    {/* Skills */}
                     <div className="experience-skills-section">
                       <h4 className="skills-section-label">SKILLS UTILIZED</h4>
                       <div className="experience-skills">
-                        {currentExperience.skills.map((skill, skillIndex) => (
+                        {exp.skills.map((skill, skillIndex) => (
                           <span key={skillIndex} className="skill-tag">{skill}</span>
                         ))}
                       </div>
                     </div>
 
+                    {/* Achievements */}
                     <div className="experience-achievements">
-                      {currentExperience.achievements.map((achievement, achIndex) => (
+                      {exp.achievements.map((achievement, achIndex) => (
                         <span key={achIndex} className="achievement-badge">{achievement}</span>
                       ))}
                     </div>
-                  </div>
-                )}
 
-                {/* Case Study Panel */}
-                {activeContentTab === 'case-study' && currentExperience.caseStudy && (
-                  <div className="content-panel case-study-panel">
-                    <div className="case-study-header">
-                      <h4 className="case-study-title">{currentExperience.caseStudy.title}</h4>
-                    </div>
-
-                    <div className="case-study-blocks">
-                      <div className="case-study-block">
-                        <h5 className="case-study-block-title">CHALLENGE</h5>
-                        <p className="case-study-block-text">{currentExperience.caseStudy.challenge}</p>
-                      </div>
-
-                      <div className="case-study-block">
-                        <h5 className="case-study-block-title">SOLUTION</h5>
-                        <p className="case-study-block-text">{currentExperience.caseStudy.solution}</p>
-                      </div>
-
-                      <div className="case-study-block">
-                        <h5 className="case-study-block-title">IMPACT</h5>
-                        <p className="case-study-block-text">{currentExperience.caseStudy.impact}</p>
-                      </div>
-                    </div>
-
-                    {currentExperience.caseStudy.metrics && currentExperience.caseStudy.metrics.length > 0 && (
-                      <div className="case-study-metrics">
-                        <h5 className="case-study-metrics-title">KEY METRICS</h5>
-                        <ul className="case-study-metrics-list">
-                          {currentExperience.caseStudy.metrics.map((metric, metricIndex) => (
-                            <li key={metricIndex} className="case-study-metric-item">
-                              <span className="metric-bullet">▸</span>
-                              <span>{highlightText(metric)}</span>
-                            </li>
-                          ))}
-                        </ul>
+                    {/* Case Study */}
+                    {exp.caseStudy && (
+                      <div className="case-study-section">
+                        <div className="case-study-header">
+                          <span className="case-study-icon">
+                            <DocumentIcon />
+                          </span>
+                          <h4 className="case-study-title">CASE STUDY</h4>
+                        </div>
+                        <div className="case-study-content">
+                          <div className="case-study-main">
+                            <div className="case-study-block">
+                              <h5 className="case-study-block-title">CHALLENGE</h5>
+                              <p className="case-study-block-text">{exp.caseStudy.challenge}</p>
+                            </div>
+                            <div className="case-study-block">
+                              <h5 className="case-study-block-title">SOLUTION</h5>
+                              <p className="case-study-block-text">{exp.caseStudy.solution}</p>
+                            </div>
+                            <div className="case-study-block">
+                              <h5 className="case-study-block-title">IMPACT</h5>
+                              <p className="case-study-block-text">{exp.caseStudy.impact}</p>
+                            </div>
+                          </div>
+                          {exp.caseStudy.metrics && exp.caseStudy.metrics.length > 0 && (
+                            <div className="case-study-metrics">
+                              <h5 className="case-study-metrics-title">KEY METRICS</h5>
+                              <ul className="case-study-metrics-list">
+                                {exp.caseStudy.metrics.map((metric, metricIndex) => (
+                                  <li key={metricIndex} className="case-study-metric-item">
+                                    <span className="metric-bullet">▸</span>
+                                    <span>{highlightText(metric)}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )}
-                  </div>
-                )}
 
-                {/* Case Study Empty State */}
-                {activeContentTab === 'case-study' && !currentExperience.caseStudy && (
-                  <div className="content-panel case-study-empty">
-                    <p>No case study available for this role.</p>
+                    {/* Website Link */}
+                    {exp.url && (
+                      <a href={exp.url} target="_blank" rel="noopener noreferrer" className="experience-website-link">
+                        <span>Visit Website</span>
+                        <ExternalLinkIcon />
+                      </a>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
-            </div>
-          </div>
-        )}
+            );
+          })}
+        </div>
       </div>
     </section>
   );
