@@ -3,6 +3,38 @@
 export default function Hero() {
   return (
     <section id="hero" className="hero-section" role="banner" aria-label="Introduction">
+      {/* Particle Mesh Animation Background */}
+      <div className="particle-mesh-container" aria-hidden="true">
+        <div className="particle-mesh">
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+        </div>
+        <svg className="particle-mesh-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <line x1="10%" y1="20%" x2="30%" y2="30%" className="mesh-line" />
+          <line x1="30%" y1="30%" x2="50%" y2="15%" className="mesh-line" />
+          <line x1="50%" y1="15%" x2="60%" y2="40%" className="mesh-line" />
+          <line x1="60%" y1="40%" x2="40%" y2="50%" className="mesh-line" />
+          <line x1="40%" y1="50%" x2="15%" y2="50%" className="mesh-line" />
+          <line x1="15%" y1="50%" x2="30%" y2="70%" className="mesh-line" />
+          <line x1="30%" y1="70%" x2="70%" y2="60%" className="mesh-line" />
+          <line x1="70%" y1="60%" x2="85%" y2="80%" className="mesh-line" />
+          <line x1="85%" y1="80%" x2="50%" y2="85%" className="mesh-line" />
+          <line x1="50%" y1="85%" x2="25%" y2="40%" className="mesh-line" />
+          <line x1="25%" y1="40%" x2="50%" y2="40%" className="mesh-line" />
+          <line x1="50%" y1="40%" x2="80%" y2="30%" className="mesh-line" />
+        </svg>
+      </div>
+      
       <div className="container">
         <div className="hero-content-wrapper">
           <div className="hero-main-content animate-on-scroll" role="status" aria-live="polite">
