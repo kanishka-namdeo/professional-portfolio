@@ -13,6 +13,14 @@ type ResponsibilityCategory =
   | 'Technical Collaboration & New Product Development';
 type ExpandedSkillsState = Record<number, boolean>;
 
+interface CaseStudy {
+  title: string;
+  challenge: string;
+  solution: string;
+  impact: string;
+  metrics?: string[];
+}
+
 interface CategorizedResponsibility {
   category: ResponsibilityCategory;
   items: string[];
@@ -27,6 +35,7 @@ interface Experience {
   responsibilities: CategorizedResponsibility[];
   skills: string[];
   achievements: string[];
+  caseStudy?: CaseStudy;
 }
 
 // Utility function to highlight important metrics and key phrases
@@ -93,12 +102,6 @@ const CategoryIconResearch = () => (
   </svg>
 );
 
-const CategoryIconAll = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-  </svg>
-);
-
 const getCategoryIcon = (category: string) => {
   switch (category) {
     case 'Product Strategy & MVP Execution':
@@ -117,8 +120,6 @@ const getCategoryIcon = (category: string) => {
       return <CategoryIconTech />;
     case 'Research & Innovation':
       return <CategoryIconResearch />;
-    case 'all':
-      return <CategoryIconAll />;
     default:
       return <CategoryIconGrowth />;
   }
@@ -147,6 +148,18 @@ const getCategoryColorClass = (category: string): string => {
   }
 };
 
+const FolderIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+  </svg>
+);
+
+const CaseStudyIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-4 h-4">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+  </svg>
+);
+
 const experiences: Experience[] = [
   {
     title: 'Senior Product Manager',
@@ -168,6 +181,13 @@ const experiences: Experience[] = [
     ],
     skills: ["Product strategy", "User research", "MVP definition", "LLM-agent design", "Workflow architecture", "Team building", "Cross-functional alignment", "Wireframing", "Customer validation", "Early-stage product development"],
     achievements: ["Delivered the 0-to-1 product strategy for the platform", "Secured the first beta customer before prototype completion", "Designed the core system enabling personalized investment workflows", "Built and led the initial engineering team", "Established early feedback loops for rapid iteration"],
+    caseStudy: {
+      title: "AI-Native Wealth Management Platform",
+      challenge: "Private banking firms struggled with fragmented workflows and lack of personalized investment insights for high-net-worth clients.",
+      solution: "Built an AI-native platform leveraging LLM-agents to automate personalized investment workflows, combining data aggregation with intelligent recommendations.",
+      impact: "Enabled wealth managers to deliver tailored insights 10x faster while maintaining compliance and data security requirements.",
+      metrics: ["20+ user interviews conducted", "First beta customer secured pre-launch", "4-person engineering team built from scratch"]
+    }
   },
   {
     title: 'Product Consultant',
@@ -183,6 +203,13 @@ const experiences: Experience[] = [
     ],
     skills: ["MVP delivery", "Video intelligence systems", "Storage optimization", "Cloud cost reduction", "Low-latency workflow design", "OMS integration", "Automated tagging", "Retrieval system design", "Client onboarding", "High-volume system design"],
     achievements: ["Delivered a high-volume video intelligence MVP", "Reduced cloud costs through optimized storage and compression", "Built fast retrieval workflows for operational teams", "Integrated seamlessly with client OMS and support tools", "Launched automated tagging and retrieval features", "Enabled smooth adoption of the MVP by client teams"],
+    caseStudy: {
+      title: "Video Intelligence for E-commerce",
+      challenge: "E-commerce client needed automated video analysis to reduce manual review workload and improve dispute resolution accuracy.",
+      solution: "Developed a video intelligence MVP with automated tagging, compression, and fast retrieval capabilities integrated with existing OMS.",
+      impact: "Reduced dispute resolution time by 60% while processing 50K+ daily video uploads with optimized cloud infrastructure.",
+      metrics: ["~50K daily orders processed", "60% reduction in dispute resolution time", "40% cloud cost reduction achieved"]
+    }
   },
   {
     title: 'Senior Product Manager',
@@ -199,11 +226,18 @@ const experiences: Experience[] = [
     ],
     skills: ["Product scaling", "Client onboarding", "International expansion", "Feature rollout", "API integrations", "Payments and invoicing", "User experience improvement", "Market research", "Product roadmap planning", "Cross-functional leadership"],
     achievements: ["Drove ~10x ARR growth and 15x product usage", "Onboarded 15+ enterprise clients and 60,000+ monthly users", "Expanded operations to 70+ new locations across 3 countries", "Launched features that improved user adoption and experience", "Built integrations that reduced implementation time by 40%", "Introduced payments and invoicing features to strengthen monetization"],
+    caseStudy: {
+      title: "Enterprise Transport Platform Scale-Up",
+      challenge: "Scaling a successful TaaS platform from regional to global presence while maintaining product quality and driving revenue growth.",
+      solution: "Led strategic expansion to 70+ locations across 3 countries, launched mobile-first experience improvements, and built native payments/invoicing capabilities.",
+      impact: "Achieved 10x ARR growth, expanded to 60,000+ monthly users, and established the platform as the market leader in enterprise transport management.",
+      metrics: ["~10x ARR growth achieved", "60,000+ monthly active users", "70+ locations across 3 countries", "15+ enterprise clients onboarded"]
+    }
   },
   {
     title: 'Software Team Lead',
     company: 'TekIP Knowledge Consulting',
-    url: 'https://www.tekip.com/',
+    url: 'https://tekip.com/',
     date: 'Dec 2020 - Apr 2022',
     summary: 'TekIP is a patent consulting firm specializing in SaaS solutions for IP search, analysis, and portfolio management.',
     responsibilities: [
@@ -216,6 +250,13 @@ const experiences: Experience[] = [
     ],
     skills: ["NLP product development", "Software architecture", "Agile delivery", "Team leadership", "Technical pitching", "UX design", "LLM integration", "Market research", "Hybrid system design", "Developer mentoring"],
     achievements: ["Launched an NLP MVP that improved analysis productivity by 10x", "Delivered 30+ features across multiple enterprise projects", "Secured budget approval for a new product initiative", "Added 2 enterprise projects through technical demos", "Designed architecture and UX for new product concepts", "Mentored developers and improved team capabilities"],
+    caseStudy: {
+      title: "AI-Powered Patent Analysis Platform",
+      challenge: "Patent analysts spent hours manually searching and analyzing patent databases, limiting productivity and research depth.",
+      solution: "Built an NLP-powered patent analysis platform leveraging LLMs to automate search, categorization, and insights extraction from patent databases.",
+      impact: "Improved patent analysis productivity by 10x, enabling deeper research while reducing time-to-insight for enterprise clients.",
+      metrics: ["10x productivity improvement", "40+ features delivered", "6 developers mentored", "5 enterprise projects delivered"]
+    }
   },
   {
     title: 'Technical Consultant',
@@ -233,6 +274,13 @@ const experiences: Experience[] = [
     ],
     skills: ["Logistics product development", "Workflow optimization", "Tracking systems", "Dashboard design", "Requirements definition", "Data accuracy improvement", "Cross-functional collaboration", "User experience design", "Operational analytics", "Product backlog management"],
     achievements: ['✓ Improved Platform Adoption', '✓ Enhanced Tracking Accuracy', '✓ Enterprise Scale Features', '✓ Real-time Analytics Dashboard'],
+    caseStudy: {
+      title: "Multi-Modal Logistics Visibility Platform",
+      challenge: "Enterprise logistics teams struggled with fragmented visibility across road, rail, and air transport modes, leading to delayed decisions.",
+      solution: "Developed a unified logistics visibility platform with real-time tracking, intelligent alerting, and comprehensive analytics dashboards.",
+      impact: "Improved tracking accuracy across all transport modes and enabled data-driven decision making for enterprise logistics operations.",
+      metrics: ["Multi-modal tracking achieved", "Real-time visibility dashboards deployed", "Enterprise client adoption increased"]
+    }
   },
   {
     title: 'Senior Technical Consultant',
@@ -245,20 +293,23 @@ const experiences: Experience[] = [
         category: 'Technical Collaboration',
         items: [
           'Defined the vision for an AI‑based healthcare analytics product.',
-
           'Designed early ML features for prediction and anomaly detection.',
-
           'Created prototypes that were used by early pilot customers.',
-
           'Studied hospital workflows to identify automation opportunities.',
           'Built dashboards that supported clinical decision‑making.',
-
           'Ensured the product met healthcare data standards.'
         ],
       },
     ],
     skills: ["Healthcare product strategy", "Predictive analytics", "Anomaly detection", "Prototyping", "Workflow research", "Clinical dashboard design", "User interviews", "Compliance and standards", "Feature specification", "ML-driven product design"],
     achievements: ['✓ AI Healthcare Platform Vision', '✓ ML-driven Analytics Modules', '✓ Early Customer Validation', '✓ Healthcare Workflow Automation'],
+    caseStudy: {
+      title: "AI-Driven Healthcare Analytics Platform",
+      challenge: "Healthcare providers lacked actionable insights from patient data, limiting their ability to predict outcomes and optimize operations.",
+      solution: "Designed an AI-powered analytics platform with predictive modeling, anomaly detection, and clinical decision support dashboards.",
+      impact: "Enabled healthcare teams to identify at-risk patients earlier and optimize resource allocation based on data-driven predictions.",
+      metrics: ["Early patient risk prediction enabled", "Clinical decision dashboards deployed", "Healthcare compliance standards met"]
+    }
   },
   {
     title: 'Co-founding member & Chief Technical Officer',
@@ -276,6 +327,13 @@ const experiences: Experience[] = [
     ],
     skills: ["Autonomous navigation", "Sensor fusion", "Path planning", "Obstacle avoidance", "Simulation design", "Field testing", "Embedded systems integration", "Marine robotics", "Control systems", "Hardware-software integration"],
     achievements: ['✓ Autonomous USV Development', '✓ Multi-Sensor Fusion', '✓ Successful Field Trials', '✓ Navigation Accuracy Improvement'],
+    caseStudy: {
+      title: "Autonomous Maritime Defense Systems",
+      challenge: "Defense agencies needed reliable autonomous surface vehicles capable of operating in challenging marine environments with minimal human intervention.",
+      solution: "Developed autonomous USVs with multi-sensor fusion navigation, obstacle avoidance, and real-time telemetry for defense and paramilitary applications.",
+      impact: "Successfully deployed autonomous systems that operated reliably in field trials, advancing India's maritime defense capabilities.",
+      metrics: ["Multi-sensor fusion navigation achieved", "Successful field trials completed", "Defense-grade reliability standards met"]
+    }
   },
 ];
 
@@ -332,44 +390,64 @@ export default function Experience() {
           <p className="section-subtitle">9+ years building and scaling products across mobility, SaaS, robotics, and AI</p>
         </header>
 
-        {/* Tab Navigation */}
-        <div className="tab-navigation animate-on-scroll">
-          <button
-            className={`tab-button ${activeTab === 'all' ? 'active' : ''}`}
-            onClick={() => setActiveTab('all')}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-            </svg>
-            All Companies
-          </button>
-          {uniqueCompanies.map((company) => (
+        {/* Manila Folder Tabs Container */}
+        <div className="manila-folder-container animate-on-scroll animate-delay-1">
+          {/* Folder Tabs */}
+          <div className="manila-folder-tabs">
             <button
-              key={company}
-              className={`tab-button ${activeTab === company ? 'active' : ''}`}
-              onClick={() => setActiveTab(company)}
+              className={`manila-folder-tab ${activeTab === 'all' ? 'active' : ''}`}
+              onClick={() => setActiveTab('all')}
             >
-              {company}
+              <span className="folder-tab-icon"><FolderIcon /></span>
+              <span className="folder-tab-label">ALL</span>
             </button>
-          ))}
-        </div>
+            {uniqueCompanies.map((company) => (
+              <button
+                key={company}
+                className={`manila-folder-tab ${activeTab === company ? 'active' : ''}`}
+                onClick={() => setActiveTab(company)}
+              >
+                <span className="folder-tab-icon"><FolderIcon /></span>
+                <span className="folder-tab-label">{company.toUpperCase()}</span>
+              </button>
+            ))}
+          </div>
 
-        {/* Tab Content */}
-        <div className="tab-content animate-on-scroll animate-delay-1">
-          <div className="tab-panel active">
-            <div className="experience-timeline">
+          {/* Folder Body */}
+          <div className="manila-folder-body">
+            <div className="manila-folder-content">
+              {/* Decorative Folder Label */}
+              <div className="folder-label-stamp">
+                <span className="folder-stamp-text">WORK EXPERIENCE FILE</span>
+              </div>
+
               {getFilteredExperiences().map((exp, index) => {
                 // Get the stable index of this experience in the full experiences array
                 const stableIndex = experiences.findIndex(e => e.company === exp.company && e.title === exp.title && e.date === exp.date);
                 return (
-                  <div key={stableIndex} className="experience-item">
-                    <div className="experience-card">
-                      <div className="experience-header">
-                        <div>
-                          <h3 className="experience-title">{exp.title}</h3>
-                          <span className="experience-company">{exp.company}</span>
+                  <div key={stableIndex} className="manila-experience-folder">
+                    {/* Folder Header */}
+                    <div className="experience-folder-header">
+                      <div className="folder-company-badge">
+                        <span className="folder-company-icon">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                          </svg>
+                        </span>
+                        <span className="folder-company-name">{exp.company}</span>
+                      </div>
+                      <div className="folder-meta-info">
+                        <span className="folder-meta-badge">{exp.date}</span>
+                      </div>
+                    </div>
+
+                    {/* Work Experience Section */}
+                    <div className="folder-work-section">
+                      <div className="work-header-row">
+                        <div className="work-title-group">
+                          <h3 className="folder-work-title">{exp.title}</h3>
                           {exp.url && (
-                            <a href={exp.url} target="_blank" rel="noopener noreferrer" className="experience-link" aria-label={`Visit ${exp.company} website`}>
+                            <a href={exp.url} target="_blank" rel="noopener noreferrer" className="folder-work-link" aria-label={`Visit ${exp.company} website`}>
                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                               </svg>
@@ -377,10 +455,11 @@ export default function Experience() {
                             </a>
                           )}
                         </div>
-                        <span className="experience-date">{exp.date}</span>
                       </div>
-                      <p className="experience-summary">{highlightText(exp.summary)}</p>
-                      <div className="experience-description">
+
+                      <p className="folder-work-summary">{highlightText(exp.summary)}</p>
+
+                      <div className="folder-responsibilities">
                         {exp.responsibilities.map((respCategory, catIndex) => (
                           <div key={catIndex} className={`responsibility-category ${getCategoryColorClass(respCategory.category)}`}>
                             <h4 className="category-title">
@@ -394,16 +473,20 @@ export default function Experience() {
                             </ul>
                           </div>
                         ))}
+                      </div>
+
+                      <div className="folder-skills-section">
+                        <h4 className="skills-section-label">SKILLS UTILIZED</h4>
                         <div className="experience-skills">
-                          {exp.skills.slice(0, expandedSkills[stableIndex] ? exp.skills.length : 4).map((skill, skillIndex) => (
+                          {exp.skills.slice(0, expandedSkills[stableIndex] ? exp.skills.length : 5).map((skill, skillIndex) => (
                             <span key={skillIndex} className="skill-tag">{skill}</span>
                           ))}
-                          {exp.skills.length > 4 && (
+                          {exp.skills.length > 5 && (
                             <button
                               onClick={() => toggleSkillsExpand(stableIndex)}
                               className="view-all-skills-button"
                               aria-expanded={expandedSkills[stableIndex] || false}
-                              aria-label={expandedSkills[stableIndex] ? 'Show less skills' : `Show ${exp.skills.length - 4} more skills`}
+                              aria-label={expandedSkills[stableIndex] ? 'Show less skills' : `Show ${exp.skills.length - 5} more skills`}
                             >
                               {expandedSkills[stableIndex] ? (
                                 <>
@@ -417,18 +500,61 @@ export default function Experience() {
                                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                                   </svg>
-                                  View all skills
+                                  +{exp.skills.length - 5} more
                                 </>
                               )}
                             </button>
                           )}
                         </div>
-                        <div className="experience-achievements">
-                          {exp.achievements.map((achievement, achIndex) => (
-                            <span key={achIndex} className="achievement-badge">{achievement}</span>
-                          ))}
+                      </div>
+                    </div>
+
+                    {/* Case Study Section - Only show if case study exists */}
+                    {exp.caseStudy && (
+                      <div className="folder-case-study-section">
+                        <div className="case-study-header">
+                          <span className="case-study-icon">
+                            <CaseStudyIcon />
+                          </span>
+                          <h4 className="case-study-title">CASE STUDY</h4>
+                        </div>
+                        <div className="case-study-content">
+                          <div className="case-study-main">
+                            <div className="case-study-block">
+                              <h5 className="case-study-block-title">CHALLENGE</h5>
+                              <p className="case-study-block-text">{exp.caseStudy.challenge}</p>
+                            </div>
+                            <div className="case-study-block">
+                              <h5 className="case-study-block-title">SOLUTION</h5>
+                              <p className="case-study-block-text">{exp.caseStudy.solution}</p>
+                            </div>
+                            <div className="case-study-block">
+                              <h5 className="case-study-block-title">IMPACT</h5>
+                              <p className="case-study-block-text">{exp.caseStudy.impact}</p>
+                            </div>
+                          </div>
+                          {exp.caseStudy.metrics && exp.caseStudy.metrics.length > 0 && (
+                            <div className="case-study-metrics">
+                              <h5 className="case-study-metrics-title">KEY METRICS</h5>
+                              <ul className="case-study-metrics-list">
+                                {exp.caseStudy.metrics.map((metric, metricIndex) => (
+                                  <li key={metricIndex} className="case-study-metric-item">
+                                    <span className="metric-bullet">▸</span>
+                                    <span>{highlightText(metric)}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
                         </div>
                       </div>
+                    )}
+
+                    {/* Achievements */}
+                    <div className="folder-achievements">
+                      {exp.achievements.map((achievement, achIndex) => (
+                        <span key={achIndex} className="achievement-badge">{achievement}</span>
+                      ))}
                     </div>
                   </div>
                 );
