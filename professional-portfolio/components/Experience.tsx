@@ -384,7 +384,22 @@ export default function Experience() {
                       {getCompanyInitial(exp.company)}
                     </div>
                     <div>
-                      <h3 className="big-bang-company-name">{exp.company}</h3>
+                      <div className="big-bang-company-row">
+                        <h3 className="big-bang-company-name">{exp.company}</h3>
+                        {exp.url && (
+                          <a 
+                            href={exp.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="big-bang-website-link"
+                            aria-label={`Visit ${exp.company} website`}
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </a>
+                        )}
+                      </div>
                       <div className="big-bang-meta">
                         <span className="big-bang-role">{exp.title}</span>
                         <span className="big-bang-duration">{exp.date}</span>
