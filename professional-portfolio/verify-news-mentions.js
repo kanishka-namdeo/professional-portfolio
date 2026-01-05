@@ -21,7 +21,7 @@ const { chromium } = require('playwright');
 
   try {
     console.log('Navigating to deployed site...');
-    await page.goto('https://8ztba28on6q4.space.minimax.io', { waitUntil: 'networkidle' });
+    await page.goto('https://s9qzzfse8xmo.space.minimax.io', { waitUntil: 'networkidle' });
     console.log('Page loaded successfully\n');
 
     // Test MoveInSync press mentions

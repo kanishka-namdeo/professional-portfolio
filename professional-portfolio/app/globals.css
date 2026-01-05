@@ -8274,15 +8274,13 @@ button[class*="icon"],
 .big-bang-news-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
+  padding: 12px 14px;
   background: var(--color-surface-alt);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-sm);
   text-decoration: none;
   color: var(--color-text);
   transition: all 0.2s ease;
-  position: relative;
 }
 
 .big-bang-news-item:hover {
@@ -8291,37 +8289,44 @@ button[class*="icon"],
   box-shadow: 3px 3px 0 0 var(--color-border);
 }
 
-.big-bang-news-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-  min-width: 0;
+.big-bang-news-item:hover .big-bang-news-headline {
+  color: var(--accent-indigo);
 }
 
-.big-bang-news-source-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 4px;
+.big-bang-news-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
   background: var(--accent-indigo);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
   flex-shrink: 0;
 }
 
-.big-bang-news-text {
+.big-bang-news-content {
   flex: 1;
   min-width: 0;
+  margin-left: 12px;
+  margin-right: 12px;
+}
+
+.big-bang-news-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
 }
 
 .big-bang-news-source {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: var(--accent-indigo);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .big-bang-news-date {
@@ -8329,39 +8334,19 @@ button[class*="icon"],
   color: var(--color-text-muted);
 }
 
+.big-bang-news-headline {
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--color-text);
+  transition: color 0.2s ease;
+}
+
 .big-bang-news-arrow {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   color: var(--color-text-muted);
   flex-shrink: 0;
-  margin-left: 8px;
-}
-
-/* Tooltip for news headline preview */
-.big-bang-news-tooltip {
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--color-surface);
-  border: 2px solid var(--color-border);
-  padding: 10px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-  line-height: 1.4;
-  max-width: 320px;
-  width: max-content;
-  box-shadow: 4px 4px 0 0 var(--color-border);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.2s ease;
-  z-index: 100;
-  pointer-events: none;
-}
-
-.big-bang-news-item:hover .big-bang-news-tooltip {
-  opacity: 1;
-  visibility: visible;
 }
 
 /* Dark mode for news rail */
@@ -8377,17 +8362,16 @@ button[class*="icon"],
   background: var(--color-surface);
 }
 
+[data-theme="dark"] .big-bang-news-item:hover .big-bang-news-headline {
+  color: var(--accent-coral);
+}
+
 [data-theme="dark"] .big-bang-news-source {
   color: var(--accent-coral);
 }
 
-[data-theme="dark"] .big-bang-news-source-icon {
+[data-theme="dark"] .big-bang-news-icon {
   background: var(--accent-coral);
-}
-
-[data-theme="dark"] .big-bang-news-tooltip {
-  background: var(--color-bg);
-  border-color: var(--color-border);
 }
 
 /* Dark mode adjustments for big-bang */
