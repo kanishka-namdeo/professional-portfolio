@@ -7890,8 +7890,7 @@ button[class*="icon"],
   display: flex;
   flex-direction: column;
   gap: 24px;
-  max-width: 900px;
-  margin: 0 auto;
+  width: 100%;
 }
 
 .big-bang-card {
@@ -7900,6 +7899,7 @@ button[class*="icon"],
   box-shadow: var(--shadow-hard);
   overflow: hidden;
   transition: all 0.3s ease;
+  width: 100%;
 }
 
 .big-bang-card:hover {
@@ -7912,14 +7912,14 @@ button[class*="icon"],
 }
 
 .big-bang-header {
-  padding: 20px 24px;
+  padding: var(--space-lg) var(--space-md);
   background: var(--accent-amber);
   border-bottom: var(--border-width) solid var(--color-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: var(--space-md);
 }
 
 .big-bang-company {
@@ -7993,7 +7993,7 @@ button[class*="icon"],
 
 .big-bang-expand-btn {
   width: 100%;
-  padding: 14px 24px;
+  padding: var(--space-sm) var(--space-md);
   background: var(--color-text);
   color: var(--color-surface);
   border: none;
@@ -8029,7 +8029,7 @@ button[class*="icon"],
 }
 
 .big-bang-body {
-  padding: 24px;
+  padding: var(--space-lg) var(--space-md);
 }
 
 .big-bang-section {
@@ -8138,7 +8138,7 @@ button[class*="icon"],
 .big-bang-metric {
   background: var(--color-bg);
   border: 2px solid var(--color-border);
-  padding: 14px;
+  padding: var(--space-sm);
   text-align: center;
   transition: all 0.2s ease;
 }
@@ -8353,7 +8353,7 @@ button[class*="icon"],
 /* Responsive */
 @media (max-width: 640px) {
   .big-bang-header {
-    padding: 16px;
+    padding: var(--space-md);
   }
 
   .big-bang-logo {
@@ -8371,7 +8371,7 @@ button[class*="icon"],
   }
 
   .big-bang-teaser {
-    padding: 6px 12px;
+    padding: var(--space-sm) var(--space-md);
   }
 
   .big-bang-teaser-value {
@@ -8379,12 +8379,12 @@ button[class*="icon"],
   }
 
   .big-bang-body {
-    padding: 16px;
+    padding: var(--space-md);
   }
 
   .big-bang-section {
-    margin-bottom: 20px;
-    padding-bottom: 20px;
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-md);
   }
 
   .big-bang-grid {
