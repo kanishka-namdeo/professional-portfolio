@@ -25,13 +25,6 @@ interface CategorizedResponsibility {
   items: string[];
 }
 
-interface PressMention {
-  headline: string;
-  source: string;
-  url: string;
-  date: string;
-}
-
 interface Experience {
   title: string;
   company: string;
@@ -42,7 +35,6 @@ interface Experience {
   skills: string[];
   achievements: string[];
   caseStudy?: CaseStudy;
-  press?: PressMention[];
 }
 
 // Get company initial for logo
@@ -113,20 +105,6 @@ const experiences: Experience[] = [
     ],
     skills: ["Product strategy", "User research", "MVP definition", "LLM-agent design", "Workflow architecture", "Team building", "Cross-functional alignment", "Wireframing", "Customer validation", "Early-stage product development"],
     achievements: ["Delivered the 0-to-1 product strategy for the platform", "Secured the first beta customer before prototype completion", "Designed the core system enabling personalized investment workflows", "Built and led the initial engineering team", "Established early feedback loops for rapid iteration"],
-    press: [
-      {
-        headline: "Cognium Raises $5M to Build AI-Native Wealth Management Platform",
-        source: "TechCrunch",
-        url: "https://techcrunch.com/2025/06/cognium-seed-funding/",
-        date: "Jun 2025"
-      },
-      {
-        headline: "Former Senior PM from MoveInSync Joins Cognium to Lead Product",
-        source: "LinkedIn",
-        url: "https://linkedin.com/news/cognium-hiring-2025",
-        date: "Jul 2025"
-      }
-    ],
     caseStudy: {
       title: "AI-Native Wealth Management Platform",
       challenge: "Private banking firms struggled with fragmented workflows and lack of personalized investment insights for high-net-worth clients.",
@@ -172,20 +150,6 @@ const experiences: Experience[] = [
     ],
     skills: ["Product scaling", "Client onboarding", "International expansion", "Feature rollout", "API integrations", "Payments and invoicing", "User experience improvement", "Market research", "Product roadmap planning", "Cross-functional leadership"],
     achievements: ["Drove ~10x ARR growth and 15x product usage", "Onboarded 15+ enterprise clients and 60,000+ monthly users", "Expanded operations to 70+ new locations across 3 countries", "Launched features that improved user adoption and experience", "Built integrations that reduced implementation time by 40%", "Introduced payments and invoicing features to strengthen monetization"],
-    press: [
-      {
-        headline: "Indian Startup MoveInSync Pioneers Intelligent Commutes Across the Globe",
-        source: "Impakter",
-        url: "https://impakter.com/indian-startup-moveinsync-pioneers-intelligent-commutes-across-the-globe/",
-        date: "2024"
-      },
-      {
-        headline: "Business RentLZ - Enterprise Vehicle Management Solution",
-        source: "MoveInSync",
-        url: "https://moveinsync.com/business-rentlz",
-        date: "2024"
-      }
-    ],
     caseStudy: {
       title: "Enterprise Transport Platform Scale-Up",
       challenge: "Scaling a successful TaaS platform from regional to global presence while maintaining product quality and driving revenue growth.",
@@ -234,14 +198,6 @@ const experiences: Experience[] = [
     ],
     skills: ["Logistics product development", "Workflow optimization", "Tracking systems", "Dashboard design", "Requirements definition", "Data accuracy improvement", "Cross-functional collaboration", "User experience design", "Operational analytics", "Product backlog management"],
     achievements: ['Improved Platform Adoption', 'Enhanced Tracking Accuracy', 'Enterprise Scale Features', 'Real-time Analytics Dashboard'],
-    press: [
-      {
-        headline: "Intugine Technologies - Logistics Visibility Solutions",
-        source: "Facebook",
-        url: "https://www.facebook.com/watch/?v=236228024272951",
-        date: "2020"
-      }
-    ],
     caseStudy: {
       title: "Multi-Modal Logistics Visibility Platform",
       challenge: "Enterprise logistics teams struggled with fragmented visibility across road, rail, and air transport modes, leading to delayed decisions.",
@@ -295,26 +251,6 @@ const experiences: Experience[] = [
     ],
     skills: ["Autonomous navigation", "Sensor fusion", "Path planning", "Obstacle avoidance", "Simulation design", "Field testing", "Embedded systems integration", "Marine robotics", "Control systems", "Hardware-software integration"],
     achievements: ['Autonomous USV Development', 'Multi-Sensor Fusion', 'Successful Field Trials', 'Navigation Accuracy Improvement'],
-    press: [
-      {
-        headline: "Wildlife Surveillance and Anti-Poaching System Installed by Rajasthan Government",
-        source: "Naya Rajasthan",
-        url: "https://nayarajasthan.wordpress.com/2018/06/06/wildlife-surveillance-and-anti-poaching-system-installed-by-rajasthan-government/",
-        date: "Jun 2018"
-      },
-      {
-        headline: "Welcome TrashFin - The Water Bodies Cleaner",
-        source: "Mumbai Mirror",
-        url: "https://mumbaimirror.indiatimes.com/mumbai/civic/welcome-trashfin-the-water-bodies-cleaner/articleshow/64891123.html",
-        date: "2018"
-      },
-      {
-        headline: "State Embraces Startups, Signs Pacts for Works Worth 15 Lakh",
-        source: "The Hindu",
-        url: "https://www.thehindu.com/news/cities/mumbai/state-embraces-startups-signs-pacts-for-works-worth-15-lakh/article24301791.ece",
-        date: "2018"
-      }
-    ],
     caseStudy: {
       title: "Autonomous Maritime Defense Systems",
       challenge: "Defense agencies needed reliable autonomous surface vehicles capable of operating in challenging marine environments with minimal human intervention.",
@@ -578,43 +514,6 @@ export default function Experience() {
                         ))}
                       </div>
                     </div>
-
-                    {/* News Rail - Press Mentions */}
-                    {exp.press && exp.press.length > 0 && (
-                      <div className="big-bang-news-rail">
-                        <h4 className="big-bang-news-title">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                          </svg>
-                          In the News
-                        </h4>
-                        <div className="big-bang-news-list">
-                          {exp.press.map((mention, mentionIndex) => (
-                            <a
-                              key={mentionIndex}
-                              href={mention.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="big-bang-news-item"
-                            >
-                              <div className="big-bang-news-icon">
-                                {mention.source.charAt(0)}
-                              </div>
-                              <div className="big-bang-news-content">
-                                <div className="big-bang-news-meta">
-                                  <span className="big-bang-news-source">{mention.source}</span>
-                                  <span className="big-bang-news-date">{mention.date}</span>
-                                </div>
-                                <div className="big-bang-news-headline">{mention.headline}</div>
-                              </div>
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="big-bang-news-arrow">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                              </svg>
-                            </a>
-                          ))}
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
               </article>
