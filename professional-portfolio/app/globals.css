@@ -8097,6 +8097,12 @@ button[class*="icon"],
   align-items: center;
   gap: 8px;
   padding-bottom: 8px;
+}
+
+/* Dark mode section title adjustments */
+[data-theme="dark"] .big-bang-section-title {
+  color: #a5b4fc;
+}
   border-bottom: 2px solid var(--color-border);
 }
 
@@ -8198,6 +8204,11 @@ button[class*="icon"],
   line-height: 1.1;
 }
 
+/* Dark mode metric adjustments */
+[data-theme="dark"] .big-bang-metric-value {
+  color: #fb923c;
+}
+
 .big-bang-metric-label {
   font-size: 0.7rem;
   text-transform: uppercase;
@@ -8221,6 +8232,13 @@ button[class*="icon"],
   font-weight: 600;
   border: 2px solid var(--color-border);
   transition: all 0.2s ease;
+}
+
+/* Dark mode tag adjustments */
+[data-theme="dark"] .big-bang-tag {
+  background: var(--color-surface);
+  color: var(--accent-indigo);
+  border-color: var(--accent-indigo);
 }
 
 .big-bang-tag:hover {
@@ -8391,6 +8409,88 @@ button[class*="icon"],
 .big-bang-card.variant-sky .big-bang-expand-btn.expanded {
   background: var(--accent-blue);
   color: #ffffff;
+}
+
+/* ========================================
+   DARK MODE OVERRIDES FOR BIG BANG CARDS
+   Ensures proper color switching in dark theme
+   ======================================== */
+
+/* Amber Dark Mode */
+[data-theme="dark"] .big-bang-card.variant-amber .big-bang-logo {
+  background: var(--bb-amber-bg);
+  color: var(--bb-amber-text);
+}
+
+[data-theme="dark"] .big-bang-card.variant-amber .big-bang-teaser {
+  background: var(--bb-amber-bg);
+  color: var(--bb-amber-text);
+}
+
+/* Indigo Dark Mode */
+[data-theme="dark"] .big-bang-card.variant-indigo .big-bang-logo {
+  background: var(--bb-indigo-bg);
+  color: var(--accent-indigo);
+}
+
+[data-theme="dark"] .big-bang-card.variant-indigo .big-bang-teaser {
+  background: var(--bb-indigo-bg);
+  color: var(--bb-indigo-text);
+}
+
+/* Teal Dark Mode */
+[data-theme="dark"] .big-bang-card.variant-teal .big-bang-logo {
+  background: var(--bb-teal-bg);
+  color: var(--accent-teal);
+}
+
+[data-theme="dark"] .big-bang-card.variant-teal .big-bang-teaser {
+  background: var(--bb-teal-bg);
+  color: var(--bb-teal-text);
+}
+
+/* Red Dark Mode */
+[data-theme="dark"] .big-bang-card.variant-red .big-bang-logo {
+  background: var(--bb-red-bg);
+  color: var(--accent-coral);
+}
+
+[data-theme="dark"] .big-bang-card.variant-red .big-bang-teaser {
+  background: var(--bb-red-bg);
+  color: var(--bb-red-text);
+}
+
+/* Purple Dark Mode */
+[data-theme="dark"] .big-bang-card.variant-purple .big-bang-logo {
+  background: var(--bb-purple-bg);
+  color: var(--accent-purple);
+}
+
+[data-theme="dark"] .big-bang-card.variant-purple .big-bang-teaser {
+  background: var(--bb-purple-bg);
+  color: var(--bb-purple-text);
+}
+
+/* Green Dark Mode */
+[data-theme="dark"] .big-bang-card.variant-green .big-bang-logo {
+  background: var(--bb-green-bg);
+  color: var(--accent-teal);
+}
+
+[data-theme="dark"] .big-bang-card.variant-green .big-bang-teaser {
+  background: var(--bb-green-bg);
+  color: var(--bb-green-text);
+}
+
+/* Sky Dark Mode */
+[data-theme="dark"] .big-bang-card.variant-sky .big-bang-logo {
+  background: var(--bb-sky-bg);
+  color: var(--accent-blue);
+}
+
+[data-theme="dark"] .big-bang-card.variant-sky .big-bang-teaser {
+  background: var(--bb-sky-bg);
+  color: var(--bb-sky-text);
 }
 
 /* Responsive */
