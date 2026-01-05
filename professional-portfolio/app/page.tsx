@@ -1,6 +1,6 @@
 import Hero from '@/components/Hero';
-import Showcase from '@/components/Showcase';
 import Experience from '@/components/Experience';
+import Showcase from '@/components/Showcase';
 import About from '@/components/About';
 import SkillsAndEducation from '@/components/SkillsAndEducation';
 import ContactFAQ from '@/components/ContactFAQ';
@@ -22,11 +22,11 @@ export default function Home() {
           {/* Hero Section */}
           <Hero />
           
-          {/* Code & Open Source Section */}
-          <Showcase />
-          
           {/* Experience Section */}
           <Experience />
+          
+          {/* Code & Open Source Section */}
+          <Showcase />
           
           {/* About Section */}
           <About />
