@@ -1953,8 +1953,9 @@ section {
     top: var(--space-sm);
     right: var(--space-sm);
   }
+}
 
-  /* Card-based layout - no timeline line needed */
+/* Card-based layout - no timeline line needed */
 
 .experience-item {
   position: relative;
@@ -8016,8 +8017,6 @@ button[class*="icon"],
 /* Dark mode section title adjustments */
 [data-theme="dark"] .big-bang-section-title {
   color: #a5b4fc;
-}
-  border-bottom: 2px solid var(--color-border);
 }
 
 .big-bang-section-title::before {
