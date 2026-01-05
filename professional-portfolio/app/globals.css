@@ -6325,6 +6325,34 @@ section {
   gap: var(--space-sm);
   margin-bottom: var(--space-xl);
   flex-wrap: wrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  position: relative;
+}
+
+.experience-tab-navigation::-webkit-scrollbar {
+  display: none;
+}
+
+.experience-tab-navigation::before,
+.experience-tab-navigation::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.experience-tab-navigation::before {
+  left: 0;
+  background: linear-gradient(to right, var(--color-surface) 0%, transparent 100%);
+}
+
+.experience-tab-navigation::after {
+  right: 0;
+  background: linear-gradient(to left, var(--color-surface) 0%, transparent 100%);
 }
 
 .experience-tab-button {
@@ -6372,6 +6400,66 @@ section {
 
 .experience-tab-button:hover svg {
   transform: scale(1.1);
+}
+
+/* Mobile horizontal scroll indicator */
+@media (max-width: 768px) {
+  .experience-tab-navigation {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: var(--space-xs) var(--container-padding);
+    margin-left: calc(-1 * var(--container-padding-left));
+    margin-right: calc(-1 * var(--container-padding));
+    width: calc(100% + var(--container-padding-left) + var(--container-padding) - var(--space-md));
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .experience-tab-navigation::before {
+    background: linear-gradient(to right, var(--color-bg) 0%, transparent 50%);
+  }
+
+  .experience-tab-navigation::after {
+    background: linear-gradient(to left, var(--color-bg) 0%, transparent 50%);
+  }
+
+  .experience-tab-button {
+    flex-shrink: 0;
+  }
+
+  /* Scroll hint animation */
+  .experience-tab-navigation .scroll-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 100%;
+    background: var(--color-surface);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-hard);
+    margin-left: var(--space-xs);
+    flex-shrink: 0;
+    pointer-events: none;
+    animation: scrollHintPulse 2s ease-in-out infinite;
+  }
+
+  .experience-tab-navigation .scroll-hint svg {
+    width: 16px;
+    height: 16px;
+    color: var(--color-text-muted);
+  }
+
+  @keyframes scrollHintPulse {
+    0%, 100% {
+      opacity: 0.6;
+      transform: translateX(-1px);
+    }
+    50% {
+      opacity: 1;
+      transform: translateX(1px);
+    }
+  }
 }
 
 /* Accordion Container */
@@ -7108,7 +7196,7 @@ button[class*="icon"],
 .experience-split-container {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xl);
+  gap: var(--space-lg);
 }
 
 /* Main Card - Neobrutalist Style */
@@ -7575,14 +7663,16 @@ button[class*="icon"],
   .neo-card-left {
     border-right: none;
     border-bottom: var(--border-width) solid var(--color-border);
+    padding: var(--space-lg);
   }
 
   .neo-card-right {
-    min-height: 200px;
+    min-height: 180px;
+    padding: var(--space-lg);
   }
 
   .neo-card-right.collapsed {
-    min-height: 160px;
+    min-height: 140px;
     border-left: none;
     border-top: 3px dashed var(--color-border);
   }
@@ -7594,24 +7684,99 @@ button[class*="icon"],
   .neo-metrics-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .experience-split-container {
+    gap: var(--space-md);
+  }
 }
 
 @media (max-width: 600px) {
   .neo-card-left,
   .neo-card-right {
-    padding: var(--space-lg);
+    padding: var(--space-md);
+  }
+
+  .neo-card-header {
+    margin-bottom: var(--space-sm);
+  }
+
+  .neo-label {
+    font-size: 0.65rem;
+    padding: 4px 8px;
   }
 
   .neo-title {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
+    line-height: 1.25;
+    margin-bottom: var(--space-xs);
+  }
+
+  .neo-subtitle {
+    font-size: 0.85rem;
+    margin-bottom: var(--space-sm);
+    line-height: 1.4;
   }
 
   .neo-summary {
     font-size: 0.9rem;
+    line-height: 1.55;
+    margin-bottom: var(--space-sm);
+  }
+
+  .neo-category {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    margin-bottom: var(--space-sm);
+  }
+
+  .neo-category svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .neo-responsibilities {
+    gap: var(--space-xs);
+  }
+
+  .neo-responsibilities li {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    padding-left: var(--space-sm);
+  }
+
+  .neo-responsibilities li::before {
+    font-size: 0.8rem;
+  }
+
+  .neo-skills {
+    gap: var(--space-xs);
+    margin-top: var(--space-sm);
+  }
+
+  .neo-skill-tag {
+    font-size: 0.75rem;
+    padding: 4px 10px;
   }
 
   .neo-impact-statement {
-    font-size: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    margin-bottom: var(--space-md);
+  }
+
+  .neo-case-block {
+    padding: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .neo-case-title {
+    font-size: 0.7rem;
+    margin-bottom: var(--space-xs);
+  }
+
+  .neo-case-block p {
+    font-size: 0.85rem;
+    line-height: 1.55;
   }
 
   .neo-metrics-grid {
@@ -7621,14 +7786,26 @@ button[class*="icon"],
 
   .neo-metric-item {
     padding: var(--space-sm);
+    min-height: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .neo-metric-value {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
+    line-height: 1.2;
   }
 
   .neo-metric-label {
     font-size: 0.7rem;
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+
+  .neo-metrics-title {
+    font-size: 0.7rem;
+    margin-bottom: var(--space-xs);
   }
 
   .neo-toggle-button {
@@ -7636,16 +7813,73 @@ button[class*="icon"],
     justify-content: center;
     padding: var(--space-sm) var(--space-md);
     font-size: 0.8rem;
+    min-height: 44px;
+    margin-top: var(--space-md);
+  }
+
+  .neo-toggle-button span {
+    font-size: 0.75rem;
+  }
+
+  .neo-toggle-button svg {
+    width: 18px;
+    height: 18px;
   }
 
   .neo-collapsed-icon {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
   }
 
   .neo-collapsed-icon svg {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
+  }
+
+  .neo-collapsed-label {
+    font-size: 0.65rem;
+    padding: 4px 10px;
+  }
+
+  .neo-collapsed-text {
+    font-size: 0.8rem;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  /* Touch feedback for interactive elements */
+  .experience-tab-button {
+    min-height: 44px;
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.85rem;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .experience-tab-button:active {
+    transform: scale(0.97);
+    box-shadow: 2px 2px 0 0 var(--color-border);
+  }
+
+  .experience-tab-button.active:active {
+    transform: translate(0, 2px) scale(0.97);
+  }
+
+  /* Section spacing optimization */
+  .section-full-width {
+    padding: var(--space-lg) 0;
+  }
+
+  .section-header {
+    margin-bottom: var(--space-md);
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .section-subtitle {
+    font-size: 0.95rem;
+    line-height: 1.5;
   }
 }
 
