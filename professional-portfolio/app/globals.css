@@ -7101,7 +7101,8 @@ button[class*="icon"],
 }
 
 /* ============================================
-   SPLIT SCREEN EXPERIENCE LAYOUT (Option 3)
+   PROGRESSIVE DISCLOSURE EXPERIENCE LAYOUT
+   Hybrid Approach - Expandable Split Screen
    ============================================ */
 
 .experience-split-container {
@@ -7117,6 +7118,17 @@ button[class*="icon"],
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-hard);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.split-screen-card:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+.split-screen-card:focus-visible {
+  outline: 3px solid var(--accent-navy);
+  outline-offset: 2px;
 }
 
 .split-screen-left {
@@ -7131,6 +7143,7 @@ button[class*="icon"],
   padding: var(--space-xl);
   background: var(--accent-amber);
   position: relative;
+  transition: all 0.4s ease;
 }
 
 .split-screen-right::before {
@@ -7143,6 +7156,71 @@ button[class*="icon"],
   background-image: radial-gradient(circle at 2px 2px, rgba(0,0,0,0.08) 1px, transparent 0);
   background-size: 12px 12px;
   pointer-events: none;
+}
+
+/* Collapsed State - Ghosted Effect */
+.split-screen-right.collapsed {
+  opacity: 0.5;
+  background: linear-gradient(135deg, var(--accent-amber) 0%, rgba(217, 119, 6, 0.3) 100%);
+}
+
+.split-screen-right.collapsed::before {
+  opacity: 0.5;
+}
+
+/* Expanded State */
+.split-screen-right.expanded {
+  opacity: 1;
+  background: var(--accent-amber);
+}
+
+.split-screen-right.expanded::before {
+  opacity: 1;
+}
+
+.case-study-ghosted {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ghosted-content {
+  text-align: center;
+  padding: var(--space-lg);
+}
+
+.ghosted-label {
+  margin-bottom: var(--space-lg);
+  display: inline-flex;
+}
+
+.ghosted-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--color-text);
+  opacity: 0.6;
+}
+
+.ghosted-placeholder svg {
+  width: 32px;
+  height: 32px;
+  margin-bottom: var(--space-sm);
+}
+
+.ghosted-placeholder p {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.ghosted-read-time {
+  font-size: 0.8rem;
+  padding: 4px 12px;
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
 }
 
 .split-label {
@@ -7226,6 +7304,78 @@ button[class*="icon"],
   margin-top: var(--space-lg);
 }
 
+/* Animated Underline for Skill Tags */
+.skill-tag.animated-underline {
+  position: relative;
+  padding-bottom: 2px;
+  overflow: hidden;
+}
+
+.skill-tag.animated-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent-navy);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.skill-tag.animated-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* View Case Study Button */
+.view-case-study-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-bg);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 2px 2px 0 0 var(--color-border);
+}
+
+.view-case-study-button:hover {
+  background: var(--accent-navy);
+  color: white;
+  border-color: var(--accent-navy);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 0 var(--color-border);
+}
+
+.view-case-study-button svg {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.read-time {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.view-case-study-button:hover .read-time {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
 .split-divider {
   display: flex;
   align-items: center;
@@ -7242,12 +7392,44 @@ button[class*="icon"],
   z-index: 10;
   box-shadow: var(--shadow-hard);
   flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.split-screen-card:hover .split-divider {
+  transform: translateY(-50%) scale(1.1);
+}
+
+.split-screen-card.expanded .split-divider {
+  background: var(--accent-navy);
+  border-color: var(--accent-navy);
+  color: white;
 }
 
 .split-divider svg {
   color: var(--color-text);
   width: 20px;
   height: 20px;
+  transition: transform 0.3s ease;
+}
+
+.split-screen-card.expanded .split-divider svg {
+  color: white;
+}
+
+/* Case Study Content - Expanded State */
+.case-study-content {
+  animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .impact-statement {
@@ -7267,24 +7449,34 @@ button[class*="icon"],
   border-radius: var(--radius-sm);
 }
 
-.case-study-problem {
+.case-study-problem,
+.case-study-solution,
+.case-study-impact {
   background: var(--color-surface);
   padding: var(--space-md);
   border-radius: var(--radius-sm);
   border: 2px solid var(--color-border);
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
-.case-study-problem .case-study-block-title {
+.case-study-problem .case-study-block-title,
+.case-study-solution .case-study-block-title,
+.case-study-impact .case-study-block-title {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.8rem;
   font-weight: 700;
   margin-bottom: var(--space-sm);
-  color: var(--color-text);
+  color: var(--accent-navy);
   letter-spacing: 0.05em;
 }
 
-.case-study-problem p {
+.case-study-impact .case-study-block-title {
+  color: var(--accent-teal);
+}
+
+.case-study-problem p,
+.case-study-solution p,
+.case-study-impact p {
   font-size: 0.9rem;
   color: var(--color-text-muted);
   line-height: 1.6;
@@ -7346,11 +7538,20 @@ button[class*="icon"],
 @media (max-width: 968px) {
   .split-screen-card {
     flex-direction: column;
+    position: relative;
   }
 
   .split-screen-left {
     border-right: none;
     border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .split-screen-right {
+    min-height: 200px;
+  }
+
+  .split-screen-right.collapsed {
+    min-height: 120px;
   }
 
   .split-divider {
@@ -7396,6 +7597,17 @@ button[class*="icon"],
   .impact-metric-label {
     font-size: 0.7rem;
   }
+
+  .view-case-study-button {
+    width: 100%;
+    justify-content: center;
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.85rem;
+  }
+
+  .read-time {
+    display: none;
+  }
 }
 
 /* Reduced Motion Support */
@@ -7408,7 +7620,15 @@ button[class*="icon"],
     transition: none;
   }
 
-  .split-subtitle .company-website:hover {
-    transform: none;
+  .split-screen-card:hover .split-divider {
+    transform: translateY(-50%);
+  }
+
+  .case-study-content {
+    animation: none;
+  }
+
+  .skill-tag.animated-underline::after {
+    transition: none;
   }
 }
