@@ -1273,6 +1273,31 @@ p,
   color: white;
 }
 
+/* Theme Toggle Button in Scroll Nav */
+.scroll-nav-theme {
+  margin-bottom: var(--space-xs);
+  padding-bottom: var(--space-xs);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.scroll-nav-theme-button {
+  background: var(--color-bg);
+}
+
+.scroll-nav-theme-button:hover {
+  background: var(--accent-indigo);
+  border-color: var(--accent-indigo);
+  color: white;
+}
+
+.scroll-nav-theme-button svg {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Hide scroll nav on mobile */
 @media (max-width: 768px) {
   .scroll-nav {
