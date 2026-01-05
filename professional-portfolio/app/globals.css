@@ -17,6 +17,21 @@
   --accent-indigo: #4f46e5;
   --accent-amber: #d97706;
 
+  /* Folder Tab Colors */
+  --color-folder-tab: #D6C4A6;
+  --color-folder-tab-hover: #E6D5B8;
+  --color-folder-tab-active: #F0E6D2;
+  --color-folder-body: #F0E6D2;
+
+  /* Accent Colors - Extended palette */
+  --accent-purple: #7c3aed;
+  --accent-teal-dark: #0f766e;
+  --accent-blue: #0284c7;
+  --accent-blue-dark: #0369a1;
+
+  /* Surface Colors */
+  --color-surface-alt: #f5f5f5;
+
   /* Balanced Spacing - Major Third Scale (1.25x, not 2x) */
   --space-xs: 0.5rem;
   /* 8px */
@@ -77,6 +92,15 @@
   --accent-coral: #fb923c;
   --accent-indigo: #818cf8;
   --accent-amber: #fbbf24;
+
+  /* Folder Tab Colors - Dark mode */
+  --color-folder-tab: #3d3d3d;
+  --color-folder-tab-hover: #4a4a4a;
+  --color-folder-tab-active: #525252;
+  --color-folder-body: #2a2a3a;
+
+  /* Surface Colors - Dark mode */
+  --color-surface-alt: #1e1e2e;
 }
 
 * {
@@ -1242,7 +1266,7 @@ p,
   right: var(--space-lg);
   width: 64px;
   height: 64px;
-  background: #0077b5;
+  background: var(--accent-navy);
   color: #ffffff;
   border: 3px solid var(--color-border);
   border-radius: 50%;
@@ -3882,7 +3906,7 @@ section {
 
 /* CTA Card */
 .about-cta-card {
-  background: linear-gradient(135deg, var(--accent-teal) 0%, #0f766e 100%);
+  background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-teal-dark) 100%);
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-hard);
@@ -5478,14 +5502,14 @@ section {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  background: #f5f5f5;
+  background: var(--color-surface-alt);
 }
 
 .article-modal-iframe {
   width: 100%;
   height: 100%;
   border: none;
-  background: white;
+  background: var(--color-surface);
   transition: opacity 0.3s ease;
 }
 
@@ -5763,7 +5787,7 @@ section {
   align-items: center;
   gap: var(--space-xs);
   padding: var(--space-md) var(--space-lg);
-  background: #D6C4A6;
+  background: var(--color-folder-tab);
   border: var(--border-width) solid var(--color-border);
   border-bottom: none;
   border-radius: var(--radius-md) var(--radius-md) 0 0;
@@ -5781,15 +5805,15 @@ section {
 }
 
 .company-folder-tab:hover {
-  background: #E6D5B8;
+  background: var(--color-folder-tab-hover);
   transform: translateY(-2px);
 }
 
 .company-folder-tab.active {
-  background: #F0E6D2;
+  background: var(--color-folder-tab-active);
   color: var(--color-text);
   border-color: var(--color-border);
-  border-bottom-color: #F0E6D2;
+  border-bottom-color: var(--color-folder-tab-active);
   margin-bottom: 0;
   padding-bottom: calc(var(--space-md) + var(--border-width));
   z-index: 10;
@@ -5821,7 +5845,7 @@ section {
 
 /* Company Folder Body */
 .company-folder-body {
-  background: #F0E6D2;
+  background: var(--color-folder-body);
   border: var(--border-width) solid var(--color-border);
   border-radius: 0 var(--radius-md) var(--radius-md) var(--radius-md);
   box-shadow: 8px 8px 0 0 var(--color-border);
@@ -8035,7 +8059,7 @@ button[class*="icon"],
 .big-bang-section {
   margin-bottom: 24px;
   padding-bottom: 24px;
-  border-bottom: 1px solid #E5E5E5;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .big-bang-section:last-of-type {
@@ -8065,17 +8089,17 @@ button[class*="icon"],
   background: var(--accent-indigo);
 }
 
-/* Section-specific color coding */
+/* Section-specific color coding using design tokens */
 .big-bang-section-challenge {
-  color: #dc2626;
+  color: var(--accent-coral);
 }
 
 .big-bang-section-challenge::before {
-  background: #dc2626;
+  background: var(--accent-coral);
 }
 
 .big-bang-section-challenge {
-  border-bottom-color: #dc2626;
+  border-bottom-color: var(--accent-coral);
 }
 
 .big-bang-section-solution {
@@ -8091,15 +8115,15 @@ button[class*="icon"],
 }
 
 .big-bang-section-impact {
-  color: #059669;
+  color: var(--accent-teal);
 }
 
 .big-bang-section-impact::before {
-  background: #059669;
+  background: var(--accent-teal);
 }
 
 .big-bang-section-impact {
-  border-bottom-color: #059669;
+  border-bottom-color: var(--accent-teal);
 }
 
 .big-bang-section-text {
@@ -8201,152 +8225,153 @@ button[class*="icon"],
 
 /* ========================================
    BIG BANG COLOR VARIANTS
+   Using design tokens for consistency
    ======================================== */
 
 /* Amber Variant */
 .big-bang-card.variant-amber .big-bang-header {
-  background: #d97706;
+  background: var(--accent-amber);
   color: #ffffff;
 }
 
 .big-bang-card.variant-amber .big-bang-logo {
   background: #ffffff;
-  color: #d97706;
+  color: var(--accent-amber);
 }
 
 .big-bang-card.variant-amber .big-bang-teaser {
   background: #ffffff;
-  color: #d97706;
+  color: var(--accent-amber);
 }
 
 .big-bang-card.variant-amber .big-bang-expand-btn.expanded {
-  background: #d97706;
+  background: var(--accent-amber);
   color: #ffffff;
 }
 
 /* Indigo Variant */
 .big-bang-card.variant-indigo .big-bang-header {
-  background: #4f46e5;
+  background: var(--accent-indigo);
   color: #ffffff;
 }
 
 .big-bang-card.variant-indigo .big-bang-logo {
   background: #ffffff;
-  color: #4f46e5;
+  color: var(--accent-indigo);
 }
 
 .big-bang-card.variant-indigo .big-bang-teaser {
   background: #ffffff;
-  color: #4f46e5;
+  color: var(--accent-indigo);
 }
 
 .big-bang-card.variant-indigo .big-bang-expand-btn.expanded {
-  background: #4f46e5;
+  background: var(--accent-indigo);
   color: #ffffff;
 }
 
 /* Teal Variant */
 .big-bang-card.variant-teal .big-bang-header {
-  background: #0d9488;
+  background: var(--accent-teal);
   color: #ffffff;
 }
 
 .big-bang-card.variant-teal .big-bang-logo {
   background: #ffffff;
-  color: #0d9488;
+  color: var(--accent-teal);
 }
 
 .big-bang-card.variant-teal .big-bang-teaser {
   background: #ffffff;
-  color: #0d9488;
+  color: var(--accent-teal);
 }
 
 .big-bang-card.variant-teal .big-bang-expand-btn.expanded {
-  background: #0d9488;
+  background: var(--accent-teal);
   color: #ffffff;
 }
 
-/* Red Variant */
+/* Red Variant - Using accent-coral as primary red tone */
 .big-bang-card.variant-red .big-bang-header {
-  background: #dc2626;
+  background: var(--accent-coral);
   color: #ffffff;
 }
 
 .big-bang-card.variant-red .big-bang-logo {
   background: #ffffff;
-  color: #dc2626;
+  color: var(--accent-coral);
 }
 
 .big-bang-card.variant-red .big-bang-teaser {
   background: #ffffff;
-  color: #dc2626;
+  color: var(--accent-coral);
 }
 
 .big-bang-card.variant-red .big-bang-expand-btn.expanded {
-  background: #dc2626;
+  background: var(--accent-coral);
   color: #ffffff;
 }
 
-/* Purple Variant */
+/* Purple Variant - Added to design system */
 .big-bang-card.variant-purple .big-bang-header {
-  background: #7c3aed;
+  background: var(--accent-purple);
   color: #ffffff;
 }
 
 .big-bang-card.variant-purple .big-bang-logo {
   background: #ffffff;
-  color: #7c3aed;
+  color: var(--accent-purple);
 }
 
 .big-bang-card.variant-purple .big-bang-teaser {
   background: #ffffff;
-  color: #7c3aed;
+  color: var(--accent-purple);
 }
 
 .big-bang-card.variant-purple .big-bang-expand-btn.expanded {
-  background: #7c3aed;
+  background: var(--accent-purple);
   color: #ffffff;
 }
 
 /* Green Variant */
 .big-bang-card.variant-green .big-bang-header {
-  background: #059669;
+  background: var(--accent-teal);
   color: #ffffff;
 }
 
 .big-bang-card.variant-green .big-bang-logo {
   background: #ffffff;
-  color: #059669;
+  color: var(--accent-teal);
 }
 
 .big-bang-card.variant-green .big-bang-teaser {
   background: #ffffff;
-  color: #059669;
+  color: var(--accent-teal);
 }
 
 .big-bang-card.variant-green .big-bang-expand-btn.expanded {
-  background: #059669;
+  background: var(--accent-teal);
   color: #ffffff;
 }
 
 /* Sky Blue Variant */
 .big-bang-card.variant-sky .big-bang-header {
-  background: #0284c7;
+  background: var(--accent-blue);
   color: #ffffff;
 }
 
 .big-bang-card.variant-sky .big-bang-logo {
   background: #ffffff;
-  color: #0284c7;
+  color: var(--accent-blue);
 }
 
 .big-bang-card.variant-sky .big-bang-teaser {
   background: #ffffff;
-  color: #0284c7;
+  color: var(--accent-blue);
 }
 
 .big-bang-card.variant-sky .big-bang-expand-btn.expanded {
-  background: #0284c7;
+  background: var(--accent-blue);
   color: #ffffff;
 }
 
