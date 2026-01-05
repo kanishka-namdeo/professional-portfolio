@@ -1,7 +1,6 @@
 import Hero from '@/components/Hero';
-import Products from '@/components/Products';
-import Showcase from '@/components/Showcase';
 import Experience from '@/components/Experience';
+import Showcase from '@/components/Showcase';
 import About from '@/components/About';
 import SkillsAndEducation from '@/components/SkillsAndEducation';
 import ContactFAQ from '@/components/ContactFAQ';
@@ -23,14 +22,11 @@ export default function Home() {
           {/* Hero Section */}
           <Hero />
           
-          {/* Products Contributed Section */}
-          <Products />
+          {/* Experience Section */}
+          <Experience />
           
           {/* Code & Open Source Section */}
           <Showcase />
-          
-          {/* Experience Section */}
-          <Experience />
           
           {/* About Section */}
           <About />

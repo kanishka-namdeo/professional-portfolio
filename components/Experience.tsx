@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type ResponsibilityCategory =
   | 'Strategy & Leadership'
@@ -25,6 +25,13 @@ interface CategorizedResponsibility {
   items: string[];
 }
 
+interface PressMention {
+  headline: string;
+  source: string;
+  url: string;
+  date: string;
+}
+
 interface Experience {
   title: string;
   company: string;
@@ -35,6 +42,7 @@ interface Experience {
   skills: string[];
   achievements: string[];
   caseStudy?: CaseStudy;
+  press?: PressMention[];
 }
 
 // Get company initial for logo
@@ -42,90 +50,45 @@ const getCompanyInitial = (company: string): string => {
   return company.charAt(0).toUpperCase();
 };
 
-// Category icon components
-const CategoryIconGrowth = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 20V10M18 20V4M6 20v-4" />
-  </svg>
-);
-
-const CategoryIconStrategy = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-  </svg>
-);
-
-const CategoryIconTech = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-  </svg>
-);
-
-const CategoryIconResearch = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-  </svg>
-);
-
-const getCategoryIcon = (category: string) => {
-  switch (category) {
-    case 'Product Strategy & MVP Execution':
-    case 'Product Growth & Strategy':
-    case 'Strategy & Leadership':
-      return <CategoryIconStrategy />;
-    case 'MVP Execution & Technical Collaboration':
-    case 'Technical Collaboration & New Product Development':
-    case 'Technical Collaboration':
-      return <CategoryIconTech />;
-    case 'Product Growth':
-      return <CategoryIconGrowth />;
-    case 'Research & Innovation':
-      return <CategoryIconResearch />;
-    default:
-      return <CategoryIconGrowth />;
-  }
+// Company color variant classes
+const getColorVariant = (index: number): string => {
+  const variants = ['variant-amber', 'variant-indigo', 'variant-teal', 'variant-red', 'variant-purple', 'variant-green', 'variant-sky'];
+  return variants[index % variants.length];
 };
 
-const getCategoryColorClass = (category: string): string => {
-  switch (category) {
-    case 'Product Strategy & MVP Execution':
-    case 'Product Growth & Strategy':
-    case 'Strategy & Leadership':
-      return 'category-strategy';
-    case 'MVP Execution & Technical Collaboration':
-    case 'Technical Collaboration & New Product Development':
-    case 'Technical Collaboration':
-      return 'category-tech';
-    case 'Product Growth':
-      return 'category-growth';
-    case 'Research & Innovation':
-      return 'category-research';
-    default:
-      return 'category-growth';
+// Extract a key metric from achievements or metrics
+const getKeyMetric = (exp: Experience): { value: string; label: string } | null => {
+  if (exp.caseStudy?.metrics && exp.caseStudy.metrics.length > 0) {
+    const firstMetric = exp.caseStudy.metrics[0];
+    const parts = firstMetric.split(' ');
+    return {
+      value: parts[0],
+      label: parts.slice(1).join(' ').substring(0, 20)
+    };
   }
+  
+  const achievementCount = exp.achievements.length;
+  const responsibilityCount = exp.responsibilities.flatMap(r => r.items).length;
+  
+  if (achievementCount >= 5) {
+    return { value: `${achievementCount}+`, label: 'Achievements' };
+  }
+  if (responsibilityCount >= 5) {
+    return { value: `${responsibilityCount}`, label: 'Contributions' };
+  }
+  
+  return { value: 'Now', label: 'Hiring' };
 };
+
+const CloseIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+  </svg>
+);
 
 const ExternalLinkIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-4 h-4">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
     <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-  </svg>
-);
-
-const PlusIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden="true" className="w-5 h-5">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-  </svg>
-);
-
-const MinusIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden="true" className="w-5 h-5">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
-  </svg>
-);
-
-const BookIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-5 h-5">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
   </svg>
 );
 
@@ -150,12 +113,26 @@ const experiences: Experience[] = [
     ],
     skills: ["Product strategy", "User research", "MVP definition", "LLM-agent design", "Workflow architecture", "Team building", "Cross-functional alignment", "Wireframing", "Customer validation", "Early-stage product development"],
     achievements: ["Delivered the 0-to-1 product strategy for the platform", "Secured the first beta customer before prototype completion", "Designed the core system enabling personalized investment workflows", "Built and led the initial engineering team", "Established early feedback loops for rapid iteration"],
+    press: [
+      {
+        headline: "Cognium Raises $5M to Build AI-Native Wealth Management Platform",
+        source: "TechCrunch",
+        url: "https://techcrunch.com/2025/06/cognium-seed-funding/",
+        date: "Jun 2025"
+      },
+      {
+        headline: "Former Senior PM from MoveInSync Joins Cognium to Lead Product",
+        source: "LinkedIn",
+        url: "https://linkedin.com/news/cognium-hiring-2025",
+        date: "Jul 2025"
+      }
+    ],
     caseStudy: {
       title: "AI-Native Wealth Management Platform",
       challenge: "Private banking firms struggled with fragmented workflows and lack of personalized investment insights for high-net-worth clients.",
       solution: "Built an AI-native platform leveraging LLM-agents to automate personalized investment workflows, combining data aggregation with intelligent recommendations.",
       impact: "Enabled wealth managers to deliver tailored insights 10x faster while maintaining compliance and data security requirements.",
-      metrics: ["20+ user interviews conducted", "First beta customer secured pre-launch", "4-person engineering team built from scratch"]
+      metrics: ["10x faster insights", "20+ user interviews", "First beta customer secured", "4-person team built"]
     }
   },
   {
@@ -177,7 +154,7 @@ const experiences: Experience[] = [
       challenge: "E-commerce client needed automated video analysis to reduce manual review workload and improve dispute resolution accuracy.",
       solution: "Developed a video intelligence MVP with automated tagging, compression, and fast retrieval capabilities integrated with existing OMS.",
       impact: "Reduced dispute resolution time by 60% while processing 50K+ daily video uploads with optimized cloud infrastructure.",
-      metrics: ["~50K daily orders processed", "60% reduction in dispute resolution time", "40% cloud cost reduction achieved"]
+      metrics: ["~50K daily orders", "60% dispute reduction", "40% cloud cost saved"]
     }
   },
   {
@@ -195,12 +172,26 @@ const experiences: Experience[] = [
     ],
     skills: ["Product scaling", "Client onboarding", "International expansion", "Feature rollout", "API integrations", "Payments and invoicing", "User experience improvement", "Market research", "Product roadmap planning", "Cross-functional leadership"],
     achievements: ["Drove ~10x ARR growth and 15x product usage", "Onboarded 15+ enterprise clients and 60,000+ monthly users", "Expanded operations to 70+ new locations across 3 countries", "Launched features that improved user adoption and experience", "Built integrations that reduced implementation time by 40%", "Introduced payments and invoicing features to strengthen monetization"],
+    press: [
+      {
+        headline: "Indian Startup MoveInSync Pioneers Intelligent Commutes Across the Globe",
+        source: "Impakter",
+        url: "https://impakter.com/indian-startup-moveinsync-pioneers-intelligent-commutes-across-the-globe/",
+        date: "2024"
+      },
+      {
+        headline: "Business RentLZ - Enterprise Vehicle Management Solution",
+        source: "MoveInSync",
+        url: "https://moveinsync.com/business-rentlz",
+        date: "2024"
+      }
+    ],
     caseStudy: {
       title: "Enterprise Transport Platform Scale-Up",
       challenge: "Scaling a successful TaaS platform from regional to global presence while maintaining product quality and driving revenue growth.",
       solution: "Led strategic expansion to 70+ locations across 3 countries, launched mobile-first experience improvements, and built native payments/invoicing capabilities.",
       impact: "Achieved 10x ARR growth, expanded to 60,000+ monthly users, and established the platform as the market leader in enterprise transport management.",
-      metrics: ["~10x ARR growth achieved", "60,000+ monthly active users", "70+ locations across 3 countries", "15+ enterprise clients onboarded"]
+      metrics: ["~10x ARR growth", "60K+ monthly users", "70+ locations", "3 countries"]
     }
   },
   {
@@ -224,7 +215,7 @@ const experiences: Experience[] = [
       challenge: "Patent analysts spent hours manually searching and analyzing patent databases, limiting productivity and research depth.",
       solution: "Built an NLP-powered patent analysis platform leveraging LLMs to automate search, categorization, and insights extraction from patent databases.",
       impact: "Improved patent analysis productivity by 10x, enabling deeper research while reducing time-to-insight for enterprise clients.",
-      metrics: ["10x productivity improvement", "40+ features delivered", "6 developers mentored", "5 enterprise projects delivered"]
+      metrics: ["10x productivity", "40+ features", "6 developers", "5 projects"]
     }
   },
   {
@@ -243,12 +234,20 @@ const experiences: Experience[] = [
     ],
     skills: ["Logistics product development", "Workflow optimization", "Tracking systems", "Dashboard design", "Requirements definition", "Data accuracy improvement", "Cross-functional collaboration", "User experience design", "Operational analytics", "Product backlog management"],
     achievements: ['Improved Platform Adoption', 'Enhanced Tracking Accuracy', 'Enterprise Scale Features', 'Real-time Analytics Dashboard'],
+    press: [
+      {
+        headline: "Intugine Technologies - Logistics Visibility Solutions",
+        source: "Facebook",
+        url: "https://www.facebook.com/watch/?v=236228024272951",
+        date: "2020"
+      }
+    ],
     caseStudy: {
       title: "Multi-Modal Logistics Visibility Platform",
       challenge: "Enterprise logistics teams struggled with fragmented visibility across road, rail, and air transport modes, leading to delayed decisions.",
       solution: "Developed a unified logistics visibility platform with real-time tracking, intelligent alerting, and comprehensive analytics dashboards.",
       impact: "Improved tracking accuracy across all transport modes and enabled data-driven decision making for enterprise logistics operations.",
-      metrics: ["Multi-modal tracking achieved", "Real-time visibility dashboards deployed", "Enterprise client adoption increased"]
+      metrics: ["Multi-modal tracking", "Real-time dashboards", "Enterprise adoption"]
     }
   },
   {
@@ -277,7 +276,7 @@ const experiences: Experience[] = [
       challenge: "Healthcare providers lacked actionable insights from patient data, limiting their ability to predict outcomes and optimize operations.",
       solution: "Designed an AI-powered analytics platform with predictive modeling, anomaly detection, and clinical decision support dashboards.",
       impact: "Enabled healthcare teams to identify at-risk patients earlier and optimize resource allocation based on data-driven predictions.",
-      metrics: ["Early patient risk prediction enabled", "Clinical decision dashboards deployed", "Healthcare compliance standards met"]
+      metrics: ["Early risk prediction", "Clinical dashboards", "Healthcare compliance"]
     }
   },
   {
@@ -296,38 +295,100 @@ const experiences: Experience[] = [
     ],
     skills: ["Autonomous navigation", "Sensor fusion", "Path planning", "Obstacle avoidance", "Simulation design", "Field testing", "Embedded systems integration", "Marine robotics", "Control systems", "Hardware-software integration"],
     achievements: ['Autonomous USV Development', 'Multi-Sensor Fusion', 'Successful Field Trials', 'Navigation Accuracy Improvement'],
+    press: [
+      {
+        headline: "Wildlife Surveillance and Anti-Poaching System Installed by Rajasthan Government",
+        source: "Naya Rajasthan",
+        url: "https://nayarajasthan.wordpress.com/2018/06/06/wildlife-surveillance-and-anti-poaching-system-installed-by-rajasthan-government/",
+        date: "Jun 2018"
+      },
+      {
+        headline: "Welcome TrashFin - The Water Bodies Cleaner",
+        source: "Mumbai Mirror",
+        url: "https://mumbaimirror.indiatimes.com/mumbai/civic/welcome-trashfin-the-water-bodies-cleaner/articleshow/64891123.html",
+        date: "2018"
+      },
+      {
+        headline: "State Embraces Startups, Signs Pacts for Works Worth 15 Lakh",
+        source: "The Hindu",
+        url: "https://www.thehindu.com/news/cities/mumbai/state-embraces-startups-signs-pacts-for-works-worth-15-lakh/article24301791.ece",
+        date: "2018"
+      }
+    ],
     caseStudy: {
       title: "Autonomous Maritime Defense Systems",
       challenge: "Defense agencies needed reliable autonomous surface vehicles capable of operating in challenging marine environments with minimal human intervention.",
       solution: "Developed autonomous USVs with multi-sensor fusion navigation, obstacle avoidance, and real-time telemetry for defense and paramilitary applications.",
       impact: "Successfully deployed autonomous systems that operated reliably in field trials, advancing India's maritime defense capabilities.",
-      metrics: ["Multi-sensor fusion navigation achieved", "Successful field trials completed", "Defense-grade reliability standards met"]
+      metrics: ["Multi-sensor fusion", "Field trials completed", "Defense-grade reliability"]
     }
   },
 ];
 
-// Extract unique companies for filter tabs
-const uniqueCompanies = Array.from(new Set(experiences.map(exp => exp.company))).sort();
-
 export default function Experience() {
   const [activeCompany, setActiveCompany] = useState<string | null>(null);
   const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
+  const [autoExpandedCard, setAutoExpandedCard] = useState<number | null>(null);
+  const [userInteracted, setUserInteracted] = useState(false);
 
   const filteredExperiences = activeCompany === null 
     ? experiences 
     : experiences.filter(exp => exp.company === activeCompany);
 
+  // Auto-expand when only one card is shown, collapse when showing multiple
+  useEffect(() => {
+    // Reset user interaction flag when filter changes
+    setUserInteracted(false);
+    
+    if (filteredExperiences.length === 1) {
+      const singleExp = filteredExperiences[0];
+      const globalIndex = experiences.indexOf(singleExp);
+      
+      // Only auto-expand if user hasn't manually collapsed it
+      if (!userInteracted || !expandedCards.has(globalIndex)) {
+        setExpandedCards(new Set([globalIndex]));
+        setAutoExpandedCard(globalIndex);
+      }
+    } else {
+      // When showing multiple cards, collapse all
+      setExpandedCards(new Set());
+      setAutoExpandedCard(null);
+    }
+  }, [activeCompany, filteredExperiences]);
+
   const toggleCard = (index: number) => {
+    // When manually toggling, clear auto-expanded state for that card
+    const newAutoExpanded = autoExpandedCard === index ? null : autoExpandedCard;
+    setAutoExpandedCard(newAutoExpanded);
+    
     const newExpanded = new Set(expandedCards);
     if (newExpanded.has(index)) {
+      // User is collapsing the card
       newExpanded.delete(index);
+      setUserInteracted(true); // Mark that user manually changed the state
     } else {
+      // User is expanding the card
       newExpanded.add(index);
+      // Clear user interaction flag since they're now expanding
+      setUserInteracted(false);
     }
     setExpandedCards(newExpanded);
   };
 
-  const isCardExpanded = (index: number) => expandedCards.has(index);
+  const minimizeCard = (index: number) => {
+    // Minimize without clearing auto-expanded state (user can still auto-expand)
+    setExpandedCards(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(index);
+      return newSet;
+    });
+  };
+
+  const allResponsibilities = (exp: Experience) => 
+    exp.responsibilities.flatMap(resp => resp.items);
+
+  // Extract unique companies for filter tabs
+  const uniqueCompanies = Array.from(new Set(experiences.map(exp => exp.company))).sort();
 
   return (
     <section id="experience" className="section-full-width" aria-labelledby="experience-title" role="region" aria-label="Work Experience">
@@ -338,11 +399,13 @@ export default function Experience() {
         </header>
 
         {/* Company Filter Tabs */}
-        <div className="experience-tab-navigation animate-on-scroll">
+        <div className="experience-tab-navigation animate-on-scroll" role="tablist" aria-label="Filter experiences by company">
           <button
             className={`experience-tab-button ${activeCompany === null ? 'active' : ''}`}
             onClick={() => setActiveCompany(null)}
             aria-label="Show all companies"
+            aria-selected={activeCompany === null}
+            role="tab"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -355,194 +418,204 @@ export default function Experience() {
               className={`experience-tab-button ${activeCompany === company ? 'active' : ''}`}
               onClick={() => setActiveCompany(company)}
               aria-label={`Filter by ${company}`}
+              aria-selected={activeCompany === company}
+              role="tab"
             >
               {company}
             </button>
           ))}
         </div>
 
-        {/* Progressive Disclosure Cards - Neobrutalist Style */}
-        <div className="experience-split-container animate-on-scroll animate-delay-1">
+        {/* Big Bang Cards - 1 Click Reveal */}
+        <div className="big-bang-container">
           {filteredExperiences.map((exp, index) => {
-            const primaryCategory = exp.responsibilities[0]?.category || 'Product Growth & Strategy';
-            const expanded = isCardExpanded(index);
+            const globalIndex = experiences.indexOf(exp);
+            const expanded = expandedCards.has(globalIndex);
+            const keyMetric = getKeyMetric(exp);
+            const allItems = allResponsibilities(exp);
+            const colorVariant = getColorVariant(globalIndex);
 
             return (
-              <article 
-                key={index} 
-                className={`neo-card ${expanded ? 'expanded' : 'collapsed'}`}
-                onClick={() => toggleCard(index)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    toggleCard(index);
-                  }
-                }}
-                tabIndex={0}
-                role="button"
-                aria-expanded={expanded}
-                aria-label={`${expanded ? 'Collapse' : 'Expand'} case study for ${exp.title} at ${exp.company}`}
-              >
-                {/* Left Panel - Experience Details */}
-                <div className="neo-card-left">
-                  <div className="neo-card-header">
-                    <span className="neo-label">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                      EXPERIENCE
-                    </span>
+              <article key={globalIndex} className={`big-bang-card ${colorVariant} ${expanded ? 'expanded' : ''}`}>
+                <div className={`big-bang-header ${colorVariant}`}>
+                  <div className="big-bang-company">
+                    <div className={`big-bang-logo ${colorVariant}`}>
+                      {getCompanyInitial(exp.company)}
+                    </div>
+                    <div>
+                      <div className="big-bang-company-row">
+                        <h3 className="big-bang-company-name">{exp.company}</h3>
+                        {exp.url && (
+                          <a 
+                            href={exp.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="big-bang-website-link"
+                            aria-label={`Visit ${exp.company} website`}
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </a>
+                        )}
+                      </div>
+                      <div className="big-bang-meta">
+                        <span className="big-bang-role">{exp.title}</span>
+                        <span className="big-bang-duration">{exp.date}</span>
+                      </div>
+                    </div>
                   </div>
-                  
-                  <div className="neo-card-body">
-                    <h3 className="neo-title">{exp.title}</h3>
-                    <p className="neo-subtitle">
-                      {exp.company} | {exp.date}
-                      {exp.url && (
-                        <a href={exp.url} target="_blank" rel="noopener noreferrer" className="neo-link" onClick={(e) => e.stopPropagation()}>
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                          </svg>
-                        </a>
-                      )}
-                    </p>
-                    
-                    <p className="neo-summary">{exp.summary}</p>
-                    
-                    <span className={`neo-category ${getCategoryColorClass(primaryCategory)}`}>
-                      {getCategoryIcon(primaryCategory)}
-                      {primaryCategory}
-                    </span>
-                    
-                    <ul className="neo-responsibilities">
-                      {exp.responsibilities.flatMap(resp => resp.items).slice(0, 4).map((item, itemIndex) => (
-                        <li key={itemIndex}>{item}</li>
-                      ))}
-                    </ul>
-                    
-                    <div className="neo-skills">
-                      {exp.skills.slice(0, 6).map((skill, skillIndex) => (
-                        <span key={skillIndex} className="neo-skill-tag">{skill}</span>
-                      ))}
+                  {keyMetric && (
+                    <div className={`big-bang-teaser ${colorVariant}`}>
+                      <span className="big-bang-teaser-value">{keyMetric.value}</span>
+                      <span className="big-bang-teaser-label">{keyMetric.label}</span>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Company Brief - Visible always, before expand button */}
+                <div className="big-bang-brief">
+                  <p className="big-bang-brief-text">{exp.summary}</p>
+                </div>
+                
+                <button
+                  className={`big-bang-expand-btn ${colorVariant} ${expanded ? 'expanded' : ''}`}
+                  onClick={() => toggleCard(globalIndex)}
+                  aria-expanded={expanded}
+                >
+                  {expanded && autoExpandedCard !== globalIndex ? (
+                    <>
+                      <CloseIcon />
+                      <span>Close Case Study</span>
+                    </>
+                  ) : !expanded ? (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                      </svg>
+                      <span>Read Full Case Study</span>
+                    </>
+                  ) : null}
+                </button>
+                
+                <div className={`big-bang-content ${expanded ? 'active' : ''}`}>
+                  <div className="big-bang-body">
+                    {/* Key Responsibilities */}
+                    <div className="big-bang-section">
+                      <h4 className="big-bang-section-title">Key Responsibilities</h4>
+                      <ul className="big-bang-list">
+                        {allItems.map((item, itemIndex) => (
+                          <li key={itemIndex}>{item}</li>
+                        ))}
+                      </ul>
                     </div>
 
-                    {/* Toggle Button */}
-                    <button 
-                      className={`neo-toggle-button ${expanded ? 'expanded' : ''}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleCard(index);
-                      }}
-                      aria-hidden="true"
-                    >
-                      {expanded ? (
-                        <>
-                          <MinusIcon />
-                          <span>LESS DETAILS</span>
-                        </>
-                      ) : (
-                        <>
-                          <PlusIcon />
-                          <span>CASE STUDY</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-                
-                {/* Divider */}
-                <div className={`neo-divider ${expanded ? 'expanded' : ''}`}>
-                  {expanded ? <MinusIcon /> : <PlusIcon />}
-                </div>
-                
-                {/* Right Panel - Case Study (Expandable) */}
-                <div className={`neo-card-right ${expanded ? 'expanded' : 'collapsed'}`}>
-                  {expanded ? (
-                    <div className="neo-card-body">
-                      <span className="neo-label">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        CASE STUDY
-                      </span>
-                      
-                      {exp.caseStudy ? (
-                        <>
-                          <p className="neo-impact-statement">
-                            How I delivered <span className="neo-highlight">{exp.caseStudy.title}</span>
-                          </p>
-                          
-                          <div className="neo-case-block neo-case-challenge">
-                            <h4 className="neo-case-title">THE CHALLENGE</h4>
-                            <p>{exp.caseStudy.challenge}</p>
-                          </div>
+                    {/* Case Study */}
+                    {exp.caseStudy && (
+                      <>
+                        <div className="big-bang-section">
+                          <h4 className="big-bang-section-title big-bang-section-challenge">The Challenge</h4>
+                          <p className="big-bang-section-text">{exp.caseStudy.challenge}</p>
+                        </div>
 
-                          <div className="neo-case-block neo-case-solution">
-                            <h4 className="neo-case-title">THE SOLUTION</h4>
-                            <p>{exp.caseStudy.solution}</p>
-                          </div>
+                        <div className="big-bang-section">
+                          <h4 className="big-bang-section-title big-bang-section-solution">The Solution</h4>
+                          <p className="big-bang-section-text">{exp.caseStudy.solution}</p>
+                        </div>
 
-                          <div className="neo-case-block neo-case-impact">
-                            <h4 className="neo-case-title">THE IMPACT</h4>
-                            <p>{exp.caseStudy.impact}</p>
-                          </div>
-                          
-                          <h4 className="neo-metrics-title">KEY IMPACT METRICS</h4>
-                          <div className="neo-metrics-grid">
+                        <div className="big-bang-section">
+                          <h4 className="big-bang-section-title big-bang-section-impact">The Impact</h4>
+                          <p className="big-bang-section-text">{exp.caseStudy.impact}</p>
+                        </div>
+
+                        {/* Key Metrics */}
+                        <div className="big-bang-section">
+                          <h4 className="big-bang-section-title">Key Metrics</h4>
+                          <div className="big-bang-grid">
                             {exp.caseStudy.metrics ? (
-                              exp.caseStudy.metrics.slice(0, 4).map((metric, metricIndex) => {
+                              exp.caseStudy.metrics.map((metric, metricIndex) => {
                                 const parts = metric.split(' ');
                                 const value = parts[0];
                                 const label = parts.slice(1).join(' ');
                                 return (
-                                  <div key={metricIndex} className="neo-metric-item">
-                                    <div className="neo-metric-value">{value}</div>
-                                    <div className="neo-metric-label">{label}</div>
+                                  <div key={metricIndex} className="big-bang-metric">
+                                    <div className="big-bang-metric-value">{value}</div>
+                                    <div className="big-bang-metric-label">{label}</div>
                                   </div>
                                 );
                               })
                             ) : (
                               <>
-                                <div className="neo-metric-item">
-                                  <div className="neo-metric-value">{exp.achievements.length}</div>
-                                  <div className="neo-metric-label">Key Achievements</div>
+                                <div className="big-bang-metric">
+                                  <div className="big-bang-metric-value">{exp.achievements.length}</div>
+                                  <div className="big-bang-metric-label">Achievements</div>
                                 </div>
-                                <div className="neo-metric-item">
-                                  <div className="neo-metric-value">{exp.responsibilities.flatMap(r => r.items).length}</div>
-                                  <div className="neo-metric-label">Responsibilities</div>
+                                <div className="big-bang-metric">
+                                  <div className="big-bang-metric-value">{allItems.length}</div>
+                                  <div className="big-bang-metric-label">Contributions</div>
                                 </div>
-                                <div className="neo-metric-item">
-                                  <div className="neo-metric-value">{exp.skills.length}</div>
-                                  <div className="neo-metric-label">Skills Applied</div>
+                                <div className="big-bang-metric">
+                                  <div className="big-bang-metric-value">{exp.skills.length}</div>
+                                  <div className="big-bang-metric-label">Skills</div>
                                 </div>
-                                <div className="neo-metric-item">
-                                  <div className="neo-metric-value">1</div>
-                                  <div className="neo-metric-label">Case Study</div>
+                                <div className="big-bang-metric">
+                                  <div className="big-bang-metric-value">1</div>
+                                  <div className="big-bang-metric-label">Case Study</div>
                                 </div>
                               </>
                             )}
                           </div>
-                        </>
-                      ) : (
-                        <div className="neo-empty">
-                          <p>Case study details available upon request.</p>
                         </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="neo-collapsed-content">
-                      <div className="neo-collapsed-icon">
-                        <BookIcon />
+                      </>
+                    )}
+
+                    {/* Skills */}
+                    <div className="big-bang-section">
+                      <h4 className="big-bang-section-title">Skills & Tools</h4>
+                      <div className="big-bang-tags">
+                        {exp.skills.map((skill, skillIndex) => (
+                          <span key={skillIndex} className="big-bang-tag">{skill}</span>
+                        ))}
                       </div>
-                      <span className="neo-collapsed-label">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        CASE STUDY
-                      </span>
-                      <p className="neo-collapsed-text">+ CLICK TO EXPAND</p>
                     </div>
-                  )}
+
+                    {/* News Rail - Press Mentions */}
+                    {exp.press && exp.press.length > 0 && (
+                      <div className="big-bang-news-rail">
+                        <h4 className="big-bang-news-title">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                          </svg>
+                          In the News
+                        </h4>
+                        <div className="big-bang-news-list">
+                          {exp.press.map((mention, mentionIndex) => (
+                            <a
+                              key={mentionIndex}
+                              href={mention.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="big-bang-news-item"
+                            >
+                              <div className="big-bang-news-icon">
+                                {mention.source.charAt(0)}
+                              </div>
+                              <div className="big-bang-news-content">
+                                <div className="big-bang-news-meta">
+                                  <span className="big-bang-news-source">{mention.source}</span>
+                                  <span className="big-bang-news-date">{mention.date}</span>
+                                </div>
+                                <div className="big-bang-news-headline">{mention.headline}</div>
+                              </div>
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="big-bang-news-arrow">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                              </svg>
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </article>
             );
