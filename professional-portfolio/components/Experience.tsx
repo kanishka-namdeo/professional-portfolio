@@ -111,26 +111,20 @@ const ExternalLinkIcon = () => (
   </svg>
 );
 
-const ArrowRightIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+const PlusIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden="true" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
   </svg>
 );
 
-const ChevronDownIcon = () => (
+const MinusIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden="true" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
+  </svg>
+);
+
+const BookIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-5 h-5">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-  </svg>
-);
-
-const ChevronUpIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-5 h-5">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-  </svg>
-);
-
-const BookOpenIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-4 h-4">
     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
   </svg>
 );
@@ -367,7 +361,7 @@ export default function Experience() {
           ))}
         </div>
 
-        {/* Progressive Disclosure Cards */}
+        {/* Progressive Disclosure Cards - Neobrutalist Style */}
         <div className="experience-split-container animate-on-scroll animate-delay-1">
           {filteredExperiences.map((exp, index) => {
             const primaryCategory = exp.responsibilities[0]?.category || 'Product Growth & Strategy';
@@ -376,7 +370,7 @@ export default function Experience() {
             return (
               <article 
                 key={index} 
-                className={`split-screen-card ${expanded ? 'expanded' : 'collapsed'}`}
+                className={`neo-card ${expanded ? 'expanded' : 'collapsed'}`}
                 onClick={() => toggleCard(index)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
@@ -389,21 +383,23 @@ export default function Experience() {
                 aria-expanded={expanded}
                 aria-label={`${expanded ? 'Collapse' : 'Expand'} case study for ${exp.title} at ${exp.company}`}
               >
-                {/* Left Side - Experience */}
-                <div className="split-screen-left">
-                  <span className="split-label">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    EXPERIENCE
-                  </span>
+                {/* Left Panel - Experience Details */}
+                <div className="neo-card-left">
+                  <div className="neo-card-header">
+                    <span className="neo-label">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                      EXPERIENCE
+                    </span>
+                  </div>
                   
-                  <div className="split-content">
-                    <h3 className="split-title">{exp.title}</h3>
-                    <p className="split-subtitle">
+                  <div className="neo-card-body">
+                    <h3 className="neo-title">{exp.title}</h3>
+                    <p className="neo-subtitle">
                       {exp.company} | {exp.date}
                       {exp.url && (
-                        <a href={exp.url} target="_blank" rel="noopener noreferrer" className="company-website" style={{ marginLeft: 'var(--space-sm)' }} onClick={(e) => e.stopPropagation()}>
+                        <a href={exp.url} target="_blank" rel="noopener noreferrer" className="neo-link" onClick={(e) => e.stopPropagation()}>
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                           </svg>
@@ -411,28 +407,28 @@ export default function Experience() {
                       )}
                     </p>
                     
-                    <p className="split-description">{exp.summary}</p>
+                    <p className="neo-summary">{exp.summary}</p>
                     
-                    <span className={`category-label ${getCategoryColorClass(primaryCategory)}`}>
+                    <span className={`neo-category ${getCategoryColorClass(primaryCategory)}`}>
                       {getCategoryIcon(primaryCategory)}
                       {primaryCategory}
                     </span>
                     
-                    <ul className="responsibility-list">
+                    <ul className="neo-responsibilities">
                       {exp.responsibilities.flatMap(resp => resp.items).slice(0, 4).map((item, itemIndex) => (
                         <li key={itemIndex}>{item}</li>
                       ))}
                     </ul>
                     
-                    <div className="split-skills">
+                    <div className="neo-skills">
                       {exp.skills.slice(0, 6).map((skill, skillIndex) => (
-                        <span key={skillIndex} className="skill-tag animated-underline">{skill}</span>
+                        <span key={skillIndex} className="neo-skill-tag">{skill}</span>
                       ))}
                     </div>
 
-                    {/* Expand/Collapse Button */}
+                    {/* Toggle Button */}
                     <button 
-                      className="view-case-study-button"
+                      className={`neo-toggle-button ${expanded ? 'expanded' : ''}`}
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleCard(index);
@@ -441,30 +437,29 @@ export default function Experience() {
                     >
                       {expanded ? (
                         <>
-                          <ChevronUpIcon />
-                          <span>Show Less</span>
+                          <MinusIcon />
+                          <span>LESS DETAILS</span>
                         </>
                       ) : (
                         <>
-                          <BookOpenIcon />
-                          <span>View Case Study</span>
-                          <span className="read-time">3 min read</span>
+                          <PlusIcon />
+                          <span>CASE STUDY</span>
                         </>
                       )}
                     </button>
                   </div>
                 </div>
                 
-                {/* Center Divider */}
-                <div className="split-divider">
-                  {expanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                {/* Divider */}
+                <div className={`neo-divider ${expanded ? 'expanded' : ''}`}>
+                  {expanded ? <MinusIcon /> : <PlusIcon />}
                 </div>
                 
-                {/* Right Side - Case Study (Collapsible) */}
-                <div className={`split-screen-right ${expanded ? 'expanded' : 'collapsed'}`}>
+                {/* Right Panel - Case Study (Expandable) */}
+                <div className={`neo-card-right ${expanded ? 'expanded' : 'collapsed'}`}>
                   {expanded ? (
-                    <div className="split-content case-study-content">
-                      <span className="split-label">
+                    <div className="neo-card-body">
+                      <span className="neo-label">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -473,82 +468,79 @@ export default function Experience() {
                       
                       {exp.caseStudy ? (
                         <>
-                          <p className="impact-statement">
-                            How I delivered <span className="impact-highlight">{exp.caseStudy.title}</span>
+                          <p className="neo-impact-statement">
+                            How I delivered <span className="neo-highlight">{exp.caseStudy.title}</span>
                           </p>
                           
-                          <div className="case-study-problem">
-                            <h4 className="case-study-block-title">THE CHALLENGE</h4>
+                          <div className="neo-case-block neo-case-challenge">
+                            <h4 className="neo-case-title">THE CHALLENGE</h4>
                             <p>{exp.caseStudy.challenge}</p>
                           </div>
 
-                          <div className="case-study-solution">
-                            <h4 className="case-study-block-title">THE SOLUTION</h4>
+                          <div className="neo-case-block neo-case-solution">
+                            <h4 className="neo-case-title">THE SOLUTION</h4>
                             <p>{exp.caseStudy.solution}</p>
                           </div>
-                          
-                          <div className="case-study-impact">
-                            <h4 className="case-study-block-title">THE IMPACT</h4>
+
+                          <div className="neo-case-block neo-case-impact">
+                            <h4 className="neo-case-title">THE IMPACT</h4>
                             <p>{exp.caseStudy.impact}</p>
                           </div>
                           
-                          <h4 className="impact-metrics-title">KEY IMPACT METRICS</h4>
-                          <div className="impact-metrics-grid">
+                          <h4 className="neo-metrics-title">KEY IMPACT METRICS</h4>
+                          <div className="neo-metrics-grid">
                             {exp.caseStudy.metrics ? (
                               exp.caseStudy.metrics.slice(0, 4).map((metric, metricIndex) => {
                                 const parts = metric.split(' ');
                                 const value = parts[0];
                                 const label = parts.slice(1).join(' ');
                                 return (
-                                  <div key={metricIndex} className="impact-metric-item">
-                                    <div className="impact-metric-value">{value}</div>
-                                    <div className="impact-metric-label">{label}</div>
+                                  <div key={metricIndex} className="neo-metric-item">
+                                    <div className="neo-metric-value">{value}</div>
+                                    <div className="neo-metric-label">{label}</div>
                                   </div>
                                 );
                               })
                             ) : (
                               <>
-                                <div className="impact-metric-item">
-                                  <div className="impact-metric-value">{exp.achievements.length}</div>
-                                  <div className="impact-metric-label">Key Achievements</div>
+                                <div className="neo-metric-item">
+                                  <div className="neo-metric-value">{exp.achievements.length}</div>
+                                  <div className="neo-metric-label">Key Achievements</div>
                                 </div>
-                                <div className="impact-metric-item">
-                                  <div className="impact-metric-value">{exp.responsibilities.flatMap(r => r.items).length}</div>
-                                  <div className="impact-metric-label">Responsibilities</div>
+                                <div className="neo-metric-item">
+                                  <div className="neo-metric-value">{exp.responsibilities.flatMap(r => r.items).length}</div>
+                                  <div className="neo-metric-label">Responsibilities</div>
                                 </div>
-                                <div className="impact-metric-item">
-                                  <div className="impact-metric-value">{exp.skills.length}</div>
-                                  <div className="impact-metric-label">Skills Applied</div>
+                                <div className="neo-metric-item">
+                                  <div className="neo-metric-value">{exp.skills.length}</div>
+                                  <div className="neo-metric-label">Skills Applied</div>
                                 </div>
-                                <div className="impact-metric-item">
-                                  <div className="impact-metric-value">1</div>
-                                  <div className="impact-metric-label">Case Study</div>
+                                <div className="neo-metric-item">
+                                  <div className="neo-metric-value">1</div>
+                                  <div className="neo-metric-label">Case Study</div>
                                 </div>
                               </>
                             )}
                           </div>
                         </>
                       ) : (
-                        <div className="case-study-empty">
+                        <div className="neo-empty">
                           <p>Case study details available upon request.</p>
                         </div>
                       )}
                     </div>
                   ) : (
-                    <div className="case-study-ghosted">
-                      <div className="ghosted-content">
-                        <span className="split-label ghosted-label">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                          CASE STUDY
-                        </span>
-                        <div className="ghosted-placeholder">
-                          <BookOpenIcon />
-                          <p>Click to reveal case study</p>
-                          <span className="ghosted-read-time">3 min read</span>
-                        </div>
+                    <div className="neo-collapsed-content">
+                      <div className="neo-collapsed-icon">
+                        <BookIcon />
                       </div>
+                      <span className="neo-collapsed-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        CASE STUDY
+                      </span>
+                      <p className="neo-collapsed-text">+ CLICK TO EXPAND</p>
                     </div>
                   )}
                 </div>
