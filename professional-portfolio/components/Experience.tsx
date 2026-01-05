@@ -262,7 +262,12 @@ const experiences: Experience[] = [
 ];
 
 export default function Experience() {
+  const [activeCompany, setActiveCompany] = useState<string | null>(null);
   const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
+
+  const filteredExperiences = activeCompany === null 
+    ? experiences 
+    : experiences.filter(exp => exp.company === activeCompany);
 
   const toggleCard = (index: number) => {
     const newExpanded = new Set(expandedCards);
@@ -277,6 +282,9 @@ export default function Experience() {
   const allResponsibilities = (exp: Experience) => 
     exp.responsibilities.flatMap(resp => resp.items);
 
+  // Extract unique companies for filter tabs
+  const uniqueCompanies = Array.from(new Set(experiences.map(exp => exp.company))).sort();
+
   return (
     <section id="experience" className="section-full-width" aria-labelledby="experience-title" role="region" aria-label="Work Experience">
       <div className="container">
@@ -285,16 +293,50 @@ export default function Experience() {
           <p className="section-subtitle">9+ years building and scaling products across mobility, SaaS, robotics, and AI</p>
         </header>
 
+        {/* Company Filter Tabs */}
+        <div className="experience-tab-navigation animate-on-scroll" role="tablist" aria-label="Filter experiences by company">
+          <button
+            className={`experience-tab-button ${activeCompany === null ? 'active' : ''}`}
+            onClick={() => setActiveCompany(null)}
+            aria-label="Show all companies"
+            aria-selected={activeCompany === null}
+            role="tab"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+            All Companies
+          </button>
+          {uniqueCompanies.map((company) => (
+            <button
+              key={company}
+              className={`experience-tab-button ${activeCompany === company ? 'active' : ''}`}
+              onClick={() => setActiveCompany(company)}
+              aria-label={`Filter by ${company}`}
+              aria-selected={activeCompany === company}
+              role="tab"
+            >
+              {company}
+            </button>
+          ))}
+          <div className="scroll-hint" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </div>
+        </div>
+
         {/* Big Bang Cards - 1 Click Reveal */}
         <div className="big-bang-container">
-          {experiences.map((exp, index) => {
-            const expanded = expandedCards.has(index);
+          {filteredExperiences.map((exp, index) => {
+            const globalIndex = experiences.indexOf(exp);
+            const expanded = expandedCards.has(globalIndex);
             const keyMetric = getKeyMetric(exp);
             const allItems = allResponsibilities(exp);
-            const colorVariant = getColorVariant(index);
+            const colorVariant = getColorVariant(globalIndex);
 
             return (
-              <article key={index} className={`big-bang-card ${colorVariant} ${expanded ? 'expanded' : ''}`}>
+              <article key={globalIndex} className={`big-bang-card ${colorVariant} ${expanded ? 'expanded' : ''}`}>
                 <div className={`big-bang-header ${colorVariant}`}>
                   <div className="big-bang-company">
                     <div className={`big-bang-logo ${colorVariant}`}>
@@ -318,7 +360,7 @@ export default function Experience() {
                 
                 <button 
                   className={`big-bang-expand-btn ${colorVariant} ${expanded ? 'expanded' : ''}`}
-                  onClick={() => toggleCard(index)}
+                  onClick={() => toggleCard(globalIndex)}
                   aria-expanded={expanded}
                 >
                   {expanded ? (
