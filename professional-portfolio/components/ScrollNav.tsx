@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 const navSections = [
   { id: 'products', label: 'Code', icon: '💻' },
@@ -16,6 +16,8 @@ export default function ScrollNav() {
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [mounted, setMounted] = useState(false);
+  const [showActiveTooltip, setShowActiveTooltip] = useState(false);
+  const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -55,8 +57,22 @@ export default function ScrollNav() {
       }
     });
     
-    setActiveSection(current);
-  }, []);
+    // Only show tooltip briefly when active section changes
+    if (current && current !== activeSection) {
+      setActiveSection(current);
+      setShowActiveTooltip(true);
+      
+      // Clear existing timeout if any
+      if (tooltipTimeoutRef.current) {
+        clearTimeout(tooltipTimeoutRef.current);
+      }
+      
+      // Hide tooltip after 2 seconds
+      tooltipTimeoutRef.current = setTimeout(() => {
+        setShowActiveTooltip(false);
+      }, 2000);
+    }
+  }, [activeSection]);
 
   useEffect(() => {
     // Throttle scroll events to improve performance
@@ -73,7 +89,13 @@ export default function ScrollNav() {
     };
 
     window.addEventListener('scroll', throttledHandleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', throttledHandleScroll);
+    return () => {
+      window.removeEventListener('scroll', throttledHandleScroll);
+      // Cleanup timeout on unmount
+      if (tooltipTimeoutRef.current) {
+        clearTimeout(tooltipTimeoutRef.current);
+      }
+    };
   }, [handleScroll]);
 
   const handleScrollTo = (sectionId: string) => {
@@ -152,7 +174,7 @@ export default function ScrollNav() {
               <span className="scroll-nav-icon">{section.icon}</span>
             </button>
             <div 
-              className={`scroll-nav-tooltip ${hoveredSection === section.id || activeSection === section.id ? 'visible' : ''}`}
+              className={`scroll-nav-tooltip ${hoveredSection === section.id || (activeSection === section.id && showActiveTooltip) ? 'visible' : ''}`}
               role="tooltip"
             >
               {section.label}
