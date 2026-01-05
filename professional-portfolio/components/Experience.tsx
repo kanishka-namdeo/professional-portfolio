@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type ResponsibilityCategory =
   | 'Strategy & Leadership'
@@ -268,6 +268,18 @@ export default function Experience() {
   const filteredExperiences = activeCompany === null 
     ? experiences 
     : experiences.filter(exp => exp.company === activeCompany);
+
+  // Auto-expand when only one card is shown, collapse when showing multiple
+  useEffect(() => {
+    if (filteredExperiences.length === 1) {
+      const singleExp = filteredExperiences[0];
+      const globalIndex = experiences.indexOf(singleExp);
+      setExpandedCards(new Set([globalIndex]));
+    } else {
+      // When showing multiple cards, collapse all
+      setExpandedCards(new Set());
+    }
+  }, [activeCompany, filteredExperiences]);
 
   const toggleCard = (index: number) => {
     const newExpanded = new Set(expandedCards);
