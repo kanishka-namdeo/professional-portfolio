@@ -117,6 +117,24 @@ const ArrowRightIcon = () => (
   </svg>
 );
 
+const ChevronDownIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+  </svg>
+);
+
+const ChevronUpIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+  </svg>
+);
+
+const BookOpenIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-4 h-4">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+  </svg>
+);
+
 const experiences: Experience[] = [
   {
     title: 'Senior Product Manager',
@@ -299,10 +317,23 @@ const uniqueCompanies = Array.from(new Set(experiences.map(exp => exp.company)))
 
 export default function Experience() {
   const [activeCompany, setActiveCompany] = useState<string | null>(null);
+  const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
 
   const filteredExperiences = activeCompany === null 
     ? experiences 
     : experiences.filter(exp => exp.company === activeCompany);
+
+  const toggleCard = (index: number) => {
+    const newExpanded = new Set(expandedCards);
+    if (newExpanded.has(index)) {
+      newExpanded.delete(index);
+    } else {
+      newExpanded.add(index);
+    }
+    setExpandedCards(newExpanded);
+  };
+
+  const isCardExpanded = (index: number) => expandedCards.has(index);
 
   return (
     <section id="experience" className="section-full-width" aria-labelledby="experience-title" role="region" aria-label="Work Experience">
@@ -336,13 +367,28 @@ export default function Experience() {
           ))}
         </div>
 
-        {/* Split Screen Cards */}
+        {/* Progressive Disclosure Cards */}
         <div className="experience-split-container animate-on-scroll animate-delay-1">
           {filteredExperiences.map((exp, index) => {
             const primaryCategory = exp.responsibilities[0]?.category || 'Product Growth & Strategy';
+            const expanded = isCardExpanded(index);
 
             return (
-              <div key={index} className="split-screen-card">
+              <article 
+                key={index} 
+                className={`split-screen-card ${expanded ? 'expanded' : 'collapsed'}`}
+                onClick={() => toggleCard(index)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleCard(index);
+                  }
+                }}
+                tabIndex={0}
+                role="button"
+                aria-expanded={expanded}
+                aria-label={`${expanded ? 'Collapse' : 'Expand'} case study for ${exp.title} at ${exp.company}`}
+              >
                 {/* Left Side - Experience */}
                 <div className="split-screen-left">
                   <span className="split-label">
@@ -357,7 +403,7 @@ export default function Experience() {
                     <p className="split-subtitle">
                       {exp.company} | {exp.date}
                       {exp.url && (
-                        <a href={exp.url} target="_blank" rel="noopener noreferrer" className="company-website" style={{ marginLeft: 'var(--space-sm)' }}>
+                        <a href={exp.url} target="_blank" rel="noopener noreferrer" className="company-website" style={{ marginLeft: 'var(--space-sm)' }} onClick={(e) => e.stopPropagation()}>
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                           </svg>
@@ -380,82 +426,133 @@ export default function Experience() {
                     
                     <div className="split-skills">
                       {exp.skills.slice(0, 6).map((skill, skillIndex) => (
-                        <span key={skillIndex} className="skill-tag">{skill}</span>
+                        <span key={skillIndex} className="skill-tag animated-underline">{skill}</span>
                       ))}
                     </div>
+
+                    {/* Expand/Collapse Button */}
+                    <button 
+                      className="view-case-study-button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleCard(index);
+                      }}
+                      aria-hidden="true"
+                    >
+                      {expanded ? (
+                        <>
+                          <ChevronUpIcon />
+                          <span>Show Less</span>
+                        </>
+                      ) : (
+                        <>
+                          <BookOpenIcon />
+                          <span>View Case Study</span>
+                          <span className="read-time">3 min read</span>
+                        </>
+                      )}
+                    </button>
                   </div>
                 </div>
                 
                 {/* Center Divider */}
                 <div className="split-divider">
-                  <ArrowRightIcon />
+                  {expanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
                 </div>
                 
-                {/* Right Side - Case Study */}
-                <div className="split-screen-right">
-                  <span className="split-label">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    CASE STUDY
-                  </span>
-                  
-                  <div className="split-content">
-                    {exp.caseStudy ? (
-                      <>
-                        <p className="impact-statement">
-                          How I delivered <span className="impact-highlight">{exp.caseStudy.title}</span>
-                        </p>
-                        
-                        <div className="case-study-problem">
-                          <h4 className="case-study-block-title">THE CHALLENGE</h4>
-                          <p>{exp.caseStudy.challenge}</p>
-                        </div>
-                        
-                        <h4 className="impact-metrics-title">KEY IMPACT METRICS</h4>
-                        <div className="impact-metrics-grid">
-                          {exp.caseStudy.metrics ? (
-                            exp.caseStudy.metrics.slice(0, 4).map((metric, metricIndex) => {
-                              const parts = metric.split(' ');
-                              const value = parts[0];
-                              const label = parts.slice(1).join(' ');
-                              return (
-                                <div key={metricIndex} className="impact-metric-item">
-                                  <div className="impact-metric-value">{value}</div>
-                                  <div className="impact-metric-label">{label}</div>
+                {/* Right Side - Case Study (Collapsible) */}
+                <div className={`split-screen-right ${expanded ? 'expanded' : 'collapsed'}`}>
+                  {expanded ? (
+                    <div className="split-content case-study-content">
+                      <span className="split-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        CASE STUDY
+                      </span>
+                      
+                      {exp.caseStudy ? (
+                        <>
+                          <p className="impact-statement">
+                            How I delivered <span className="impact-highlight">{exp.caseStudy.title}</span>
+                          </p>
+                          
+                          <div className="case-study-problem">
+                            <h4 className="case-study-block-title">THE CHALLENGE</h4>
+                            <p>{exp.caseStudy.challenge}</p>
+                          </div>
+
+                          <div className="case-study-solution">
+                            <h4 className="case-study-block-title">THE SOLUTION</h4>
+                            <p>{exp.caseStudy.solution}</p>
+                          </div>
+                          
+                          <div className="case-study-impact">
+                            <h4 className="case-study-block-title">THE IMPACT</h4>
+                            <p>{exp.caseStudy.impact}</p>
+                          </div>
+                          
+                          <h4 className="impact-metrics-title">KEY IMPACT METRICS</h4>
+                          <div className="impact-metrics-grid">
+                            {exp.caseStudy.metrics ? (
+                              exp.caseStudy.metrics.slice(0, 4).map((metric, metricIndex) => {
+                                const parts = metric.split(' ');
+                                const value = parts[0];
+                                const label = parts.slice(1).join(' ');
+                                return (
+                                  <div key={metricIndex} className="impact-metric-item">
+                                    <div className="impact-metric-value">{value}</div>
+                                    <div className="impact-metric-label">{label}</div>
+                                  </div>
+                                );
+                              })
+                            ) : (
+                              <>
+                                <div className="impact-metric-item">
+                                  <div className="impact-metric-value">{exp.achievements.length}</div>
+                                  <div className="impact-metric-label">Key Achievements</div>
                                 </div>
-                              );
-                            })
-                          ) : (
-                            <>
-                              <div className="impact-metric-item">
-                                <div className="impact-metric-value">{exp.achievements.length}</div>
-                                <div className="impact-metric-label">Key Achievements</div>
-                              </div>
-                              <div className="impact-metric-item">
-                                <div className="impact-metric-value">{exp.responsibilities.flatMap(r => r.items).length}</div>
-                                <div className="impact-metric-label">Responsibilities</div>
-                              </div>
-                              <div className="impact-metric-item">
-                                <div className="impact-metric-value">{exp.skills.length}</div>
-                                <div className="impact-metric-label">Skills Applied</div>
-                              </div>
-                              <div className="impact-metric-item">
-                                <div className="impact-metric-value">1</div>
-                                <div className="impact-metric-label">Case Study</div>
-                              </div>
-                            </>
-                          )}
+                                <div className="impact-metric-item">
+                                  <div className="impact-metric-value">{exp.responsibilities.flatMap(r => r.items).length}</div>
+                                  <div className="impact-metric-label">Responsibilities</div>
+                                </div>
+                                <div className="impact-metric-item">
+                                  <div className="impact-metric-value">{exp.skills.length}</div>
+                                  <div className="impact-metric-label">Skills Applied</div>
+                                </div>
+                                <div className="impact-metric-item">
+                                  <div className="impact-metric-value">1</div>
+                                  <div className="impact-metric-label">Case Study</div>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        </>
+                      ) : (
+                        <div className="case-study-empty">
+                          <p>Case study details available upon request.</p>
                         </div>
-                      </>
-                    ) : (
-                      <div className="case-study-empty">
-                        <p>Case study details available upon request.</p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="case-study-ghosted">
+                      <div className="ghosted-content">
+                        <span className="split-label ghosted-label">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          CASE STUDY
+                        </span>
+                        <div className="ghosted-placeholder">
+                          <BookOpenIcon />
+                          <p>Click to reveal case study</p>
+                          <span className="ghosted-read-time">3 min read</span>
+                        </div>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
