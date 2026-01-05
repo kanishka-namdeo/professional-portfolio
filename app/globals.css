@@ -8043,7 +8043,7 @@ button[class*="icon"],
   .big-bang-brief {
     padding: var(--space-sm) var(--space-md);
   }
-  
+
   .big-bang-brief-text {
     font-size: 0.85rem;
     /* Clamp to 3 lines on mobile */
@@ -8051,6 +8051,173 @@ button[class*="icon"],
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+}
+
+/* News Cover - Press indicator on card cover */
+.big-bang-news-cover {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.big-bang-news-cover-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.big-bang-news-cover-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--accent-navy);
+}
+
+.big-bang-news-cover-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.big-bang-news-cover-count {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+  padding: 2px 6px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.big-bang-news-cover-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.big-bang-news-cover-source {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-navy);
+}
+
+.big-bang-news-cover-divider {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.big-bang-news-cover-headline {
+  font-size: 0.8rem;
+  color: var(--color-text);
+  font-style: italic;
+  flex: 1;
+  min-width: 150px;
+}
+
+/* Responsive: News cover on mobile */
+@media (max-width: 640px) {
+  .big-bang-news-cover {
+    padding: var(--space-sm);
+  }
+
+  .big-bang-news-cover-headline {
+    font-size: 0.75rem;
+    min-width: 100px;
+  }
+}
+
+/* Industry Verticals Compact - Horizontal tag strip (no height increase) */
+.big-bang-industries-compact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px var(--space-md);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.big-bang-industries-compact-tag {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--accent-teal);
+  background: var(--color-surface);
+  padding: 2px 6px;
+  border: 1px solid var(--accent-teal);
+  border-radius: var(--radius-sm);
+}
+
+/* Responsive: Compact industries on mobile */
+@media (max-width: 640px) {
+  .big-bang-industries-compact {
+    padding: 4px var(--space-sm);
+    gap: 3px;
+  }
+
+  .big-bang-industries-compact-tag {
+    font-size: 0.6rem;
+    padding: 2px 4px;
+  }
+}
+
+/* Industry Verticals Cover - Full section (deprecated, keeping for reference) */
+.big-bang-industries-cover {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.big-bang-industries-cover-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.big-bang-industries-cover-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--accent-teal);
+}
+
+.big-bang-industries-cover-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.big-bang-industries-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.big-bang-industries-tag {
+  font-size: 0.75rem;
+  color: var(--color-text);
+  background: var(--color-surface);
+  padding: 3px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+/* Responsive: Industries cover on mobile */
+@media (max-width: 640px) {
+  .big-bang-industries-cover {
+    padding: var(--space-sm);
+  }
+
+  .big-bang-industries-tag {
+    font-size: 0.7rem;
+    padding: 2px 6px;
   }
 }
 
@@ -8384,66 +8551,131 @@ button[class*="icon"],
 }
 
 /* ========================================
-   BIG BANG COLOR VARIANTS
-   Using design tokens for consistency
+   BIG BANG CARDS - NORMALIZED DESIGN
+   Structural Color System (Shadows, not Backgrounds)
+   Reduces visual noise while maintaining neobrutalist aesthetic
    ======================================== */
 
-/* Amber Variant */
-.big-bang-card.variant-amber .big-bang-header {
-  background: var(--accent-amber);
+/* Base Card - Clean white background, neutral styling */
+.big-bang-card {
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  box-shadow: var(--shadow-hard);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.big-bang-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translate(-2px, -2px);
+}
+
+.big-bang-card.expanded {
+  box-shadow: 6px 6px 0px 0px var(--color-border);
+}
+
+/* Neutral Header - White background, black text */
+.big-bang-header {
+  padding: var(--space-lg) var(--space-md);
+  background: var(--color-surface);
+  border-bottom: var(--border-width) solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+/* Logo - White with black border */
+.big-bang-logo {
+  width: 52px;
+  height: 52px;
+  background: var(--color-bg);
+  border: var(--border-width) solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: var(--color-text);
+}
+
+/* Teaser - Black pill for high contrast */
+.big-bang-teaser {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--color-text);
+  color: var(--color-surface);
+  padding: 8px 16px;
+  border: var(--border-width) solid var(--color-border);
+}
+
+/* Expand Button - Black for consistency */
+.big-bang-expand-btn {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-text);
+  color: var(--color-surface);
+  border: none;
+  border-top: var(--border-width) solid var(--color-border);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.big-bang-expand-btn:hover {
+  background: var(--color-text-muted);
+}
+
+.big-bang-expand-btn:active {
+  transform: scale(0.98);
+}
+
+/* ========================================
+   COLOR VARIANTS - STRICT TRIAD SYSTEM
+   Color applied via HARD SHADOWS only
+   Neutral backgrounds maintain visual consistency
+   ======================================== */
+
+/* Primary Brand - Purple (Current/Featured Roles) */
+.big-bang-card.variant-primary {
+  box-shadow: 6px 6px 0px 0px var(--accent-purple);
+}
+
+.big-bang-card.variant-primary:hover {
+  box-shadow: 8px 8px 0px 0px var(--accent-purple);
+}
+
+.big-bang-card.variant-primary.expanded {
+  box-shadow: 6px 6px 0px 0px var(--accent-purple);
+}
+
+.big-bang-card.variant-primary .big-bang-expand-btn.expanded {
+  background: var(--accent-purple);
   color: #ffffff;
 }
 
-.big-bang-card.variant-amber .big-bang-logo {
-  background: var(--bb-amber-bg);
-  color: var(--accent-amber);
+/* Support A - Teal (Product/SaaS Roles) */
+.big-bang-card.variant-teal {
+  box-shadow: 6px 6px 0px 0px var(--accent-teal);
 }
 
-.big-bang-card.variant-amber .big-bang-teaser {
-  background: var(--bb-amber-bg);
-  color: var(--bb-amber-text);
+.big-bang-card.variant-teal:hover {
+  box-shadow: 8px 8px 0px 0px var(--accent-teal);
 }
 
-.big-bang-card.variant-amber .big-bang-expand-btn.expanded {
-  background: var(--accent-amber);
-  color: #ffffff;
-}
-
-/* Indigo Variant */
-.big-bang-card.variant-indigo .big-bang-header {
-  background: var(--accent-indigo);
-  color: #ffffff;
-}
-
-.big-bang-card.variant-indigo .big-bang-logo {
-  background: var(--bb-indigo-bg);
-  color: var(--accent-indigo);
-}
-
-.big-bang-card.variant-indigo .big-bang-teaser {
-  background: var(--bb-indigo-bg);
-  color: var(--bb-indigo-text);
-}
-
-.big-bang-card.variant-indigo .big-bang-expand-btn.expanded {
-  background: var(--accent-indigo);
-  color: #ffffff;
-}
-
-/* Teal Variant */
-.big-bang-card.variant-teal .big-bang-header {
-  background: var(--accent-teal);
-  color: #ffffff;
-}
-
-.big-bang-card.variant-teal .big-bang-logo {
-  background: var(--bb-teal-bg);
-  color: var(--accent-teal);
-}
-
-.big-bang-card.variant-teal .big-bang-teaser {
-  background: var(--bb-teal-bg);
-  color: var(--bb-teal-text);
+.big-bang-card.variant-teal.expanded {
+  box-shadow: 6px 6px 0px 0px var(--accent-teal);
 }
 
 .big-bang-card.variant-teal .big-bang-expand-btn.expanded {
@@ -8451,170 +8683,51 @@ button[class*="icon"],
   color: #ffffff;
 }
 
-/* Red Variant - Using accent-coral as primary red tone */
-.big-bang-card.variant-red .big-bang-header {
-  background: var(--accent-coral);
-  color: #ffffff;
+/* Support B - Amber (Consulting/Earlier Roles) */
+.big-bang-card.variant-amber {
+  box-shadow: 6px 6px 0px 0px var(--accent-amber);
 }
 
-.big-bang-card.variant-red .big-bang-logo {
-  background: var(--bb-red-bg);
-  color: var(--accent-coral);
+.big-bang-card.variant-amber:hover {
+  box-shadow: 8px 8px 0px 0px var(--accent-amber);
 }
 
-.big-bang-card.variant-red .big-bang-teaser {
-  background: var(--bb-red-bg);
-  color: var(--bb-red-text);
+.big-bang-card.variant-amber.expanded {
+  box-shadow: 6px 6px 0px 0px var(--accent-amber);
 }
 
-.big-bang-card.variant-red .big-bang-expand-btn.expanded {
-  background: var(--accent-coral);
-  color: #ffffff;
-}
-
-/* Purple Variant - Added to design system */
-.big-bang-card.variant-purple .big-bang-header {
-  background: var(--accent-purple);
-  color: #ffffff;
-}
-
-.big-bang-card.variant-purple .big-bang-logo {
-  background: var(--bb-purple-bg);
-  color: var(--accent-purple);
-}
-
-.big-bang-card.variant-purple .big-bang-teaser {
-  background: var(--bb-purple-bg);
-  color: var(--bb-purple-text);
-}
-
-.big-bang-card.variant-purple .big-bang-expand-btn.expanded {
-  background: var(--accent-purple);
-  color: #ffffff;
-}
-
-/* Green Variant */
-.big-bang-card.variant-green .big-bang-header {
-  background: var(--accent-teal);
-  color: #ffffff;
-}
-
-.big-bang-card.variant-green .big-bang-logo {
-  background: var(--bb-green-bg);
-  color: var(--accent-teal);
-}
-
-.big-bang-card.variant-green .big-bang-teaser {
-  background: var(--bb-green-bg);
-  color: var(--bb-green-text);
-}
-
-.big-bang-card.variant-green .big-bang-expand-btn.expanded {
-  background: var(--accent-teal);
-  color: #ffffff;
-}
-
-/* Sky Blue Variant */
-.big-bang-card.variant-sky .big-bang-header {
-  background: var(--accent-blue);
-  color: #ffffff;
-}
-
-.big-bang-card.variant-sky .big-bang-logo {
-  background: var(--bb-sky-bg);
-  color: var(--accent-blue);
-}
-
-.big-bang-card.variant-sky .big-bang-teaser {
-  background: var(--bb-sky-bg);
-  color: var(--bb-sky-text);
-}
-
-.big-bang-card.variant-sky .big-bang-expand-btn.expanded {
-  background: var(--accent-blue);
+.big-bang-card.variant-amber .big-bang-expand-btn.expanded {
+  background: var(--accent-amber);
   color: #ffffff;
 }
 
 /* ========================================
-   DARK MODE OVERRIDES FOR BIG BANG CARDS
-   Ensures proper color switching in dark theme
+   DARK MODE OVERRIDES FOR NORMALIZED CARDS
+   Adjust shadows for dark background visibility
    ======================================== */
 
-/* Amber Dark Mode */
-[data-theme="dark"] .big-bang-card.variant-amber .big-bang-logo {
-  background: var(--bb-amber-bg);
-  color: var(--bb-amber-text);
+[data-theme="dark"] .big-bang-card.variant-primary {
+  box-shadow: 6px 6px 0px 0px var(--accent-purple);
 }
 
-[data-theme="dark"] .big-bang-card.variant-amber .big-bang-teaser {
-  background: var(--bb-amber-bg);
-  color: var(--bb-amber-text);
+[data-theme="dark"] .big-bang-card.variant-primary:hover {
+  box-shadow: 8px 8px 0px 0px var(--accent-purple);
 }
 
-/* Indigo Dark Mode */
-[data-theme="dark"] .big-bang-card.variant-indigo .big-bang-logo {
-  background: var(--bb-indigo-bg);
-  color: var(--accent-indigo);
+[data-theme="dark"] .big-bang-card.variant-teal {
+  box-shadow: 6px 6px 0px 0px var(--accent-teal);
 }
 
-[data-theme="dark"] .big-bang-card.variant-indigo .big-bang-teaser {
-  background: var(--bb-indigo-bg);
-  color: var(--bb-indigo-text);
+[data-theme="dark"] .big-bang-card.variant-teal:hover {
+  box-shadow: 8px 8px 0px 0px var(--accent-teal);
 }
 
-/* Teal Dark Mode */
-[data-theme="dark"] .big-bang-card.variant-teal .big-bang-logo {
-  background: var(--bb-teal-bg);
-  color: var(--accent-teal);
+[data-theme="dark"] .big-bang-card.variant-amber {
+  box-shadow: 6px 6px 0px 0px var(--accent-amber);
 }
 
-[data-theme="dark"] .big-bang-card.variant-teal .big-bang-teaser {
-  background: var(--bb-teal-bg);
-  color: var(--bb-teal-text);
-}
-
-/* Red Dark Mode */
-[data-theme="dark"] .big-bang-card.variant-red .big-bang-logo {
-  background: var(--bb-red-bg);
-  color: var(--accent-coral);
-}
-
-[data-theme="dark"] .big-bang-card.variant-red .big-bang-teaser {
-  background: var(--bb-red-bg);
-  color: var(--bb-red-text);
-}
-
-/* Purple Dark Mode */
-[data-theme="dark"] .big-bang-card.variant-purple .big-bang-logo {
-  background: var(--bb-purple-bg);
-  color: var(--accent-purple);
-}
-
-[data-theme="dark"] .big-bang-card.variant-purple .big-bang-teaser {
-  background: var(--bb-purple-bg);
-  color: var(--bb-purple-text);
-}
-
-/* Green Dark Mode */
-[data-theme="dark"] .big-bang-card.variant-green .big-bang-logo {
-  background: var(--bb-green-bg);
-  color: var(--accent-teal);
-}
-
-[data-theme="dark"] .big-bang-card.variant-green .big-bang-teaser {
-  background: var(--bb-green-bg);
-  color: var(--bb-green-text);
-}
-
-/* Sky Dark Mode */
-[data-theme="dark"] .big-bang-card.variant-sky .big-bang-logo {
-  background: var(--bb-sky-bg);
-  color: var(--accent-blue);
-}
-
-[data-theme="dark"] .big-bang-card.variant-sky .big-bang-teaser {
-  background: var(--bb-sky-bg);
-  color: var(--bb-sky-text);
+[data-theme="dark"] .big-bang-card.variant-amber:hover {
+  box-shadow: 8px 8px 0px 0px var(--accent-amber);
 }
 
 /* Responsive */

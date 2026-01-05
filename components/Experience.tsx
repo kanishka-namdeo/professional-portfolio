@@ -43,6 +43,7 @@ interface Experience {
   achievements: string[];
   caseStudy?: CaseStudy;
   press?: PressMention[];
+  industries?: string[];
 }
 
 // Get company initial for logo
@@ -50,9 +51,12 @@ const getCompanyInitial = (company: string): string => {
   return company.charAt(0).toUpperCase();
 };
 
-// Company color variant classes
+// Normalized color variants - Structural Color System
+// Color applied via hard shadows only, not backgrounds
+// Creates visual consistency with rest of portfolio
 const getColorVariant = (index: number): string => {
-  const variants = ['variant-amber', 'variant-indigo', 'variant-teal', 'variant-red', 'variant-purple', 'variant-green', 'variant-sky'];
+  // Strict Triad: Purple (Featured) -> Teal (Product) -> Amber (Consulting)
+  const variants = ['variant-primary', 'variant-teal', 'variant-amber', 'variant-teal', 'variant-amber', 'variant-amber', 'variant-primary'];
   return variants[index % variants.length];
 };
 
@@ -127,6 +131,7 @@ const experiences: Experience[] = [
         date: "Jul 2025"
       }
     ],
+    industries: ["Wealth Management", "Private Banking", "Enterprise AI"],
     caseStudy: {
       title: "AI-Native Wealth Management Platform",
       challenge: "Private banking firms struggled with fragmented workflows and lack of personalized investment insights for high-net-worth clients.",
@@ -155,7 +160,8 @@ const experiences: Experience[] = [
       solution: "Developed a video intelligence MVP with automated tagging, compression, and fast retrieval capabilities integrated with existing OMS.",
       impact: "Reduced dispute resolution time by 60% while processing 50K+ daily video uploads with optimized cloud infrastructure.",
       metrics: ["~50K daily orders", "60% dispute reduction", "40% cloud cost saved"]
-    }
+    },
+    industries: ["E-commerce", "Logistics", "Video Intelligence"],
   },
   {
     title: 'Senior Product Manager',
@@ -192,7 +198,8 @@ const experiences: Experience[] = [
       solution: "Led strategic expansion to 70+ locations across 3 countries, launched mobile-first experience improvements, and built native payments/invoicing capabilities.",
       impact: "Achieved 10x ARR growth, expanded to 60,000+ monthly users, and established the platform as the market leader in enterprise transport management.",
       metrics: ["~10x ARR growth", "60K+ monthly users", "70+ locations", "3 countries"]
-    }
+    },
+    industries: ["Enterprise SaaS", "Transportation", "Mobility", "Corporate Travel"],
   },
   {
     title: 'Software Team Lead',
@@ -216,7 +223,8 @@ const experiences: Experience[] = [
       solution: "Built an NLP-powered patent analysis platform leveraging LLMs to automate search, categorization, and insights extraction from patent databases.",
       impact: "Improved patent analysis productivity by 10x, enabling deeper research while reducing time-to-insight for enterprise clients.",
       metrics: ["10x productivity", "40+ features", "6 developers", "5 projects"]
-    }
+    },
+    industries: ["Legal Tech", "Patent Management", "SaaS", "NLP/AI"],
   },
   {
     title: 'Technical Consultant',
@@ -248,7 +256,8 @@ const experiences: Experience[] = [
       solution: "Developed a unified logistics visibility platform with real-time tracking, intelligent alerting, and comprehensive analytics dashboards.",
       impact: "Improved tracking accuracy across all transport modes and enabled data-driven decision making for enterprise logistics operations.",
       metrics: ["Multi-modal tracking", "Real-time dashboards", "Enterprise adoption"]
-    }
+    },
+    industries: ["Logistics", "Supply Chain", "Transportation", "Enterprise SaaS"],
   },
   {
     title: 'Senior Technical Consultant',
@@ -277,7 +286,8 @@ const experiences: Experience[] = [
       solution: "Designed an AI-powered analytics platform with predictive modeling, anomaly detection, and clinical decision support dashboards.",
       impact: "Enabled healthcare teams to identify at-risk patients earlier and optimize resource allocation based on data-driven predictions.",
       metrics: ["Early risk prediction", "Clinical dashboards", "Healthcare compliance"]
-    }
+    },
+    industries: ["Healthcare", "Medical AI", "Clinical Analytics", "Enterprise AI"],
   },
   {
     title: 'Co-founding member & Chief Technical Officer',
@@ -321,7 +331,8 @@ const experiences: Experience[] = [
       solution: "Developed autonomous USVs with multi-sensor fusion navigation, obstacle avoidance, and real-time telemetry for defense and paramilitary applications.",
       impact: "Successfully deployed autonomous systems that operated reliably in field trials, advancing India's maritime defense capabilities.",
       metrics: ["Multi-sensor fusion", "Field trials completed", "Defense-grade reliability"]
-    }
+    },
+    industries: ["Defense Technology", "Maritime Robotics", "Aerospace", "Autonomous Systems"],
   },
 ];
 
@@ -477,6 +488,33 @@ export default function Experience() {
                 <div className="big-bang-brief">
                   <p className="big-bang-brief-text">{exp.summary}</p>
                 </div>
+                
+                {/* Industry Verticals - Compact horizontal tags between header and metric */}
+                {exp.industries && exp.industries.length > 0 && (
+                  <div className="big-bang-industries-compact">
+                    {exp.industries.map((industry, indIndex) => (
+                      <span key={indIndex} className="big-bang-industries-compact-tag">{industry}</span>
+                    ))}
+                  </div>
+                )}
+                
+                {/* News Cover - Press indicator on card cover */}
+                {exp.press && exp.press.length > 0 && !expanded && (
+                  <div className="big-bang-news-cover">
+                    <div className="big-bang-news-cover-header">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="big-bang-news-cover-icon">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                      </svg>
+                      <span className="big-bang-news-cover-label">In the News</span>
+                      <span className="big-bang-news-cover-count">{exp.press.length} mention{exp.press.length > 1 ? 's' : ''}</span>
+                    </div>
+                    <div className="big-bang-news-cover-preview">
+                      <span className="big-bang-news-cover-source">{exp.press[0].source}</span>
+                      <span className="big-bang-news-cover-divider">—</span>
+                      <span className="big-bang-news-cover-headline">{exp.press[0].headline.length > 50 ? exp.press[0].headline.substring(0, 50) + '...' : exp.press[0].headline}</span>
+                    </div>
+                  </div>
+                )}
                 
                 <button
                   className={`big-bang-expand-btn ${colorVariant} ${expanded ? 'expanded' : ''}`}
