@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import ThemeToggle from './ThemeToggle';
 
 const navLinks = [
-  { href: '#products-contributed', label: 'Products' },
   { href: '#products', label: 'Code' },
   { href: '#experience', label: 'Experience' },
   { href: '#about', label: 'About' },

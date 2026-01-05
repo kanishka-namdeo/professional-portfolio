@@ -214,7 +214,6 @@ h6 {
 /* Text Readability - Prevent content stretching on wide screens */
 p,
 .card-description,
-.product-description,
 .experience-summary,
 .press-description,
 .thought-excerpt,
@@ -1923,18 +1922,7 @@ section {
     right: var(--space-sm);
   }
 
-  .case-study-close svg {
-    width: 20px;
-    height: 20px;
-  }
-}
-
-/* Experience Section */
-.experience-timeline {
-  position: relative;
-}
-
-/* Card-based layout - no timeline line needed */
+  /* Card-based layout - no timeline line needed */
 
 .experience-item {
   position: relative;
@@ -4519,8 +4507,7 @@ section {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .showcase-grid,
-  .products-grid {
+  .showcase-grid {
     grid-template-columns: 1fr;
   }
 
@@ -6939,7 +6926,6 @@ button[class*="icon"],
 
   /* Hover effects */
   .showcase-card:hover,
-  .product-card:hover,
   .foundation-card:hover,
   .btn:hover,
   button:hover {

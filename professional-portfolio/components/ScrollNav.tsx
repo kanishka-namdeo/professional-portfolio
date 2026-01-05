@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
 const navSections = [
-  { id: 'products-contributed', label: 'Products', icon: '📦' },
   { id: 'products', label: 'Code', icon: '💻' },
   { id: 'experience', label: 'Experience', icon: '💼' },
   { id: 'about', label: 'About', icon: '👤' },
