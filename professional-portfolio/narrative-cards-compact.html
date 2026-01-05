@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narrative Experience Cards - Compact Gallery</title>
+    <style>
+        :root {
+            --color-bg: #f5f5dc;
+            --color-card: #ffefd5;
+            --color-text: #1a1a1a;
+            --color-accent-1: #ff6b6b;
+            --color-accent-2: #4ecdc4;
+            --color-accent-3: #ffe66d;
+            --color-accent-4: #95e1d3;
+            --color-accent-5: #f38181;
+            --color-accent-6: #aa96da;
+            --color-accent-7: #fcbad3;
+            --color-accent-8: #a8d8ea;
+            --color-border: #1a1a1a;
+            --shadow-offset: 4px;
+            --border-width: 2px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: system-ui, sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            padding: 30px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--color-border);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+        }
+
+        .stat {
+            background: var(--color-text);
+            color: var(--color-bg);
+            padding: 5px 15px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .card-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            padding-left: 5px;
+            color: #555;
+        }
+
+        .card {
+            background: var(--color-card);
+            border: var(--border-width) solid var(--color-border);
+            box-shadow: var(--shadow-offset) var(--shadow-offset) 0 0 var(--color-border);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        .card-inner {
+            padding: 15px;
+            min-height: 200px;
+        }
+
+        /* ========== CARD STYLES ========== */
+
+        /* Git Commit */
+        .card-commit { font-family: monospace; }
+        .card-commit .hash {
+            background: var(--color-accent-2);
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            border: 1px solid var(--color-border);
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .card-commit .msg {
+            font-size: 0.9rem;
+            padding-left: 15px;
+            border-left: 3px solid var(--color-accent-1);
+            margin-bottom: 10px;
+        }
+        .card-commit .meta {
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        /* Chat */
+        .card-chat { display: flex; flex-direction: column; gap: 8px; }
+        .card-chat .msg {
+            padding: 8px 12px;
+            max-width: 85%;
+            border: 2px solid var(--color-border);
+            font-size: 0.8rem;
+        }
+        .card-chat .msg.sent {
+            align-self: flex-end;
+            background: var(--color-accent-4);
+            border-radius: 12px 12px 0 12px;
+        }
+        .card-chat .msg.received {
+            align-self: flex-start;
+            background: #fff;
+            border-radius: 12px 12px 12px 0;
+        }
+        .card-chat .input {
+            display: flex;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        .card-chat .input-field {
+            flex: 1;
+            padding: 8px;
+            border: 2px solid var(--color-border);
+            font-size: 0.75rem;
+        }
+        .card-chat .send {
+            background: var(--color-accent-1);
+            padding: 8px 15px;
+            border: 2px solid var(--color-border);
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Code Block */
+        .card-code {
+            background: #1a1a1a;
+            color: #f8f8f2;
+            font-family: monospace;
+            font-size: 0.7rem;
+            padding: 12px;
+        }
+        .card-code .line { display: flex; gap: 12px; }
+        .card-code .num { color: #6272a4; min-width: 25px; }
+        .card-code .kw { color: #ff79c6; }
+        .card-code .fn { color: #50fa7b; }
+        .card-code .str { color: #f1fa8c; }
+
+        /* Terminal */
+        .card-terminal {
+            background: #1a1a2e;
+            color: #00ff00;
+            font-family: monospace;
+            font-size: 0.75rem;
+            padding: 12px;
+        }
+        .card-terminal .prompt { color: #00bfff; }
+        .card-terminal .success { color: #00ff00; }
+        .card-terminal .info { color: #ffe66d; }
+        .card-terminal .output { margin: 5px 0; }
+
+        /* Recipe */
+        .card-recipe { background: #fffef0; }
+        .card-recipe .title {
+            font-family: Georgia, serif;
+            font-style: italic;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            border-bottom: 2px dashed var(--color-border);
+            padding-bottom: 8px;
+        }
+        .card-recipe .meta {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .card-recipe .meta span {
+            background: var(--color-accent-5);
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            border: 1px solid var(--color-border);
+        }
+        .card-recipe .ing { font-size: 0.8rem; margin-bottom: 5px; }
+        .card-recipe .ing span { float: right; font-weight: bold; }
+
+        /* Spotify */
+        .card-spotify {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: white;
+        }
+        .card-spotify .track {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .card-spotify .album {
+            width: 60px;
+            height: 60px;
+            background: var(--color-accent-7);
+            border: 2px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .card-spotify .info h3 { font-size: 0.9rem; margin-bottom: 3px; }
+        .card-spotify .info p { font-size: 0.75rem; opacity: 0.7; }
+        .card-spotify .progress {
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            margin-bottom: 8px;
+        }
+        .card-spotify .bar { width: 35%; height: 100%; background: #1db954; }
+        .card-spotify .time { font-size: 0.7rem; opacity: 0.7; display: flex; justify-content: space-between; }
+
+        /* Browser */
+        .card-browser { padding: 0; }
+        .card-browser .toolbar {
+            background: #e8e8e8;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid var(--color-border);
+        }
+        .card-browser .dots { display: flex; gap: 4px; }
+        .card-browser .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1px solid var(--color-border);
+        }
+        .card-browser .dot:nth-child(1) { background: #ff5f56; }
+        .card-browser .dot:nth-child(2) { background: #ffbd2e; }
+        .card-browser .dot:nth-child(3) { background: #27c93f; }
+        .card-browser .url {
+            flex: 1;
+            background: white;
+            padding: 4px 10px;
+            border: 2px solid var(--color-border);
+            font-size: 0.7rem;
+            border-radius: 4px;
+        }
+        .card-browser .content { padding: 15px; }
+        .card-browser .content h4 { font-size: 0.9rem; margin-bottom: 8px; }
+        .card-browser .content p { font-size: 0.8rem; margin-bottom: 5px; }
+
+        /* Invoice */
+        .card-invoice { background: white; }
+        .card-invoice .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--color-border);
+        }
+        .card-invoice .logo { font-weight: bold; font-size: 1rem; }
+        .card-invoice .num { font-size: 0.75rem; text-align: right; }
+        .card-invoice .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px dotted var(--color-border);
+            font-size: 0.8rem;
+        }
+        .card-invoice .total {
+            background: var(--color-accent-2);
+            padding: 10px;
+            border: 2px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .card-invoice .status {
+            display: inline-block;
+            padding: 4px 10px;
+            background: var(--color-accent-3);
+            border: 2px solid var(--color-border);
+            font-weight: bold;
+            font-size: 0.75rem;
+            margin-top: 10px;
+        }
+
+        /* Game Achievement */
+        .card-game {
+            background: #1a1a2e;
+            color: white;
+        }
+        .card-game .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .card-game .icon {
+            width: 50px;
+            height: 50px;
+            background: var(--color-accent-1);
+            border: 2px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+        .card-game .info h3 { font-size: 0.95rem; margin-bottom: 2px; }
+        .card-game .info p { font-size: 0.7rem; opacity: 0.7; }
+        .card-game .title {
+            font-size: 1rem;
+            color: var(--color-accent-3);
+            margin-bottom: 8px;
+        }
+        .card-game .desc { font-size: 0.8rem; opacity: 0.9; margin-bottom: 10px; }
+        .card-game .progress {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid var(--color-border);
+            padding: 2px;
+        }
+        .card-game .bar {
+            width: 75%;
+            height: 16px;
+            background: var(--color-accent-2);
+            border: 1px solid var(--color-border);
+        }
+
+        /* Weather */
+        .card-weather {
+            background: linear-gradient(180deg, #87ceeb 0%, #e0f6ff 100%);
+        }
+        .card-weather .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .card-weather .temp { font-size: 2.5rem; font-weight: bold; }
+        .card-weather .icon { font-size: 2.5rem; }
+        .card-weather .condition { font-size: 0.9rem; margin-bottom: 12px; }
+        .card-weather .details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+        .card-weather .detail {
+            background: rgba(255,255,255,0.6);
+            padding: 8px;
+            border: 2px solid var(--color-border);
+            text-align: center;
+        }
+        .card-weather .label { font-size: 0.65rem; text-transform: uppercase; }
+        .card-weather .value { font-size: 0.9rem; font-weight: bold; }
+
+        /* Calendar */
+        .card-calendar { background: white; }
+        .card-calendar .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .card-calendar .date {
+            background: var(--color-accent-1);
+            border: 2px solid var(--color-border);
+            padding: 6px 12px;
+            text-align: center;
+            min-width: 55px;
+        }
+        .card-calendar .day { font-size: 1.5rem; font-weight: bold; line-height: 1; }
+        .card-calendar .month { font-size: 0.65rem; text-transform: uppercase; }
+        .card-calendar .event { font-size: 0.95rem; font-weight: bold; }
+        .card-calendar .time { font-size: 0.75rem; color: #666; }
+        .card-calendar .details {
+            background: var(--color-accent-3);
+            padding: 12px;
+            border: 2px solid var(--color-border);
+            margin-top: 10px;
+        }
+        .card-calendar .location { font-size: 0.8rem; display: flex; align-items: center; gap: 6px; }
+        .card-calendar .avatars { display: flex; margin-top: 8px; }
+        .card-calendar .avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 2px solid var(--color-border);
+            margin-left: -8px;
+            background: var(--color-accent-4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: bold;
+        }
+        .card-calendar .avatar:first-child { margin-left: 0; }
+
+        /* Podcast */
+        .card-podcast {
+            background: #2d2d2d;
+            color: white;
+        }
+        .card-podcast .header {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .card-podcast .cover {
+            width: 80px;
+            height: 80px;
+            background: var(--color-accent-5);
+            border: 2px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        .card-podcast .info h3 { font-size: 0.95rem; margin-bottom: 3px; }
+        .card-podcast .info p { font-size: 0.75rem; opacity: 0.7; margin-bottom: 8px; }
+        .card-podcast .episode {
+            background: rgba(255,255,255,0.1);
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            display: inline-block;
+        }
+        .card-podcast .desc { font-size: 0.8rem; opacity: 0.9; margin-bottom: 10px; }
+        .card-podcast .waveform {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 30px;
+            margin-bottom: 10px;
+        }
+        .card-podcast .wave {
+            width: 4px;
+            background: var(--color-accent-6);
+            border: 1px solid var(--color-border);
+        }
+        .card-podcast .play {
+            background: var(--color-accent-7);
+            color: var(--color-text);
+            border: 2px solid var(--color-border);
+            padding: 8px 12px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        /* Ticket */
+        .card-ticket {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+        }
+        .card-ticket .header {
+            background: var(--color-accent-8);
+            color: var(--color-text);
+            padding: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .card-ticket .body { padding: 20px; }
+        .card-ticket .movie { font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; }
+        .card-ticket .details { font-size: 0.8rem; opacity: 0.8; margin-bottom: 15px; }
+        .card-ticket .info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding-top: 12px;
+            border-top: 2px dashed rgba(255,255,255,0.3);
+        }
+        .card-ticket .label { font-size: 0.6rem; text-transform: uppercase; opacity: 0.6; }
+        .card-ticket .value { font-size: 0.9rem; font-weight: bold; }
+
+        /* Package */
+        .card-package { background: #d4a574; }
+        .card-package .content { text-align: center; }
+        .card-package .icon { font-size: 3rem; margin-bottom: 10px; }
+        .card-package .tracking {
+            background: white;
+            border: 2px dashed var(--color-border);
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .card-package .track-num {
+            font-family: monospace;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .card-package .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+        }
+        .card-package .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--color-accent-2);
+            border-radius: 50%;
+            border: 2px solid var(--color-border);
+        }
+        .card-package .weight { font-size: 0.8rem; }
+
+        /* Newspaper */
+        .card-newspaper {
+            background: #f5f0e1;
+            font-family: Georgia, serif;
+        }
+        .card-newspaper .name {
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-bottom: 3px double var(--color-border);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            font-family: 'Times New Roman', serif;
+        }
+        .card-newspaper .meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+        .card-newspaper .headline {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        .card-newspaper .image {
+            float: left;
+            width: 80px;
+            height: 80px;
+            background: var(--color-accent-6);
+            border: 2px solid var(--color-border);
+            margin: 0 10px 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .card-newspaper .excerpt {
+            font-size: 0.8rem;
+            line-height: 1.5;
+            text-align: justify;
+        }
+        .card-newspaper .author {
+            margin-top: 10px;
+            font-style: italic;
+            font-size: 0.75rem;
+        }
+
+        /* Comic */
+        .card-comic { background: #fff9e6; }
+        .card-comic .title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+        .card-comic .panel {
+            border: 3px solid var(--color-border);
+            padding: 12px;
+            margin-bottom: 10px;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+        .card-comic .bubble {
+            background: white;
+            border: 2px solid var(--color-border);
+            padding: 8px 12px;
+            border-radius: 8px;
+            position: relative;
+            max-width: 85%;
+        }
+        .card-comic .bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 15px;
+            border: 5px solid transparent;
+            border-top-color: var(--color-border);
+        }
+        .card-comic .char { font-size: 2rem; margin: 8px; }
+
+        /* Badge */
+        .card-badge {
+            background: #1a3a5c;
+            color: white;
+            text-align: center;
+        }
+        .card-badge .header {
+            background: var(--color-accent-8);
+            color: var(--color-text);
+            padding: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.75rem;
+        }
+        .card-badge .photo {
+            width: 90px;
+            height: 90px;
+            margin: 18px auto 12px;
+            background: var(--color-accent-4);
+            border: 3px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+        }
+        .card-badge .name { font-size: 1.1rem; font-weight: bold; margin-bottom: 3px; }
+        .card-badge .title { font-size: 0.8rem; opacity: 0.8; margin-bottom: 10px; }
+        .card-badge .id {
+            font-family: monospace;
+            font-size: 0.75rem;
+            background: rgba(255,255,255,0.1);
+            padding: 6px 12px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .card-badge .qr {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.5rem;
+            color: #1a3a5c;
+            padding: 5px;
+        }
+
+        /* Vinyl */
+        .card-vinyl {
+            background: #1a1a1a;
+            color: white;
+        }
+        .card-vinyl .record {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 15px;
+        }
+        .card-vinyl .disc {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #333 0%, #1a1a1a 100%);
+            border-radius: 50%;
+            border: 2px solid var(--color-border);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-vinyl .disc::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--color-accent-7);
+            border-radius: 50%;
+            border: 2px solid var(--color-border);
+        }
+        .card-vinyl .info h3 { font-size: 0.95rem; margin-bottom: 3px; }
+        .card-vinyl .info p { font-size: 0.75rem; opacity: 0.7; }
+        .card-vinyl .tracks {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid var(--color-border);
+            padding: 12px;
+        }
+        .card-vinyl .track {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dotted rgba(255,255,255,0.2);
+            font-size: 0.75rem;
+        }
+        .card-vinyl .track:last-child { border-bottom: none; }
+        .card-vinyl .track.active { color: var(--color-accent-3); }
+
+        /* Polaroid */
+        .card-polaroid {
+            background: #f0f0f0;
+            padding: 12px 12px 35px 12px;
+        }
+        .card-polaroid .image {
+            background: var(--color-accent-5);
+            border: 2px solid var(--color-border);
+            padding: 15px 8px;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-polaroid .caption {
+            font-family: Georgia, serif;
+            font-style: italic;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .card-polaroid .date {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        /* Playing Card */
+        .card-poker {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        .card-poker .corner {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1;
+        }
+        .card-poker .corner.top { top: 10px; left: 10px; }
+        .card-poker .corner.bottom {
+            bottom: 10px;
+            right: 10px;
+            transform: rotate(180deg);
+        }
+        .card-poker .val { font-size: 1.2rem; font-weight: bold; }
+        .card-poker .suit { font-size: 1rem; }
+        .card-poker .center {
+            font-size: 3.5rem;
+            margin: 25px 0;
+        }
+        .card-poker .red { color: #c41e3a; }
+        .card-poker .black { color: #1a1a1a; }
+
+        @media (max-width: 768px) {
+            .gallery { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Narrative Experience Cards</h1>
+        <p class="subtitle">20 creative approaches to presenting professional experience</p>
+        <div class="stats">
+            <span class="stat">20 Unique Formats</span>
+            <span class="stat">Portfolio Ready</span>
+            <span class="stat">Copy & Paste</span>
+        </div>
+    </header>
+
+    <div class="gallery">
+
+        <!-- 1. Git Commit -->
+        <div class="card-wrapper">
+            <div class="card-label">1. Version Control</div>
+            <div class="card card-commit">
+                <div class="card-inner">
+                    <div class="hash">a7f3c2e</div>
+                    <div class="msg">refactor: Redesigned auth flow to improve security by 40%</div>
+                    <div class="meta">auth_controller.ts • +247 lines</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Chat -->
+        <div class="card-wrapper">
+            <div class="card-label">2. Team Chat</div>
+            <div class="card card-chat">
+                <div class="card-inner">
+                    <div class="msg received">How should we approach the redesign?</div>
+                    <div class="msg sent">Focus on accessibility first, then optimize performance.</div>
+                    <div class="input">
+                        <input class="input-field" placeholder="Type..." value="I'll start the component library">
+                        <button class="send">→</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Code Block -->
+        <div class="card-wrapper">
+            <div class="card-label">3. Code Snippet</div>
+            <div class="card card-code">
+                <div class="card-inner">
+                    <div class="line"><span class="num">1</span><span class="comment">// Optimized search</span></div>
+                    <div class="line"><span class="num">2</span><span class="kw">function</span> <span class="fn">findElement</span>(arr, t) {</div>
+                    <div class="line"><span class="num">3</span>  <span class="kw">let</span> l = <span class="num">0</span>, r = arr.length - <span class="num">1</span>;</div>
+                    <div class="line"><span class="num">4</span>  <span class="kw">while</span> (l <= r) {</div>
+                    <div class="line"><span class="num">5</span>    <span class="kw">const</span> m = Math.floor((l+r)/<span class="num">2</span>);</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Terminal -->
+        <div class="card-wrapper">
+            <div class="card-label">4. Terminal</div>
+            <div class="card card-terminal">
+                <div class="card-inner">
+                    <div><span class="prompt">$</span> npm run deploy</div>
+                    <div class="output success">✓ Build complete: 142ms</div>
+                    <div class="output success">✓ Assets optimized</div>
+                    <div class="output success">✓ Deployed to production</div>
+                    <div style="margin-top: 8px;"><span class="prompt">$</span> <span style="animation: blink 1s infinite;">_</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Recipe -->
+        <div class="card-wrapper">
+            <div class="card-label">5. Recipe</div>
+            <div class="card card-recipe">
+                <div class="card-inner">
+                    <div class="title">"Perfect System Architecture"</div>
+                    <div class="meta">
+                        <span>⏱ 6 weeks</span>
+                        <span>👥 4 engineers</span>
+                    </div>
+                    <div class="ing">User Research <span>200+ interviews</span></div>
+                    <div class="ing">Wireframes <span>45 screens</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Spotify -->
+        <div class="card-wrapper">
+            <div class="card-label">6. Media Player</div>
+            <div class="card card-spotify">
+                <div class="card-inner">
+                    <div class="track">
+                        <div class="album">📊</div>
+                        <div class="info">
+                            <h3>Enterprise Dashboard v3</h3>
+                            <p>Featured Release • Q4 2024</p>
+                        </div>
+                    </div>
+                    <div class="progress"><div class="bar"></div></div>
+                    <div class="time"><span>2:34</span><span>6:42</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Browser -->
+        <div class="card-wrapper">
+            <div class="card-label">7. Browser Window</div>
+            <div class="card card-browser">
+                <div class="toolbar">
+                    <div class="dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                    <div class="url">analytics.company.com</div>
+                </div>
+                <div class="content">
+                    <h4>📈 Performance Metrics</h4>
+                    <p>Load time: <strong>1.2s</strong> (↓ 40%)</p>
+                    <p>Conversion: <strong>4.8%</strong> (↑ 2.1%)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. Invoice -->
+        <div class="card-wrapper">
+            <div class="card-label">8. Invoice</div>
+            <div class="card card-invoice">
+                <div class="card-inner">
+                    <div class="header">
+                        <div class="logo">IMPACT</div>
+                        <div class="num">Q4 2024<br>Dec 31, 2024</div>
+                    </div>
+                    <div class="item"><span>User Acquisition</span><span>+45,000</span></div>
+                    <div class="item"><span>Retention Rate</span><span>92.3%</span></div>
+                    <div class="item"><span>NPS Score</span><span>+72</span></div>
+                    <div class="total"><span>ROI</span><span>340%</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. Game Achievement -->
+        <div class="card-wrapper">
+            <div class="card-label">9. Game Achievement</div>
+            <div class="card card-game">
+                <div class="card-inner">
+                    <div class="header">
+                        <div class="icon">🏆</div>
+                        <div class="info">
+                            <h3>Senior Designer</h3>
+                            <p>Level 8 • 15,420 XP</p>
+                        </div>
+                    </div>
+                    <div class="title">🏅 UX Master</div>
+                    <div class="desc">50+ features shipped with 99% satisfaction</div>
+                    <div class="progress"><div class="bar"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. Weather -->
+        <div class="card-wrapper">
+            <div class="card-label">10. Weather Forecast</div>
+            <div class="card card-weather">
+                <div class="card-inner">
+                    <div class="header">
+                        <div class="temp">72°F</div>
+                        <div class="icon">☀️</div>
+                    </div>
+                    <div class="condition">Sunny with high engagement</div>
+                    <div class="details">
+                        <div class="detail">
+                            <div class="label">Velocity</div>
+                            <div class="value">95 pts</div>
+                        </div>
+                        <div class="detail">
+                            <div class="label">Satisfaction</div>
+                            <div class="value">9.2/10</div>
+                        </div>
+                        <div class="detail">
+                            <div class="label">Quality</div>
+                            <div class="value">98%</div>
+                        </div>
+                        <div class="detail">
+                            <div class="label">Risk</div>
+                            <div class="value">Low</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 11. Calendar -->
+        <div class="card-wrapper">
+            <div class="card-label">11. Calendar Event</div>
+            <div class="card card-calendar">
+                <div class="card-inner">
+                    <div class="header">
+                        <div class="date">
+                            <div class="day">15</div>
+                            <div class="month">Mar</div>
+                        </div>
+                        <div>
+                            <div class="event">Product Launch: v2.0</div>
+                            <div class="time">📅 March 15, 2024</div>
+                        </div>
+                    </div>
+                    <div class="details">
+                        <div class="location">📍 Virtual Event</div>
+                        <div class="avatars">
+                            <div class="avatar">JD</div>
+                            <div class="avatar">AS</div>
+                            <div class="avatar" style="background: var(--color-accent-5);">+42</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. Podcast -->
+        <div class="card-wrapper">
+            <div class="card-label">12. Podcast Episode</div>
+            <div class="card card-podcast">
+                <div class="card-inner">
+                    <div class="header">
+                        <div class="cover">🎙</div>
+                        <div class="info">
+                            <h3>Design Matters</h3>
+                            <p>Episode 142 • Season 4</p>
+                            <span class="episode">Guest Appearance</span>
+                        </div>
+                    </div>
+                    <div class="desc">"Building inclusive design systems for AI-driven interfaces."</div>
+                    <div class="waveform">
+                        <div class="wave" style="height: 12px;"></div>
+                        <div class="wave" style="height: 20px;"></div>
+                        <div class="wave" style="height: 28px;"></div>
+                        <div class="wave" style="height: 16px;"></div>
+                        <div class="wave" style="height: 24px;"></div>
+                    </div>
+                    <button class="play">▶ Listen</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 13. Ticket -->
+        <div class="card-wrapper">
+            <div class="card-label">13. Movie Ticket</div>
+            <div class="card card-ticket">
+                <div class="header">Premiere Night</div>
+                <div class="body">
+                    <div class="movie">"The Design Journey"</div>
+                    <div class="details">Documentary • 2024</div>
+                    <div class="info">
+                        <div><div class="label">Role</div><div class="value">Lead</div></div>
+                        <div><div class="label">Duration</div><div class="value">2h 15m</div></div>
+                        <div><div class="label">Rating</div><div class="value">9.4</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 14. Package -->
+        <div class="card-wrapper">
+            <div class="card-label">14. Shipping Package</div>
+            <div class="card card-package">
+                <div class="card-inner">
+                    <div class="content">
+                        <div class="icon">📦</div>
+                        <div class="tracking">
+                            <div class="track-num">TRK-2024-8847</div>
+                            <div class="status">
+                                <div class="dot"></div>
+                                <span>Delivered • Signed</span>
+                            </div>
+                        </div>
+                        <div class="weight">Contents: Design System v3.0 (45 components)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 15. Newspaper -->
+        <div class="card-wrapper">
+            <div class="card-label">15. Newspaper</div>
+            <div class="card card-newspaper">
+                <div class="card-inner">
+                    <div class="name">Design Weekly</div>
+                    <div class="meta"><span>Dec 18, 2024</span><span>Vol. 142</span></div>
+                    <div class="headline">How We Rebuilt Enterprise UX From Scratch</div>
+                    <div class="image">🖥️</div>
+                    <div class="excerpt">In an exclusive interview, we reveal the strategies behind transforming legacy systems...</div>
+                    <div class="author">By Sarah Mitchell</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 16. Comic -->
+        <div class="card-wrapper">
+            <div class="card-label">16. Comic Panel</div>
+            <div class="card card-comic">
+                <div class="card-inner">
+                    <div class="title">"The Problem Discovery"</div>
+                    <div class="panel">
+                        <span class="char">😰</span>
+                        <div class="bubble">"Users are struggling with this 12-step checkout..."</div>
+                    </div>
+                    <div class="panel" style="background: #e8f5e9;">
+                        <span class="char">💡</span>
+                        <div class="bubble">"What if we reduced it to 3 steps?"</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 17. Badge -->
+        <div class="card-wrapper">
+            <div class="card-label">17. ID Badge</div>
+            <div class="card card-badge">
+                <div class="header">Employee ID</div>
+                <div class="card-inner">
+                    <div class="photo">👤</div>
+                    <div class="name">Alex Chen</div>
+                    <div class="title">Senior UX Designer</div>
+                    <div class="id">EMP-2019-0847</div>
+                    <div class="qr">██████████<br>███ □■███<br>██ ■██■ █<br>███ ██ ██<br>██████████</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 18. Vinyl -->
+        <div class="card-wrapper">
+            <div class="card-label">18. Vinyl Record</div>
+            <div class="card card-vinyl">
+                <div class="card-inner">
+                    <div class="record">
+                        <div class="disc"></div>
+                        <div class="info">
+                            <h3>Design Symphony</h3>
+                            <p>The Career Collection</p>
+                        </div>
+                    </div>
+                    <div class="tracks">
+                        <div class="track active"><span>Side A: Research</span><span>12:45</span></div>
+                        <div class="track"><span>Side A: Prototypes</span><span>8:32</span></div>
+                        <div class="track"><span>Side B: Launch</span><span>15:18</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 19. Polaroid -->
+        <div class="card-wrapper">
+            <div class="card-label">19. Polaroid Photo</div>
+            <div class="card card-polaroid" style="position: relative;">
+                <div class="card-inner">
+                    <div class="image">🏢</div>
+                    <div class="caption">"First day at the startup that became a unicorn 🦄"</div>
+                </div>
+                <div class="date">March 2020</div>
+            </div>
+        </div>
+
+        <!-- 20. Playing Card -->
+        <div class="card-wrapper">
+            <div class="card-label">20. Playing Card</div>
+            <div class="card card-poker" style="position: relative;">
+                <div class="corner top"><span class="val">A</span><span class="suit black">♠</span></div>
+                <div class="center black">♠</div>
+                <div class="corner bottom"><span class="val">A</span><span class="suit black">♠</span></div>
+            </div>
+        </div>
+
+    </div>
+
+    <style>
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+
+    <footer style="text-align: center; margin-top: 50px; padding: 30px; background: var(--color-text); color: var(--color-bg);">
+        <p style="font-size: 1rem; margin-bottom: 15px;">🎯 20 Creative Formats • Portfolio Ready</p>
+        <p style="font-size: 0.85rem; opacity: 0.8;">Each card is modular and can be copied independently</p>
+    </footer>
+
+</body>
+</html>
