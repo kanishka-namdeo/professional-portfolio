@@ -172,6 +172,20 @@ const experiences: Experience[] = [
     ],
     skills: ["Product scaling", "Client onboarding", "International expansion", "Feature rollout", "API integrations", "Payments and invoicing", "User experience improvement", "Market research", "Product roadmap planning", "Cross-functional leadership"],
     achievements: ["Drove ~10x ARR growth and 15x product usage", "Onboarded 15+ enterprise clients and 60,000+ monthly users", "Expanded operations to 70+ new locations across 3 countries", "Launched features that improved user adoption and experience", "Built integrations that reduced implementation time by 40%", "Introduced payments and invoicing features to strengthen monetization"],
+    press: [
+      {
+        headline: "Indian Startup MoveInSync Pioneers Intelligent Commutes Across the Globe",
+        source: "Impakter",
+        url: "https://impakter.com/indian-startup-moveinsync-pioneers-intelligent-commutes-across-the-globe/",
+        date: "2024"
+      },
+      {
+        headline: "Business RentLZ - Enterprise Vehicle Management Solution",
+        source: "MoveInSync",
+        url: "https://moveinsync.com/business-rentlz",
+        date: "2024"
+      }
+    ],
     caseStudy: {
       title: "Enterprise Transport Platform Scale-Up",
       challenge: "Scaling a successful TaaS platform from regional to global presence while maintaining product quality and driving revenue growth.",
@@ -220,6 +234,14 @@ const experiences: Experience[] = [
     ],
     skills: ["Logistics product development", "Workflow optimization", "Tracking systems", "Dashboard design", "Requirements definition", "Data accuracy improvement", "Cross-functional collaboration", "User experience design", "Operational analytics", "Product backlog management"],
     achievements: ['Improved Platform Adoption', 'Enhanced Tracking Accuracy', 'Enterprise Scale Features', 'Real-time Analytics Dashboard'],
+    press: [
+      {
+        headline: "Intugine Technologies - Logistics Visibility Solutions",
+        source: "Facebook",
+        url: "https://www.facebook.com/watch/?v=236228024272951",
+        date: "2020"
+      }
+    ],
     caseStudy: {
       title: "Multi-Modal Logistics Visibility Platform",
       challenge: "Enterprise logistics teams struggled with fragmented visibility across road, rail, and air transport modes, leading to delayed decisions.",
@@ -273,6 +295,26 @@ const experiences: Experience[] = [
     ],
     skills: ["Autonomous navigation", "Sensor fusion", "Path planning", "Obstacle avoidance", "Simulation design", "Field testing", "Embedded systems integration", "Marine robotics", "Control systems", "Hardware-software integration"],
     achievements: ['Autonomous USV Development', 'Multi-Sensor Fusion', 'Successful Field Trials', 'Navigation Accuracy Improvement'],
+    press: [
+      {
+        headline: "Wildlife Surveillance and Anti-Poaching System Installed by Rajasthan Government",
+        source: "Naya Rajasthan",
+        url: "https://nayarajasthan.wordpress.com/2018/06/06/wildlife-surveillance-and-anti-poaching-system-installed-by-rajasthan-government/",
+        date: "Jun 2018"
+      },
+      {
+        headline: "Welcome TrashFin - The Water Bodies Cleaner",
+        source: "Mumbai Mirror",
+        url: "https://mumbaimirror.indiatimes.com/mumbai/civic/welcome-trashfin-the-water-bodies-cleaner/articleshow/64891123.html",
+        date: "2018"
+      },
+      {
+        headline: "State Embraces Startups, Signs Pacts for Works Worth 15 Lakh",
+        source: "The Hindu",
+        url: "https://www.thehindu.com/news/cities/mumbai/state-embraces-startups-signs-pacts-for-works-worth-15-lakh/article24301791.ece",
+        date: "2018"
+      }
+    ],
     caseStudy: {
       title: "Autonomous Maritime Defense Systems",
       challenge: "Defense agencies needed reliable autonomous surface vehicles capable of operating in challenging marine environments with minimal human intervention.",

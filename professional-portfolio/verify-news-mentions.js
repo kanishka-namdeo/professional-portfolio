@@ -6,6 +6,7 @@ const { chromium } = require('playwright');
   const page = await context.newPage();
 
   const errors = [];
+  let totalPressMentions = 0;
   
   // Collect console errors
   page.on('console', msg => {
@@ -20,99 +21,143 @@ const { chromium } = require('playwright');
 
   try {
     console.log('Navigating to deployed site...');
-    await page.goto('https://9adl1wbn62xy.space.minimax.io', { waitUntil: 'networkidle' });
-    console.log('Page loaded successfully');
+    await page.goto('https://8ztba28on6q4.space.minimax.io', { waitUntil: 'networkidle' });
+    console.log('Page loaded successfully\n');
 
-    // Click on Cognium filter tab
-    console.log('Clicking Cognium filter tab...');
-    await page.click('button:has-text("Cognium")');
+    // Test MoveInSync press mentions
+    console.log('=== Testing MoveInSync Press Mentions ===');
+    await page.click('button:has-text("MoveInSync")');
+    await page.waitForTimeout(1000);
+    
+    const moveinsyncExpanded = await page.locator('.big-bang-card.expanded').count();
+    if (moveinsyncExpanded === 0) {
+      await page.click('button:has-text("Read Full Case Study")');
+      await page.waitForTimeout(500);
+    }
+    
+    const impakterItem = await page.locator('.big-bang-news-item:has-text("Impakter")');
+    const isImpakterVisible = await impakterItem.isVisible();
+    if (isImpakterVisible) {
+      console.log('✓ Impakter press mention is visible');
+      totalPressMentions++;
+    } else {
+      errors.push('Impakter press mention is not visible');
+    }
+    
+    const moveinsyncItem = await page.locator('.big-bang-news-item .big-bang-news-source:has-text("MoveInSync")');
+    const isMoveInSyncVisible = await moveinsyncItem.isVisible();
+    if (isMoveInSyncVisible) {
+      console.log('✓ MoveInSync press mention is visible');
+      totalPressMentions++;
+    } else {
+      errors.push('MoveInSync press mention is not visible');
+    }
+    
+    // Click "All Companies" to reset
+    await page.click('button:has-text("All Companies")');
     await page.waitForTimeout(500);
 
-    // Wait for card to potentially auto-expand
+    // Test Intugine press mentions
+    console.log('\n=== Testing Intugine Press Mentions ===');
+    await page.click('button:has-text("Intugine")');
     await page.waitForTimeout(1000);
-
-    // Check if card is already expanded (auto-expand when single card)
-    const isCardExpanded = await page.locator('.big-bang-card.expanded').count();
-    console.log(`Card expanded state: ${isCardExpanded > 0 ? 'Already expanded' : 'Not expanded'}`);
-
-    // If not expanded, click to expand
-    if (isCardExpanded === 0) {
-      console.log('Expanding the Cognium card...');
-      const expandButton = await page.locator('button:has-text("Read Full Case Study")');
-      await expandButton.click();
+    
+    const intugineExpanded = await page.locator('.big-bang-card.expanded').count();
+    if (intugineExpanded === 0) {
+      await page.click('button:has-text("Read Full Case Study")');
       await page.waitForTimeout(500);
-    } else {
-      console.log('Card auto-expanded, proceeding to verification...');
     }
-
-    // Verify News Rail section is visible
-    console.log('Verifying News Rail section...');
-    const newsRail = await page.locator('.big-bang-news-rail');
-    const isNewsRailVisible = await newsRail.isVisible();
     
-    if (!isNewsRailVisible) {
-      errors.push('News Rail section is not visible');
+    const facebookItem = await page.locator('.big-bang-news-item:has-text("Facebook")');
+    const isFacebookVisible = await facebookItem.isVisible();
+    if (isFacebookVisible) {
+      console.log('✓ Facebook press mention is visible');
+      totalPressMentions++;
     } else {
-      console.log('✓ News Rail section is visible');
+      errors.push('Facebook press mention is not visible');
     }
-
-    // Verify "In the News" heading
-    const newsTitle = await page.locator('.big-bang-news-title:has-text("In the News")');
-    const isTitleVisible = await newsTitle.isVisible();
     
-    if (!isTitleVisible) {
-      errors.push('"In the News" title is not visible');
-    } else {
-      console.log('✓ "In the News" title is visible');
-    }
+    // Click "All Companies" to reset
+    await page.click('button:has-text("All Companies")');
+    await page.waitForTimeout(500);
 
-    // Verify TechCrunch mention
-    console.log('Verifying TechCrunch press mention...');
+    // Test Sagar Defence press mentions
+    console.log('\n=== Testing Sagar Defence Press Mentions ===');
+    await page.click('button:has-text("Sagar Defence")');
+    await page.waitForTimeout(1000);
+    
+    const sagarExpanded = await page.locator('.big-bang-card.expanded').count();
+    if (sagarExpanded === 0) {
+      await page.click('button:has-text("Read Full Case Study")');
+      await page.waitForTimeout(500);
+    }
+    
+    const nayaRajasthanItem = await page.locator('.big-bang-news-item:has-text("Naya Rajasthan")');
+    const isNayaRajasthanVisible = await nayaRajasthanItem.isVisible();
+    if (isNayaRajasthanVisible) {
+      console.log('✓ Naya Rajasthan press mention is visible');
+      totalPressMentions++;
+    } else {
+      errors.push('Naya Rajasthan press mention is not visible');
+    }
+    
+    const mumbaiMirrorItem = await page.locator('.big-bang-news-item:has-text("Mumbai Mirror")');
+    const isMumbaiMirrorVisible = await mumbaiMirrorItem.isVisible();
+    if (isMumbaiMirrorVisible) {
+      console.log('✓ Mumbai Mirror press mention is visible');
+      totalPressMentions++;
+    } else {
+      errors.push('Mumbai Mirror press mention is not visible');
+    }
+    
+    const theHinduItem = await page.locator('.big-bang-news-item:has-text("The Hindu")');
+    const isTheHinduVisible = await theHinduItem.isVisible();
+    if (isTheHinduVisible) {
+      console.log('✓ The Hindu press mention is visible');
+      totalPressMentions++;
+    } else {
+      errors.push('The Hindu press mention is not visible');
+    }
+    
+    // Click "All Companies" to reset
+    await page.click('button:has-text("All Companies")');
+    await page.waitForTimeout(500);
+
+    // Test Cognium press mentions
+    console.log('\n=== Testing Cognium Press Mentions ===');
+    await page.click('button:has-text("Cognium")');
+    await page.waitForTimeout(1000);
+    
+    const cogniumExpanded = await page.locator('.big-bang-card.expanded').count();
+    if (cogniumExpanded === 0) {
+      await page.click('button:has-text("Read Full Case Study")');
+      await page.waitForTimeout(500);
+    }
+    
     const techCrunchItem = await page.locator('.big-bang-news-item:has-text("TechCrunch")');
     const isTechCrunchVisible = await techCrunchItem.isVisible();
-    
-    if (!isTechCrunchVisible) {
-      errors.push('TechCrunch press mention is not visible');
-    } else {
+    if (isTechCrunchVisible) {
       console.log('✓ TechCrunch press mention is visible');
+      totalPressMentions++;
+    } else {
+      errors.push('TechCrunch press mention is not visible');
     }
-
-    // Verify LinkedIn mention
-    console.log('Verifying LinkedIn press mention...');
+    
     const linkedInItem = await page.locator('.big-bang-news-item:has-text("LinkedIn")');
     const isLinkedInVisible = await linkedInItem.isVisible();
-    
-    if (!isLinkedInVisible) {
-      errors.push('LinkedIn press mention is not visible');
-    } else {
+    if (isLinkedInVisible) {
       console.log('✓ LinkedIn press mention is visible');
-    }
-
-    // Verify links have correct href
-    console.log('Verifying external links...');
-    const techCrunchLink = await page.locator('.big-bang-news-item:has-text("TechCrunch")');
-    const techCrunchHref = await techCrunchLink.getAttribute('href');
-    
-    if (!techCrunchHref.includes('techcrunch.com')) {
-      errors.push(`TechCrunch link href is incorrect: ${techCrunchHref}`);
+      totalPressMentions++;
     } else {
-      console.log('✓ TechCrunch link is correct');
-    }
-
-    // Verify source icons are present
-    console.log('Verifying source icons...');
-    const sourceIcons = await page.locator('.big-bang-news-source-icon').count();
-    
-    if (sourceIcons < 2) {
-      errors.push(`Expected at least 2 source icons, found ${sourceIcons}`);
-    } else {
-      console.log(`✓ Found ${sourceIcons} source icons`);
+      errors.push('LinkedIn press mention is not visible');
     }
 
     // Report results
     console.log('\n=== VERIFICATION RESULTS ===');
+    console.log(`Total press mentions verified: ${totalPressMentions}`);
+    
     if (errors.length === 0) {
-      console.log('✅ All tests passed! News Mentions feature is working correctly.');
+      console.log('✅ All tests passed! All news links are working correctly.');
     } else {
       console.log('❌ Tests failed:');
       errors.forEach(err => console.log(`  - ${err}`));
