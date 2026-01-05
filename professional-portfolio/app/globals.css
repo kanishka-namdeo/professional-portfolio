@@ -2217,7 +2217,7 @@ section {
 }
 
 .skill-tag {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 500;
   padding: var(--space-xs) var(--space-sm);
   background: var(--color-bg);
@@ -2227,6 +2227,7 @@ section {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
+  transition: all 0.15s ease;
 }
 
 .view-all-skills-button {
@@ -2296,44 +2297,71 @@ section {
 .experience-tab-navigation {
   display: flex;
   gap: var(--space-sm);
-  flex-wrap: wrap;
-
-  /* Integrated design - part of the experience section */
   margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
   padding: var(--space-md);
   background: var(--color-surface);
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-hard);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  position: relative;
+}
+
+.experience-tab-navigation::-webkit-scrollbar {
+  display: none;
+}
+
+.experience-tab-navigation::before,
+.experience-tab-navigation::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.experience-tab-navigation::before {
+  left: 0;
+  background: linear-gradient(to right, var(--color-surface) 0%, transparent 100%);
+}
+
+.experience-tab-navigation::after {
+  right: 0;
+  background: linear-gradient(to left, var(--color-surface) 0%, transparent 100%);
 }
 
 .experience-tab-button {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
   padding: var(--space-sm) var(--space-lg);
   background: var(--color-bg);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-sm);
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--color-text-muted);
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  box-shadow: var(--shadow-hard);
 }
 
 .experience-tab-button:hover {
   color: var(--color-text);
   background: var(--color-surface);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 0px 0px var(--color-border);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-hover);
 }
 
 .experience-tab-button.active {
   background: var(--accent-navy);
-  color: #ffffff;
+  color: white;
   border-color: var(--accent-navy);
   transform: translateY(-2px);
   box-shadow: 0 4px 0px 0px var(--color-border);
@@ -2346,9 +2374,22 @@ section {
   flex-shrink: 0;
 }
 
-.experience-tab-button .tab-icon svg {
+.experience-tab-button .tab-icon svg,
+.experience-tab-button svg {
   width: 20px;
   height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.experience-tab-button.active svg {
+  color: white;
+}
+
+.experience-tab-button:hover svg {
+  transform: scale(1.1);
 }
 
 /* Experience Tab Content */
@@ -2511,20 +2552,6 @@ section {
 .skill-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-xs);
-}
-
-.skill-tag {
-  font-size: 0.8rem;
-  font-weight: 500;
-  padding: var(--space-xs) var(--space-sm);
-  background: var(--color-bg);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  color: var(--color-text);
-  transition: all 0.15s ease;
-  display: inline-flex;
-  align-items: center;
   gap: var(--space-xs);
 }
 
@@ -2923,11 +2950,6 @@ section {
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-hard);
-}
-
-.about-hero-icon {
-  font-size: 1.5rem;
-  flex-shrink: 0;
 }
 
 .about-hero-text {
@@ -4296,18 +4318,6 @@ section {
 
 .tab-panel.active {
   display: block;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* Contact Section */
@@ -6051,17 +6061,6 @@ section {
   animation: fadeIn 0.3s ease;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* Experience Panel */
 .experience-panel {
   display: flex;
@@ -6360,92 +6359,7 @@ section {
   }
 }
 
-/* Experience Accordion Stack Layout - Vertical Stack Expansion */
-
-/* Company Filter Tabs - ContactFAQ Style */
-.experience-tab-navigation {
-  display: flex;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-xl);
-  flex-wrap: wrap;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  position: relative;
-}
-
-.experience-tab-navigation::-webkit-scrollbar {
-  display: none;
-}
-
-.experience-tab-navigation::before,
-.experience-tab-navigation::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 40px;
-  z-index: 5;
-  pointer-events: none;
-}
-
-.experience-tab-navigation::before {
-  left: 0;
-  background: linear-gradient(to right, var(--color-surface) 0%, transparent 100%);
-}
-
-.experience-tab-navigation::after {
-  right: 0;
-  background: linear-gradient(to left, var(--color-surface) 0%, transparent 100%);
-}
-
-.experience-tab-button {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-sm) var(--space-lg);
-  background: var(--color-surface);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-md);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: var(--shadow-hard);
-}
-
-.experience-tab-button:hover {
-  background: var(--color-bg);
-  color: var(--color-text);
-  transform: translate(-2px, -2px);
-  box-shadow: var(--shadow-hover);
-}
-
-.experience-tab-button.active {
-  background: var(--accent-navy);
-  color: white;
-  border-color: var(--color-border);
-  box-shadow: 0 4px 0 0 var(--color-border);
-  transform: translate(0, 2px);
-}
-
-.experience-tab-button svg {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s ease;
-}
-
-.experience-tab-button.active svg {
-  color: white;
-}
-
-.experience-tab-button:hover svg {
-  transform: scale(1.1);
-}
-
-/* Mobile horizontal scroll indicator */
+/* Accordion Container */
 @media (max-width: 768px) {
   .experience-tab-navigation {
     flex-wrap: nowrap;
