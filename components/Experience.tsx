@@ -105,15 +105,15 @@ const getCategoryColorClass = (category: string): string => {
   }
 };
 
-const ChevronIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-5 h-5">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-  </svg>
-);
-
 const ExternalLinkIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true" className="w-4 h-4">
     <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+  </svg>
+);
+
+const ArrowRightIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
   </svg>
 );
 
@@ -299,19 +299,6 @@ const uniqueCompanies = Array.from(new Set(experiences.map(exp => exp.company)))
 
 export default function Experience() {
   const [activeCompany, setActiveCompany] = useState<string | null>(null);
-  const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
-
-  const toggleCard = (index: number) => {
-    setExpandedCards(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(index)) {
-        newSet.delete(index);
-      } else {
-        newSet.add(index);
-      }
-      return newSet;
-    });
-  };
 
   const filteredExperiences = activeCompany === null 
     ? experiences 
@@ -325,7 +312,7 @@ export default function Experience() {
           <p className="section-subtitle">9+ years building and scaling products across mobility, SaaS, robotics, and AI</p>
         </header>
 
-        {/* Company Filter Tabs - Contact FAQ Style */}
+        {/* Company Filter Tabs */}
         <div className="experience-tab-navigation animate-on-scroll">
           <button
             className={`experience-tab-button ${activeCompany === null ? 'active' : ''}`}
@@ -349,118 +336,123 @@ export default function Experience() {
           ))}
         </div>
 
-        {/* Accordion Stack Cards */}
-        <div className="experience-accordion animate-on-scroll animate-delay-1">
+        {/* Split Screen Cards */}
+        <div className="experience-split-container animate-on-scroll animate-delay-1">
           {filteredExperiences.map((exp, index) => {
-            const originalIndex = experiences.findIndex(e => e.company === exp.company && e.title === exp.title && e.date === exp.date);
-            const isExpanded = expandedCards.has(originalIndex);
+            const primaryCategory = exp.responsibilities[0]?.category || 'Product Growth & Strategy';
 
             return (
-              <div key={originalIndex} className={`accordion-card ${isExpanded ? 'expanded' : ''}`}>
-                {/* Card Header */}
-                <div className="accordion-header">
-                  <div className="company-logo">{getCompanyInitial(exp.company)}</div>
-                  <div className="header-info">
-                    <h3>{exp.title}</h3>
-                    <span className="company-name">{exp.company}</span>
-                    <div className="header-meta">
-                      <span>{exp.date}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Preview Section */}
-                <div className="accordion-preview">
-                  <p className="summary-text">{exp.summary}</p>
-                  <div className="achievements-row">
-                    {exp.achievements.slice(0, 3).map((achievement, achIndex) => (
-                      <span key={achIndex} className="achievement-badge">{achievement}</span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Trigger Button */}
-                <button
-                  className={`accordion-trigger ${isExpanded ? 'active' : ''}`}
-                  onClick={() => toggleCard(originalIndex)}
-                  aria-expanded={isExpanded}
-                  aria-controls={`accordion-content-${originalIndex}`}
-                >
-                  <span>{isExpanded ? 'Hide Case Study & Details' : 'View Case Study & Details'}</span>
-                  <ChevronIcon />
-                </button>
-
-                {/* Expanded Content */}
-                <div
-                  id={`accordion-content-${originalIndex}`}
-                  className={`accordion-content ${isExpanded ? 'open' : ''}`}
-                  role="region"
-                  aria-labelledby={`accordion-header-${originalIndex}`}
-                >
-                  <div className="accordion-body">
-                    {/* Left Column - Responsibilities */}
-                    <div className="responsibilities-col">
-                      <h4 className="section-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                        </svg>
-                        Key Responsibilities
-                      </h4>
-                      <ul className="responsibility-list">
-                        {exp.responsibilities.flatMap(resp => resp.items).map((item, itemIndex) => (
-                          <li key={itemIndex}>{item}</li>
-                        ))}
-                      </ul>
-                      
-                      {/* Skills Section */}
-                      <div className="tech-stack-section">
-                        <h4 className="section-title">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              <div key={index} className="split-screen-card">
+                {/* Left Side - Experience */}
+                <div className="split-screen-left">
+                  <span className="split-label">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    EXPERIENCE
+                  </span>
+                  
+                  <div className="split-content">
+                    <h3 className="split-title">{exp.title}</h3>
+                    <p className="split-subtitle">
+                      {exp.company} | {exp.date}
+                      {exp.url && (
+                        <a href={exp.url} target="_blank" rel="noopener noreferrer" className="company-website" style={{ marginLeft: 'var(--space-sm)' }}>
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                           </svg>
-                          Skills Utilized
-                        </h4>
-                        <div className="tech-stack">
-                          {exp.skills.map((skill, skillIndex) => (
-                            <span key={skillIndex} className="skill-tag">{skill}</span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right Column - Case Study */}
-                    <div className="case-study-col">
-                      {exp.caseStudy ? (
-                        <>
-                          <div className="case-study-section-block">
-                            <h4 className="case-study-block-title">THE CHALLENGE</h4>
-                            <p>{exp.caseStudy.challenge}</p>
-                          </div>
-                          <div className="case-study-section-block">
-                            <h4 className="case-study-block-title">THE SOLUTION</h4>
-                            <p>{exp.caseStudy.solution}</p>
-                          </div>
-                          <div className="case-study-section-block">
-                            <h4 className="case-study-block-title">RESULTS</h4>
-                            <p>{exp.caseStudy.impact}</p>
-                            {exp.caseStudy.metrics && exp.caseStudy.metrics.length > 0 && (
-                              <div className="metrics-grid">
-                                {exp.caseStudy.metrics.slice(0, 4).map((metric, metricIndex) => (
-                                  <div key={metricIndex} className="metric-item">
-                                    <div className="metric-value">{metric.split(' ')[0]}</div>
-                                    <div className="metric-label">{metric.split(' ').slice(1).join(' ')}</div>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        </>
-                      ) : (
-                        <div className="case-study-empty">
-                          <p>No case study available for this role.</p>
-                        </div>
+                        </a>
                       )}
+                    </p>
+                    
+                    <p className="split-description">{exp.summary}</p>
+                    
+                    <span className={`category-label ${getCategoryColorClass(primaryCategory)}`}>
+                      {getCategoryIcon(primaryCategory)}
+                      {primaryCategory}
+                    </span>
+                    
+                    <ul className="responsibility-list">
+                      {exp.responsibilities.flatMap(resp => resp.items).slice(0, 4).map((item, itemIndex) => (
+                        <li key={itemIndex}>{item}</li>
+                      ))}
+                    </ul>
+                    
+                    <div className="split-skills">
+                      {exp.skills.slice(0, 6).map((skill, skillIndex) => (
+                        <span key={skillIndex} className="skill-tag">{skill}</span>
+                      ))}
                     </div>
+                  </div>
+                </div>
+                
+                {/* Center Divider */}
+                <div className="split-divider">
+                  <ArrowRightIcon />
+                </div>
+                
+                {/* Right Side - Case Study */}
+                <div className="split-screen-right">
+                  <span className="split-label">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    CASE STUDY
+                  </span>
+                  
+                  <div className="split-content">
+                    {exp.caseStudy ? (
+                      <>
+                        <p className="impact-statement">
+                          How I delivered <span className="impact-highlight">{exp.caseStudy.title}</span>
+                        </p>
+                        
+                        <div className="case-study-problem">
+                          <h4 className="case-study-block-title">THE CHALLENGE</h4>
+                          <p>{exp.caseStudy.challenge}</p>
+                        </div>
+                        
+                        <h4 className="impact-metrics-title">KEY IMPACT METRICS</h4>
+                        <div className="impact-metrics-grid">
+                          {exp.caseStudy.metrics ? (
+                            exp.caseStudy.metrics.slice(0, 4).map((metric, metricIndex) => {
+                              const parts = metric.split(' ');
+                              const value = parts[0];
+                              const label = parts.slice(1).join(' ');
+                              return (
+                                <div key={metricIndex} className="impact-metric-item">
+                                  <div className="impact-metric-value">{value}</div>
+                                  <div className="impact-metric-label">{label}</div>
+                                </div>
+                              );
+                            })
+                          ) : (
+                            <>
+                              <div className="impact-metric-item">
+                                <div className="impact-metric-value">{exp.achievements.length}</div>
+                                <div className="impact-metric-label">Key Achievements</div>
+                              </div>
+                              <div className="impact-metric-item">
+                                <div className="impact-metric-value">{exp.responsibilities.flatMap(r => r.items).length}</div>
+                                <div className="impact-metric-label">Responsibilities</div>
+                              </div>
+                              <div className="impact-metric-item">
+                                <div className="impact-metric-value">{exp.skills.length}</div>
+                                <div className="impact-metric-label">Skills Applied</div>
+                              </div>
+                              <div className="impact-metric-item">
+                                <div className="impact-metric-value">1</div>
+                                <div className="impact-metric-label">Case Study</div>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="case-study-empty">
+                        <p>Case study details available upon request.</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
