@@ -42,6 +42,12 @@ const getCompanyInitial = (company: string): string => {
   return company.charAt(0).toUpperCase();
 };
 
+// Company color variant classes
+const getColorVariant = (index: number): string => {
+  const variants = ['variant-amber', 'variant-indigo', 'variant-teal', 'variant-red', 'variant-purple', 'variant-green', 'variant-sky'];
+  return variants[index % variants.length];
+};
+
 // Extract a key metric from achievements or metrics
 const getKeyMetric = (exp: Experience): { value: string; label: string } | null => {
   if (exp.caseStudy?.metrics && exp.caseStudy.metrics.length > 0) {
@@ -53,7 +59,6 @@ const getKeyMetric = (exp: Experience): { value: string; label: string } | null 
     };
   }
   
-  // Fallback metrics based on achievements
   const achievementCount = exp.achievements.length;
   const responsibilityCount = exp.responsibilities.flatMap(r => r.items).length;
   
@@ -286,12 +291,15 @@ export default function Experience() {
             const expanded = expandedCards.has(index);
             const keyMetric = getKeyMetric(exp);
             const allItems = allResponsibilities(exp);
+            const colorVariant = getColorVariant(index);
 
             return (
-              <article key={index} className={`big-bang-card ${expanded ? 'expanded' : ''}`}>
-                <div className="big-bang-header">
+              <article key={index} className={`big-bang-card ${colorVariant} ${expanded ? 'expanded' : ''}`}>
+                <div className={`big-bang-header ${colorVariant}`}>
                   <div className="big-bang-company">
-                    <div className="big-bang-logo">{getCompanyInitial(exp.company)}</div>
+                    <div className={`big-bang-logo ${colorVariant}`}>
+                      {getCompanyInitial(exp.company)}
+                    </div>
                     <div>
                       <h3 className="big-bang-company-name">{exp.company}</h3>
                       <div className="big-bang-meta">
@@ -301,7 +309,7 @@ export default function Experience() {
                     </div>
                   </div>
                   {keyMetric && (
-                    <div className="big-bang-teaser">
+                    <div className={`big-bang-teaser ${colorVariant}`}>
                       <span className="big-bang-teaser-value">{keyMetric.value}</span>
                       <span className="big-bang-teaser-label">{keyMetric.label}</span>
                     </div>
@@ -309,7 +317,7 @@ export default function Experience() {
                 </div>
                 
                 <button 
-                  className="big-bang-expand-btn"
+                  className={`big-bang-expand-btn ${colorVariant} ${expanded ? 'expanded' : ''}`}
                   onClick={() => toggleCard(index)}
                   aria-expanded={expanded}
                 >
@@ -350,17 +358,17 @@ export default function Experience() {
                     {exp.caseStudy && (
                       <>
                         <div className="big-bang-section">
-                          <h4 className="big-bang-section-title">The Challenge</h4>
+                          <h4 className="big-bang-section-title big-bang-section-challenge">The Challenge</h4>
                           <p className="big-bang-section-text">{exp.caseStudy.challenge}</p>
                         </div>
 
                         <div className="big-bang-section">
-                          <h4 className="big-bang-section-title">The Solution</h4>
+                          <h4 className="big-bang-section-title big-bang-section-solution">The Solution</h4>
                           <p className="big-bang-section-text">{exp.caseStudy.solution}</p>
                         </div>
 
                         <div className="big-bang-section">
-                          <h4 className="big-bang-section-title">The Impact</h4>
+                          <h4 className="big-bang-section-title big-bang-section-impact">The Impact</h4>
                           <p className="big-bang-section-text">{exp.caseStudy.impact}</p>
                         </div>
 

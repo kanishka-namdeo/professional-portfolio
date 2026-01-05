@@ -8054,6 +8054,8 @@ button[class*="icon"],
   display: flex;
   align-items: center;
   gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--color-border);
 }
 
 .big-bang-section-title::before {
@@ -8061,6 +8063,43 @@ button[class*="icon"],
   width: 8px;
   height: 8px;
   background: var(--accent-indigo);
+}
+
+/* Section-specific color coding */
+.big-bang-section-challenge {
+  color: #dc2626;
+}
+
+.big-bang-section-challenge::before {
+  background: #dc2626;
+}
+
+.big-bang-section-challenge {
+  border-bottom-color: #dc2626;
+}
+
+.big-bang-section-solution {
+  color: var(--accent-teal);
+}
+
+.big-bang-section-solution::before {
+  background: var(--accent-teal);
+}
+
+.big-bang-section-solution {
+  border-bottom-color: var(--accent-teal);
+}
+
+.big-bang-section-impact {
+  color: #059669;
+}
+
+.big-bang-section-impact::before {
+  background: #059669;
+}
+
+.big-bang-section-impact {
+  border-bottom-color: #059669;
 }
 
 .big-bang-section-text {
@@ -8101,6 +8140,12 @@ button[class*="icon"],
   border: 2px solid var(--color-border);
   padding: 14px;
   text-align: center;
+  transition: all 0.2s ease;
+}
+
+.big-bang-metric:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 0 var(--color-border);
 }
 
 .big-bang-metric-value {
@@ -8133,6 +8178,12 @@ button[class*="icon"],
   font-size: 0.8rem;
   font-weight: 600;
   border: 2px solid var(--color-border);
+  transition: all 0.2s ease;
+}
+
+.big-bang-tag:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 2px 2px 0 0 var(--color-border);
 }
 
 /* Dark mode adjustments for big-bang */
@@ -8146,6 +8197,157 @@ button[class*="icon"],
 
 [data-theme="dark"] .big-bang-section {
   border-bottom-color: var(--color-border);
+}
+
+/* ========================================
+   BIG BANG COLOR VARIANTS
+   ======================================== */
+
+/* Amber Variant */
+.big-bang-card.variant-amber .big-bang-header {
+  background: #d97706;
+  color: #ffffff;
+}
+
+.big-bang-card.variant-amber .big-bang-logo {
+  background: #ffffff;
+  color: #d97706;
+}
+
+.big-bang-card.variant-amber .big-bang-teaser {
+  background: #ffffff;
+  color: #d97706;
+}
+
+.big-bang-card.variant-amber .big-bang-expand-btn.expanded {
+  background: #d97706;
+  color: #ffffff;
+}
+
+/* Indigo Variant */
+.big-bang-card.variant-indigo .big-bang-header {
+  background: #4f46e5;
+  color: #ffffff;
+}
+
+.big-bang-card.variant-indigo .big-bang-logo {
+  background: #ffffff;
+  color: #4f46e5;
+}
+
+.big-bang-card.variant-indigo .big-bang-teaser {
+  background: #ffffff;
+  color: #4f46e5;
+}
+
+.big-bang-card.variant-indigo .big-bang-expand-btn.expanded {
+  background: #4f46e5;
+  color: #ffffff;
+}
+
+/* Teal Variant */
+.big-bang-card.variant-teal .big-bang-header {
+  background: #0d9488;
+  color: #ffffff;
+}
+
+.big-bang-card.variant-teal .big-bang-logo {
+  background: #ffffff;
+  color: #0d9488;
+}
+
+.big-bang-card.variant-teal .big-bang-teaser {
+  background: #ffffff;
+  color: #0d9488;
+}
+
+.big-bang-card.variant-teal .big-bang-expand-btn.expanded {
+  background: #0d9488;
+  color: #ffffff;
+}
+
+/* Red Variant */
+.big-bang-card.variant-red .big-bang-header {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.big-bang-card.variant-red .big-bang-logo {
+  background: #ffffff;
+  color: #dc2626;
+}
+
+.big-bang-card.variant-red .big-bang-teaser {
+  background: #ffffff;
+  color: #dc2626;
+}
+
+.big-bang-card.variant-red .big-bang-expand-btn.expanded {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+/* Purple Variant */
+.big-bang-card.variant-purple .big-bang-header {
+  background: #7c3aed;
+  color: #ffffff;
+}
+
+.big-bang-card.variant-purple .big-bang-logo {
+  background: #ffffff;
+  color: #7c3aed;
+}
+
+.big-bang-card.variant-purple .big-bang-teaser {
+  background: #ffffff;
+  color: #7c3aed;
+}
+
+.big-bang-card.variant-purple .big-bang-expand-btn.expanded {
+  background: #7c3aed;
+  color: #ffffff;
+}
+
+/* Green Variant */
+.big-bang-card.variant-green .big-bang-header {
+  background: #059669;
+  color: #ffffff;
+}
+
+.big-bang-card.variant-green .big-bang-logo {
+  background: #ffffff;
+  color: #059669;
+}
+
+.big-bang-card.variant-green .big-bang-teaser {
+  background: #ffffff;
+  color: #059669;
+}
+
+.big-bang-card.variant-green .big-bang-expand-btn.expanded {
+  background: #059669;
+  color: #ffffff;
+}
+
+/* Sky Blue Variant */
+.big-bang-card.variant-sky .big-bang-header {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+.big-bang-card.variant-sky .big-bang-logo {
+  background: #ffffff;
+  color: #0284c7;
+}
+
+.big-bang-card.variant-sky .big-bang-teaser {
+  background: #ffffff;
+  color: #0284c7;
+}
+
+.big-bang-card.variant-sky .big-bang-expand-btn.expanded {
+  background: #0284c7;
+  color: #ffffff;
 }
 
 /* Responsive */
