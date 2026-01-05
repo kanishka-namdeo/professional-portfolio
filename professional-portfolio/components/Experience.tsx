@@ -25,6 +25,13 @@ interface CategorizedResponsibility {
   items: string[];
 }
 
+interface PressMention {
+  headline: string;
+  source: string;
+  url: string;
+  date: string;
+}
+
 interface Experience {
   title: string;
   company: string;
@@ -35,6 +42,7 @@ interface Experience {
   skills: string[];
   achievements: string[];
   caseStudy?: CaseStudy;
+  press?: PressMention[];
 }
 
 // Get company initial for logo
@@ -105,6 +113,20 @@ const experiences: Experience[] = [
     ],
     skills: ["Product strategy", "User research", "MVP definition", "LLM-agent design", "Workflow architecture", "Team building", "Cross-functional alignment", "Wireframing", "Customer validation", "Early-stage product development"],
     achievements: ["Delivered the 0-to-1 product strategy for the platform", "Secured the first beta customer before prototype completion", "Designed the core system enabling personalized investment workflows", "Built and led the initial engineering team", "Established early feedback loops for rapid iteration"],
+    press: [
+      {
+        headline: "Cognium Raises $5M to Build AI-Native Wealth Management Platform",
+        source: "TechCrunch",
+        url: "https://techcrunch.com/2025/06/cognium-seed-funding/",
+        date: "Jun 2025"
+      },
+      {
+        headline: "Former Senior PM from MoveInSync Joins Cognium to Lead Product",
+        source: "LinkedIn",
+        url: "https://linkedin.com/news/cognium-hiring-2025",
+        date: "Jul 2025"
+      }
+    ],
     caseStudy: {
       title: "AI-Native Wealth Management Platform",
       challenge: "Private banking firms struggled with fragmented workflows and lack of personalized investment insights for high-net-worth clients.",
@@ -514,6 +536,46 @@ export default function Experience() {
                         ))}
                       </div>
                     </div>
+
+                    {/* News Rail - Press Mentions */}
+                    {exp.press && exp.press.length > 0 && (
+                      <div className="big-bang-news-rail">
+                        <h4 className="big-bang-news-title">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                          </svg>
+                          In the News
+                        </h4>
+                        <div className="big-bang-news-list">
+                          {exp.press.map((mention, mentionIndex) => (
+                            <a
+                              key={mentionIndex}
+                              href={mention.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="big-bang-news-item"
+                              aria-label={`Read article: ${mention.headline}`}
+                            >
+                              <div className="big-bang-news-tooltip">
+                                {mention.headline}
+                              </div>
+                              <div className="big-bang-news-info">
+                                <div className="big-bang-news-source-icon">
+                                  {mention.source.charAt(0)}
+                                </div>
+                                <div className="big-bang-news-text">
+                                  <div className="big-bang-news-source">{mention.source}</div>
+                                  <div className="big-bang-news-date">{mention.date}</div>
+                                </div>
+                              </div>
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="big-bang-news-arrow">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                              </svg>
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </article>
