@@ -17,7 +17,8 @@ export default function ScrollNav() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [mounted, setMounted] = useState(false);
   const [showActiveTooltip, setShowActiveTooltip] = useState(false);
-  const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const prevSectionRef = useRef<string>('');
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -35,6 +36,14 @@ export default function ScrollNav() {
     localStorage.setItem('theme', newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
   }, [theme]);
+
+  // Clear tooltip timeout
+  const clearTooltipTimeout = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  }, []);
 
   // Throttled scroll handler for better performance
   const handleScroll = useCallback(() => {
@@ -57,22 +66,21 @@ export default function ScrollNav() {
       }
     });
     
-    // Only show tooltip briefly when active section changes
-    if (current && current !== activeSection) {
+    // Only update if section changed
+    if (current && current !== prevSectionRef.current) {
+      prevSectionRef.current = current;
       setActiveSection(current);
       setShowActiveTooltip(true);
       
-      // Clear existing timeout if any
-      if (tooltipTimeoutRef.current) {
-        clearTimeout(tooltipTimeoutRef.current);
-      }
+      // Clear any existing timeout
+      clearTooltipTimeout();
       
       // Hide tooltip after 2 seconds
-      tooltipTimeoutRef.current = setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setShowActiveTooltip(false);
       }, 2000);
     }
-  }, [activeSection]);
+  }, [clearTooltipTimeout]);
 
   useEffect(() => {
     // Throttle scroll events to improve performance
@@ -91,12 +99,9 @@ export default function ScrollNav() {
     window.addEventListener('scroll', throttledHandleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', throttledHandleScroll);
-      // Cleanup timeout on unmount
-      if (tooltipTimeoutRef.current) {
-        clearTimeout(tooltipTimeoutRef.current);
-      }
+      clearTooltipTimeout();
     };
-  }, [handleScroll]);
+  }, [handleScroll, clearTooltipTimeout]);
 
   const handleScrollTo = (sectionId: string) => {
     const target = document.querySelector(`#${sectionId}`);
