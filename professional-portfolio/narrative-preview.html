@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narrative Cards Preview</title>
+    <style>
+        :root {
+            --color-bg: #f5f5dc;
+            --color-card: #ffefd5;
+            --color-text: #1a1a1a;
+            --color-accent-1: #ff6b6b;
+            --color-accent-2: #4ecdc4;
+            --color-accent-3: #ffe66d;
+            --color-accent-4: #95e1d3;
+            --color-accent-5: #f38181;
+            --color-accent-6: #aa96da;
+            --color-accent-7: #fcbad3;
+            --color-accent-8: #a8d8ea;
+            --color-border: #1a1a1a;
+            --shadow-offset: 4px;
+            --border-width: 2px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: system-ui, sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            padding: 30px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--color-border);
+        }
+
+        h1 { font-size: 1.8rem; text-transform: uppercase; letter-spacing: 2px; }
+        .subtitle { font-size: 0.95rem; color: #555; margin-top: 10px; }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; padding-left: 3px; color: #666; }
+
+        .card {
+            background: var(--color-card);
+            border: var(--border-width) solid var(--color-border);
+            box-shadow: var(--shadow-offset) var(--shadow-offset) 0 0 var(--color-border);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+        .card:hover { transform: translateY(-3px); }
+        .card-inner { padding: 15px; min-height: 160px; }
+
+        /* 1. Git Commit */
+        .card-commit { font-family: monospace; }
+        .card-commit .hash { background: var(--color-accent-2); padding: 3px 8px; font-size: 0.75rem; border: 1px solid var(--color-border); display: inline-block; margin-bottom: 8px; }
+        .card-commit .msg { font-size: 0.85rem; padding-left: 12px; border-left: 3px solid var(--color-accent-1); margin-bottom: 8px; }
+        .card-commit .meta { font-size: 0.7rem; color: #666; }
+
+        /* 2. Chat */
+        .card-chat { display: flex; flex-direction: column; gap: 6px; }
+        .card-chat .msg { padding: 6px 10px; max-width: 85%; border: 2px solid var(--color-border); font-size: 0.75rem; }
+        .card-chat .msg.sent { align-self: flex-end; background: var(--color-accent-4); border-radius: 10px 10px 0 10px; }
+        .card-chat .msg.received { align-self: flex-start; background: #fff; border-radius: 10px 10px 10px 0; }
+
+        /* 3. Code */
+        .card-code { background: #1a1a1a; color: #f8f8f2; font-family: monospace; font-size: 0.65rem; padding: 10px; }
+        .card-code .line { display: flex; gap: 10px; }
+        .card-code .num { color: #6272a4; min-width: 20px; }
+        .card-code .kw { color: #ff79c6; }
+        .card-code .fn { color: #50fa7b; }
+
+        /* 4. Terminal */
+        .card-terminal { background: #1a1a2e; color: #00ff00; font-family: monospace; font-size: 0.7rem; padding: 10px; }
+        .card-terminal .prompt { color: #00bfff; }
+        .card-terminal .success { color: #00ff00; }
+
+        /* 5. Recipe */
+        .card-recipe { background: #fffef0; }
+        .card-recipe .title { font-family: Georgia, serif; font-style: italic; font-size: 0.9rem; margin-bottom: 8px; border-bottom: 2px dashed var(--color-border); padding-bottom: 6px; }
+        .card-recipe .meta { display: flex; gap: 6px; margin-bottom: 10px; }
+        .card-recipe .meta span { background: var(--color-accent-5); padding: 2px 6px; font-size: 0.65rem; border: 1px solid var(--color-border); }
+        .card-recipe .ing { font-size: 0.75rem; margin-bottom: 4px; }
+        .card-recipe .ing span { float: right; font-weight: bold; }
+
+        /* 6. Spotify */
+        .card-spotify { background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%); color: white; }
+        .card-spotify .track { display: flex; gap: 10px; margin-bottom: 10px; }
+        .card-spotify .album { width: 50px; height: 50px; background: var(--color-accent-7); border: 2px solid var(--color-border); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .card-spotify .info h3 { font-size: 0.85rem; margin-bottom: 2px; }
+        .card-spotify .info p { font-size: 0.65rem; opacity: 0.7; }
+        .card-spotify .progress { height: 3px; background: rgba(255,255,255,0.2); border-radius: 2px; margin-bottom: 6px; }
+        .card-spotify .bar { width: 35%; height: 100%; background: #1db954; }
+        .card-spotify .time { font-size: 0.6rem; opacity: 0.7; display: flex; justify-content: space-between; }
+
+        /* 7. Browser */
+        .card-browser { padding: 0; }
+        .card-browser .toolbar { background: #e8e8e8; padding: 6px 10px; display: flex; align-items: center; gap: 6px; border-bottom: 2px solid var(--color-border); }
+        .card-browser .dots { display: flex; gap: 3px; }
+        .card-browser .dot { width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--color-border); }
+        .card-browser .dot:nth-child(1) { background: #ff5f56; }
+        .card-browser .dot:nth-child(2) { background: #ffbd2e; }
+        .card-browser .dot:nth-child(3) { background: #27c93f; }
+        .card-browser .url { flex: 1; background: white; padding: 3px 8px; border: 2px solid var(--color-border); font-size: 0.6rem; border-radius: 3px; }
+        .card-browser .content { padding: 12px; }
+        .card-browser .content h4 { font-size: 0.85rem; margin-bottom: 6px; }
+        .card-browser .content p { font-size: 0.75rem; margin-bottom: 4px; }
+
+        /* 8. Game Achievement */
+        .card-game { background: #1a1a2e; color: white; }
+        .card-game .header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .card-game .icon { width: 40px; height: 40px; background: var(--color-accent-1); border: 2px solid var(--color-border); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        .card-game .info h3 { font-size: 0.85rem; margin-bottom: 2px; }
+        .card-game .info p { font-size: 0.65rem; opacity: 0.7; }
+        .card-game .title { font-size: 0.9rem; color: var(--color-accent-3); margin-bottom: 6px; }
+        .card-game .desc { font-size: 0.75rem; opacity: 0.9; margin-bottom: 8px; }
+        .card-game .progress { background: rgba(255,255,255,0.1); border: 2px solid var(--color-border); padding: 2px; }
+        .card-game .bar { width: 75%; height: 14px; background: var(--color-accent-2); border: 1px solid var(--color-border); }
+
+        /* 9. Calendar */
+        .card-calendar { background: white; }
+        .card-calendar .header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .card-calendar .date { background: var(--color-accent-1); border: 2px solid var(--color-border); padding: 5px 10px; text-align: center; min-width: 45px; }
+        .card-calendar .day { font-size: 1.2rem; font-weight: bold; line-height: 1; }
+        .card-calendar .month { font-size: 0.6rem; text-transform: uppercase; }
+        .card-calendar .event { font-size: 0.85rem; font-weight: bold; }
+        .card-calendar .time { font-size: 0.7rem; color: #666; }
+        .card-calendar .details { background: var(--color-accent-3); padding: 10px; border: 2px solid var(--color-border); margin-top: 8px; }
+        .card-calendar .avatars { display: flex; margin-top: 6px; }
+        .card-calendar .avatar { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--color-border); margin-left: -6px; background: var(--color-accent-4); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: bold; }
+        .card-calendar .avatar:first-child { margin-left: 0; }
+
+        /* 10. Weather */
+        .card-weather { background: linear-gradient(180deg, #87ceeb 0%, #e0f6ff 100%); }
+        .card-weather .header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .card-weather .temp { font-size: 2rem; font-weight: bold; }
+        .card-weather .icon { font-size: 2rem; }
+        .card-weather .condition { font-size: 0.8rem; margin-bottom: 10px; }
+        .card-weather .details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        .card-weather .detail { background: rgba(255,255,255,0.6); padding: 6px; border: 2px solid var(--color-border); text-align: center; }
+        .card-weather .label { font-size: 0.6rem; text-transform: uppercase; }
+        .card-weather .value { font-size: 0.8rem; font-weight: bold; }
+
+        @media (max-width: 768px) {
+            .gallery { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .gallery { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Narrative Cards Preview</h1>
+        <p class="subtitle">10 preview cards • Full collection available</p>
+    </header>
+
+    <div class="gallery">
+        <!-- 1. Git Commit -->
+        <div class="card-wrapper">
+            <div class="card-label">1. Version Control</div>
+            <div class="card card-commit">
+                <div class="card-inner">
+                    <div class="hash">a7f3c2e</div>
+                    <div class="msg">refactor: Redesigned auth flow for 40% improvement</div>
+                    <div class="meta">auth_controller.ts • +247 lines</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Chat -->
+        <div class="card-wrapper">
+            <div class="card-label">2. Team Chat</div>
+            <div class="card card-chat">
+                <div class="card-inner">
+                    <div class="msg received">How should we approach the redesign?</div>
+                    <div class="msg sent">Focus on accessibility first, then optimize.</div>
+                    <div class="msg received">Agreed, wireframes by Friday.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Code -->
+        <div class="card-wrapper">
+            <div class="card-label">3. Code Snippet</div>
+            <div class="card card-code">
+                <div class="card-inner">
+                    <div class="line"><span class="num">1</span><span class="comment">// Optimized search</span></div>
+                    <div class="line"><span class="num">2</span><span class="kw">function</span> <span class="fn">findElement</span>(arr, t) {</div>
+                    <div class="line"><span class="num">3</span>  <span class="kw">let</span> l = <span class="num">0</span>, r = arr.length - <span class="num">1</span>;</div>
+                    <div class="line"><span class="num">4</span>  <span class="kw">while</span> (l <= r) {</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Terminal -->
+        <div class="card-wrapper">
+            <div class="card-label">4. Terminal</div>
+            <div class="card card-terminal">
+                <div class="card-inner">
+                    <div><span class="prompt">$</span> npm run deploy</div>
+                    <div class="success">✓ Build complete: 142ms</div>
+                    <div class="success">✓ Deployed to production</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Recipe -->
+        <div class="card-wrapper">
+            <div class="card-label">5. Recipe</div>
+            <div class="card card-recipe">
+                <div class="card-inner">
+                    <div class="title">"Perfect System Architecture"</div>
+                    <div class="meta"><span>⏱ 6 weeks</span><span>👥 4 engineers</span></div>
+                    <div class="ing">User Research <span>200+</span></div>
+                    <div class="ing">Wireframes <span>45 screens</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Spotify -->
+        <div class="card-wrapper">
+            <div class="card-label">6. Media Player</div>
+            <div class="card card-spotify">
+                <div class="card-inner">
+                    <div class="track">
+                        <div class="album">📊</div>
+                        <div class="info">
+                            <h3>Enterprise Dashboard v3</h3>
+                            <p>Q4 2024 • Featured</p>
+                        </div>
+                    </div>
+                    <div class="progress"><div class="bar"></div></div>
+                    <div class="time"><span>2:34</span><span>6:42</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Browser -->
+        <div class="card-wrapper">
+            <div class="card-label">7. Browser</div>
+            <div class="card card-browser">
+                <div class="toolbar">
+                    <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+                    <div class="url">analytics.company.com</div>
+                </div>
+                <div class="content">
+                    <h4>📈 Performance</h4>
+                    <p>Load: <strong>1.2s</strong> (↓ 40%)</p>
+                    <p>Conv: <strong>4.8%</strong> (↑ 2.1%)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. Game Achievement -->
+        <div class="card-wrapper">
+            <div class="card-label">8. Game</div>
+            <div class="card card-game">
+                <div class="card-inner">
+                    <div class="header">
+                        <div class="icon">🏆</div>
+                        <div class="info"><h3>Senior Designer</h3><p>Level 8 • 15K XP</p></div>
+                    </div>
+                    <div class="title">🏅 UX Master</div>
+                    <div class="desc">50+ features shipped, 99% satisfaction</div>
+                    <div class="progress"><div class="bar"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. Calendar -->
+        <div class="card-wrapper">
+            <div class="card-label">9. Calendar</div>
+            <div class="card card-calendar">
+                <div class="card-inner">
+                    <div class="header">
+                        <div class="date"><div class="day">15</div><div class="month">Mar</div></div>
+                        <div><div class="event">Product Launch v2.0</div><div class="time">📅 March 15, 2024</div></div>
+                    </div>
+                    <div class="details">
+                        <div class="avatars">
+                            <div class="avatar">JD</div>
+                            <div class="avatar">AS</div>
+                            <div class="avatar" style="background: var(--color-accent-5);">+42</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. Weather -->
+        <div class="card-wrapper">
+            <div class="card-label">10. Weather</div>
+            <div class="card card-weather">
+                <div class="card-inner">
+                    <div class="header">
+                        <div class="temp">72°F</div>
+                        <div class="icon">☀️</div>
+                    </div>
+                    <div class="condition">Sunny with high engagement</div>
+                    <div class="details">
+                        <div class="detail"><div class="label">Velocity</div><div class="value">95</div></div>
+                        <div class="detail"><div class="label">Satisfy</div><div class="value">9.2</div></div>
+                        <div class="detail"><div class="label">Quality</div><div class="value">98%</div></div>
+                        <div class="detail"><div class="label">Risk</div><div class="value">Low</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; padding: 30px; background: var(--color-text); color: var(--color-bg);">
+        <p style="font-size: 1rem;">10 Preview Cards Shown</p>
+        <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 8px;">Full version includes 20 cards with all styles</p>
+    </div>
+</body>
+</html>
