@@ -8238,6 +8238,138 @@ button[class*="icon"],
   box-shadow: 2px 2px 0 0 var(--color-border);
 }
 
+/* ========================================
+   NEWS RAIL - Press Mentions Section
+   Appears below Skills section in expanded cards ======================================== */
+
+.big-bang-news-rail {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 2px solid var(--color-border);
+}
+
+.big-bang-news-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.big-bang-news-title svg {
+  width: 18px;
+  height: 18px;
+}
+
+.big-bang-news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.big-bang-news-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  background: var(--color-surface-alt);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: var(--color-text);
+  transition: all 0.2s ease;
+}
+
+.big-bang-news-item:hover {
+  background: var(--color-surface);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 0 var(--color-border);
+}
+
+.big-bang-news-item:hover .big-bang-news-headline {
+  color: var(--accent-indigo);
+}
+
+.big-bang-news-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: var(--accent-indigo);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.big-bang-news-content {
+  flex: 1;
+  min-width: 0;
+  margin-left: 12px;
+  margin-right: 12px;
+}
+
+.big-bang-news-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.big-bang-news-source {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent-indigo);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.big-bang-news-date {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.big-bang-news-headline {
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--color-text);
+  transition: color 0.2s ease;
+}
+
+.big-bang-news-arrow {
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+/* Dark mode for news rail */
+[data-theme="dark"] .big-bang-news-item {
+  background: var(--color-bg);
+}
+
+[data-theme="dark"] .big-bang-news-item:hover {
+  background: var(--color-surface);
+}
+
+[data-theme="dark"] .big-bang-news-item:hover .big-bang-news-headline {
+  color: var(--accent-coral);
+}
+
+[data-theme="dark"] .big-bang-news-source {
+  color: var(--accent-coral);
+}
+
+[data-theme="dark"] .big-bang-news-icon {
+  background: var(--accent-coral);
+}
+
 /* Dark mode adjustments for big-bang */
 [data-theme="dark"] .big-bang-list li::before {
   color: var(--accent-coral);
