@@ -32,6 +32,22 @@
   /* Surface Colors */
   --color-surface-alt: #f5f5f5;
 
+  /* Big Bang Card Colors - Light Mode */
+  --bb-amber-bg: #ffffff;
+  --bb-amber-text: var(--accent-amber);
+  --bb-indigo-bg: #ffffff;
+  --bb-indigo-text: var(--accent-indigo);
+  --bb-teal-bg: #ffffff;
+  --bb-teal-text: var(--accent-teal);
+  --bb-red-bg: #ffffff;
+  --bb-red-text: var(--accent-coral);
+  --bb-purple-bg: #ffffff;
+  --bb-purple-text: var(--accent-purple);
+  --bb-green-bg: #ffffff;
+  --bb-green-text: var(--accent-teal);
+  --bb-sky-bg: #ffffff;
+  --bb-sky-text: var(--accent-blue);
+
   /* Balanced Spacing - Major Third Scale (1.25x, not 2x) */
   --space-xs: 0.5rem;
   /* 8px */
@@ -101,6 +117,22 @@
 
   /* Surface Colors - Dark mode */
   --color-surface-alt: #1e1e2e;
+
+  /* Big Bang Card Colors - Dark Mode */
+  --bb-amber-bg: #2a2a2a;
+  --bb-amber-text: #fbbf24;
+  --bb-indigo-bg: #2d2d4a;
+  --bb-indigo-text: #a5b4fc;
+  --bb-teal-bg: #1a3a3a;
+  --bb-teal-text: #5eead4;
+  --bb-red-bg: #3d2a2a;
+  --bb-red-text: #fb923c;
+  --bb-purple-bg: #2d1f4a;
+  --bb-purple-text: #c4b5fd;
+  --bb-green-bg: #1a3d3a;
+  --bb-green-text: #6ee7b7;
+  --bb-sky-bg: #1a2d3d;
+  --bb-sky-text: #7dd3fc;
 }
 
 * {
@@ -8221,13 +8253,13 @@ button[class*="icon"],
 }
 
 .big-bang-card.variant-amber .big-bang-logo {
-  background: #ffffff;
+  background: var(--bb-amber-bg);
   color: var(--accent-amber);
 }
 
 .big-bang-card.variant-amber .big-bang-teaser {
-  background: #ffffff;
-  color: var(--accent-amber);
+  background: var(--bb-amber-bg);
+  color: var(--bb-amber-text);
 }
 
 .big-bang-card.variant-amber .big-bang-expand-btn.expanded {
@@ -8242,13 +8274,13 @@ button[class*="icon"],
 }
 
 .big-bang-card.variant-indigo .big-bang-logo {
-  background: #ffffff;
+  background: var(--bb-indigo-bg);
   color: var(--accent-indigo);
 }
 
 .big-bang-card.variant-indigo .big-bang-teaser {
-  background: #ffffff;
-  color: var(--accent-indigo);
+  background: var(--bb-indigo-bg);
+  color: var(--bb-indigo-text);
 }
 
 .big-bang-card.variant-indigo .big-bang-expand-btn.expanded {
@@ -8263,13 +8295,13 @@ button[class*="icon"],
 }
 
 .big-bang-card.variant-teal .big-bang-logo {
-  background: #ffffff;
+  background: var(--bb-teal-bg);
   color: var(--accent-teal);
 }
 
 .big-bang-card.variant-teal .big-bang-teaser {
-  background: #ffffff;
-  color: var(--accent-teal);
+  background: var(--bb-teal-bg);
+  color: var(--bb-teal-text);
 }
 
 .big-bang-card.variant-teal .big-bang-expand-btn.expanded {
@@ -8284,13 +8316,13 @@ button[class*="icon"],
 }
 
 .big-bang-card.variant-red .big-bang-logo {
-  background: #ffffff;
+  background: var(--bb-red-bg);
   color: var(--accent-coral);
 }
 
 .big-bang-card.variant-red .big-bang-teaser {
-  background: #ffffff;
-  color: var(--accent-coral);
+  background: var(--bb-red-bg);
+  color: var(--bb-red-text);
 }
 
 .big-bang-card.variant-red .big-bang-expand-btn.expanded {
@@ -8305,13 +8337,13 @@ button[class*="icon"],
 }
 
 .big-bang-card.variant-purple .big-bang-logo {
-  background: #ffffff;
+  background: var(--bb-purple-bg);
   color: var(--accent-purple);
 }
 
 .big-bang-card.variant-purple .big-bang-teaser {
-  background: #ffffff;
-  color: var(--accent-purple);
+  background: var(--bb-purple-bg);
+  color: var(--bb-purple-text);
 }
 
 .big-bang-card.variant-purple .big-bang-expand-btn.expanded {
@@ -8326,13 +8358,13 @@ button[class*="icon"],
 }
 
 .big-bang-card.variant-green .big-bang-logo {
-  background: #ffffff;
+  background: var(--bb-green-bg);
   color: var(--accent-teal);
 }
 
 .big-bang-card.variant-green .big-bang-teaser {
-  background: #ffffff;
-  color: var(--accent-teal);
+  background: var(--bb-green-bg);
+  color: var(--bb-green-text);
 }
 
 .big-bang-card.variant-green .big-bang-expand-btn.expanded {
@@ -8347,13 +8379,13 @@ button[class*="icon"],
 }
 
 .big-bang-card.variant-sky .big-bang-logo {
-  background: #ffffff;
+  background: var(--bb-sky-bg);
   color: var(--accent-blue);
 }
 
 .big-bang-card.variant-sky .big-bang-teaser {
-  background: #ffffff;
-  color: var(--accent-blue);
+  background: var(--bb-sky-bg);
+  color: var(--bb-sky-text);
 }
 
 .big-bang-card.variant-sky .big-bang-expand-btn.expanded {
