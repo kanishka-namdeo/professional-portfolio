@@ -7975,6 +7975,37 @@ button[class*="icon"],
   transform: scale(0.98);
 }
 
+/* Company Brief - Visible always, outside the collapsible content */
+.big-bang-brief {
+  padding: var(--space-md) var(--space-md);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.big-bang-brief-text {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Responsive: Limit brief height on smaller screens */
+@media (max-width: 640px) {
+  .big-bang-brief {
+    padding: var(--space-sm) var(--space-md);
+  }
+  
+  .big-bang-brief-text {
+    font-size: 0.85rem;
+    /* Clamp to 3 lines on mobile */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
 .big-bang-content {
   max-height: 0;
   overflow: hidden;

@@ -399,6 +399,11 @@ export default function Experience() {
                   )}
                 </div>
                 
+                {/* Company Brief - Visible always, before expand button */}
+                <div className="big-bang-brief">
+                  <p className="big-bang-brief-text">{exp.summary}</p>
+                </div>
+                
                 <button
                   className={`big-bang-expand-btn ${colorVariant} ${expanded ? 'expanded' : ''}`}
                   onClick={() => toggleCard(globalIndex)}
@@ -421,12 +426,6 @@ export default function Experience() {
                 
                 <div className={`big-bang-content ${expanded ? 'active' : ''}`}>
                   <div className="big-bang-body">
-                    {/* Company Brief */}
-                    <div className="big-bang-section">
-                      <h4 className="big-bang-section-title">Company Brief</h4>
-                      <p className="big-bang-section-text">{exp.summary}</p>
-                    </div>
-
                     {/* Key Responsibilities */}
                     <div className="big-bang-section">
                       <h4 className="big-bang-section-title">Key Responsibilities</h4>
