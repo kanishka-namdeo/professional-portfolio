@@ -56,7 +56,7 @@ export default function Hero() {
             Open to new roles
           </div>
           <nav className="hero-actions animate-on-scroll animate-delay-2" aria-label="Quick links">
-            <a href="#products" className="cta-button primary">My Projects</a>
+            <a href="#experience" className="cta-button primary">See My Work</a>
             <a href="#contact" className="cta-button secondary">Contact</a>
           </nav>
         </div>
