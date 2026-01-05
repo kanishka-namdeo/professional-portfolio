@@ -264,6 +264,8 @@ const experiences: Experience[] = [
 export default function Experience() {
   const [activeCompany, setActiveCompany] = useState<string | null>(null);
   const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
+  const [autoExpandedCard, setAutoExpandedCard] = useState<number | null>(null);
+  const [userInteracted, setUserInteracted] = useState(false);
 
   const filteredExperiences = activeCompany === null 
     ? experiences 
@@ -271,24 +273,51 @@ export default function Experience() {
 
   // Auto-expand when only one card is shown, collapse when showing multiple
   useEffect(() => {
+    // Reset user interaction flag when filter changes
+    setUserInteracted(false);
+    
     if (filteredExperiences.length === 1) {
       const singleExp = filteredExperiences[0];
       const globalIndex = experiences.indexOf(singleExp);
-      setExpandedCards(new Set([globalIndex]));
+      
+      // Only auto-expand if user hasn't manually collapsed it
+      if (!userInteracted || !expandedCards.has(globalIndex)) {
+        setExpandedCards(new Set([globalIndex]));
+        setAutoExpandedCard(globalIndex);
+      }
     } else {
       // When showing multiple cards, collapse all
       setExpandedCards(new Set());
+      setAutoExpandedCard(null);
     }
   }, [activeCompany, filteredExperiences]);
 
   const toggleCard = (index: number) => {
+    // When manually toggling, clear auto-expanded state for that card
+    const newAutoExpanded = autoExpandedCard === index ? null : autoExpandedCard;
+    setAutoExpandedCard(newAutoExpanded);
+    
     const newExpanded = new Set(expandedCards);
     if (newExpanded.has(index)) {
+      // User is collapsing the card
       newExpanded.delete(index);
+      setUserInteracted(true); // Mark that user manually changed the state
     } else {
+      // User is expanding the card
       newExpanded.add(index);
+      // Clear user interaction flag since they're now expanding
+      setUserInteracted(false);
     }
     setExpandedCards(newExpanded);
+  };
+
+  const minimizeCard = (index: number) => {
+    // Minimize without clearing auto-expanded state (user can still auto-expand)
+    setExpandedCards(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(index);
+      return newSet;
+    });
   };
 
   const allResponsibilities = (exp: Experience) => 
@@ -370,24 +399,24 @@ export default function Experience() {
                   )}
                 </div>
                 
-                <button 
+                <button
                   className={`big-bang-expand-btn ${colorVariant} ${expanded ? 'expanded' : ''}`}
                   onClick={() => toggleCard(globalIndex)}
                   aria-expanded={expanded}
                 >
-                  {expanded ? (
+                  {expanded && autoExpandedCard !== globalIndex ? (
                     <>
                       <CloseIcon />
                       <span>Close Case Study</span>
                     </>
-                  ) : (
+                  ) : !expanded ? (
                     <>
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                       </svg>
                       <span>Read Full Case Study</span>
                     </>
-                  )}
+                  ) : null}
                 </button>
                 
                 <div className={`big-bang-content ${expanded ? 'active' : ''}`}>
