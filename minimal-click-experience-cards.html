@@ -2379,17 +2379,6 @@
             });
             viewport.querySelector('#' + cardId).classList.add('active');
         }
-
-        // Close Big Bang on button click
-        document.querySelectorAll('.big-bang-expand-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const content = this.nextElementSibling;
-                if (content.classList.contains('active')) {
-                    content.classList.remove('active');
-                    this.innerHTML = '📖 Read Full Case Study';
-                }
-            });
-        });
     </script>
 </body>
 </html>
