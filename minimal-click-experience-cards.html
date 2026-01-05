@@ -1,0 +1,2395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Click Experience Cards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #FDFBF7;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #000000;
+            --text-secondary: #1A1A1A;
+            --border-color: #000000;
+            --accent-red: #FF4D4D;
+            --accent-indigo: #5D5FEF;
+            --accent-yellow: #FFD700;
+            --accent-green: #00D26A;
+            --accent-orange: #FF8B3D;
+            --accent-purple: #A855F7;
+            --shadow-hard: 6px 6px 0px 0px #000000;
+            --shadow-hover: 8px 8px 0px 0px #000000;
+            --shadow-active: 3px 3px 0px 0px #000000;
+            --border-thick: 3px solid #000000;
+            --border-thin: 2px solid #000000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Public Sans', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .section-header h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .click-counter {
+            display: inline-block;
+            background: var(--accent-indigo);
+            color: white;
+            padding: 8px 16px;
+            border: var(--border-thick);
+            box-shadow: var(--shadow-hard);
+            font-weight: 700;
+            margin-top: 16px;
+            text-transform: uppercase;
+        }
+
+        /* Variation Section */
+        .variation-section {
+            margin-bottom: 100px;
+        }
+
+        .variation-title {
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: var(--border-thick);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .variation-number {
+            background: var(--text-primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: var(--border-thick);
+            box-shadow: var(--shadow-hard);
+        }
+
+        /* ========================================
+           VARIATION 1: THE BIG BANG (1 Click)
+           ======================================== */
+        .big-bang-container {
+            display: grid;
+            gap: 24px;
+        }
+
+        .big-bang-card {
+            background: var(--bg-secondary);
+            border: var(--border-thick);
+            box-shadow: var(--shadow-hard);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .big-bang-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translate(-2px, -2px);
+        }
+
+        .big-bang-header {
+            padding: 24px;
+            background: var(--accent-yellow);
+            border-bottom: var(--border-thick);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .big-bang-company {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .big-bang-logo {
+            width: 56px;
+            height: 56px;
+            background: white;
+            border: var(--border-thick);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .big-bang-company h3 {
+            font-size: 1.25rem;
+        }
+
+        .big-bang-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .big-bang-role {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .big-bang-duration {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .big-bang-teaser {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--text-primary);
+            color: white;
+            padding: 8px 16px;
+            border: var(--border-thick);
+        }
+
+        .big-bang-teaser-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .big-bang-expand-btn {
+            width: 100%;
+            padding: 16px 24px;
+            background: var(--accent-red);
+            color: white;
+            border: none;
+            border-top: var(--border-thick);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .big-bang-expand-btn:hover {
+            background: #E63F3F;
+        }
+
+        .big-bang-expand-btn:active {
+            box-shadow: var(--shadow-active);
+            transform: translate(3px, 3px);
+        }
+
+        .big-bang-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .big-bang-content.active {
+            max-height: 3000px;
+        }
+
+        .big-bang-body {
+            padding: 24px;
+        }
+
+        .big-bang-section {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #E5E5E5;
+        }
+
+        .big-bang-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .big-bang-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-indigo);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .big-bang-section p {
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .big-bang-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .big-bang-list li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        .big-bang-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--accent-red);
+            font-weight: 700;
+        }
+
+        .big-bang-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+        }
+
+        .big-bang-metric {
+            background: var(--bg-primary);
+            border: var(--border-thin);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .big-bang-metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--accent-red);
+        }
+
+        .big-bang-metric-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 4px;
+        }
+
+        .big-bang-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .big-bang-tag {
+            background: var(--accent-indigo);
+            color: white;
+            padding: 6px 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: var(--border-thin);
+        }
+
+        .big-bang-press {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .big-bang-press a {
+            color: var(--accent-indigo);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .big-bang-press a:hover {
+            text-decoration: underline;
+        }
+
+        /* ========================================
+           VARIATION 2: HOVER PEEK + MODAL (1 Click)
+           ======================================== */
+        .hover-peek-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .hover-peek-card {
+            background: var(--bg-secondary);
+            border: var(--border-thick);
+            box-shadow: var(--shadow-hard);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .hover-peek-card:hover {
+            transform: rotate(-1deg) translate(-4px, -4px);
+            box-shadow: 10px 10px 0px 0px var(--accent-yellow);
+        }
+
+        .hover-peek-card:hover .hover-peek-preview {
+            background: var(--accent-yellow);
+        }
+
+        .hover-peek-preview {
+            padding: 24px;
+            transition: background 0.3s ease;
+        }
+
+        .hover-peek-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .hover-peek-company {
+            font-size: 1.25rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .hover-peek-badge {
+            background: var(--accent-green);
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: var(--border-thin);
+        }
+
+        .hover-peek-role {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .hover-peek-stats {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .hover-peek-stat {
+            background: white;
+            border: var(--border-thin);
+            padding: 12px;
+            flex: 1;
+            text-align: center;
+        }
+
+        .hover-peek-stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .hover-peek-stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .hover-peek-peek {
+            background: white;
+            border: var(--border-thin);
+            padding: 12px;
+            font-size: 0.9rem;
+            font-style: italic;
+            border-style: dashed;
+        }
+
+        .hover-peek-peek-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-indigo);
+            margin-bottom: 8px;
+        }
+
+        .hover-peek-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .hover-peek-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hover-peek-modal {
+            background: var(--bg-secondary);
+            border: var(--border-thick);
+            box-shadow: var(--shadow-hard);
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .hover-peek-overlay.active .hover-peek-modal {
+            transform: scale(1);
+        }
+
+        .hover-peek-modal-header {
+            padding: 24px;
+            background: var(--accent-indigo);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .hover-peek-modal-title {
+            font-size: 1.25rem;
+        }
+
+        .hover-peek-close {
+            background: white;
+            border: var(--border-thick);
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .hover-peek-close:hover {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .hover-peek-modal-body {
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .hover-peek-modal-section {
+            margin-bottom: 20px;
+        }
+
+        .hover-peek-modal-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .hover-peek-modal-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-indigo);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: var(--border-thin);
+            font-weight: 700;
+        }
+
+        /* ========================================
+           VARIATION 3: THE SMART STACK (1 Click)
+           ======================================== */
+        .smart-stack-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .smart-stack-card {
+            background: var(--bg-secondary);
+            border: var(--border-thick);
+            box-shadow: var(--shadow-hard);
+            transition: all 0.3s ease;
+        }
+
+        .smart-stack-card.expanded {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .smart-stack-header {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: white;
+            transition: background 0.3s ease;
+        }
+
+        .smart-stack-card:not(.expanded) .smart-stack-header:hover {
+            background: var(--bg-primary);
+        }
+
+        .smart-stack-card.expanded .smart-stack-header {
+            background: var(--accent-purple);
+            color: white;
+        }
+
+        .smart-stack-company {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .smart-stack-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-orange);
+            border: var(--border-thick);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .smart-stack-info h3 {
+            font-size: 1.1rem;
+        }
+
+        .smart-stack-info span {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .smart-stack-expand-icon {
+            width: 36px;
+            height: 36px;
+            border: var(--border-thick);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+
+        .smart-stack-card.expanded .smart-stack-expand-icon {
+            transform: rotate(45deg);
+            background: white;
+        }
+
+        .smart-stack-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .smart-stack-content.expanded {
+            max-height: 2000px;
+        }
+
+        .smart-stack-body {
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            border-top: 1px solid #E5E5E5;
+        }
+
+        .smart-stack-column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .smart-stack-section {
+            margin-bottom: 24px;
+        }
+
+        .smart-stack-section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-purple);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .smart-stack-section-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-purple);
+        }
+
+        /* ========================================
+           VARIATION 4: THE FOLDER FILE (0-2 Clicks)
+           ======================================== */
+        .folder-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .folder-card {
+            background: var(--bg-secondary);
+            border: var(--border-thick);
+            box-shadow: var(--shadow-hard);
+        }
+
+        .folder-tabs {
+            display: flex;
+            border-bottom: var(--border-thick);
+            background: var(--bg-primary);
+        }
+
+        .folder-tab {
+            padding: 16px 24px;
+            background: transparent;
+            border: none;
+            border-right: var(--border-thick);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .folder-tab:last-child {
+            border-right: none;
+        }
+
+        .folder-tab:hover {
+            background: white;
+        }
+
+        .folder-tab.active {
+            background: var(--accent-green);
+        }
+
+        .folder-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-green);
+        }
+
+        .folder-tab-count {
+            background: var(--text-primary);
+            color: white;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            margin-left: 8px;
+            border: var(--border-thin);
+        }
+
+        .folder-content {
+            padding: 24px;
+            min-height: 600px;
+        }
+
+        .folder-panel {
+            display: none;
+        }
+
+        .folder-panel.active {
+            display: block;
+        }
+
+        .folder-header {
+            padding: 24px;
+            background: var(--accent-green);
+            border: var(--border-thick);
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .folder-company {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .folder-logo {
+            width: 64px;
+            height: 64px;
+            background: white;
+            border: var(--border-thick);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .folder-meta h3 {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+
+        .folder-meta p {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .folder-duration {
+            background: white;
+            padding: 12px 20px;
+            border: var(--border-thick);
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .folder-section-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .folder-section {
+            background: var(--bg-primary);
+            border: var(--border-thin);
+            padding: 20px;
+        }
+
+        .folder-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-green);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #ccc;
+            font-weight: 700;
+        }
+
+        .folder-full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* ========================================
+           VARIATION 5: THE FOCUS SCROLL (1 Click)
+           ======================================== */
+        .focus-scroll-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 24px;
+            min-height: 800px;
+        }
+
+        .focus-scroll-nav {
+            border: var(--border-thick);
+            box-shadow: var(--shadow-hard);
+            background: var(--bg-secondary);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .focus-scroll-nav-header {
+            padding: 16px;
+            background: var(--accent-red);
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-bottom: var(--border-thick);
+        }
+
+        .focus-scroll-list {
+            list-style: none;
+        }
+
+        .focus-scroll-item {
+            padding: 16px;
+            border-bottom: var(--border-thin);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .focus-scroll-item:last-child {
+            border-bottom: none;
+        }
+
+        .focus-scroll-item:hover {
+            background: var(--bg-primary);
+        }
+
+        .focus-scroll-item.active {
+            background: var(--accent-yellow);
+            padding-left: 24px;
+        }
+
+        .focus-scroll-item-company {
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 4px;
+        }
+
+        .focus-scroll-item-role {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .focus-scroll-viewport {
+            border: var(--border-thick);
+            box-shadow: var(--shadow-hard);
+            background: var(--bg-secondary);
+        }
+
+        .focus-scroll-card {
+            padding: 0;
+            display: none;
+        }
+
+        .focus-scroll-card.active {
+            display: block;
+        }
+
+        .focus-scroll-card-header {
+            padding: 32px;
+            background: linear-gradient(135deg, var(--accent-red), #E63F3F);
+            color: white;
+            position: relative;
+        }
+
+        .focus-scroll-card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-yellow);
+        }
+
+        .focus-scroll-card-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .focus-scroll-card-title h3 {
+            font-size: 1.75rem;
+        }
+
+        .focus-scroll-card-role {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .focus-scroll-card-brief {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-style: italic;
+        }
+
+        .focus-scroll-card-body {
+            padding: 32px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .focus-scroll-section {
+            margin-bottom: 24px;
+        }
+
+        .focus-scroll-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-red);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .focus-scroll-metrics {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 24px;
+            background: var(--bg-primary);
+            border: var(--border-thin);
+        }
+
+        .focus-scroll-metric {
+            text-align: center;
+            padding: 16px;
+            background: white;
+            border: var(--border-thin);
+        }
+
+        .focus-scroll-metric-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--accent-red);
+        }
+
+        .focus-scroll-metric-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 4px;
+        }
+
+        .focus-scroll-tags {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding-top: 16px;
+            border-top: var(--border-thin);
+        }
+
+        .focus-scroll-tag {
+            background: var(--accent-indigo);
+            color: white;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: var(--border-thin);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .big-bang-body,
+            .hover-peek-modal-body,
+            .smart-stack-body,
+            .folder-section-group,
+            .focus-scroll-card-body {
+                grid-template-columns: 1fr;
+            }
+
+            .focus-scroll-container {
+                grid-template-columns: 1fr;
+            }
+
+            .focus-scroll-nav {
+                position: relative;
+                top: 0;
+            }
+
+            .folder-tabs {
+                flex-wrap: wrap;
+            }
+
+            .folder-tab {
+                flex: 1 1 40%;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .big-bang-card,
+        .hover-peek-card,
+        .smart-stack-card,
+        .folder-card,
+        .focus-scroll-card {
+            animation: fadeIn 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="section-header">
+            <h1>Minimal Click Experience Cards</h1>
+            <p>Five innovative approaches to display work experience with maximum 2 clicks to see all content. Designed for recruiters who value efficiency.</p>
+            <span class="click-counter">⚡ Max 2 Clicks</span>
+        </header>
+
+        <!-- VARIATION 1: THE BIG BANG -->
+        <section class="variation-section">
+            <h2 class="variation-title">
+                <span class="variation-number">1</span>
+                The "Big Bang" — 1 Click Reveal
+            </h2>
+            <p style="margin-bottom: 24px; color: var(--text-secondary);">One massive button. One click. Everything expands instantly.</p>
+
+            <div class="big-bang-container">
+                <!-- Card 1 -->
+                <article class="big-bang-card">
+                    <div class="big-bang-header">
+                        <div class="big-bang-company">
+                            <div class="big-bang-logo">N</div>
+                            <div>
+                                <h3>NeuroFlow</h3>
+                                <div class="big-bang-meta">
+                                    <span class="big-bang-role">Lead Product Designer</span>
+                                    <span class="big-bang-duration">Jan 2022 - Present</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="big-bang-teaser">
+                            <span>🚀</span>
+                            <span class="big-bang-teaser-value">+247%</span>
+                            <span>Conversion</span>
+                        </div>
+                    </div>
+                    <button class="big-bang-expand-btn" onclick="this.nextElementSibling.classList.toggle('active'); this.innerHTML = this.nextElementSibling.classList.contains('active') ? '✕ Close Case Study' : '📖 Read Full Case Study'">
+                        📖 Read Full Case Study
+                    </button>
+                    <div class="big-bang-content">
+                        <div class="big-bang-body">
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">Company Brief</h4>
+                                <p>NeuroFlow is an AI-powered productivity startup building neural-inspired workflow tools for remote teams. The platform combines machine learning with behavioral psychology to optimize individual and team performance.</p>
+                            </div>
+
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">Key Responsibilities</h4>
+                                <ul class="big-bang-list">
+                                    <li>Led design direction for the core product serving 150,000+ users</li>
+                                    <li>Established and maintained the company's design system</li>
+                                    <li>Mentored 3 junior designers and coordinated with engineering teams</li>
+                                    <li>Conducted user research and usability testing for new features</li>
+                                    <li>Presented design rationale to executives and stakeholders</li>
+                                </ul>
+                            </div>
+
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">The Challenge</h4>
+                                <ul class="big-bang-list">
+                                    <li>Users reported cognitive overload when switching between multiple views</li>
+                                    <li>The existing dashboard had a 68% bounce rate on the analytics page</li>
+                                    <li>Legacy code made it difficult to implement consistent UI patterns</li>
+                                </ul>
+                            </div>
+
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">The Solution</h4>
+                                <ul class="big-bang-list">
+                                    <li>Redesigned the information architecture using a card-based layout</li>
+                                    <li>Implemented progressive disclosure to reduce initial cognitive load</li>
+                                    <li>Built a comprehensive design system enabling 3x faster development</li>
+                                </ul>
+                            </div>
+
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">The Impact</h4>
+                                <ul class="big-bang-list">
+                                    <li>247% increase in feature adoption within the first quarter</li>
+                                    <li>Analytics page bounce rate dropped from 68% to 23%</li>
+                                    <li>Design-to-development handoff time reduced by 60%</li>
+                                    <li>Team satisfaction scores improved from 3.2 to 4.6/5</li>
+                                </ul>
+                            </div>
+
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">Key Metrics</h4>
+                                <div class="big-bang-grid">
+                                    <div class="big-bang-metric">
+                                        <div class="big-bang-metric-value">247%</div>
+                                        <div class="big-bang-metric-label">Conversion Growth</div>
+                                    </div>
+                                    <div class="big-bang-metric">
+                                        <div class="big-bang-metric-value">150K</div>
+                                        <div class="big-bang-metric-label">Active Users</div>
+                                    </div>
+                                    <div class="big-bang-metric">
+                                        <div class="big-bang-metric-value">23%</div>
+                                        <div class="big-bang-metric-label">Bounce Rate</div>
+                                    </div>
+                                    <div class="big-bang-metric">
+                                        <div class="big-bang-metric-value">60%</div>
+                                        <div class="big-bang-metric-label">Faster Handoff</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">Press Mentions</h4>
+                                <div class="big-bang-press">
+                                    <a href="#" target="_blank">↗ Product Hunt Featured - "NeuroFlow transforms how teams work"</a>
+                                    <a href="#" target="_blank">↗ TechCrunch - "The AI tool that actually improves productivity"</a>
+                                    <a href="#" target="_blank">↗ The Verge - "NeuroFlow's redesign sets new standards for UX"</a>
+                                </div>
+                            </div>
+
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">Skills & Tools</h4>
+                                <div class="big-bang-tags">
+                                    <span class="big-bang-tag">Figma</span>
+                                    <span class="big-bang-tag">React</span>
+                                    <span class="big-bang-tag">TypeScript</span>
+                                    <span class="big-bang-tag">Storybook</span>
+                                    <span class="big-bang-tag">User Research</span>
+                                    <span class="big-bang-tag">Design Systems</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="big-bang-card">
+                    <div class="big-bang-header" style="background: var(--accent-indigo); color: white;">
+                        <div class="big-bang-company">
+                            <div class="big-bang-logo" style="background: white;">V</div>
+                            <div>
+                                <h3>Vertex Analytics</h3>
+                                <div class="big-bang-meta">
+                                    <span class="big-bang-role" style="color: rgba(255,255,255,0.9);">Senior UX Designer</span>
+                                    <span class="big-bang-duration" style="color: rgba(255,255,255,0.8);">Mar 2019 - Dec 2021</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="big-bang-teaser" style="background: white; color: var(--accent-indigo);">
+                            <span>📊</span>
+                            <span class="big-bang-teaser-value">$2.4M</span>
+                            <span>Saved</span>
+                        </div>
+                    </div>
+                    <button class="big-bang-expand-btn" style="background: var(--accent-indigo);" onclick="this.nextElementSibling.classList.toggle('active'); this.innerHTML = this.nextElementSibling.classList.contains('active') ? '✕ Close Case Study' : '📖 Read Full Case Study'">
+                        📖 Read Full Case Study
+                    </button>
+                    <div class="big-bang-content">
+                        <div class="big-bang-body">
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">Company Brief</h4>
+                                <p>Vertex Analytics provides enterprise data visualization solutions for Fortune 500 companies. Their platform transforms complex datasets into actionable business insights through intuitive dashboards and reporting tools.</p>
+                            </div>
+
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">Key Responsibilities</h4>
+                                <ul class="big-bang-list">
+                                    <li>Designed enterprise dashboard interfaces for clients including Walmart and Nike</li>
+                                    <li>Led the redesign of the flagship analytics platform used by 500+ enterprise clients</li>
+                                    <li>Collaborated with data science teams to simplify complex visualizations</li>
+                                    <li>Established UX best practices and documentation</li>
+                                </ul>
+                            </div>
+
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">The Challenge</h4>
+                                <ul class="big-bang-list">
+                                    <li>Enterprise users found the learning curve too steep for advanced features</li>
+                                    <li>Mobile experience was completely broken and unused</li>
+                                    <li>Data visualization components were inconsistent across modules</li>
+                                </ul>
+                            </div>
+
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">The Solution</h4>
+                                <ul class="big-bang-list">
+                                    <li>Created a guided onboarding flow with contextual tooltips</li>
+                                    <li>Developed a mobile-first responsive design approach</li>
+                                    <li>Standardized 40+ data visualization components</li>
+                                </ul>
+                            </div>
+
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">The Impact</h4>
+                                <ul class="big-bang-list">
+                                    <li>$2.4M saved in customer support costs through self-service features</li>
+                                    <li>Mobile usage increased from 2% to 34% of total traffic</li>
+                                    <li>Customer NPS improved from 32 to 58</li>
+                                    <li>Reduced time-to-value from 2 weeks to 3 days</li>
+                                </ul>
+                            </div>
+
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">Key Metrics</h4>
+                                <div class="big-bang-grid">
+                                    <div class="big-bang-metric">
+                                        <div class="big-bang-metric-value">$2.4M</div>
+                                        <div class="big-bang-metric-label">Cost Savings</div>
+                                    </div>
+                                    <div class="big-bang-metric">
+                                        <div class="big-bang-metric-value">500+</div>
+                                        <div class="big-bang-metric-label">Enterprise Clients</div>
+                                    </div>
+                                    <div class="big-bang-metric">
+                                        <div class="big-bang-metric-value">34%</div>
+                                        <div class="big-bang-metric-label">Mobile Usage</div>
+                                    </div>
+                                    <div class="big-bang-metric">
+                                        <div class="big-bang-metric-value">58</div>
+                                        <div class="big-bang-metric-label">NPS Score</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">Press Mentions</h4>
+                                <div class="big-bang-press">
+                                    <a href="#" target="_blank">↗ Forbes - "Vertex Analytics revolutionizes enterprise data"</a>
+                                    <a href="#" target="_blank">↗ Business Insider - "The $2.4M design decision"</a>
+                                </div>
+                            </div>
+
+                            <div class="big-bang-section">
+                                <h4 class="big-bang-section-title">Skills & Tools</h4>
+                                <div class="big-bang-tags">
+                                    <span class="big-bang-tag">Sketch</span>
+                                    <span class="big-bang-tag">D3.js</span>
+                                    <span class="big-bang-tag">Python</span>
+                                    <span class="big-bang-tag">Tableau</span>
+                                    <span class="big-bang-tag">Enterprise UX</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- VARIATION 2: HOVER PEEK + MODAL -->
+        <section class="variation-section">
+            <h2 class="variation-title">
+                <span class="variation-number">2</span>
+                Hover-Peek + Modal — 1 Click Total
+            </h2>
+            <p style="margin-bottom: 24px; color: var(--text-secondary);">Hover reveals key stats. Click anywhere to open the full modal. Done.</p>
+
+            <div class="hover-peek-container">
+                <!-- Card 1 -->
+                <article class="hover-peek-card" onclick="openHoverPeekModal('modal-1')">
+                    <div class="hover-peek-preview">
+                        <div class="hover-peek-header">
+                            <div class="hover-peek-company">EcoStream</div>
+                            <div class="hover-peek-badge">Sustainability</div>
+                        </div>
+                        <div class="hover-peek-role">Product Design Lead · 2020 - 2022</div>
+                        <div class="hover-peek-stats">
+                            <div class="hover-peek-stat">
+                                <div class="hover-peek-stat-value">89%</div>
+                                <div class="hover-peek-stat-label">Engagement</div>
+                            </div>
+                            <div class="hover-peek-stat">
+                                <div class="hover-peek-stat-value">500K</div>
+                                <div class="hover-peek-stat-label">Downloads</div>
+                            </div>
+                            <div class="hover-peek-stat">
+                                <div class="hover-peek-stat-value">4.8★</div>
+                                <div class="hover-peek-stat-label">Rating</div>
+                            </div>
+                        </div>
+                        <div class="hover-peek-peek">
+                            <div class="hover-peek-peek-label">Quick Peek</div>
+                            "Carbon footprint tracking app that made sustainability accessible to mainstream users."
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="hover-peek-card" onclick="openHoverPeekModal('modal-2')">
+                    <div class="hover-peek-preview" style="background: #FFF0F0;">
+                        <div class="hover-peek-header">
+                            <div class="hover-peek-company">QuantumPay</div>
+                            <div class="hover-peek-badge" style="background: var(--accent-red);">Fintech</div>
+                        </div>
+                        <div class="hover-peek-role">UX Designer · 2018 - 2020</div>
+                        <div class="hover-peek-stats">
+                            <div class="hover-peek-stat">
+                                <div class="hover-peek-stat-value">3x</div>
+                                <div class="hover-peek-stat-label">Faster</div>
+                            </div>
+                            <div class="hover-peek-stat">
+                                <div class="hover-peek-stat-value">$50M</div>
+                                <div class="hover-peek-stat-label">Processed</div>
+                            </div>
+                            <div class="hover-peek-stat">
+                                <div class="hover-peek-stat-value">0.2%</div>
+                                <div class="hover-peek-stat-label">Error Rate</div>
+                            </div>
+                        </div>
+                        <div class="hover-peek-peek">
+                            <div class="hover-peek-peek-label">Quick Peek</div>
+                            "Payment processing platform reimagining B2B transactions with AI fraud detection."
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="hover-peek-card" onclick="openHoverPeekModal('modal-3')">
+                    <div class="hover-peek-preview" style="background: #F0F4FF;">
+                        <div class="hover-peek-header">
+                            <div class="hover-peek-company">LearnHub</div>
+                            <div class="hover-peek-badge" style="background: var(--accent-purple);">EdTech</div>
+                        </div>
+                        <div class="hover-peek-role">UI/UX Designer · 2016 - 2018</div>
+                        <div class="hover-peek-stats">
+                            <div class="hover-peek-stat">
+                                <div class="hover-peek-stat-value">92%</div>
+                                <div class="hover-peek-stat-label">Completion</div>
+                            </div>
+                            <div class="hover-peek-stat">
+                                <div class="hover-peek-stat-value">2M+</div>
+                                <div class="hover-peek-stat-label">Students</div>
+                            </div>
+                            <div class="hover-peek-stat">
+                                <div class="hover-peek-stat-value">45min</div>
+                                <div class="hover-peek-stat-label">Avg Session</div>
+                            </div>
+                        </div>
+                        <div class="hover-peek-peek">
+                            <div class="hover-peek-peek-label">Quick Peek</div>
+                            "Gamified learning platform transforming online education with interactive experiences."
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Modals (hidden by default) -->
+            <div id="modal-1" class="hover-peek-overlay" onclick="closeHoverPeekModal(event)">
+                <div class="hover-peek-modal" onclick="event.stopPropagation()">
+                    <div class="hover-peek-modal-header">
+                        <div>
+                            <div class="hover-peek-modal-title">EcoStream · Product Design Lead</div>
+                            <div style="font-size: 0.875rem; opacity: 0.8;">Jan 2020 - Dec 2022</div>
+                        </div>
+                        <button class="hover-peek-close" onclick="closeHoverPeekModal()">×</button>
+                    </div>
+                    <div class="hover-peek-modal-body">
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">Company Brief</h4>
+                            <p>EcoStream is a sustainability tech company building mobile applications that help individuals and businesses track, reduce, and offset their carbon footprint through gamification and actionable insights.</p>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">Key Responsibilities</h4>
+                            <ul class="big-bang-list">
+                                <li>Led product design for flagship mobile application</li>
+                                <li>Designed gamification systems increasing daily active usage</li>
+                                <li>Created carbon footprint visualization algorithms</li>
+                                <li>Established brand design guidelines and design system</li>
+                            </ul>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">The Challenge</h4>
+                            <ul class="big-bang-list">
+                                <li>Sustainability apps had high churn rates due to lack of engagement</li>
+                                <li>Users found carbon calculations confusing and unreliable</li>
+                                <li>Competitive market with 50+ similar apps</li>
+                            </ul>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">The Solution</h4>
+                            <ul class="big-bang-list">
+                                <li>Implemented game mechanics with daily challenges and rewards</li>
+                                <li>Created intuitive progress visualizations and milestones</li>
+                                <li>Partnered with carbon offset providers for verified actions</li>
+                            </ul>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">The Impact</h4>
+                            <ul class="big-bang-list">
+                                <li>89% user engagement rate (industry average: 23%)</li>
+                                <li>500K+ downloads in first year</li>
+                                <li>Featured in Apple App Store "Apps We Love"</li>
+                                <li>Reduced average user carbon footprint by 30%</li>
+                            </ul>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">Key Metrics</h4>
+                            <div class="big-bang-grid">
+                                <div class="big-bang-metric">
+                                    <div class="big-bang-metric-value">89%</div>
+                                    <div class="big-bang-metric-label">Engagement</div>
+                                </div>
+                                <div class="big-bang-metric">
+                                    <div class="big-bang-metric-value">500K</div>
+                                    <div class="big-bang-metric-label">Downloads</div>
+                                </div>
+                                <div class="big-bang-metric">
+                                    <div class="big-bang-metric-value">4.8★</div>
+                                    <div class="big-bang-metric-label">App Rating</div>
+                                </div>
+                                <div class="big-bang-metric">
+                                    <div class="big-bang-metric-value">30%</div>
+                                    <div class="big-bang-metric-label">Carbon Reduced</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">Press Mentions</h4>
+                            <div class="big-bang-press">
+                                <a href="#">↗ The Guardian - "EcoStream leads sustainability app revolution"</a>
+                                <a href="#">↗ Wired - "Gamification that actually makes a difference"</a>
+                            </div>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">Skills & Tools</h4>
+                            <div class="big-bang-tags">
+                                <span class="big-bang-tag">Figma</span>
+                                <span class="big-bang-tag">Protopie</span>
+                                <span class="big-bang-tag">React Native</span>
+                                <span class="big-bang-tag">Gamification</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="modal-2" class="hover-peek-overlay" onclick="closeHoverPeekModal(event)">
+                <div class="hover-peek-modal" onclick="event.stopPropagation()">
+                    <div class="hover-peek-modal-header" style="background: var(--accent-red);">
+                        <div>
+                            <div class="hover-peek-modal-title">QuantumPay · UX Designer</div>
+                            <div style="font-size: 0.875rem; opacity: 0.8;">Jun 2018 - Dec 2019</div>
+                        </div>
+                        <button class="hover-peek-close" onclick="closeHoverPeekModal()">×</button>
+                    </div>
+                    <div class="hover-peek-modal-body">
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">Company Brief</h4>
+                            <p>QuantumPay is a fintech startup revolutionizing B2B payment processing with AI-powered fraud detection, instant settlements, and seamless integration with existing financial systems.</p>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">Key Responsibilities</h4>
+                            <ul class="big-bang-list">
+                                <li>Designed end-to-end payment flow user experiences</li>
+                                <li>Created real-time fraud alert interfaces</li>
+                                <li>Developed merchant onboarding and KYC processes</li>
+                                <li>Led UX research for enterprise clients</li>
+                            </ul>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">The Challenge</h4>
+                            <ul class="big-bang-list">
+                                <li>Complex financial data was overwhelming for non-technical users</li>
+                                <li>Existing fraud alerts caused unnecessary transaction blocks</li>
+                                <li>Onboarding took 2+ weeks due to manual processes</li>
+                            </ul>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">The Solution</h4>
+                            <ul class="big-bang-list">
+                                <li>Simplified complex data into actionable insights</li>
+                                <li>Implemented adaptive fraud detection with user education</li>
+                                <li>Automated document verification reducing onboarding to hours</li>
+                            </ul>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">The Impact</h4>
+                            <ul class="big-bang-list">
+                                <li>3x faster payment processing times</li>
+                                <li>$50M+ processed in first year</li>
+                                <li>Reduced false positive fraud alerts by 67%</li>
+                                <li>Onboarding time reduced from 2 weeks to 4 hours</li>
+                            </ul>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">Key Metrics</h4>
+                            <div class="big-bang-grid">
+                                <div class="big-bang-metric">
+                                    <div class="big-bang-metric-value">3x</div>
+                                    <div class="big-bang-metric-label">Faster</div>
+                                </div>
+                                <div class="big-bang-metric">
+                                    <div class="big-bang-metric-value">$50M</div>
+                                    <div class="big-bang-metric-label">Processed</div>
+                                </div>
+                                <div class="big-bang-metric">
+                                    <div class="big-bang-metric-value">0.2%</div>
+                                    <div class="big-bang-metric-label">Error Rate</div>
+                                </div>
+                                <div class="big-bang-metric">
+                                    <div class="big-bang-metric-value">4hrs</div>
+                                    <div class="big-bang-metric-label">Onboarding</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">Press Mentions</h4>
+                            <div class="big-bang-press">
+                                <a href="#">↗ Bloomberg - "QuantumPay's AI revolution in fintech"</a>
+                                <a href="#">↗ Fintech Daily - "The startup that could replace wire transfers"</a>
+                            </div>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">Skills & Tools</h4>
+                            <div class="big-bang-tags">
+                                <span class="big-bang-tag">Sketch</span>
+                                <span class="big-bang-tag">InVision</span>
+                                <span class="big-bang-tag">Principle</span>
+                                <span class="big-bang-tag">Fintech UX</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="modal-3" class="hover-peek-overlay" onclick="closeHoverPeekModal(event)">
+                <div class="hover-peek-modal" onclick="event.stopPropagation()">
+                    <div class="hover-peek-modal-header" style="background: var(--accent-purple);">
+                        <div>
+                            <div class="hover-peek-modal-title">LearnHub · UI/UX Designer</div>
+                            <div style="font-size: 0.875rem; opacity: 0.8;">Jan 2016 - May 2018</div>
+                        </div>
+                        <button class="hover-peek-close" onclick="closeHoverPeekModal()">×</button>
+                    </div>
+                    <div class="hover-peek-modal-body">
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">Company Brief</h4>
+                            <p>LearnHub is an EdTech platform offering personalized online learning experiences through AI-driven course recommendations, interactive content, and peer collaboration features.</p>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">Key Responsibilities</h4>
+                            <ul class="big-bang-list">
+                                <li>Designed core learning interface and course player</li>
+                                <li>Created gamification and achievement systems</li>
+                                <li>Built collaborative study group features</li>
+                                <li>Conducted A/B testing on learning outcomes</li>
+                            </ul>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">The Challenge</h4>
+                            <ul class="big-bang-list">
+                                <li>Online course completion rates below 10% industry-wide</li>
+                                <li>Students felt isolated in self-paced learning</li>
+                                <li>Content was static and disengaging</li>
+                            </ul>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">The Solution</h4>
+                            <ul class="big-bang-list">
+                                <li>Interactive video player with embedded challenges</li>
+                                <li>Study buddy matching and group challenges</li>
+                                <li>Personalized learning paths based on goals</li>
+                            </ul>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">The Impact</h4>
+                            <ul class="big-bang-list">
+                                <li>92% course completion rate (vs. 10% industry average)</li>
+                                <li>2M+ registered students</li>
+                                <li>Average session time increased to 45 minutes</li>
+                                <li>Successfully raised Series B funding</li>
+                            </ul>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">Key Metrics</h4>
+                            <div class="big-bang-grid">
+                                <div class="big-bang-metric">
+                                    <div class="big-bang-metric-value">92%</div>
+                                    <div class="big-bang-metric-label">Completion</div>
+                                </div>
+                                <div class="big-bang-metric">
+                                    <div class="big-bang-metric-value">2M+</div>
+                                    <div class="big-bang-metric-label">Students</div>
+                                </div>
+                                <div class="big-bang-metric">
+                                    <div class="big-bang-metric-value">45min</div>
+                                    <div class="big-bang-metric-label">Avg Session</div>
+                                </div>
+                                <div class="big-bang-metric">
+                                    <div class="big-bang-metric-value">$25M</div>
+                                    <div class="big-bang-metric-label">Funding</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">Press Mentions</h4>
+                            <div class="big-bang-press">
+                                <a href="#">↗ EdTech Magazine - "LearnHub redefines online education"</a>
+                                <a href="#">↗ TechCrunch - "Why course completion finally matters"</a>
+                            </div>
+                        </div>
+                        <div class="hover-peek-modal-section">
+                            <h4 class="hover-peek-modal-section-title">Skills & Tools</h4>
+                            <div class="big-bang-tags">
+                                <span class="big-bang-tag">Adobe XD</span>
+                                <span class="big-bang-tag">After Effects</span>
+                                <span class="big-bang-tag">HTML/CSS</span>
+                                <span class="big-bang-tag">EdTech</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VARIATION 3: THE SMART STACK -->
+        <section class="variation-section">
+            <h2 class="variation-title">
+                <span class="variation-number">3</span>
+                The Smart Stack — 1 Click Expand
+            </h2>
+            <p style="margin-bottom: 24px; color: var(--text-secondary);">Cards stack like a file cabinet. Click any header to expand with all content visible.</p>
+
+            <div class="smart-stack-container">
+                <article class="smart-stack-card expanded">
+                    <div class="smart-stack-header" onclick="this.parentElement.classList.toggle('expanded'); this.parentElement.querySelector('.smart-stack-content').classList.toggle('expanded')">
+                        <div class="smart-stack-company">
+                            <div class="smart-stack-icon">N</div>
+                            <div class="smart-stack-info">
+                                <h3>NeuroFlow</h3>
+                                <span>Lead Product Designer · 2022 - Present</span>
+                            </div>
+                        </div>
+                        <div class="smart-stack-expand-icon">+</div>
+                    </div>
+                    <div class="smart-stack-content expanded">
+                        <div class="smart-stack-body">
+                            <div class="smart-stack-column">
+                                <div class="smart-stack-section">
+                                    <h4 class="smart-stack-section-title">Context & Challenge</h4>
+                                    <p style="margin-bottom: 12px;">NeuroFlow is an AI-powered productivity startup serving 150,000+ users. Users reported cognitive overload and a 68% bounce rate on the analytics page.</p>
+                                    <ul class="big-bang-list">
+                                        <li>Multiple views causing confusion</li>
+                                        <li>High bounce on key pages</li>
+                                        <li>Inconsistent UI patterns</li>
+                                    </ul>
+                                </div>
+                                <div class="smart-stack-section">
+                                    <h4 class="smart-stack-section-title">Solution & Approach</h4>
+                                    <ul class="big-bang-list">
+                                        <li>Card-based information architecture</li>
+                                        <li>Progressive disclosure implementation</li>
+                                        <li>Comprehensive design system</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="smart-stack-column">
+                                <div class="smart-stack-section">
+                                    <h4 class="smart-stack-section-title">Results & Impact</h4>
+                                    <ul class="big-bang-list">
+                                        <li>247% feature adoption increase</li>
+                                        <li>Bounce rate: 68% → 23%</li>
+                                        <li>60% faster design handoff</li>
+                                    </ul>
+                                </div>
+                                <div class="smart-stack-section">
+                                    <h4 class="smart-stack-section-title">Key Metrics</h4>
+                                    <div class="big-bang-grid" style="grid-template-columns: repeat(2, 1fr);">
+                                        <div class="big-bang-metric">
+                                            <div class="big-bang-metric-value">247%</div>
+                                            <div class="big-bang-metric-label">Growth</div>
+                                        </div>
+                                        <div class="big-bang-metric">
+                                            <div class="big-bang-metric-value">150K</div>
+                                            <div class="big-bang-metric-label">Users</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="smart-stack-section">
+                                    <h4 class="smart-stack-section-title">Skills</h4>
+                                    <div class="big-bang-tags">
+                                        <span class="big-bang-tag">Figma</span>
+                                        <span class="big-bang-tag">React</span>
+                                        <span class="big-bang-tag">Systems</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="smart-stack-card">
+                    <div class="smart-stack-header" onclick="this.parentElement.classList.toggle('expanded'); this.parentElement.querySelector('.smart-stack-content').classList.toggle('expanded')">
+                        <div class="smart-stack-company">
+                            <div class="smart-stack-icon" style="background: var(--accent-green);">V</div>
+                            <div class="smart-stack-info">
+                                <h3>Vertex Analytics</h3>
+                                <span>Senior UX Designer · 2019 - 2021</span>
+                            </div>
+                        </div>
+                        <div class="smart-stack-expand-icon">+</div>
+                    </div>
+                    <div class="smart-stack-content">
+                        <div class="smart-stack-body">
+                            <div class="smart-stack-column">
+                                <div class="smart-stack-section">
+                                    <h4 class="smart-stack-section-title">Context & Challenge</h4>
+                                    <p style="margin-bottom: 12px;">Vertex Analytics serves enterprise clients with complex data visualization needs. Steep learning curve and broken mobile experience were key issues.</p>
+                                    <ul class="big-bang-list">
+                                        <li>Complex features hard to learn</li>
+                                        <li>Mobile usage at 2%</li>
+                                        <li>Inconsistent visualizations</li>
+                                    </ul>
+                                </div>
+                                <div class="smart-stack-section">
+                                    <h4 class="smart-stack-section-title">Solution & Approach</h4>
+                                    <ul class="big-bang-list">
+                                        <li>Guided onboarding flows</li>
+                                        <li>Mobile-first redesign</li>
+                                        <li>40+ standardized components</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="smart-stack-column">
+                                <div class="smart-stack-section">
+                                    <h4 class="smart-stack-section-title">Results & Impact</h4>
+                                    <ul class="big-bang-list">
+                                        <li>$2.4M support cost savings</li>
+                                        <li>Mobile usage: 2% → 34%</li>
+                                        <li>NPS: 32 → 58</li>
+                                    </ul>
+                                </div>
+                                <div class="smart-stack-section">
+                                    <h4 class="smart-stack-section-title">Key Metrics</h4>
+                                    <div class="big-bang-grid" style="grid-template-columns: repeat(2, 1fr);">
+                                        <div class="big-bang-metric">
+                                            <div class="big-bang-metric-value">$2.4M</div>
+                                            <div class="big-bang-metric-label">Saved</div>
+                                        </div>
+                                        <div class="big-bang-metric">
+                                            <div class="big-bang-metric-value">34%</div>
+                                            <div class="big-bang-metric-label">Mobile</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="smart-stack-section">
+                                    <h4 class="smart-stack-section-title">Skills</h4>
+                                    <div class="big-bang-tags">
+                                        <span class="big-bang-tag">Sketch</span>
+                                        <span class="big-bang-tag">D3.js</span>
+                                        <span class="big-bang-tag">Enterprise</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="smart-stack-card">
+                    <div class="smart-stack-header" onclick="this.parentElement.classList.toggle('expanded'); this.parentElement.querySelector('.smart-stack-content').classList.toggle('expanded')">
+                        <div class="smart-stack-company">
+                            <div class="smart-stack-icon" style="background: var(--accent-red);">E</div>
+                            <div class="smart-stack-info">
+                                <h3>EcoStream</h3>
+                                <span>Product Design Lead · 2020 - 2022</span>
+                            </div>
+                        </div>
+                        <div class="smart-stack-expand-icon">+</div>
+                    </div>
+                    <div class="smart-stack-content">
+                        <div class="smart-stack-body">
+                            <div class="smart-stack-column">
+                                <div class="smart-stack-section">
+                                    <h4 class="smart-stack-section-title">Context & Challenge</h4>
+                                    <p style="margin-bottom: 12px;">EcoStream is a sustainability app competing in a crowded market. High churn and confusing carbon calculations were barriers to growth.</p>
+                                    <ul class="big-bang-list">
+                                        <li>Low engagement (industry avg 23%)</li>
+                                        <li>Confusing calculations</li>
+                                        <li>50+ competitors</li>
+                                    </ul>
+                                </div>
+                                <div class="smart-stack-section">
+                                    <h4 class="smart-stack-section-title">Solution & Approach</h4>
+                                    <ul class="big-bang-list">
+                                        <li>Daily challenges and rewards</li>
+                                        <li>Intuitive progress visuals</li>
+                                        <li>Verified carbon offsets</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="smart-stack-column">
+                                <div class="smart-stack-section">
+                                    <h4 class="smart-stack-section-title">Results & Impact</h4>
+                                    <ul class="big-bang-list">
+                                        <li>89% engagement (vs 23% avg)</li>
+                                        <li>500K+ downloads</li>
+                                        <li>30% carbon reduction</li>
+                                    </ul>
+                                </div>
+                                <div class="smart-stack-section">
+                                    <h4 class="smart-stack-section-title">Key Metrics</h4>
+                                    <div class="big-bang-grid" style="grid-template-columns: repeat(2, 1fr);">
+                                        <div class="big-bang-metric">
+                                            <div class="big-bang-metric-value">89%</div>
+                                            <div class="big-bang-metric-label">Engage</div>
+                                        </div>
+                                        <div class="big-bang-metric">
+                                            <div class="big-bang-metric-value">500K</div>
+                                            <div class="big-bang-metric-label">Downloads</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="smart-stack-section">
+                                    <h4 class="smart-stack-section-title">Skills</h4>
+                                    <div class="big-bang-tags">
+                                        <span class="big-bang-tag">Figma</span>
+                                        <span class="big-bang-tag">Protopie</span>
+                                        <span class="big-bang-tag">Gamification</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- VARIATION 4: THE FOLDER FILE -->
+        <section class="variation-section">
+            <h2 class="variation-title">
+                <span class="variation-number">4</span>
+                The Folder File — 0-2 Clicks
+            </h2>
+            <p style="margin-bottom: 24px; color: var(--text-secondary);">Results tab open by default (most important info). 1 click switches tabs. All content visible.</p>
+
+            <div class="folder-container">
+                <div class="folder-card">
+                    <div class="folder-tabs">
+                        <button class="folder-tab" onclick="switchFolderTab(this, 'results')">📊 Results</button>
+                        <button class="folder-tab" onclick="switchFolderTab(this, 'context')">🏢 Context</button>
+                        <button class="folder-tab" onclick="switchFolderTab(this, 'actions')">⚡ Actions</button>
+                    </div>
+
+                    <div class="folder-content">
+                        <!-- Results Panel (Default Open - 0 clicks) -->
+                        <div id="results" class="folder-panel active">
+                            <div class="folder-header">
+                                <div class="folder-company">
+                                    <div class="folder-logo">N</div>
+                                    <div class="folder-meta">
+                                        <h3>NeuroFlow</h3>
+                                        <p>Lead Product Designer · Jan 2022 - Present</p>
+                                    </div>
+                                </div>
+                                <div class="folder-duration">Current Role</div>
+                            </div>
+
+                            <div class="folder-section-group">
+                                <div class="folder-section">
+                                    <h4 class="folder-section-title">The Impact</h4>
+                                    <ul class="big-bang-list">
+                                        <li>247% increase in feature adoption</li>
+                                        <li>Bounce rate dropped from 68% to 23%</li>
+                                        <li>60% faster design-to-dev handoff</li>
+                                        <li>NPS improved from 32 to 58</li>
+                                    </ul>
+                                </div>
+                                <div class="folder-section">
+                                    <h4 class="folder-section-title">Key Metrics</h4>
+                                    <div class="big-bang-grid" style="grid-template-columns: repeat(2, 1fr);">
+                                        <div class="big-bang-metric">
+                                            <div class="big-bang-metric-value">247%</div>
+                                            <div class="big-bang-metric-label">Growth</div>
+                                        </div>
+                                        <div class="big-bang-metric">
+                                            <div class="big-bang-metric-value">150K</div>
+                                            <div class="big-bang-metric-label">Users</div>
+                                        </div>
+                                        <div class="big-bang-metric">
+                                            <div class="big-bang-metric-value">23%</div>
+                                            <div class="big-bang-metric-label">Bounce</div>
+                                        </div>
+                                        <div class="big-bang-metric">
+                                            <div class="big-bang-metric-value">99%</div>
+                                            <div class="big-bang-metric-label">Uptime</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="folder-section folder-full-width">
+                                    <h4 class="folder-section-title">Press & Recognition</h4>
+                                    <div class="big-bang-press">
+                                        <a href="#">↗ Product Hunt Featured - "NeuroFlow transforms how teams work"</a>
+                                        <a href="#">↗ TechCrunch - "The AI tool that actually improves productivity"</a>
+                                        <a href="#">↗ The Verge - "NeuroFlow's redesign sets new standards for UX"</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Context Panel (1 click) -->
+                        <div id="context" class="folder-panel">
+                            <div class="folder-header" style="background: var(--accent-indigo);">
+                                <div class="folder-company">
+                                    <div class="folder-logo">N</div>
+                                    <div class="folder-meta">
+                                        <h3>NeuroFlow</h3>
+                                        <p>Lead Product Designer · Jan 2022 - Present</p>
+                                    </div>
+                                </div>
+                                <div class="folder-duration">Current Role</div>
+                            </div>
+
+                            <div class="folder-section-group">
+                                <div class="folder-section folder-full-width">
+                                    <h4 class="folder-section-title">Company Brief</h4>
+                                    <p>NeuroFlow is an AI-powered productivity startup building neural-inspired workflow tools for remote teams. The platform combines machine learning with behavioral psychology to optimize individual and team performance.</p>
+                                </div>
+                                <div class="folder-section">
+                                    <h4 class="folder-section-title">The Challenge</h4>
+                                    <ul class="big-bang-list">
+                                        <li>Users reported cognitive overload with multiple views</li>
+                                        <li>Analytics page had 68% bounce rate</li>
+                                        <li>Legacy code made UI inconsistent</li>
+                                    </ul>
+                                </div>
+                                <div class="folder-section">
+                                    <h4 class="folder-section-title">Key Responsibilities</h4>
+                                    <ul class="big-bang-list">
+                                        <li>Led design for 150K+ users</li>
+                                        <li>Established design system</li>
+                                        <li>Mentored 3 junior designers</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions Panel (1 click) -->
+                        <div id="actions" class="folder-panel">
+                            <div class="folder-header" style="background: var(--accent-orange);">
+                                <div class="folder-company">
+                                    <div class="folder-logo">N</div>
+                                    <div class="folder-meta">
+                                        <h3>NeuroFlow</h3>
+                                        <p>Lead Product Designer · Jan 2022 - Present</p>
+                                    </div>
+                                </div>
+                                <div class="folder-duration">Current Role</div>
+                            </div>
+
+                            <div class="folder-section-group">
+                                <div class="folder-section folder-full-width">
+                                    <h4 class="folder-section-title">The Solution</h4>
+                                    <ul class="big-bang-list">
+                                        <li>Redesigned information architecture with card-based layout</li>
+                                        <li>Implemented progressive disclosure to reduce cognitive load</li>
+                                        <li>Built comprehensive design system enabling 3x faster development</li>
+                                    </ul>
+                                </div>
+                                <div class="folder-section">
+                                    <h4 class="folder-section-title">Skills & Tools</h4>
+                                    <div class="big-bang-tags">
+                                        <span class="big-bang-tag">Figma</span>
+                                        <span class="big-bang-tag">React</span>
+                                        <span class="big-bang-tag">TypeScript</span>
+                                        <span class="big-bang-tag">Storybook</span>
+                                        <span class="big-bang-tag">User Research</span>
+                                    </div>
+                                </div>
+                                <div class="folder-section">
+                                    <h4 class="folder-section-title">Key Deliverables</h4>
+                                    <ul class="big-bang-list">
+                                        <li>Design System (200+ components)</li>
+                                        <li>User Journey Maps</li>
+                                        <li>Interactive Prototypes</li>
+                                        <li>Research Reports</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VARIATION 5: THE FOCUS SCROLL -->
+        <section class="variation-section">
+            <h2 class="variation-title">
+                <span class="variation-number">5</span>
+                The Focus Scroll — 1 Click Navigation
+            </h2>
+            <p style="mbottom: 24px; color: var(--text-secondary);">Left nav switches focus instantly. Right side shows full expanded content. No accordion needed.</p>
+
+            <div class="focus-scroll-container">
+                <nav class="focus-scroll-nav">
+                    <div class="focus-scroll-nav-header">Experience</div>
+                    <ul class="focus-scroll-list">
+                        <li class="focus-scroll-item active" onclick="switchFocusScroll(this, 'focus-1')">
+                            <div class="focus-scroll-item-company">NeuroFlow</div>
+                            <div class="focus-scroll-item-role">Lead Product Designer</div>
+                        </li>
+                        <li class="focus-scroll-item" onclick="switchFocusScroll(this, 'focus-2')">
+                            <div class="focus-scroll-item-company">Vertex Analytics</div>
+                            <div class="focus-scroll-item-role">Senior UX Designer</div>
+                        </li>
+                        <li class="focus-scroll-item" onclick="switchFocusScroll(this, 'focus-3')">
+                            <div class="focus-scroll-item-company">EcoStream</div>
+                            <div class="focus-scroll-item-role">Product Design Lead</div>
+                        </li>
+                        <li class="focus-scroll-item" onclick="switchFocusScroll(this, 'focus-4')">
+                            <div class="focus-scroll-item-company">QuantumPay</div>
+                            <div class="focus-scroll-item-role">UX Designer</div>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="focus-scroll-viewport">
+                    <!-- Card 1 -->
+                    <article id="focus-1" class="focus-scroll-card active">
+                        <div class="focus-scroll-card-header">
+                            <div class="focus-scroll-card-title">
+                                <div>
+                                    <h3>NeuroFlow</h3>
+                                    <div class="focus-scroll-card-role">Lead Product Designer · 2022 - Present</div>
+                                </div>
+                            </div>
+                            <div class="focus-scroll-card-brief">
+                                "AI-powered productivity startup building neural-inspired workflow tools for remote teams."
+                            </div>
+                        </div>
+                        <div class="focus-scroll-card-body">
+                            <div class="focus-scroll-section">
+                                <h4 class="focus-scroll-section-title">Key Responsibilities</h4>
+                                <ul class="big-bang-list">
+                                    <li>Led design direction for 150,000+ users</li>
+                                    <li>Established and maintained design system</li>
+                                    <li>Mentored 3 junior designers</li>
+                                </ul>
+                            </div>
+                            <div class="focus-scroll-section">
+                                <h4 class="focus-scroll-section-title">The Challenge</h4>
+                                <ul class="big-bang-list">
+                                    <li>68% bounce rate on analytics page</li>
+                                    <li>Users reported cognitive overload</li>
+                                </ul>
+                            </div>
+                            <div class="focus-scroll-section">
+                                <h4 class="focus-scroll-section-title">The Solution</h4>
+                                <ul class="big-bang-list">
+                                    <li>Card-based information architecture</li>
+                                    <li>Progressive disclosure implementation</li>
+                                </ul>
+                            </div>
+                            <div class="focus-scroll-metrics">
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">247%</div>
+                                    <div class="focus-scroll-metric-label">Adoption Growth</div>
+                                </div>
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">150K</div>
+                                    <div class="focus-scroll-metric-label">Active Users</div>
+                                </div>
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">23%</div>
+                                    <div class="focus-scroll-metric-label">Bounce Rate</div>
+                                </div>
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">99%</div>
+                                    <div class="focus-scroll-metric-label">Uptime</div>
+                                </div>
+                            </div>
+                            <div class="focus-scroll-tags">
+                                <span class="focus-scroll-tag">Figma</span>
+                                <span class="focus-scroll-tag">React</span>
+                                <span class="focus-scroll-tag">TypeScript</span>
+                                <span class="focus-scroll-tag">Design Systems</span>
+                                <span class="focus-scroll-tag">User Research</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 2 -->
+                    <article id="focus-2" class="focus-scroll-card">
+                        <div class="focus-scroll-card-header" style="background: linear-gradient(135deg, var(--accent-indigo), #4A4ADF);">
+                            <div class="focus-scroll-card-title">
+                                <div>
+                                    <h3>Vertex Analytics</h3>
+                                    <div class="focus-scroll-card-role">Senior UX Designer · 2019 - 2021</div>
+                                </div>
+                            </div>
+                            <div class="focus-scroll-card-brief">
+                                "Enterprise data visualization solutions transforming complex datasets into actionable insights."
+                            </div>
+                        </div>
+                        <div class="focus-scroll-card-body">
+                            <div class="focus-scroll-section">
+                                <h4 class="focus-scroll-section-title">Key Responsibilities</h4>
+                                <ul class="big-bang-list">
+                                    <li>Designed dashboards for Fortune 500 clients</li>
+                                    <li>Led redesign of flagship analytics platform</li>
+                                    <li>Standardized 40+ visualization components</li>
+                                </ul>
+                            </div>
+                            <div class="focus-scroll-section">
+                                <h4 class="focus-scroll-section-title">The Challenge</h4>
+                                <ul class="big-bang-list">
+                                    <li>Steep learning curve for enterprise users</li>
+                                    <li>Mobile experience broken (2% usage)</li>
+                                </ul>
+                            </div>
+                            <div class="focus-scroll-section">
+                                <h4 class="focus-scroll-section-title">The Solution</h4>
+                                <ul class="big-bang-list">
+                                    <li>Guided onboarding flows</li>
+                                    <li>Mobile-first responsive design</li>
+                                </ul>
+                            </div>
+                            <div class="focus-scroll-metrics">
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">$2.4M</div>
+                                    <div class="focus-scroll-metric-label">Cost Savings</div>
+                                </div>
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">500+</div>
+                                    <div class="focus-scroll-metric-label">Enterprise Clients</div>
+                                </div>
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">34%</div>
+                                    <div class="focus-scroll-metric-label">Mobile Usage</div>
+                                </div>
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">58</div>
+                                    <div class="focus-scroll-metric-label">NPS Score</div>
+                                </div>
+                            </div>
+                            <div class="focus-scroll-tags">
+                                <span class="focus-scroll-tag">Sketch</span>
+                                <span class="focus-scroll-tag">D3.js</span>
+                                <span class="focus-scroll-tag">Python</span>
+                                <span class="focus-scroll-tag">Enterprise UX</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 3 -->
+                    <article id="focus-3" class="focus-scroll-card">
+                        <div class="focus-scroll-card-header" style="background: linear-gradient(135deg, var(--accent-green), #00B85A);">
+                            <div class="focus-scroll-card-title">
+                                <div>
+                                    <h3>EcoStream</h3>
+                                    <div class="focus-scroll-card-role">Product Design Lead · 2020 - 2022</div>
+                                </div>
+                            </div>
+                            <div class="focus-scroll-card-brief">
+                                "Sustainability app helping individuals and businesses track and reduce carbon footprint."
+                            </div>
+                        </div>
+                        <div class="focus-scroll-card-body">
+                            <div class="focus-scroll-section">
+                                <h4 class="focus-scroll-section-title">Key Responsibilities</h4>
+                                <ul class="big-bang-list">
+                                    <li>Led product design for flagship mobile app</li>
+                                    <li>Designed gamification systems</li>
+                                    <li>Established brand guidelines</li>
+                                </ul>
+                            </div>
+                            <div class="focus-scroll-section">
+                                <h4 class="focus-scroll-section-title">The Challenge</h4>
+                                <ul class="big-bang-list">
+                                    <li>High churn in sustainability apps</li>
+                                    <li>50+ competitors in market</li>
+                                </ul>
+                            </div>
+                            <div class="focus-scroll-section">
+                                <h4 class="focus-scroll-section-title">The Solution</h4>
+                                <ul class="big-bang-list">
+                                    <li>Daily challenges and rewards system</li>
+                                    <li>Intuitive progress visualizations</li>
+                                </ul>
+                            </div>
+                            <div class="focus-scroll-metrics">
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">89%</div>
+                                    <div class="focus-scroll-metric-label">Engagement</div>
+                                </div>
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">500K</div>
+                                    <div class="focus-scroll-metric-label">Downloads</div>
+                                </div>
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">4.8★</div>
+                                    <div class="focus-scroll-metric-label">App Rating</div>
+                                </div>
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">30%</div>
+                                    <div class="focus-scroll-metric-label">Carbon Reduced</div>
+                                </div>
+                            </div>
+                            <div class="focus-scroll-tags">
+                                <span class="focus-scroll-tag">Figma</span>
+                                <span class="focus-scroll-tag">Protopie</span>
+                                <span class="focus-scroll-tag">React Native</span>
+                                <span class="focus-scroll-tag">Gamification</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 4 -->
+                    <article id="focus-4" class="focus-scroll-card">
+                        <div class="focus-scroll-card-header" style="background: linear-gradient(135deg, var(--accent-red), #E63F3F);">
+                            <div class="focus-scroll-card-title">
+                                <div>
+                                    <h3>QuantumPay</h3>
+                                    <div class="focus-scroll-card-role">UX Designer · 2018 - 2020</div>
+                                </div>
+                            </div>
+                            <div class="focus-scroll-card-brief">
+                                "Fintech startup revolutionizing B2B payments with AI-powered fraud detection."
+                            </div>
+                        </div>
+                        <div class="focus-scroll-card-body">
+                            <div class="focus-scroll-section">
+                                <h4 class="focus-scroll-section-title">Key Responsibilities</h4>
+                                <ul class="big-bang-list">
+                                    <li>Designed end-to-end payment flows</li>
+                                    <li>Created fraud alert interfaces</li>
+                                    <li>Developed KYC processes</li>
+                                </ul>
+                            </div>
+                            <div class="focus-scroll-section">
+                                <h4 class="focus-scroll-section-title">The Challenge</h4>
+                                <ul class="big-bang-list">
+                                    <li>Complex data overwhelming users</li>
+                                    <li>Onboarding took 2+ weeks</li>
+                                </ul>
+                            </div>
+                            <div class="focus-scroll-section">
+                                <h4 class="focus-scroll-section-title">The Solution</h4>
+                                <ul class="big-bang-list">
+                                    <li>Simplified complex data presentations</li>
+                                    <li>Automated document verification</li>
+                                </ul>
+                            </div>
+                            <div class="focus-scroll-metrics">
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">3x</div>
+                                    <div class="focus-scroll-metric-label">Faster</div>
+                                </div>
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">$50M</div>
+                                    <div class="focus-scroll-metric-label">Processed</div>
+                                </div>
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">0.2%</div>
+                                    <div class="focus-scroll-metric-label">Error Rate</div>
+                                </div>
+                                <div class="focus-scroll-metric">
+                                    <div class="focus-scroll-metric-value">4hrs</div>
+                                    <div class="focus-scroll-metric-label">Onboarding</div>
+                                </div>
+                            </div>
+                            <div class="focus-scroll-tags">
+                                <span class="focus-scroll-tag">Sketch</span>
+                                <span class="focus-scroll-tag">InVision</span>
+                                <span class="focus-scroll-tag">Principle</span>
+                                <span class="focus-scroll-tag">Fintech UX</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Hover Peek Modal Functions
+        function openHoverPeekModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeHoverPeekModal(event) {
+            if (!event || event.target === event.currentTarget) {
+                document.querySelectorAll('.hover-peek-overlay').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeHoverPeekModal();
+            }
+        });
+
+        // Folder Tab Functions
+        function switchFolderTab(button, tabId) {
+            // Update tab states
+            button.parentElement.querySelectorAll('.folder-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            button.classList.add('active');
+
+            // Update panel visibility
+            const folderCard = button.closest('.folder-card');
+            folderCard.querySelectorAll('.folder-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            folderCard.querySelector('#' + tabId).classList.add('active');
+        }
+
+        // Focus Scroll Functions
+        function switchFocusScroll(listItem, cardId) {
+            // Update list states
+            listItem.parentElement.querySelectorAll('.focus-scroll-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            listItem.classList.add('active');
+
+            // Update card visibility
+            const viewport = listItem.closest('.focus-scroll-container').querySelector('.focus-scroll-viewport');
+            viewport.querySelectorAll('.focus-scroll-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            viewport.querySelector('#' + cardId).classList.add('active');
+        }
+
+        // Close Big Bang on button click
+        document.querySelectorAll('.big-bang-expand-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                if (content.classList.contains('active')) {
+                    content.classList.remove('active');
+                    this.innerHTML = '📖 Read Full Case Study';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
