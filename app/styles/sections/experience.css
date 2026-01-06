@@ -1,0 +1,297 @@
+/* ==========================================================================
+   Experience Section Styles
+   Experience timeline, company folders, and tabbed content panels.
+   ========================================================================== */
+
+/* Section Title */
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.section-title::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 40px;
+  background: var(--accent-navy);
+  border-radius: var(--radius-sm);
+}
+
+/* Company Folder */
+.company-folder {
+  background: var(--color-folder-body);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-xl);
+  box-shadow: var(--shadow-hard);
+  overflow: hidden;
+}
+
+.company-folder-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-folder-tab);
+  border: var(--border-width) solid var(--color-border);
+  border-bottom: none;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.company-folder-tab.active {
+  background: var(--color-folder-tab-active);
+  position: relative;
+  z-index: 10;
+}
+
+.company-folder-tab:hover {
+  background: var(--color-folder-tab-hover);
+}
+
+.company-folder-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--color-surface);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.company-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.company-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: var(--accent-navy);
+  color: white;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.company-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.company-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.company-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.company-role {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.company-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.company-date {
+  padding: var(--space-xs) var(--space-md);
+  background: var(--color-bg);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.company-website {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-xs) var(--space-md);
+  background: var(--accent-navy);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.company-website:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 0 var(--color-border);
+}
+
+.company-website svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Content Tabs */
+.content-tabs-container {
+  padding: 0;
+}
+
+.content-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 var(--space-lg);
+  background: var(--color-bg);
+  border-bottom: var(--border-width) solid var(--color-border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.content-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-bg);
+  border: var(--border-width) solid var(--color-border);
+  border-bottom: none;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: calc(-1 * var(--border-width));
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.content-tab:hover {
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.content-tab.active {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
+  border-bottom-color: var(--color-surface);
+  margin-bottom: 0;
+  padding-bottom: calc(var(--space-md) + var(--border-width));
+  z-index: 10;
+}
+
+.content-tab-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  transition: all 0.2s ease;
+}
+
+.content-tab.active .content-tab-icon {
+  color: var(--accent-navy);
+}
+
+.content-tab:hover .content-tab-icon {
+  transform: scale(1.1);
+  color: var(--accent-navy);
+}
+
+.content-tab-label {
+  letter-spacing: 0.05em;
+}
+
+/* Content Panels */
+.content-tab-panels {
+  background: var(--color-surface);
+  padding: var(--space-xl);
+}
+
+.content-panel {
+  animation: fadeIn 0.3s ease;
+}
+
+.experience-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.experience-summary {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  padding: var(--space-md);
+  background: var(--color-bg);
+  border-left: 4px solid var(--accent-teal);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  .company-folder-header {
+    padding: var(--space-md);
+  }
+
+  .company-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .company-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .company-name {
+    font-size: 1.25rem;
+  }
+
+  .content-tabs {
+    padding: 0 var(--space-sm);
+  }
+
+  .content-tab {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.85rem;
+  }
+
+  .content-tab-panels {
+    padding: var(--space-md);
+  }
+}

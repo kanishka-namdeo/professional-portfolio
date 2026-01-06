@@ -1,0 +1,203 @@
+/* ==========================================================================
+   Skills Section Styles
+   Skills visualization with tags and categorized skills.
+   ========================================================================== */
+
+/* Skills Section */
+.skills-section {
+  padding: var(--space-2xl) 0;
+}
+
+/* Skills Layout */
+.skills-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+}
+
+/* Skills Category */
+.skills-category {
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-hard);
+}
+
+.skills-category-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.skills-category-title svg {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-navy);
+}
+
+/* Skills Grid */
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* Skill Tag */
+.skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+  transition: all 0.2s ease;
+}
+
+.skill-tag:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 2px 2px 0 0 var(--color-border);
+  background: var(--accent-navy);
+  color: white;
+}
+
+.skill-tag svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.skill-tag.frontend {
+  background: rgba(14, 165, 233, 0.1);
+  border-color: var(--accent-blue);
+}
+
+.skill-tag.backend {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: var(--accent-teal);
+}
+
+.skill-tag.database {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: var(--accent-purple);
+}
+
+.skill-tag.devops {
+  background: rgba(249, 115, 22, 0.1);
+  border-color: var(--accent-coral);
+}
+
+.skill-tag.tools {
+  background: rgba(236, 72, 153, 0.1);
+  border-color: #ec4899;
+}
+
+/* Industry Verticals */
+.industry-verticals {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+}
+
+.industry-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--color-bg);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.industry-item:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 2px 2px 0 0 var(--color-border);
+}
+
+.industry-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: var(--accent-teal);
+  color: white;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.industry-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.industry-info {
+  flex: 1;
+}
+
+.industry-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  margin-bottom: 2px;
+}
+
+.industry-desc {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* Skills Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .skills-layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .skills-category {
+    padding: var(--space-lg);
+  }
+
+  .industry-verticals {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-tag {
+    font-size: 0.85rem;
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* Responsive - Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .skills-layout {
+    gap: var(--space-lg);
+  }
+
+  .industry-verticals {
+    grid-template-columns: 1fr;
+  }
+}

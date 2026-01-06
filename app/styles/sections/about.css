@@ -1,0 +1,214 @@
+/* ==========================================================================
+   About Section Styles
+   About section with bio, cards, and personal information.
+   ========================================================================== */
+
+/* About Section */
+.about-section {
+  padding: var(--space-2xl) 0;
+}
+
+/* About Content Grid */
+.about-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  margin-bottom: var(--space-2xl);
+}
+
+/* About Image */
+.about-image-container {
+  position: relative;
+}
+
+.about-image {
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-hard);
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.about-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* About Text */
+.about-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.about-lead {
+  font-size: 1.25rem;
+  color: var(--color-text);
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+.about-bio {
+  color: var(--color-text-muted);
+  line-height: 1.8;
+}
+
+/* About Cards Grid */
+.about-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+/* About Card */
+.about-card {
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-hard);
+  transition: all 0.2s ease;
+}
+
+.about-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.about-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--accent-teal);
+  color: white;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-md);
+}
+
+.about-card-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.about-card-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-sm);
+}
+
+.about-card-description {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* Big Bang Cards Grid */
+.big-bang-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+/* Big Bang Card */
+.bb-card {
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-hard);
+  transition: all 0.2s ease;
+}
+
+.bb-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.bb-card-amber {
+  border-left: 6px solid var(--accent-amber);
+}
+
+.bb-card-indigo {
+  border-left: 6px solid var(--accent-indigo);
+}
+
+.bb-card-teal {
+  border-left: 6px solid var(--accent-teal);
+}
+
+.bb-card-red {
+  border-left: 6px solid var(--accent-coral);
+}
+
+.bb-card-purple {
+  border-left: 6px solid var(--accent-purple);
+}
+
+.bb-card-green {
+  border-left: 6px solid var(--accent-teal);
+}
+
+.bb-card-sky {
+  border-left: 6px solid var(--accent-blue);
+}
+
+.bb-card-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-sm);
+}
+
+.bb-card-text {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .about-content-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .about-cards-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .big-bang-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .about-card {
+    padding: var(--space-md);
+  }
+
+  .bb-card {
+    padding: var(--space-md);
+  }
+}
+
+/* Responsive - Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .about-content-grid {
+    gap: var(--space-lg);
+  }
+
+  .about-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .big-bang-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
