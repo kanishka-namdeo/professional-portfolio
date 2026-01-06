@@ -6,7 +6,6 @@ const navSections = [
   { id: 'experience', label: 'Experience', icon: '💼' },
   { id: 'products', label: 'Code', icon: '💻' },
   { id: 'about', label: 'About', icon: '👤' },
-  { id: 'skills', label: 'Skills', icon: '⚡' },
   { id: 'contact', label: 'Contact', icon: '📧' },
 ];
 
@@ -22,7 +21,6 @@ export default function ScrollNav() {
 
   useEffect(() => {
     setMounted(true);
-    // Check for saved theme or system preference
     const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
@@ -37,7 +35,6 @@ export default function ScrollNav() {
     document.documentElement.setAttribute('data-theme', newTheme);
   }, [theme]);
 
-  // Clear tooltip timeout
   const clearTooltipTimeout = useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -45,37 +42,31 @@ export default function ScrollNav() {
     }
   }, []);
 
-  // Throttled scroll handler for better performance
   const handleScroll = useCallback(() => {
-    // Show scroll nav when user has scrolled past the hero section
     if (window.scrollY > 400) {
       setIsVisible(true);
     } else {
       setIsVisible(false);
     }
 
-    // Track active section
     const sections = document.querySelectorAll('section[id]');
     let current = '';
     
     sections.forEach((section) => {
       const sectionTop = section.getBoundingClientRect().top;
-      const offset = 150; // Offset for better detection
+      const offset = 150;
       if (sectionTop <= offset) {
         current = section.getAttribute('id') || '';
       }
     });
     
-    // Only update if section changed
     if (current && current !== prevSectionRef.current) {
       prevSectionRef.current = current;
       setActiveSection(current);
       setShowActiveTooltip(true);
       
-      // Clear any existing timeout
       clearTooltipTimeout();
       
-      // Hide tooltip after 2 seconds
       timeoutRef.current = setTimeout(() => {
         setShowActiveTooltip(false);
       }, 2000);
@@ -83,7 +74,6 @@ export default function ScrollNav() {
   }, [clearTooltipTimeout]);
 
   useEffect(() => {
-    // Throttle scroll events to improve performance
     let ticking = false;
     
     const throttledHandleScroll = () => {
@@ -119,7 +109,6 @@ export default function ScrollNav() {
   return (
     <nav className="scroll-nav" aria-label="Section navigation">
       <div className="scroll-nav-inner">
-        {/* Theme Toggle Button */}
         <div 
           className="scroll-nav-item-wrapper scroll-nav-theme"
           onMouseEnter={() => setHoveredSection('theme')}

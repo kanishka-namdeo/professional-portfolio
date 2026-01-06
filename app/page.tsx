@@ -2,7 +2,6 @@ import Hero from '@/components/Hero';
 import Experience from '@/components/Experience';
 import Showcase from '@/components/Showcase';
 import About from '@/components/About';
-import SkillsAndEducation from '@/components/SkillsAndEducation';
 import ContactFAQ from '@/components/ContactFAQ';
 import StickyCTA from '@/components/StickyCTA';
 
@@ -28,11 +27,8 @@ export default function Home() {
           {/* Code & Open Source Section */}
           <Showcase />
           
-          {/* About Section */}
+          {/* About & Qualifications Section (Merged) */}
           <About />
-          
-          {/* Skills & Qualifications Section */}
-          <SkillsAndEducation />
           
           {/* Contact Section */}
           <ContactFAQ />

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Option 2: Timeline-First Journey</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --color-bg: #fafafa;
+      --color-surface: #ffffff;
+      --color-border: #0a0a0a;
+      --color-text: #0a0a0a;
+      --color-text-muted: #525252;
+      --accent-navy: #1e3a5f;
+      --accent-teal: #0d9488;
+      --accent-indigo: #4f46e5;
+      --accent-amber: #d97706;
+      --border-width: 3px;
+      --shadow-hard: 4px 4px 0px 0px var(--color-border);
+      --shadow-hover: 6px 6px 0px 0px var(--color-border);
+      --radius-md: 8px;
+      --space-sm: 0.75rem;
+      --space-md: 1.5rem;
+      --space-lg: 2rem;
+      --space-xl: 3rem;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      padding: var(--space-xl);
+    }
+    .section-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--space-xl);
+    }
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 700;
+      margin-bottom: var(--space-sm);
+    }
+    .section-subtitle {
+      color: var(--color-text-muted);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    /* Journey Timeline */
+    .journey-timeline {
+      position: relative;
+      padding-left: 40px;
+      margin-bottom: var(--space-xl);
+    }
+    .journey-timeline::before {
+      content: '';
+      position: absolute;
+      left: 12px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--color-border);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: var(--space-lg);
+    }
+    .timeline-item:last-child {
+      margin-bottom: 0;
+    }
+    .timeline-dot {
+      position: absolute;
+      left: -34px;
+      top: 4px;
+      width: 22px;
+      height: 22px;
+      background: var(--color-surface);
+      border: 3px solid var(--color-border);
+      border-radius: 50%;
+      z-index: 1;
+    }
+    .timeline-item.current .timeline-dot {
+      background: var(--accent-teal);
+      border-color: var(--accent-teal);
+    }
+    .timeline-card {
+      background: var(--color-surface);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-hard);
+      padding: var(--space-lg);
+      transition: all 0.2s ease;
+    }
+    .timeline-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: var(--shadow-hover);
+    }
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-sm);
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .timeline-role {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .timeline-company {
+      color: var(--accent-navy);
+      font-weight: 600;
+    }
+    .timeline-period {
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      background: var(--color-bg);
+      border-radius: 20px;
+    }
+    .timeline-item.current .timeline-period {
+      background: rgba(13, 148, 136, 0.1);
+      color: var(--accent-teal);
+      font-weight: 600;
+    }
+    .timeline-desc {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+    }
+    /* Qualifications Strip */
+    .quals-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+    @media (max-width: 800px) {
+      .quals-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 500px) {
+      .quals-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+    .qual-strip-card {
+      background: var(--color-surface);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-hard);
+      padding: var(--space-md);
+      text-align: center;
+    }
+    .qual-strip-icon {
+      font-size: 2rem;
+      margin-bottom: var(--space-sm);
+    }
+    .qual-strip-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .qual-strip-org {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+    @media (max-width: 900px) {
+      .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 500px) {
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .skill-card {
+      background: var(--color-surface);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-hard);
+      padding: var(--space-md);
+    }
+    .skill-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: var(--space-sm);
+    }
+    .skill-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .skill-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .skill-tag {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      color: var(--color-text-muted);
+    }
+    /* Bio CTA */
+    .bio-cta-section {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--space-lg);
+    }
+    @media (max-width: 700px) {
+      .bio-cta-section {
+        grid-template-columns: 1fr;
+      }
+    }
+    .bio-card {
+      background: var(--color-surface);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-hard);
+      padding: var(--space-lg);
+    }
+    .bio-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: var(--space-md);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .bio-text {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+    }
+    .bio-text p {
+      margin-bottom: var(--space-sm);
+    }
+    .bio-text p:last-child {
+      margin-bottom: 0;
+    }
+    .contact-card {
+      background: linear-gradient(135deg, var(--accent-navy) 0%, #2d4a6f 100%);
+      border: none;
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .contact-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: var(--space-sm);
+    }
+    .contact-subtitle {
+      font-size: 0.85rem;
+      opacity: 0.9;
+      margin-bottom: var(--space-md);
+    }
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: white;
+      color: var(--accent-navy);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: var(--radius-md);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="section-container">
+    <header class="section-header">
+      <h2 class="section-title">About & Credentials</h2>
+      <p class="section-subtitle">My journey from robotics to product leadership</p>
+    </header>
+
+    <!-- Quick Qualifications Strip -->
+    <div class="quals-strip">
+      <div class="qual-strip-card">
+        <div class="qual-strip-icon">🎓</div>
+        <div class="qual-strip-title">B.E. Mechanical</div>
+        <div class="qual-strip-org">UIT-RGPV • 2015</div>
+      </div>
+      <div class="qual-strip-card">
+        <div class="qual-strip-icon">🏆</div>
+        <div class="qual-strip-title">CSPO</div>
+        <div class="qual-strip-org">Scrum Alliance</div>
+      </div>
+      <div class="qual-strip-card">
+        <div class="qual-strip-icon">🤖</div>
+        <div class="qual-strip-title">Robotics</div>
+        <div class="qual-strip-org">EDX / KUKA</div>
+      </div>
+      <div class="qual-strip-card">
+        <div class="qual-strip-icon">💼</div>
+        <div class="qual-strip-title">8+ Years</div>
+        <div class="qual-strip-org">Product + Tech</div>
+      </div>
+    </div>
+
+    <!-- Journey Timeline -->
+    <div class="journey-timeline">
+      <div class="timeline-item current">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <div>
+              <div class="timeline-role">Technical Product Manager</div>
+              <div class="timeline-company">Noon</div>
+            </div>
+            <span class="timeline-period">2022 - Present</span>
+          </div>
+          <p class="timeline-desc">Leading fulfillment solutions at one of MENA's largest e-commerce platforms.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <div>
+              <div class="timeline-role">Senior Product Manager</div>
+              <div class="timeline-company">MoveInSync</div>
+            </div>
+            <span class="timeline-period">2020 - 2022</span>
+          </div>
+          <p class="timeline-desc">Scaled B2B logistics product to 50+ cities across India, Philippines, and South Africa.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <div>
+              <div class="timeline-role">Robotics Engineer</div>
+              <div class="timeline-company">Sagar Defence Systems</div>
+            </div>
+            <span class="timeline-period">2017 - 2018</span>
+          </div>
+          <p class="timeline-desc">Designed autonomous surface vehicles and drones for defense applications.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills Grid -->
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-card-header">
+          <span class="skill-indicator" style="background: var(--accent-navy)"></span>
+          <span class="skill-title">Product</span>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">Strategy</span>
+          <span class="skill-tag">Roadmaps</span>
+          <span class="skill-tag">User Research</span>
+          <span class="skill-tag">PRDs</span>
+          <span class="skill-tag">Agile</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-card-header">
+          <span class="skill-indicator" style="background: var(--accent-teal)"></span>
+          <span class="skill-title">Technical</span>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">MEAN Stack</span>
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">NLP/LLM</span>
+          <span class="skill-tag">APIs</span>
+          <span class="skill-tag">FastAPI</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-card-header">
+          <span class="skill-indicator" style="background: var(--accent-indigo)"></span>
+          <span class="skill-title">Domains</span>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">Mobility</span>
+          <span class="skill-tag">SaaS</span>
+          <span class="skill-tag">Robotics</span>
+          <span class="skill-tag">Healthcare AI</span>
+          <span class="skill-tag">Logistics</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-card-header">
+          <span class="skill-indicator" style="background: var(--accent-amber)"></span>
+          <span class="skill-title">Tools</span>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">Jira</span>
+          <span class="skill-tag">Figma</span>
+          <span class="skill-tag">Confluence</span>
+          <span class="skill-tag">Mixpanel</span>
+          <span class="skill-tag">ERP</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bio & CTA -->
+    <div class="bio-cta-section">
+      <div class="bio-card">
+        <h4 class="bio-title"><span>👋</span> Hey, I'm Kanishka</h4>
+        <div class="bio-text">
+          <p>I spent three years building autonomous drones—brilliant engineering that sometimes missed the mark because we weren't solving the right problems.</p>
+          <p>That gap between "technically impressive" and "actually useful" became my obsession. Now I lead products that touch millions of users, combining technical depth with genuine user empathy.</p>
+        </div>
+      </div>
+      
+      <div class="contact-card">
+        <h4 class="contact-title">Let's Connect</h4>
+        <p class="contact-subtitle">Open to meaningful opportunities</p>
+        <a href="#" class="contact-btn">
+          <span>Get In Touch</span>
+          →
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Option 4: Tabbed Profile</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --color-bg: #fafafa;
+      --color-surface: #ffffff;
+      --color-border: #0a0a0a;
+      --color-text: #0a0a0a;
+      --color-text-muted: #525252;
+      --accent-navy: #1e3a5f;
+      --accent-teal: #0d9488;
+      --accent-indigo: #4f46e5;
+      --accent-amber: #d97706;
+      --border-width: 3px;
+      --shadow-hard: 4px 4px 0px 0px var(--color-border);
+      --shadow-hover: 6px 6px 0px 0px var(--color-border);
+      --radius-md: 8px;
+      --space-sm: 0.75rem;
+      --space-md: 1.5rem;
+      --space-lg: 2rem;
+      --space-xl: 3rem;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      padding: var(--space-xl);
+    }
+    .section-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .section-header {
+      margin-bottom: var(--space-xl);
+    }
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 700;
+    }
+    /* Profile Header */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+      background: var(--color-surface);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-hard);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-lg);
+    }
+    @media (max-width: 600px) {
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 4px solid var(--color-border);
+      background: linear-gradient(135deg, var(--accent-navy), var(--accent-teal));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+    .profile-info {
+      flex: 1;
+    }
+    .profile-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .profile-role {
+      color: var(--accent-teal);
+      font-weight: 500;
+      margin-bottom: var(--space-sm);
+    }
+    .profile-quick {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .quick-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+    }
+    .profile-cta {
+      flex-shrink: 0;
+    }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: var(--accent-navy);
+      color: white;
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      box-shadow: var(--shadow-hard);
+    }
+    /* Tab Navigation */
+    .tab-nav {
+      display: flex;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+      border-bottom: var(--border-width) solid var(--color-border);
+      padding-bottom: 0;
+    }
+    .tab-btn {
+      padding: var(--space-sm) var(--space-md);
+      background: transparent;
+      border: none;
+      border-bottom: 4px solid transparent;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tab-btn:hover {
+      color: var(--color-text);
+    }
+    .tab-btn.active {
+      color: var(--accent-navy);
+      border-bottom-color: var(--accent-navy);
+    }
+    /* Tab Content */
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Overview Tab */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--space-lg);
+    }
+    @media (max-width: 800px) {
+      .overview-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .overview-card {
+      background: var(--color-surface);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-hard);
+      padding: var(--space-lg);
+    }
+    .overview-text {
+      font-size: 0.95rem;
+      color: var(--color-text-muted);
+      line-height: 1.75;
+    }
+    .overview-text p {
+      margin-bottom: var(--space-md);
+    }
+    .overview-text p:last-child {
+      margin-bottom: 0;
+    }
+    .metric-card {
+      text-align: center;
+      padding: var(--space-md);
+      background: var(--color-bg);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-sm);
+    }
+    .metric-card:last-child {
+      margin-bottom: 0;
+    }
+    .metric-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--accent-navy);
+    }
+    .metric-label {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    /* Experience Tab */
+    .exp-timeline {
+      position: relative;
+      padding-left: 30px;
+    }
+    .exp-timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .exp-item {
+      position: relative;
+      margin-bottom: var(--space-lg);
+    }
+    .exp-item:last-child {
+      margin-bottom: 0;
+    }
+    .exp-dot {
+      position: absolute;
+      left: -26px;
+      top: 4px;
+      width: 14px;
+      height: 14px;
+      background: var(--color-surface);
+      border: 3px solid var(--color-border);
+      border-radius: 50%;
+    }
+    .exp-item.current .exp-dot {
+      background: var(--accent-teal);
+      border-color: var(--accent-teal);
+    }
+    .exp-card {
+      background: var(--color-surface);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-hard);
+      padding: var(--space-md);
+    }
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .exp-role {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .exp-company {
+      color: var(--accent-navy);
+      font-weight: 500;
+    }
+    .exp-period {
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      background: var(--color-bg);
+      border-radius: 15px;
+    }
+    .exp-desc {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+    }
+    /* Skills Tab */
+    .skills-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-md);
+    }
+    @media (max-width: 600px) {
+      .skills-tabs {
+        grid-template-columns: 1fr;
+      }
+    }
+    .skill-group {
+      background: var(--color-surface);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-hard);
+      padding: var(--space-md);
+    }
+    .skill-group-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: var(--space-sm);
+    }
+    .skill-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .skill-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .skill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .skill-item {
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      background: var(--color-bg);
+      border: 2px solid var(--color-border);
+      border-radius: 20px;
+      color: var(--color-text);
+    }
+    /* Credentials Tab */
+    .creds-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-md);
+    }
+    @media (max-width: 600px) {
+      .creds-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .cred-card {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      background: var(--color-surface);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-hard);
+      padding: var(--space-md);
+      transition: all 0.2s ease;
+    }
+    .cred-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: var(--shadow-hover);
+    }
+    .cred-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+    .cred-content {
+      flex: 1;
+    }
+    .cred-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .cred-org {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      margin-bottom: 4px;
+    }
+    .cred-date {
+      font-size: 0.75rem;
+      color: var(--accent-teal);
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="section-container">
+    <header class="section-header">
+      <h2 class="section-title">About Me</h2>
+    </header>
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="profile-avatar">KN</div>
+      <div class="profile-info">
+        <h3 class="profile-name">Kanishka Namdeo</h3>
+        <p class="profile-role">Technical Product Manager</p>
+        <div class="profile-quick">
+          <span class="quick-item">📍 Dubai, UAE</span>
+          <span class="quick-item">💼 8+ Years</span>
+          <span class="quick-item">🎓 B.E. Mechanical</span>
+        </div>
+      </div>
+      <div class="profile-cta">
+        <a href="#" class="cta-btn">
+          <span>Get In Touch</span>
+          →
+        </a>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="overview">Overview</button>
+      <button class="tab-btn" data-tab="experience">Experience</button>
+      <button class="tab-btn" data-tab="skills">Skills</button>
+      <button class="tab-btn" data-tab="credentials">Credentials</button>
+    </nav>
+
+    <!-- Tab Contents -->
+    <div id="overview" class="tab-content active">
+      <div class="overview-grid">
+        <div class="overview-card">
+          <p class="overview-text">
+            I spent three years building autonomous drones—brilliant engineering that sometimes missed the mark because we weren't solving the right problems.
+          </p>
+          <p class="overview-text">
+            That gap between "technically impressive" and "actually useful" became my obsession. Now I lead products that touch millions of users, combining technical depth with genuine user empathy.
+          </p>
+          <p class="overview-text">
+            Currently at Noon, tackling fulfillment challenges at scale. Previously helped MoveInSync expand to 50+ cities across three countries.
+          </p>
+        </div>
+        <div>
+          <div class="metric-card">
+            <div class="metric-value">8x</div>
+            <div class="metric-label">ARR Growth</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">50+</div>
+            <div class="metric-label">Cities Scaled</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">30K+</div>
+            <div class="metric-label">Users Impacted</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="experience" class="tab-content">
+      <div class="exp-timeline">
+        <div class="exp-item current">
+          <div class="exp-dot"></div>
+          <div class="exp-card">
+            <div class="exp-header">
+              <div>
+                <div class="exp-role">Technical Product Manager</div>
+                <div class="exp-company">Noon</div>
+              </div>
+              <span class="exp-period">2022 - Present</span>
+            </div>
+            <p class="exp-desc">Leading fulfillment solutions at one of MENA's largest e-commerce platforms.</p>
+          </div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-dot"></div>
+          <div class="exp-card">
+            <div class="exp-header">
+              <div>
+                <div class="exp-role">Senior Product Manager</div>
+                <div class="exp-company">MoveInSync</div>
+              </div>
+              <span class="exp-period">2020 - 2022</span>
+            </div>
+            <p class="exp-desc">Scaled B2B logistics product across India, Philippines, and South Africa.</p>
+          </div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-dot"></div>
+          <div class="exp-card">
+            <div class="exp-header">
+              <div>
+                <div class="exp-role">Robotics Engineer</div>
+                <div class="exp-company">Sagar Defence Systems</div>
+              </div>
+              <span class="exp-period">2017 - 2018</span>
+            </div>
+            <p class="exp-desc">Designed autonomous surface vehicles and drones for defense applications.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="skills" class="tab-content">
+      <div class="skills-tabs">
+        <div class="skill-group">
+          <div class="skill-group-header">
+            <span class="skill-dot" style="background: var(--accent-navy)"></span>
+            <span class="skill-title">Product Management</span>
+          </div>
+          <div class="skill-list">
+            <span class="skill-item">Strategy</span>
+            <span class="skill-item">Roadmaps</span>
+            <span class="skill-item">User Research</span>
+            <span class="skill-item">PRDs</span>
+            <span class="skill-item">Agile/Scrum</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-header">
+            <span class="skill-dot" style="background: var(--accent-teal)"></span>
+            <span class="skill-title">Technical</span>
+          </div>
+          <div class="skill-list">
+            <span class="skill-item">MEAN Stack</span>
+            <span class="skill-item">Python</span>
+            <span class="skill-item">NLP/LLM</span>
+            <span class="skill-item">API Design</span>
+            <span class="skill-item">FastAPI</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-header">
+            <span class="skill-dot" style="background: var(--accent-indigo)"></span>
+            <span class="skill-title">Domains</span>
+          </div>
+          <div class="skill-list">
+            <span class="skill-item">Mobility</span>
+            <span class="skill-item">SaaS</span>
+            <span class="skill-item">Robotics</span>
+            <span class="skill-item">Healthcare AI</span>
+            <span class="skill-item">Logistics</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-header">
+            <span class="skill-dot" style="background: var(--accent-amber)"></span>
+            <span class="skill-title">Tools & Methods</span>
+          </div>
+          <div class="skill-list">
+            <span class="skill-item">Jira</span>
+            <span class="skill-item">Confluence</span>
+            <span class="skill-item">Figma</span>
+            <span class="skill-item">Mixpanel</span>
+            <span class="skill-item">ERP Systems</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="credentials" class="tab-content">
+      <div class="creds-grid">
+        <div class="cred-card">
+          <span class="cred-icon">🏆</span>
+          <div class="cred-content">
+            <div class="cred-title">Certified Scrum Product Owner</div>
+            <div class="cred-org">Scrum Alliance</div>
+            <div class="cred-date">November 2024</div>
+          </div>
+        </div>
+        <div class="cred-card">
+          <span class="cred-icon">🎓</span>
+          <div class="cred-content">
+            <div class="cred-title">Bachelor of Engineering</div>
+            <div class="cred-org">UIT-RGPV • Mechanical Engineering</div>
+            <div class="cred-date">June 2015</div>
+          </div>
+        </div>
+        <div class="cred-card">
+          <span class="cred-icon">🤖</span>
+          <div class="cred-content">
+            <div class="cred-title">Autonomous Mobile Robots</div>
+            <div class="cred-org">EDX</div>
+            <div class="cred-date">Robot Perception, Locomotion, Localization</div>
+          </div>
+        </div>
+        <div class="cred-card">
+          <span class="cred-icon">🦾</span>
+          <div class="cred-content">
+            <div class="cred-title">Advanced Robot Programmer</div>
+            <div class="cred-org">KUKA College</div>
+            <div class="cred-date">KRL Programming, SIMPRO</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

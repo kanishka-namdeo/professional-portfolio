@@ -1,13 +1,11 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import ThemeToggle from './ThemeToggle';
 
 const navLinks = [
   { href: '#experience', label: 'Experience' },
   { href: '#products', label: 'Code' },
   { href: '#about', label: 'About' },
-  { href: '#skills', label: 'Skills' },
   { href: '#contact', label: 'Contact' },
 ];
 
@@ -17,12 +15,10 @@ export default function Navigation() {
   const [isHidden, setIsHidden] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  // Close menu on route change or scroll
   const closeMenu = useCallback(() => {
     setIsOpen(false);
   }, []);
 
-  // Scroll lock when mobile menu is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -39,7 +35,6 @@ export default function Navigation() {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      // Hide nav when scrolling down, show when scrolling up
       if (currentScrollY > lastScrollY && currentScrollY > 200) {
         setIsHidden(true);
       } else {
@@ -48,7 +43,6 @@ export default function Navigation() {
       
       setLastScrollY(currentScrollY);
 
-      // Track active section
       const sections = document.querySelectorAll('section[id]');
       let current = '';
       
@@ -62,7 +56,6 @@ export default function Navigation() {
       setActiveSection(current);
     };
 
-    // Close menu when clicking outside
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (isOpen && !target.closest('.nav-container') && !target.closest('.mobile-nav')) {
@@ -89,7 +82,6 @@ export default function Navigation() {
 
   return (
     <div className="nav-container">
-      {/* Main Navigation Header */}
       <nav className={`nav ${isHidden ? 'hidden' : ''}`} role="navigation" aria-label="Main navigation">
         <div className="nav-inner">
           <a href="#" className="nav-logo" aria-label="Go to homepage">
@@ -97,7 +89,6 @@ export default function Navigation() {
             <span>Kanishka Namdeo</span>
           </a>
           
-          {/* Desktop Navigation Links */}
           <ul className="nav-links-desktop">
             {navLinks.map((link) => (
               <li key={link.href} role="none">
@@ -128,12 +119,9 @@ export default function Navigation() {
             <span></span>
             <span></span>
           </button>
-          
-          <ThemeToggle />
         </div>
       </nav>
       
-      {/* Mobile Navigation Overlay */}
       <div className={`mobile-nav ${isOpen ? 'active' : ''}`} id="mobileNavLinks">
         <ul className="nav-links">
           {navLinks.map((link) => (
@@ -154,7 +142,6 @@ export default function Navigation() {
         </ul>
       </div>
       
-      {/* Mobile Backdrop */}
       {isOpen && (
         <div 
           className="nav-backdrop"
