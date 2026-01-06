@@ -947,6 +947,13 @@ p,
   position: relative;
   overflow: hidden;
   padding: 0 calc(var(--space-xl) + 60px);
+  cursor: grab;
+  user-select: none;
+}
+
+.showcase-carousel-container.is-dragging {
+  cursor: grabbing;
+  user-select: none;
 }
 
 .showcase-carousel {
@@ -2735,6 +2742,7 @@ section {
   transition: all 0.15s ease;
   z-index: 10;
   box-shadow: var(--shadow-hard);
+  color: var(--color-text);
 }
 
 .carousel-btn:hover {

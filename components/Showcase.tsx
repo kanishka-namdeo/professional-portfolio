@@ -76,9 +76,20 @@ const showcaseItems: ShowcaseItem[] = [
 export default function Showcase() {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [cardStride, setCardStride] = useState(0);
+  
+  // Drag state
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartX, setDragStartX] = useState(0);
+  const [dragStartTranslate, setDragStartTranslate] = useState(0);
+  const [dragLastX, setDragLastX] = useState(0);
+  const [dragVelocity, setDragVelocity] = useState(0);
+  const [hasDragged, setHasDragged] = useState(false);
+  const dragAnimationRef = useRef<number | null>(null);
+  const lastDragTimeRef = useRef<number>(0);
 
   const calculateStride = useCallback(() => {
     if (!scrollRef.current) return;
@@ -94,20 +105,163 @@ export default function Showcase() {
   }, []);
 
   const scrollTo = useCallback((index: number, smooth: boolean = true) => {
-    const stride = cardStride || 412; // fallback matches legacy width + gap
+    const stride = cardStride || 412;
     if (scrollRef.current) {
       scrollRef.current.style.transition = smooth ? 'transform 0.3s ease-out' : 'none';
       scrollRef.current.style.transform = `translateX(-${index * stride}px)`;
     }
+    setCurrentIndex(index);
   }, [cardStride]);
 
   const scroll = (direction: 'left' | 'right') => {
     const newIndex = direction === 'left'
-      ? (currentIndex - 1 + showcaseItems.length) % showcaseItems.length
-      : (currentIndex + 1) % showcaseItems.length;
-    setCurrentIndex(newIndex);
+      ? Math.max(0, currentIndex - 1)
+      : Math.min(showcaseItems.length - 1, currentIndex + 1);
     scrollTo(newIndex);
   };
+
+  // Get carousel boundaries
+  const getCarouselBounds = useCallback(() => {
+    if (!scrollRef.current) return { min: 0, max: 0 };
+    const stride = cardStride || 412;
+    const maxIndex = showcaseItems.length - 1;
+    return {
+      min: 0,
+      max: maxIndex * stride
+    };
+  }, [cardStride]);
+
+  // Handle drag start
+  const handleDragStart = useCallback((clientX: number) => {
+    if (showcaseItems.length <= 1) return;
+    
+    setIsDragging(true);
+    setDragStartX(clientX);
+    setDragStartTranslate(-currentIndex * (cardStride || 412));
+    setDragLastX(clientX);
+    setDragVelocity(0);
+    setHasDragged(false);
+    lastDragTimeRef.current = Date.now();
+    
+    if (scrollRef.current) {
+      scrollRef.current.style.transition = 'none';
+      scrollRef.current.style.cursor = 'grabbing';
+    }
+  }, [currentIndex, cardStride]);
+
+  // Handle drag movement
+  const handleDragMove = useCallback((clientX: number) => {
+    if (!isDragging || !scrollRef.current) return;
+
+    const deltaX = clientX - dragStartX;
+    const bounds = getCarouselBounds();
+    const currentTranslate = dragStartTranslate + deltaX;
+    
+    // Apply resistance at edges
+    let newTranslate = currentTranslate;
+    if (currentTranslate < bounds.min) {
+      const over = bounds.min - currentTranslate;
+      newTranslate = bounds.min - (over * 0.3);
+    } else if (currentTranslate > bounds.max) {
+      const over = currentTranslate - bounds.max;
+      newTranslate = bounds.max + (over * 0.3);
+    }
+    
+    scrollRef.current.style.transform = `translateX(${newTranslate}px)`;
+    
+    // Calculate velocity
+    const now = Date.now();
+    const timeDelta = now - lastDragTimeRef.current;
+    if (timeDelta > 50) {
+      const velocity = (clientX - dragLastX) / timeDelta;
+      setDragVelocity(velocity);
+      setDragLastX(clientX);
+      lastDragTimeRef.current = now;
+    }
+    
+    // Mark as dragged if moved more than 5 pixels
+    if (Math.abs(deltaX) > 5) {
+      setHasDragged(true);
+    }
+  }, [isDragging, dragStartX, dragStartTranslate, getCarouselBounds]);
+
+  // Handle drag end
+  const handleDragEnd = useCallback(() => {
+    if (!isDragging || !scrollRef.current) return;
+
+    setIsDragging(false);
+    
+    if (scrollRef.current) {
+      scrollRef.current.style.cursor = 'grab';
+    }
+
+    // Calculate nearest snap point
+    const stride = cardStride || 412;
+    const currentTranslate = -currentIndex * stride;
+    const actualTranslate = dragStartTranslate + (dragLastX - dragStartX);
+    const rawIndex = Math.abs(actualTranslate) / stride;
+    const nearestIndex = Math.round(rawIndex);
+    const clampedIndex = Math.max(0, Math.min(showcaseItems.length - 1, nearestIndex));
+
+    // Apply momentum if there was significant velocity
+    if (Math.abs(dragVelocity) > 2) {
+      const momentumDirection = dragVelocity > 0 ? -1 : 1;
+      let momentumIndex = clampedIndex + momentumDirection;
+      momentumIndex = Math.max(0, Math.min(showcaseItems.length - 1, momentumIndex));
+      scrollTo(momentumIndex);
+    } else {
+      scrollTo(clampedIndex);
+    }
+    
+    setDragVelocity(0);
+    setHasDragged(false);
+  }, [isDragging, currentIndex, cardStride, dragStartX, dragStartTranslate, dragLastX, dragVelocity, scrollTo]);
+
+  // Mouse event handlers
+  const onMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    handleDragStart(e.clientX);
+  }, [handleDragStart]);
+
+  const onMouseMove = useCallback((e: React.MouseEvent) => {
+    handleDragMove(e.clientX);
+  }, [handleDragMove]);
+
+  const onMouseUp = useCallback((e: React.MouseEvent) => {
+    handleDragEnd();
+  }, [handleDragEnd]);
+
+  const onMouseLeave = useCallback(() => {
+    if (isDragging) {
+      handleDragEnd();
+    }
+  }, [isDragging, handleDragEnd]);
+
+  // Touch event handlers
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    handleDragStart(e.touches[0].clientX);
+  }, [handleDragStart]);
+
+  const onTouchMove = useCallback((e: React.TouchEvent) => {
+    handleDragMove(e.touches[0].clientX);
+  }, [handleDragMove]);
+
+  const onTouchEnd = useCallback(() => {
+    handleDragEnd();
+  }, [handleDragEnd]);
+
+  // Prevent card click from triggering navigation (CTA only)
+  const onCardClick = useCallback((e: React.MouseEvent) => {
+    // Only allow click if it was on the CTA section and no drag occurred
+    const ctaElement = (e.currentTarget as HTMLElement).querySelector('.card-footer');
+    if (ctaElement && ctaElement.contains(e.target as Node) && !hasDragged) {
+      // Allow the default CTA navigation
+      return;
+    }
+    // Prevent navigation for all other card clicks
+    e.preventDefault();
+    e.stopPropagation();
+  }, [hasDragged]);
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
@@ -153,7 +307,10 @@ export default function Showcase() {
           </p>
         </div>
 
-        <div className="showcase-carousel-container">
+        <div 
+          className="showcase-carousel-container"
+          ref={containerRef}
+        >
           <button
             className="carousel-btn carousel-prev"
             onClick={() => scroll('left')}
@@ -166,21 +323,31 @@ export default function Showcase() {
           </button>
 
           <div
-            className="showcase-carousel"
+            className={`showcase-carousel ${isDragging ? 'is-dragging' : ''}`}
             ref={scrollRef}
             role="list"
             aria-label="Code and open source projects"
-            style={{ display: 'flex', gap: 'var(--space-lg)', willChange: 'transform' }}
+            style={{ 
+              display: 'flex', 
+              gap: 'var(--space-lg)', 
+              willChange: 'transform',
+              cursor: 'grab'
+            }}
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseLeave}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
           >
             {showcaseItems.map((item, index) => (
-              <a
+              <div
                 key={item.title}
-                href={item.link}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="showcase-card animate-on-scroll"
                 role="listitem"
                 aria-label={item.title}
+                onClick={onCardClick}
               >
                 <div className="card-header">
                   <div className={`card-icon ${item.type}`}>
@@ -220,15 +387,20 @@ export default function Showcase() {
                   ))}
                 </div>
 
-                <div className="card-footer">
+                <a
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="card-footer"
+                >
                   <span className="link-text">
                     {item.type === 'github' ? 'View Repository' : 'Read Article'}
                   </span>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16" className="arrow-icon">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </div>
-              </a>
+                </a>
+              </div>
             ))}
           </div>
 
