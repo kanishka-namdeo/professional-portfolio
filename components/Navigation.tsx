@@ -65,7 +65,7 @@ export default function Navigation() {
     // Close menu when clicking outside
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (isOpen && !target.closest('.nav') && !target.closest('.nav-links')) {
+      if (isOpen && !target.closest('.nav-container') && !target.closest('.mobile-nav')) {
         closeMenu();
       }
     };
@@ -88,28 +88,17 @@ export default function Navigation() {
   };
 
   return (
-    <>
-      <nav className={`nav ${isHidden ? 'hidden' : ''} ${isOpen ? 'nav-open' : ''}`} role="navigation" aria-label="Main navigation">
+    <div className="nav-container">
+      {/* Main Navigation Header */}
+      <nav className={`nav ${isHidden ? 'hidden' : ''}`} role="navigation" aria-label="Main navigation">
         <div className="nav-inner">
           <a href="#" className="nav-logo" aria-label="Go to homepage">
             <div className="nav-logo-icon">KN</div>
             <span>Kanishka Namdeo</span>
           </a>
           
-          <button
-            className={`mobile-toggle ${isOpen ? 'active' : ''}`}
-            id="mobileToggle"
-            aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
-            aria-expanded={isOpen}
-            aria-controls="navLinks"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-          
-          <ul className={`nav-links ${isOpen ? 'active' : ''}`} id="navLinks" role="menubar">
+          {/* Desktop Navigation Links */}
+          <ul className="nav-links-desktop">
             {navLinks.map((link) => (
               <li key={link.href} role="none">
                 <a
@@ -126,9 +115,44 @@ export default function Navigation() {
               </li>
             ))}
           </ul>
+          
+          <button
+            className={`mobile-toggle ${isOpen ? 'active' : ''}`}
+            id="mobileToggle"
+            aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isOpen}
+            aria-controls="mobileNavLinks"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          
           <ThemeToggle />
         </div>
       </nav>
+      
+      {/* Mobile Navigation Overlay */}
+      <div className={`mobile-nav ${isOpen ? 'active' : ''}`} id="mobileNavLinks">
+        <ul className="nav-links-mobile">
+          {navLinks.map((link) => (
+            <li key={link.href} role="none">
+              <a
+                href={link.href}
+                className={`nav-link ${activeSection === link.href.slice(1) ? 'active' : ''}`}
+                role="menuitem"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(link.href);
+                }}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
       
       {/* Mobile Backdrop */}
       {isOpen && (
@@ -138,6 +162,6 @@ export default function Navigation() {
           aria-hidden="true"
         />
       )}
-    </>
+    </div>
   );
 }

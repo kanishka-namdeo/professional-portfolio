@@ -10,7 +10,7 @@ body {
   transition: background-color var(--theme-transition), color var(--theme-transition), border-color var(--theme-transition);
   line-height: 1.6;
   font-size: 18px;
-  overflow-x: hidden;
+  /* overflow-x: hidden removed to prevent conflict with scroll lock */
 }
 
 /* Screen Reader Only - Visually hidden but accessible to screen readers */

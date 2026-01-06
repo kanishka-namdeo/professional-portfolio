@@ -77,5 +77,5 @@ svg {
 
 /* Fix horizontal scrollbar flash */
 html {
-  overflow-x: hidden;
+  /* overflow-x: hidden; - Removed to prevent conflict with scroll lock */
 }
