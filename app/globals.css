@@ -9819,7 +9819,7 @@ button[class*="icon"],
 .big-bang-card.variant-primary .big-bang-logo {
   background: var(--accent-purple);
   color: #ffffff;
-  border-color: var(--accent-purple);
+  border: var(--border-width) solid var(--color-border);
 }
 
 /* Support A - Teal (Product/SaaS Roles) */
@@ -9843,7 +9843,7 @@ button[class*="icon"],
 .big-bang-card.variant-teal .big-bang-logo {
   background: var(--accent-teal);
   color: #ffffff;
-  border-color: var(--accent-teal);
+  border: var(--border-width) solid var(--color-border);
 }
 
 /* Support B - Amber (Consulting/Earlier Roles) */
@@ -9867,7 +9867,7 @@ button[class*="icon"],
 .big-bang-card.variant-amber .big-bang-logo {
   background: var(--accent-amber);
   color: #ffffff;
-  border-color: var(--accent-amber);
+  border: var(--border-width) solid var(--color-border);
 }
 
 /* ========================================
@@ -9919,19 +9919,19 @@ button[class*="icon"],
 [data-theme="dark"] .big-bang-card.variant-primary .big-bang-logo {
   background: var(--accent-purple);
   color: #ffffff;
-  border-color: var(--accent-purple);
+  border: var(--border-width) solid var(--color-border);
 }
 
 [data-theme="dark"] .big-bang-card.variant-teal .big-bang-logo {
   background: var(--accent-teal);
   color: #ffffff;
-  border-color: var(--accent-teal);
+  border: var(--border-width) solid var(--color-border);
 }
 
 [data-theme="dark"] .big-bang-card.variant-amber .big-bang-logo {
   background: var(--accent-amber);
   color: #ffffff;
-  border-color: var(--accent-amber);
+  border: var(--border-width) solid var(--color-border);
 }
 
 /* Responsive */
