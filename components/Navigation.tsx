@@ -135,7 +135,7 @@ export default function Navigation() {
       
       {/* Mobile Navigation Overlay */}
       <div className={`mobile-nav ${isOpen ? 'active' : ''}`} id="mobileNavLinks">
-        <ul className="nav-links-mobile">
+        <ul className="nav-links">
           {navLinks.map((link) => (
             <li key={link.href} role="none">
               <a
