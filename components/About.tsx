@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
+import { time } from 'console';
 
 // Profile data
 const profileData = {
@@ -15,9 +16,8 @@ const profileData = {
 // Bio content
 const bioContent = {
   paragraphs: [
-    'I spent three years building autonomous drones—brilliant engineering that sometimes missed the mark because we weren\'t solving the right problems.',
-    'That gap between "technically impressive" and "actually useful" became my obsession. Now I lead products that touch millions of users, combining technical depth with genuine user empathy.',
-    'Currently at Noon, tackling fulfillment challenges at scale. Previously helped MoveInSync expand to 50+ cities across three countries.'
+    'I started my career writing code for robots, obsessed with how things work. Over time, I became even more obsessed with why they should exist.',
+    'That curiosity pulled me from software into product. Now I build with the same hands-on rigor, just with a wider lens.'
   ]
 };
 
@@ -25,7 +25,7 @@ const bioContent = {
 const keyMetrics = [
   { value: '8x', label: 'ARR Growth' },
   { value: '50+', label: 'Cities Scaled' },
-  { value: '30K+', label: 'Users Impacted' }
+  { value: '70K+', label: 'Users Impacted' }
 ];
 
 // Skills categories
@@ -33,22 +33,22 @@ const skillsData = [
   {
     title: 'Product Management',
     color: 'var(--accent-navy)',
-    skills: ['Strategy', 'Roadmaps', 'User Research', 'PRDs', 'Agile/Scrum']
+    skills: ['Strategy', 'Roadmaps', 'User Research', 'PRDs', 'Agile/Scrum', 'Stakeholder Mgmt', 'Go-to-Market']
   },
   {
     title: 'Technical',
     color: 'var(--accent-teal)',
-    skills: ['MEAN Stack', 'Python', 'NLP/LLM', 'API Design', 'FastAPI']
+    skills: ['Python', 'Angular', 'React', 'FastAPI', "SQL", "MongoDB", 'Firebase', 'OpenCV', "TensorFlow", 'ROS', 'PyTorch']
   },
   {
     title: 'Domains',
     color: 'var(--accent-indigo)',
-    skills: ['Mobility', 'SaaS', 'Robotics', 'Healthcare AI', 'Logistics']
+    skills: ['SaaS','Robotics','IoT','Transport','Logistics','FinTech',"Intellectual Property" ]
   },
   {
     title: 'Tools & Methods',
     color: 'var(--accent-amber)',
-    skills: ['Jira', 'Confluence', 'Figma', 'Mixpanel', 'ERP Systems']
+    skills: ['Jira', 'Confluence', 'Figma', 'Mixpanel', 'A/B Testing', 'Analytics', 'User Testing', 'Wireframing', 'Prototyping']
   }
 ];
 
@@ -68,7 +68,7 @@ const credentialsData = [
   },
   {
     icon: '🤖',
-    title: 'Autonomous Mobile Robots',
+    title: 'Autonomous Mobile Robots (AMRx)',
     org: 'EDX',
     date: 'Robot Perception, Locomotion, Localization'
   },

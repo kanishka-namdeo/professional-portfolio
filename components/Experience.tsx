@@ -118,20 +118,8 @@ const experiences: Experience[] = [
     skills: ["Product strategy", "User research", "MVP definition", "LLM-agent design", "Workflow architecture", "Team building", "Cross-functional alignment", "Wireframing", "Customer validation", "Early-stage product development"],
     achievements: ["Delivered the 0-to-1 product strategy for the platform", "Secured the first beta customer before prototype completion", "Designed the core system enabling personalized investment workflows", "Built and led the initial engineering team", "Established early feedback loops for rapid iteration"],
     press: [
-      {
-        headline: "Cognium Raises $5M to Build AI-Native Wealth Management Platform",
-        source: "TechCrunch",
-        url: "https://techcrunch.com/2025/06/cognium-seed-funding/",
-        date: "Jun 2025"
-      },
-      {
-        headline: "Former Senior PM from MoveInSync Joins Cognium to Lead Product",
-        source: "LinkedIn",
-        url: "https://linkedin.com/news/cognium-hiring-2025",
-        date: "Jul 2025"
-      }
     ],
-    industries: ["Wealth Management", "Private Banking", "Enterprise AI"],
+    industries: ["Wealth Management", "Private Banking", "Enterprise AI", "SaaS"],
     caseStudy: {
       title: "AI-Native Wealth Management Platform",
       challenge: "Private banking firms struggled with fragmented workflows and lack of personalized investment insights for high-net-worth clients.",
@@ -149,11 +137,19 @@ const experiences: Experience[] = [
     responsibilities: [
       {
         category: 'MVP Execution & Technical Collaboration',
-        items: ["Scoped core MVP features for a video intelligence system, ensuring smooth client deployment.", "Integrated with OMS and support tools, improving dispute resolution speed.", "Designed storage optimization workflows, reducing cloud costs through compression and archival.", "Enabled high-volume processing of ~50K daily orders, ensuring system reliability.", "Coordinated with client teams to ensure adoption and seamless workflow integration."]
+        items: [
+          "Scoped core MVP features for a video intelligence system, ensuring smooth client deployment.", 
+          "Integrated with OMS and support tools, improving dispute resolution speed.", "Designed storage optimization workflows, reducing cloud costs through compression and archival.", 
+          "Enabled high-volume processing of ~50K daily orders, ensuring system reliability.", 
+          "Coordinated with client teams to ensure adoption and seamless workflow integration."]
       },
     ],
-    skills: ["MVP delivery", "Video intelligence systems", "Storage optimization", "Cloud cost reduction", "Low-latency workflow design", "OMS integration", "Automated tagging", "Retrieval system design", "Client onboarding", "High-volume system design"],
-    achievements: ["Delivered a high-volume video intelligence MVP", "Reduced cloud costs through optimized storage and compression", "Built fast retrieval workflows for operational teams", "Integrated seamlessly with client OMS and support tools", "Launched automated tagging and retrieval features", "Enabled smooth adoption of the MVP by client teams"],
+    skills: ["MVP delivery", "Video intelligence systems", "Storage optimization", "Cloud cost reduction", "Low-latency workflow design", "OMS integration", "Automated tagging", "Retrieval system design", "High-volume system design"],
+    achievements: ["Delivered a high-volume video intelligence MVP", 
+      "Reduced cloud costs through optimized storage and compression", "Built fast retrieval workflows for operational teams", 
+      "Integrated seamlessly with client OMS and support tools", 
+      "Launched automated tagging and retrieval features", 
+      "Enabled smooth adoption of the MVP by client teams"],
     caseStudy: {
       title: "Video Intelligence for E-commerce",
       challenge: "E-commerce client needed automated video analysis to reduce manual review workload and improve dispute resolution accuracy.",
@@ -161,7 +157,7 @@ const experiences: Experience[] = [
       impact: "Reduced dispute resolution time by 60% while processing 50K+ daily video uploads with optimized cloud infrastructure.",
       metrics: ["~50K daily orders", "60% dispute reduction", "40% cloud cost saved"]
     },
-    industries: ["E-commerce", "Logistics", "Video Intelligence"],
+    industries: ["E-commerce", "Logistics", "SaaS"],
   },
   {
     title: 'Senior Product Manager',
