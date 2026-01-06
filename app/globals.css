@@ -307,14 +307,14 @@ p,
   font-weight: 700;
 }
 
-.nav-links {
+.nav-links-desktop {
   display: flex;
   gap: var(--space-lg);
   /* 32px: comfortable spacing */
   list-style: none;
 }
 
-.nav-link {
+.nav-links-desktop .nav-link {
   color: var(--color-text);
   text-decoration: none;
   font-weight: 500;
@@ -325,15 +325,19 @@ p,
   transition: all 0.15s ease;
 }
 
-.nav-link:hover {
+.nav-links-desktop .nav-link:hover {
   background: var(--color-border);
   color: var(--color-surface);
 }
 
-.nav-link.active {
+.nav-links-desktop .nav-link.active {
   background: var(--accent-navy);
   color: white;
   border-color: var(--color-border);
+}
+
+.nav-links {
+  display: none;
 }
 
 .mobile-toggle {
@@ -1241,6 +1245,11 @@ p,
     transform: rotate(-45deg) translate(5px, -5px);
   }
 
+  /* Hide desktop nav on mobile */
+  .nav-links-desktop {
+    display: none;
+  }
+
   /* Mobile Navigation Container */
   .mobile-nav {
     position: fixed;
@@ -1261,6 +1270,7 @@ p,
 
   /* Mobile Navigation Links Overlay */
   .mobile-nav .nav-links {
+    display: flex;
     position: fixed;
     top: 0;
     left: auto;
