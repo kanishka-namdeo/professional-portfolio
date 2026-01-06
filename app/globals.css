@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Modular CSS Imports */
+@import './styles/about.css';
+
 :root {
   /* Professional Neobrutalist Color Palette - Light Mode */
   --color-bg: #fafafa;
