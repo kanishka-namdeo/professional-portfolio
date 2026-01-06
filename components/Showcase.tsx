@@ -78,19 +78,42 @@ export default function Showcase() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(true);
   const [cardStride, setCardStride] = useState(0);
-  
-  // Drag state
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStartX, setDragStartX] = useState(0);
-  const [dragStartTranslate, setDragStartTranslate] = useState(0);
-  const [dragLastX, setDragLastX] = useState(0);
-  const [dragVelocity, setDragVelocity] = useState(0);
-  const [hasDragged, setHasDragged] = useState(false);
-  const dragAnimationRef = useRef<number | null>(null);
-  const lastDragTimeRef = useRef<number>(0);
 
+  // Drag state using refs to avoid stale closures
+  const isDraggingRef = useRef(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartXRef = useRef(0);
+  const dragStartTranslateRef = useRef(0);
+  const dragLastXRef = useRef(0);
+  const dragVelocityRef = useRef(0);
+  const hasDraggedRef = useRef(false);
+  const lastDragTimeRef = useRef(0);
+  const isInitializedRef = useRef(false);
+
+  // Refs for window event handlers
+  const windowMouseMoveRef = useRef<(e: MouseEvent) => void>(undefined);
+  const windowMouseUpRef = useRef<(e: MouseEvent) => void>(undefined);
+  const windowTouchMoveRef = useRef<(e: TouchEvent) => void>(undefined);
+  const windowTouchEndRef = useRef<() => void>(undefined);
+
+  // Cleanup function for window listeners
+  const cleanupWindowListeners = useCallback(() => {
+    if (windowMouseMoveRef.current) {
+      window.removeEventListener('mousemove', windowMouseMoveRef.current);
+    }
+    if (windowMouseUpRef.current) {
+      window.removeEventListener('mouseup', windowMouseUpRef.current);
+    }
+    if (windowTouchMoveRef.current) {
+      window.removeEventListener('touchmove', windowTouchMoveRef.current);
+    }
+    if (windowTouchEndRef.current) {
+      window.removeEventListener('touchend', windowTouchEndRef.current);
+    }
+  }, []);
+
+  // Calculate stride (width of one card + gap)
   const calculateStride = useCallback(() => {
     if (!scrollRef.current) return;
     const firstCard = scrollRef.current.querySelector('.showcase-card') as HTMLElement | null;
@@ -101,9 +124,18 @@ export default function Showcase() {
     const gapValue = (scrollStyles.gap || scrollStyles.columnGap || '0').split(' ')[0];
     const gap = parseFloat(gapValue) || 0;
 
-    setCardStride(Math.round(cardRect.width + gap));
+    const stride = Math.round(cardRect.width + gap);
+    setCardStride(stride);
+
+    // Initialize position after stride is calculated
+    if (!isInitializedRef.current && scrollRef.current) {
+      scrollRef.current.style.transition = 'none';
+      scrollRef.current.style.transform = `translateX(0px)`;
+      isInitializedRef.current = true;
+    }
   }, []);
 
+  // Scroll to a specific index
   const scrollTo = useCallback((index: number, smooth: boolean = true) => {
     const stride = cardStride || 412;
     if (scrollRef.current) {
@@ -113,6 +145,7 @@ export default function Showcase() {
     setCurrentIndex(index);
   }, [cardStride]);
 
+  // Scroll left or right by one item
   const scroll = (direction: 'left' | 'right') => {
     const newIndex = direction === 'left'
       ? Math.max(0, currentIndex - 1)
@@ -131,32 +164,14 @@ export default function Showcase() {
     };
   }, [cardStride]);
 
-  // Handle drag start
-  const handleDragStart = useCallback((clientX: number) => {
-    if (showcaseItems.length <= 1) return;
-    
-    setIsDragging(true);
-    setDragStartX(clientX);
-    setDragStartTranslate(-currentIndex * (cardStride || 412));
-    setDragLastX(clientX);
-    setDragVelocity(0);
-    setHasDragged(false);
-    lastDragTimeRef.current = Date.now();
-    
-    if (scrollRef.current) {
-      scrollRef.current.style.transition = 'none';
-      scrollRef.current.style.cursor = 'grabbing';
-    }
-  }, [currentIndex, cardStride]);
-
   // Handle drag movement
   const handleDragMove = useCallback((clientX: number) => {
-    if (!isDragging || !scrollRef.current) return;
+    if (!isDraggingRef.current || !scrollRef.current) return;
 
-    const deltaX = clientX - dragStartX;
+    const deltaX = clientX - dragStartXRef.current;
     const bounds = getCarouselBounds();
-    const currentTranslate = dragStartTranslate + deltaX;
-    
+    const currentTranslate = dragStartTranslateRef.current + deltaX;
+
     // Apply resistance at edges
     let newTranslate = currentTranslate;
     if (currentTranslate < bounds.min) {
@@ -166,56 +181,113 @@ export default function Showcase() {
       const over = currentTranslate - bounds.max;
       newTranslate = bounds.max + (over * 0.3);
     }
-    
+
     scrollRef.current.style.transform = `translateX(${newTranslate}px)`;
-    
+
     // Calculate velocity
     const now = Date.now();
     const timeDelta = now - lastDragTimeRef.current;
     if (timeDelta > 50) {
-      const velocity = (clientX - dragLastX) / timeDelta;
-      setDragVelocity(velocity);
-      setDragLastX(clientX);
+      const velocity = (clientX - dragLastXRef.current) / timeDelta;
+      dragVelocityRef.current = velocity;
+      dragLastXRef.current = clientX;
       lastDragTimeRef.current = now;
     }
-    
+
     // Mark as dragged if moved more than 5 pixels
     if (Math.abs(deltaX) > 5) {
-      setHasDragged(true);
+      hasDraggedRef.current = true;
     }
-  }, [isDragging, dragStartX, dragStartTranslate, getCarouselBounds]);
+  }, [getCarouselBounds]);
 
   // Handle drag end
   const handleDragEnd = useCallback(() => {
-    if (!isDragging || !scrollRef.current) return;
+    if (!isDraggingRef.current || !scrollRef.current) return;
 
+    isDraggingRef.current = false;
     setIsDragging(false);
-    
+
     if (scrollRef.current) {
       scrollRef.current.style.cursor = 'grab';
     }
 
     // Calculate nearest snap point
     const stride = cardStride || 412;
-    const currentTranslate = -currentIndex * stride;
-    const actualTranslate = dragStartTranslate + (dragLastX - dragStartX);
+    const actualTranslate = dragStartTranslateRef.current + (dragLastXRef.current - dragStartXRef.current);
     const rawIndex = Math.abs(actualTranslate) / stride;
-    const nearestIndex = Math.round(rawIndex);
-    const clampedIndex = Math.max(0, Math.min(showcaseItems.length - 1, nearestIndex));
+    let nearestIndex = Math.round(rawIndex);
+    nearestIndex = Math.max(0, Math.min(showcaseItems.length - 1, nearestIndex));
 
     // Apply momentum if there was significant velocity
-    if (Math.abs(dragVelocity) > 2) {
-      const momentumDirection = dragVelocity > 0 ? -1 : 1;
-      let momentumIndex = clampedIndex + momentumDirection;
+    if (Math.abs(dragVelocityRef.current) > 2) {
+      const momentumDirection = dragVelocityRef.current > 0 ? -1 : 1;
+      let momentumIndex = nearestIndex + momentumDirection;
       momentumIndex = Math.max(0, Math.min(showcaseItems.length - 1, momentumIndex));
       scrollTo(momentumIndex);
     } else {
-      scrollTo(clampedIndex);
+      scrollTo(nearestIndex);
     }
-    
-    setDragVelocity(0);
-    setHasDragged(false);
-  }, [isDragging, currentIndex, cardStride, dragStartX, dragStartTranslate, dragLastX, dragVelocity, scrollTo]);
+
+    dragVelocityRef.current = 0;
+    hasDraggedRef.current = false;
+  }, [cardStride, scrollTo]);
+
+  // Setup window event handlers after all drag handlers are defined
+  useEffect(() => {
+    windowMouseMoveRef.current = (e: MouseEvent) => {
+      handleDragMove(e.clientX);
+    };
+    windowMouseUpRef.current = (e: MouseEvent) => {
+      cleanupWindowListeners();
+      handleDragEnd();
+    };
+    windowTouchMoveRef.current = (e: TouchEvent) => {
+      if (e.touches[0]) {
+        handleDragMove(e.touches[0].clientX);
+      }
+    };
+    windowTouchEndRef.current = () => {
+      cleanupWindowListeners();
+      handleDragEnd();
+    };
+
+    return () => {
+      cleanupWindowListeners();
+    };
+  }, [handleDragMove, handleDragEnd, cleanupWindowListeners]);
+
+  // Mouse event handlers
+  const handleDragStart = useCallback((clientX: number) => {
+    if (showcaseItems.length <= 1) return;
+
+    isDraggingRef.current = true;
+    setIsDragging(true);
+    dragStartXRef.current = clientX;
+    dragStartTranslateRef.current = -currentIndex * (cardStride || 412);
+    dragLastXRef.current = clientX;
+    dragVelocityRef.current = 0;
+    hasDraggedRef.current = false;
+    lastDragTimeRef.current = Date.now();
+
+    if (scrollRef.current) {
+      scrollRef.current.style.transition = 'none';
+      scrollRef.current.style.cursor = 'grabbing';
+    }
+
+    // Add window-level event listeners for drag operations
+    if (windowMouseMoveRef.current) {
+      window.addEventListener('mousemove', windowMouseMoveRef.current);
+    }
+    if (windowMouseUpRef.current) {
+      window.addEventListener('mouseup', windowMouseUpRef.current);
+    }
+    if (windowTouchMoveRef.current) {
+      window.addEventListener('touchmove', windowTouchMoveRef.current);
+    }
+    if (windowTouchEndRef.current) {
+      window.addEventListener('touchend', windowTouchEndRef.current);
+    }
+  }, [currentIndex, cardStride]);
 
   // Mouse event handlers
   const onMouseDown = useCallback((e: React.MouseEvent) => {
@@ -232,10 +304,10 @@ export default function Showcase() {
   }, [handleDragEnd]);
 
   const onMouseLeave = useCallback(() => {
-    if (isDragging) {
+    if (isDraggingRef.current) {
       handleDragEnd();
     }
-  }, [isDragging, handleDragEnd]);
+  }, [handleDragEnd]);
 
   // Touch event handlers
   const onTouchStart = useCallback((e: React.TouchEvent) => {
@@ -254,14 +326,14 @@ export default function Showcase() {
   const onCardClick = useCallback((e: React.MouseEvent) => {
     // Only allow click if it was on the CTA section and no drag occurred
     const ctaElement = (e.currentTarget as HTMLElement).querySelector('.card-footer');
-    if (ctaElement && ctaElement.contains(e.target as Node) && !hasDragged) {
+    if (ctaElement && ctaElement.contains(e.target as Node) && !hasDraggedRef.current) {
       // Allow the default CTA navigation
       return;
     }
     // Prevent navigation for all other card clicks
     e.preventDefault();
     e.stopPropagation();
-  }, [hasDragged]);
+  }, []);
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
@@ -286,14 +358,17 @@ export default function Showcase() {
 
   useEffect(() => {
     // Initialize position
-    scrollTo(0, false);
     calculateStride();
 
     const handleResize = () => calculateStride();
     window.addEventListener('resize', handleResize);
 
-    return () => window.removeEventListener('resize', handleResize);
-  }, [scrollTo, calculateStride]);
+    // Cleanup: Remove drag listeners if component unmounts during drag
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      cleanupWindowListeners();
+    };
+  }, [calculateStride, cleanupWindowListeners]);
 
   return (
     <section className="showcase section-full-width" id="products" aria-labelledby="showcase-title">
@@ -307,101 +382,112 @@ export default function Showcase() {
           </p>
         </div>
 
-        <div 
-          className="showcase-carousel-container"
-          ref={containerRef}
-        >
+        <div className="showcase-carousel-wrapper">
           <button
             className="carousel-btn carousel-prev"
             onClick={() => scroll('left')}
             aria-label="Previous project"
             disabled={showcaseItems.length <= 1}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              stroke="currentColor"
+              strokeWidth={2}
+              aria-hidden="true"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
 
-          <div
-            className={`showcase-carousel ${isDragging ? 'is-dragging' : ''}`}
-            ref={scrollRef}
-            role="list"
-            aria-label="Code and open source projects"
-            style={{ 
-              display: 'flex', 
-              gap: 'var(--space-lg)', 
-              willChange: 'transform',
-              cursor: 'grab'
-            }}
-            onMouseDown={onMouseDown}
-            onMouseMove={onMouseMove}
-            onMouseUp={onMouseUp}
-            onMouseLeave={onMouseLeave}
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
+          <div 
+            className="showcase-carousel-container"
+            ref={containerRef}
           >
-            {showcaseItems.map((item, index) => (
-              <div
-                key={item.title}
-                className="showcase-card animate-on-scroll"
-                role="listitem"
-                aria-label={item.title}
-                onClick={onCardClick}
-              >
-                <div className="card-header">
-                  <div className={`card-icon ${item.type}`}>
-                    {item.type === 'github' ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                      </svg>
-                    ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24">
-                        <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
-                      </svg>
-                    )}
-                  </div>
-                  {item.meta && (
-                    <div className="card-meta">
-                      {item.type === 'github' && item.meta.language && (
-                        <span className="meta-item language">
-                          <span className="language-dot"></span>
-                          {item.meta.language}
-                        </span>
-                      )}
-                      {item.meta.date && (
-                        <span className="meta-item date">{item.meta.date}</span>
+            <div
+              className={`showcase-carousel ${isDragging ? 'is-dragging' : ''}`}
+              ref={scrollRef}
+              role="list"
+              aria-label="Code and open source projects"
+              style={{ 
+                display: 'flex', 
+                gap: 'var(--space-lg)', 
+                willChange: 'transform',
+                cursor: 'grab'
+              }}
+              onMouseDown={onMouseDown}
+              onMouseMove={onMouseMove}
+              onMouseUp={onMouseUp}
+              onMouseLeave={onMouseLeave}
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+            >
+              {showcaseItems.map((item, index) => (
+                <div
+                  key={item.title}
+                  className="showcase-card animate-on-scroll"
+                  role="listitem"
+                  aria-label={item.title}
+                  onClick={onCardClick}
+                >
+                  <div className="card-header">
+                    <div className={`card-icon ${item.type}`}>
+                      {item.type === 'github' ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24">
+                          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24">
+                          <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
+                        </svg>
                       )}
                     </div>
-                  )}
-                </div>
+                    {item.meta && (
+                      <div className="card-meta">
+                        {item.type === 'github' && item.meta.language && (
+                          <span className="meta-item language">
+                            <span className="language-dot"></span>
+                            {item.meta.language}
+                          </span>
+                        )}
+                        {item.meta.date && (
+                          <span className="meta-item date">{item.meta.date}</span>
+                        )}
+                      </div>
+                    )}
+                  </div>
 
-                <h3 className="card-title">{item.title}</h3>
-                <p className="card-description">{item.description}</p>
+                  <h3 className="card-title">{item.title}</h3>
+                  <p className="card-description">{item.description}</p>
 
-                <div className="card-tags">
-                  {item.tags.map((tag) => (
-                    <span key={tag} className="tag">
-                      {tag}
+                  <div className="card-tags">
+                    {item.tags.map((tag) => (
+                      <span key={tag} className="tag">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="card-footer"
+                  >
+                    <span className="link-text">
+                      {item.type === 'github' ? 'View Repository' : 'Read Article'}
                     </span>
-                  ))}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16" className="arrow-icon">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </a>
                 </div>
-
-                <a
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="card-footer"
-                >
-                  <span className="link-text">
-                    {item.type === 'github' ? 'View Repository' : 'Read Article'}
-                  </span>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16" className="arrow-icon">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </a>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           <button
@@ -410,8 +496,17 @@ export default function Showcase() {
             aria-label="Next project"
             disabled={showcaseItems.length <= 1}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              stroke="currentColor"
+              strokeWidth={2}
+              aria-hidden="true"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </button>
         </div>

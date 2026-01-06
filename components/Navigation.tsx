@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import ThemeToggle from './ThemeToggle';
 
 const navLinks = [
@@ -16,6 +16,24 @@ export default function Navigation() {
   const [activeSection, setActiveSection] = useState('');
   const [isHidden, setIsHidden] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  // Close menu on route change or scroll
+  const closeMenu = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
+  // Scroll lock when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,12 +62,25 @@ export default function Navigation() {
       setActiveSection(current);
     };
 
+    // Close menu when clicking outside
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (isOpen && !target.closest('.nav') && !target.closest('.nav-links')) {
+        closeMenu();
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+    document.addEventListener('click', handleClickOutside);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [lastScrollY, isOpen, closeMenu]);
 
   const handleNavClick = (href: string) => {
-    setIsOpen(false);
+    closeMenu();
     const target = document.querySelector(href);
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -57,44 +88,56 @@ export default function Navigation() {
   };
 
   return (
-    <nav className={`nav ${isHidden ? 'hidden' : ''}`} role="navigation" aria-label="Main navigation">
-      <div className="nav-inner">
-        <a href="#" className="nav-logo" aria-label="Go to homepage">
-          <div className="nav-logo-icon">KN</div>
-          <span>Kanishka Namdeo</span>
-        </a>
-        
-        <button
-          className="mobile-toggle"
-          id="mobileToggle"
-          aria-label="Toggle navigation menu"
-          aria-expanded={isOpen}
-          aria-controls="navLinks"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-        
-        <ul className={`nav-links ${isOpen ? 'active' : ''}`} id="navLinks">
-          {navLinks.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                className={`nav-link ${activeSection === link.href.slice(1) ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(link.href);
-                }}
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <ThemeToggle />
-      </div>
-    </nav>
+    <>
+      <nav className={`nav ${isHidden ? 'hidden' : ''} ${isOpen ? 'nav-open' : ''}`} role="navigation" aria-label="Main navigation">
+        <div className="nav-inner">
+          <a href="#" className="nav-logo" aria-label="Go to homepage">
+            <div className="nav-logo-icon">KN</div>
+            <span>Kanishka Namdeo</span>
+          </a>
+          
+          <button
+            className={`mobile-toggle ${isOpen ? 'active' : ''}`}
+            id="mobileToggle"
+            aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isOpen}
+            aria-controls="navLinks"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          
+          <ul className={`nav-links ${isOpen ? 'active' : ''}`} id="navLinks" role="menubar">
+            {navLinks.map((link) => (
+              <li key={link.href} role="none">
+                <a
+                  href={link.href}
+                  className={`nav-link ${activeSection === link.href.slice(1) ? 'active' : ''}`}
+                  role="menuitem"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(link.href);
+                  }}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <ThemeToggle />
+        </div>
+      </nav>
+      
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div 
+          className="nav-backdrop"
+          onClick={closeMenu}
+          aria-hidden="true"
+        />
+      )}
+    </>
   );
 }
