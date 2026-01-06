@@ -9816,6 +9816,12 @@ button[class*="icon"],
   color: #ffffff;
 }
 
+.big-bang-card.variant-primary .big-bang-logo {
+  background: var(--accent-purple);
+  color: #ffffff;
+  border-color: var(--accent-purple);
+}
+
 /* Support A - Teal (Product/SaaS Roles) */
 .big-bang-card.variant-teal {
   box-shadow: 4px 4px 0px 0px var(--accent-teal);
@@ -9834,6 +9840,12 @@ button[class*="icon"],
   color: #ffffff;
 }
 
+.big-bang-card.variant-teal .big-bang-logo {
+  background: var(--accent-teal);
+  color: #ffffff;
+  border-color: var(--accent-teal);
+}
+
 /* Support B - Amber (Consulting/Earlier Roles) */
 .big-bang-card.variant-amber {
   box-shadow: 4px 4px 0px 0px var(--accent-amber);
@@ -9850,6 +9862,12 @@ button[class*="icon"],
 .big-bang-card.variant-amber .big-bang-expand-btn.expanded {
   background: var(--accent-amber);
   color: #ffffff;
+}
+
+.big-bang-card.variant-amber .big-bang-logo {
+  background: var(--accent-amber);
+  color: #ffffff;
+  border-color: var(--accent-amber);
 }
 
 /* ========================================
@@ -9895,6 +9913,25 @@ button[class*="icon"],
 [data-theme="dark"] .big-bang-expand-btn.expanded {
   background: var(--color-text);
   color: var(--color-surface);
+}
+
+/* Dark mode logo colors - maintain visibility on dark backgrounds */
+[data-theme="dark"] .big-bang-card.variant-primary .big-bang-logo {
+  background: var(--accent-purple);
+  color: #ffffff;
+  border-color: var(--accent-purple);
+}
+
+[data-theme="dark"] .big-bang-card.variant-teal .big-bang-logo {
+  background: var(--accent-teal);
+  color: #ffffff;
+  border-color: var(--accent-teal);
+}
+
+[data-theme="dark"] .big-bang-card.variant-amber .big-bang-logo {
+  background: var(--accent-amber);
+  color: #ffffff;
+  border-color: var(--accent-amber);
 }
 
 /* Responsive */
