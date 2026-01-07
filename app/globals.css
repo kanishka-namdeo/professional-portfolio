@@ -317,11 +317,12 @@ p,
 
 .nav-links-desktop {
   display: flex;
-  gap: var(--space-lg);
+  gap: var(--space-md);
   /* 32px: comfortable spacing */
   list-style: none;
   flex: 1;
-  justify-content: center;
+  justify-content: right;
+  padding-right: var(--space-lg);
 }
 
 .nav-links-desktop .nav-link {
