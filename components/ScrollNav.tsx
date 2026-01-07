@@ -6,7 +6,6 @@ const navSections = [
   { id: 'experience', label: 'Experience', icon: '💼' },
   { id: 'products', label: 'Code', icon: '💻' },
   { id: 'about', label: 'About', icon: '👤' },
-  { id: 'contact', label: 'Contact', icon: '📧' },
 ];
 
 export default function ScrollNav() {

@@ -1,6 +1,5 @@
 /* ========================================
-   ABOUT SECTION - Tabbed Profile Layout
-   Option 4: Merged About + Qualifications
+   ABOUT SECTION - Clean Semantic Layout
    Neobrutalist Design Language
    ======================================== */
 
@@ -114,6 +113,13 @@
   margin: 0 0 var(--space-md) 0;
 }
 
+.profile-tagline {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0 0 var(--space-md) 0;
+}
+
 .profile-quick-facts {
   display: flex;
   flex-wrap: wrap;
@@ -151,159 +157,150 @@
   font-size: 1rem;
 }
 
-.profile-cta {
-  flex-shrink: 0;
+/* ========================================
+   CTA SECTION
+   Email and LinkedIn CTAs
+   ======================================== */
+
+.profile-cta-container {
+  display: flex;
+  gap: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 2px solid var(--color-border);
+  margin-top: var(--space-md);
 }
 
-.profile-contact-btn {
+@media (max-width: 968px) {
+  .profile-cta-container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-cta-container {
+    width: 100%;
+  }
+}
+
+.profile-cta-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
-  background: var(--accent-navy);
-  color: white;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 600;
-  font-size: 0.95rem;
-  text-decoration: none;
   box-shadow: var(--shadow-hard);
   transition: all 0.2s ease;
   white-space: nowrap;
+  flex: 1;
 }
 
-.profile-contact-btn:hover {
+.profile-cta-btn:hover {
   transform: translate(-2px, -2px);
   box-shadow: var(--shadow-hover);
 }
 
-.profile-contact-btn svg {
-  transition: transform 0.2s ease;
+.profile-cta-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-subtle);
 }
 
-.profile-contact-btn:hover svg {
-  transform: translateX(4px);
+.profile-cta-btn svg {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
 }
 
-@media (max-width: 768px) {
-  .profile-cta {
-    width: 100%;
-  }
-  
-  .profile-contact-btn {
-    width: 100%;
-    justify-content: center;
-  }
+.profile-cta-btn:focus-visible {
+  outline: 3px solid var(--accent-teal);
+  outline-offset: 2px;
 }
 
-/* ========================================
-   TAB NAVIGATION
-   ======================================== */
-
-.about-tabs-nav {
-  display: flex;
-  gap: 0;
-  border-bottom: var(--border-width) solid var(--color-border);
-  padding-bottom: 0;
-  margin-bottom: var(--space-lg);
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s ease 0.1s;
+/* Email CTA - Navy theme */
+.email-cta {
+  background: var(--accent-navy);
+  color: white;
 }
 
-.about-tabs-nav.visible {
-  opacity: 1;
-  transform: translateY(0);
+.email-cta:hover {
+  background: var(--accent-navy);
+  color: white;
 }
 
-.tab-button {
-  padding: var(--space-sm) var(--space-lg);
-  background: transparent;
-  border: none;
-  border-bottom: 4px solid transparent;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-}
-
-.tab-button:hover {
+/* LinkedIn CTA - Professional theme */
+.linkedin-cta {
+  background: var(--color-surface);
   color: var(--color-text);
+}
+
+.linkedin-cta:hover {
   background: var(--color-bg);
 }
 
-.tab-button.active {
-  color: var(--accent-navy);
-  border-bottom-color: var(--accent-navy);
-}
-
-.tab-button:focus-visible {
-  outline: 3px solid var(--accent-teal);
-  outline-offset: -3px;
-}
-
-@media (max-width: 640px) {
-  .tab-button {
-    padding: var(--space-sm) var(--space-md);
-    font-size: 0.85rem;
+@media (max-width: 768px) {
+  .profile-cta-btn {
+    width: 100%;
   }
 }
 
 @media (max-width: 480px) {
-  .tab-button {
-    padding: var(--space-xs) var(--space-sm);
-    font-size: 0.8rem;
+  .profile-cta-btn {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.9rem;
+  }
+  
+  .profile-cta-btn svg {
+    width: 18px;
+    height: 18px;
   }
 }
 
 /* ========================================
-   TAB PANELS
+   SPLIT LAYOUT
+   Two column layout for Story + Journey / FAQ
    ======================================== */
 
-.about-tab-panels {
-  position: relative;
-}
-
-.tab-panel {
-  display: none;
-  animation: tabFadeIn 0.3s ease;
-}
-
-.tab-panel.active {
-  display: block;
-}
-
-@keyframes tabFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ========================================
-   OVERVIEW TAB
-   ======================================== */
-
-.overview-grid {
+.about-split-container {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: var(--space-lg);
-  align-items: start;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease 0.2s;
 }
 
-@media (max-width: 900px) {
-  .overview-grid {
+.about-split-container.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 968px) {
+  .about-split-container {
     grid-template-columns: 1fr;
+    gap: var(--space-lg);
   }
 }
+
+.about-split-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.about-split-right {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========================================
+   BIO CARD
+   Story section
+   ======================================== */
 
 .overview-bio-card {
   background: var(--color-surface);
@@ -356,53 +353,9 @@
   }
 }
 
-.overview-metrics {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-}
-
-.metric-card {
-  text-align: center;
-  padding: var(--space-md);
-  background: var(--color-surface);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-hard);
-  transition: all 0.2s ease;
-}
-
-.metric-card:hover {
-  box-shadow: var(--shadow-hover);
-  transform: translate(-2px, -2px);
-}
-
-.metric-value {
-  display: block;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--accent-navy);
-  line-height: 1.1;
-  margin-bottom: 4px;
-}
-
-@media (max-width: 480px) {
-  .metric-value {
-    font-size: 1.5rem;
-  }
-}
-
-.metric-label {
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 500;
-}
-
 /* ========================================
-   EXPERIENCE TAB
+   EXPERIENCE TIMELINE
+   Journey timeline with expandable cards
    ======================================== */
 
 .experience-timeline {
@@ -420,13 +373,18 @@
   background: var(--color-border);
 }
 
-.experience-item {
+.timeline-item {
   position: relative;
   margin-bottom: var(--space-lg);
 }
 
-.experience-item:last-child {
+.timeline-item:last-child {
   margin-bottom: 0;
+}
+
+.timeline-item.current .experience-dot {
+  background: var(--accent-teal);
+  border-color: var(--accent-teal);
 }
 
 .experience-dot {
@@ -437,14 +395,9 @@
   height: 18px;
   background: var(--color-surface);
   border: 3px solid var(--color-border);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   z-index: 1;
   transition: all 0.2s ease;
-}
-
-.experience-item.current .experience-dot {
-  background: var(--accent-teal);
-  border-color: var(--accent-teal);
 }
 
 .experience-card {
@@ -454,11 +407,23 @@
   box-shadow: var(--shadow-hard);
   padding: var(--space-lg);
   transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
 }
 
 .experience-card:hover {
   box-shadow: var(--shadow-hover);
   transform: translate(-2px, -2px);
+}
+
+.experience-card.expanded {
+  box-shadow: var(--shadow-hover);
+  transform: translate(-2px, -2px);
+}
+
+.experience-card:focus-visible {
+  outline: 3px solid var(--accent-teal);
+  outline-offset: 2px;
 }
 
 .experience-header {
@@ -494,14 +459,32 @@
   white-space: nowrap;
 }
 
-.experience-item.current .experience-period {
+.timeline-item.current .experience-period {
   background: rgba(13, 148, 136, 0.1);
   color: var(--accent-teal);
   border-color: var(--accent-teal);
   font-weight: 600;
 }
 
-.experience-description {
+.timeline-expanded-content {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.timeline-detail {
   font-size: 0.9rem;
   color: var(--color-text-muted);
   line-height: 1.6;
@@ -524,164 +507,233 @@
 }
 
 /* ========================================
-   SKILLS TAB
+   FAQ SECTION
+   Tabbed FAQ with accordion items
    ======================================== */
 
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-md);
+.faq-section {
+  display: flex;
+  flex-direction: column;
 }
 
-@media (max-width: 700px) {
-  .skills-grid {
-    grid-template-columns: 1fr;
-  }
+.faq-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
 }
 
-.skill-category-card {
-  background: var(--color-surface);
+.faq-title {
+  background: var(--color-text);
+  color: var(--color-surface);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: var(--space-xs) var(--space-md);
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-hard);
-  padding: var(--space-lg);
-  transition: all 0.2s ease;
+  margin: 0;
+  white-space: nowrap;
 }
 
-.skill-category-card:hover {
+/* FAQ Tabs */
+.faq-tabs {
+  display: flex;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.faq-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-subtle);
+}
+
+.faq-tab:hover {
+  background: var(--color-surface);
+  color: var(--color-text);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-base);
+}
+
+.faq-tab.active {
+  background: var(--accent-navy);
+  color: white;
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-base);
+}
+
+.faq-tab:focus-visible {
+  outline: 3px solid var(--accent-teal);
+  outline-offset: 2px;
+}
+
+.faq-tab-icon {
+  font-size: 1rem;
+}
+
+.faq-tab-label {
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .faq-tab {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.85rem;
+  }
+
+  .faq-tab-icon {
+    font-size: 0.9rem;
+  }
+}
+
+/* FAQ Tab Panels */
+.faq-tab-panel {
+  display: none;
+  animation: tabFadeIn 0.3s ease;
+}
+
+.faq-tab-panel.active {
+  display: block;
+}
+
+@keyframes tabFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.faq-tab-panel {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.faq-tab-panel:not(.active) {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* FAQ Item Card */
+.faq-item-card {
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-base);
+  padding: var(--space-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.faq-item-card:hover {
   box-shadow: var(--shadow-hover);
   transform: translate(-2px, -2px);
 }
 
-.skill-category-header {
+.faq-item-card.expanded {
+  box-shadow: var(--shadow-hover);
+}
+
+.faq-item-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: var(--space-md);
+  min-height: 24px;
+  width: 100%;
 }
 
-.skill-indicator {
+.faq-item-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 24px;
+  width: 100%;
+}
+
+.faq-indicator {
   width: 12px;
   height: 12px;
   background: var(--skill-color, var(--accent-navy));
-  border-radius: 0;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
 }
 
-.skill-category-title {
+.faq-question-title {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 1rem;
   font-weight: 700;
   margin: 0;
   color: var(--color-text);
-}
-
-.skill-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.skill-tag {
-  font-size: 0.8rem;
-  font-weight: 500;
-  padding: 5px 12px;
-  background: var(--color-bg);
-  border: 2px solid var(--color-border);
-  border-radius: 20px;
-  color: var(--color-text);
-  transition: all 0.2s ease;
-}
-
-.skill-tag:hover {
-  background: var(--color-surface);
-  transform: translateY(-2px);
-  box-shadow: 2px 2px 0 0 var(--color-border);
-}
-
-/* ========================================
-   CREDENTIALS TAB
-   ======================================== */
-
-.credentials-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-md);
-}
-
-@media (max-width: 700px) {
-  .credentials-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.credential-card {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-md);
-  background: var(--color-surface);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-hard);
-  padding: var(--space-lg);
-  transition: all 0.2s ease;
-}
-
-.credential-card:hover {
-  box-shadow: var(--shadow-hover);
-  transform: translate(-2px, -2px);
-}
-
-.credential-icon {
-  font-size: 2rem;
-  flex-shrink: 0;
-}
-
-.credential-content {
   flex: 1;
-  min-width: 0;
 }
 
-.credential-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  margin: 0 0 4px 0;
-  color: var(--color-text);
+.faq-toggle-icon {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  transition: transform 0.2s ease;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-left: auto;
 }
 
-.credential-org {
+.faq-item-card.expanded .faq-toggle-icon {
+  transform: rotate(0deg);
+}
+
+.faq-answer-text {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
   font-size: 0.9rem;
   color: var(--color-text-muted);
-  margin: 0 0 8px 0;
+  line-height: 1.6;
+  margin: 0;
+  margin-top: 0;
 }
 
-.credential-date {
-  font-size: 0.75rem;
-  color: var(--accent-teal);
-  font-weight: 600;
-  display: inline-block;
-  padding: 2px 8px;
-  background: rgba(13, 148, 136, 0.1);
-  border-radius: 10px;
+.faq-answer-text.visible {
+  max-height: 500px;
+  opacity: 1;
+  margin-top: var(--space-md);
 }
 
-@media (max-width: 480px) {
-  .credential-card {
-    padding: var(--space-md);
-    gap: var(--space-sm);
-  }
-  
-  .credential-icon {
-    font-size: 1.5rem;
-  }
-  
-  .credential-title {
-    font-size: 0.9rem;
-  }
-  
-  .credential-org {
-    font-size: 0.8rem;
-  }
+.faq-card:focus-visible,
+.experience-card:focus-visible {
+  outline: 3px solid var(--accent-teal);
+  outline-offset: 2px;
 }
 
 /* ========================================
@@ -698,25 +750,48 @@
 
 [data-theme="dark"] .overview-bio-card,
 [data-theme="dark"] .experience-card,
-[data-theme="dark"] .skill-category-card,
-[data-theme="dark"] .credential-card {
+[data-theme="dark"] .faq-item-card {
   background: var(--color-surface);
 }
 
-[data-theme="dark"] .metric-card {
-  background: var(--color-surface);
+[data-theme="dark"] .faq-title {
+  background: var(--color-text);
+  color: var(--color-surface);
 }
 
-[data-theme="dark"] .tab-button {
+[data-theme="dark"] .faq-toggle-icon {
   color: var(--color-text-muted);
 }
 
-[data-theme="dark"] .tab-button:hover {
+[data-theme="dark"] .timeline-expanded-content {
+  border-top-color: var(--color-border);
+}
+
+[data-theme="dark"] .timeline-detail {
+  color: var(--color-text-muted);
+}
+
+[data-theme="dark"] .email-cta {
+  background: var(--accent-navy);
+  color: white;
+}
+
+[data-theme="dark"] .linkedin-cta {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .linkedin-cta:hover {
   background: var(--color-surface-alt);
 }
 
-[data-theme="dark"] .tab-button.active {
-  color: var(--accent-teal);
+[data-theme="dark"] .faq-tab:not(.active) {
+  background: var(--color-surface);
+}
+
+[data-theme="dark"] .faq-tab.active {
+  background: var(--accent-navy);
+  color: white;
 }
 
 /* ========================================
@@ -725,34 +800,52 @@
 
 @media (prefers-reduced-motion: reduce) {
   .about-profile-header,
-  .about-tabs-nav,
-  .tab-panel,
+  .about-split-container,
+  .faq-tab-panel,
   .profile-header-card,
   .overview-bio-card,
   .experience-card,
-  .skill-category-card,
-  .credential-card,
-  .metric-card,
-  .tab-button {
+  .faq-item-card,
+  .faq-toggle-icon,
+  .faq-answer-text,
+  .timeline-expanded-content {
     transition: none;
     animation: none;
     transform: none;
   }
   
   .about-profile-header.visible,
-  .about-tabs-nav.visible {
+  .about-split-container.visible {
     opacity: 1;
     transform: none;
   }
   
-  .tab-panel.active {
+  .faq-tab-panel.active {
     animation: none;
+    opacity: 1;
+    transform: none;
+    position: static;
+  }
+  
+  .faq-tab-panel:not(.active) {
+    opacity: 0;
+    position: absolute;
+  }
+  
+  .faq-answer-text.visible {
+    max-height: none;
+    opacity: 1;
+    margin-top: var(--space-md);
+  }
+  
+  .faq-item-card.expanded .faq-toggle-icon {
+    transform: none;
   }
 }
 
-.tab-button:focus-visible,
-.profile-contact-btn:focus-visible,
-.skill-tag:focus-visible {
+.profile-cta-btn:focus-visible,
+.faq-tab:focus-visible,
+.faq-item-card:focus-visible {
   outline: 3px solid var(--accent-teal);
   outline-offset: 2px;
 }
@@ -762,9 +855,7 @@
   .profile-header-card,
   .overview-bio-card,
   .experience-card,
-  .skill-category-card,
-  .credential-card,
-  .metric-card {
+  .faq-item-card {
     border-width: 4px;
   }
 }

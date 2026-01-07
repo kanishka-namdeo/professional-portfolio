@@ -2,8 +2,8 @@ import Hero from '@/components/Hero';
 import Experience from '@/components/Experience';
 import Showcase from '@/components/Showcase';
 import About from '@/components/About';
-import ContactFAQ from '@/components/ContactFAQ';
 import StickyCTA from '@/components/StickyCTA';
+import BackToTop from '@/components/BackToTop';
 
 export default function Home() {
   return (
@@ -27,15 +27,15 @@ export default function Home() {
           {/* Code & Open Source Section */}
           <Showcase />
           
-          {/* About & Qualifications Section (Merged) */}
+          {/* About & FAQ Section (Merged) */}
           <About />
-          
-          {/* Contact Section */}
-          <ContactFAQ />
         </article>
         
         {/* Sticky CTA */}
         <StickyCTA />
+        
+        {/* Back to Top Button */}
+        <BackToTop />
       </main>
     </>
   );

@@ -7,7 +7,6 @@ const navLinks = [
   { href: '#experience', label: 'Experience' },
   { href: '#products', label: 'Code' },
   { href: '#about', label: 'About' },
-  { href: '#contact', label: 'Contact' },
 ];
 
 export default function Navigation() {
