@@ -150,6 +150,12 @@
   box-sizing: border-box;
 }
 
+/* Mobile touch feedback - remove default tap highlight */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
 *:not(script) {
   transition: background-color var(--theme-transition),
     color var(--theme-transition),
@@ -440,6 +446,7 @@ p,
   color: var(--color-text);
   margin-bottom: var(--space-sm);
   letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
 /* Special highlight color for "I DO BOTH." statement */
@@ -531,6 +538,11 @@ p,
   box-shadow: var(--shadow-hover);
 }
 
+.hero-actions .cta-button.primary:active {
+  transform: translate(0, 0);
+  box-shadow: var(--shadow-base);
+}
+
 .hero-actions .cta-button.secondary {
   background: var(--color-surface);
   color: var(--color-text);
@@ -540,6 +552,11 @@ p,
 .hero-actions .cta-button.secondary:hover {
   transform: translate(-2px, -2px);
   box-shadow: var(--shadow-hover);
+}
+
+.hero-actions .cta-button.secondary:active {
+  transform: translate(0, 0);
+  box-shadow: var(--shadow-base);
 }
 
 /* Hero Availability Badge */
