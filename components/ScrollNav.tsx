@@ -21,12 +21,45 @@ export default function ScrollNav() {
 
   useEffect(() => {
     setMounted(true);
+    // Check document first (in case ThemeToggle set it), then localStorage
+    const docTheme = document.documentElement.getAttribute('data-theme') as 'light' | 'dark' | null;
     const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+    const initialTheme = docTheme || savedTheme || (prefersDark ? 'dark' : 'light');
     setTheme(initialTheme);
     document.documentElement.setAttribute('data-theme', initialTheme);
+    localStorage.setItem('theme', initialTheme);
   }, []);
+
+  // Listen for storage events from other tabs/windows
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'theme' && e.newValue) {
+        const newTheme = e.newValue as 'light' | 'dark';
+        setTheme(newTheme);
+        document.documentElement.setAttribute('data-theme', newTheme);
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  // Also listen for theme changes on document (from ThemeToggle in top nav)
+  useEffect(() => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+          const newTheme = document.documentElement.getAttribute('data-theme') as 'light' | 'dark';
+          if (newTheme && newTheme !== theme) {
+            setTheme(newTheme);
+          }
+        }
+      });
+    });
+    
+    observer.observe(document.documentElement, { attributes: true });
+    return () => observer.disconnect();
+  }, [theme]);
 
   const toggleTheme = useCallback(() => {
     const newTheme = theme === 'light' ? 'dark' : 'light';

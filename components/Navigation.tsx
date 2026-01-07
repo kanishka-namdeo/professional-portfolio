@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import ThemeToggle from './ThemeToggle';
 
 const navLinks = [
   { href: '#experience', label: 'Experience' },
@@ -106,6 +107,8 @@ export default function Navigation() {
               </li>
             ))}
           </ul>
+          
+          <ThemeToggle />
           
           <button
             className={`mobile-toggle ${isOpen ? 'active' : ''}`}
