@@ -454,7 +454,7 @@
   padding: 4px 12px;
   background: var(--color-bg);
   border: 2px solid var(--color-border);
-  border-radius: 20px;
+  border-radius: var(--radius-full);
   color: var(--color-text-muted);
   white-space: nowrap;
 }

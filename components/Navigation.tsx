@@ -107,20 +107,22 @@ export default function Navigation() {
             ))}
           </ul>
           
-          <ThemeToggle />
-          
-          <button
-            className={`mobile-toggle ${isOpen ? 'active' : ''}`}
-            id="mobileToggle"
-            aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
-            aria-expanded={isOpen}
-            aria-controls="mobileNavLinks"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
+          <div className="nav-cta-group">
+            <ThemeToggle />
+            
+            <button
+              className={`mobile-toggle ${isOpen ? 'active' : ''}`}
+              id="mobileToggle"
+              aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={isOpen}
+              aria-controls="mobileNavLinks"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
         </div>
       </nav>
       
