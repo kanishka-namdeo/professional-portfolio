@@ -253,7 +253,7 @@
     padding: var(--space-sm) var(--space-md);
     font-size: 0.9rem;
   }
-  
+
   .profile-cta-btn svg {
     width: 18px;
     height: 18px;
@@ -478,6 +478,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -495,11 +496,11 @@
   .experience-card {
     padding: var(--space-md);
   }
-  
+
   .experience-role {
     font-size: 1rem;
   }
-  
+
   .experience-period {
     font-size: 0.75rem;
     padding: 3px 10px;
@@ -615,6 +616,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -658,14 +660,6 @@
 
 .faq-item-card.expanded {
   box-shadow: var(--shadow-hover);
-}
-
-.faq-item-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 24px;
-  width: 100%;
 }
 
 .faq-item-header {
@@ -730,7 +724,6 @@
   margin-top: var(--space-md);
 }
 
-.faq-card:focus-visible,
 .experience-card:focus-visible {
   outline: 3px solid var(--accent-teal);
   outline-offset: 2px;
@@ -799,6 +792,7 @@
    ======================================== */
 
 @media (prefers-reduced-motion: reduce) {
+
   .about-profile-header,
   .about-split-container,
   .faq-tab-panel,
@@ -813,31 +807,31 @@
     animation: none;
     transform: none;
   }
-  
+
   .about-profile-header.visible,
   .about-split-container.visible {
     opacity: 1;
     transform: none;
   }
-  
+
   .faq-tab-panel.active {
     animation: none;
     opacity: 1;
     transform: none;
     position: static;
   }
-  
+
   .faq-tab-panel:not(.active) {
     opacity: 0;
     position: absolute;
   }
-  
+
   .faq-answer-text.visible {
     max-height: none;
     opacity: 1;
     margin-top: var(--space-md);
   }
-  
+
   .faq-item-card.expanded .faq-toggle-icon {
     transform: none;
   }
@@ -852,6 +846,7 @@
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
+
   .profile-header-card,
   .overview-bio-card,
   .experience-card,

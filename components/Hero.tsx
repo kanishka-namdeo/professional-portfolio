@@ -43,13 +43,13 @@ export default function Hero() {
             <p className="hero-main-line hero-statement-highlight">I DO BOTH.</p>
           </div>
           <div className="hero-metrics-highlight animate-on-scroll animate-delay-1" role="list" aria-label="Key achievements">
-            <span className="metric-highlight-item" role="listitem"><strong>8x</strong> ARR Growth</span>
+            <span className="metric-highlight-item" role="listitem"><strong>10x</strong> ARR Growth</span>
             <span className="metric-highlight-divider" aria-hidden="true">|</span>
-            <span className="metric-highlight-item" role="listitem"><strong>30K+</strong> Users</span>
+            <span className="metric-highlight-item" role="listitem"><strong>70K+</strong> Users</span>
             <span className="metric-highlight-divider" aria-hidden="true">|</span>
             <span className="metric-highlight-item" role="listitem"><strong>50+</strong> Locations</span>
             <span className="metric-highlight-divider" aria-hidden="true">|</span>
-            <span className="metric-highlight-item" role="listitem"><strong>9+</strong> Years</span>
+            <span className="metric-highlight-item" role="listitem"><strong>9+</strong> Years Building Products</span>
           </div>
           <div className="hero-availability-badge animate-on-scroll animate-delay-1" role="status" aria-label="Availability status">
             <span className="availability-dot" aria-hidden="true"></span>

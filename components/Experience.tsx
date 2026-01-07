@@ -123,7 +123,7 @@ const experiences: Experience[] = [
     caseStudy: {
       title: "AI-Native Wealth Management Platform",
       challenge: "Private banking firms struggled with fragmented workflows and lack of personalized investment insights for high-net-worth clients.",
-      solution: "Built an AI-native platform leveraging LLM-agents to automate personalized investment workflows, combining data aggregation with intelligent recommendations.",
+      solution: "Built an AI-native platform leveraging AI-agents to automate personalized investment workflows, combining data aggregation with intelligent recommendations.",
       impact: "Enabled wealth managers to deliver tailored insights 10x faster while maintaining compliance and data security requirements.",
       metrics: ["10x faster insights", "20+ user interviews", "First beta customer secured", "4-person team built"]
     }
