@@ -8,7 +8,7 @@ const profileData = {
   name: 'Kanishka Namdeo',
   role: 'Technical Product Manager',
   location: 'Dubai, UAE',
-  experience: '8+ Years',
+  experience: '9+ Years',
   tagline: 'I build digital products that people love to use — with clean code and thoughtful design.',
   avatarInitials: 'KN'
 };
@@ -16,7 +16,7 @@ const profileData = {
 // Social proof data
 const socialProof = {
   stats: [
-    { value: '8+', label: 'Years Experience' },
+    { value: '9+', label: 'Years Experience' },
     { value: '10+', label: 'Products Launched' },
     { value: '$2M+', label: 'Revenue Impact' }
   ],
@@ -303,7 +303,6 @@ export default function About() {
             {/* FAQ Section */}
             <div className="faq-section">
               <div className="faq-header">
-                <div className="faq-divider"></div>
                 <h3 className="faq-title">FAQ</h3>
               </div>
 

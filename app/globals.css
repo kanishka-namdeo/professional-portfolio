@@ -3828,7 +3828,13 @@ section {
 
 /* FAQ Section */
 .faq-section {
+  background: var(--color-bg);
   background: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-hard);
+    padding: var(--space-lg);
+    transition: all 0.2s ease;
 }
 
 .faq-list {
@@ -10068,14 +10074,14 @@ button[class*="icon"],
 }
 
 .faq-title {
-  background: var(--color-text);
-  color: var(--color-surface);
+  background: var(--color-surface);
+  color: var(--color-text);
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1rem;
+  font-size: 2rem;
   font-weight: 700;
-  padding: var(--space-sm) var(--space-md);
-  border: var(--border-width) solid var(--color-border);
-  box-shadow: var(--shadow-hard);
+  /* padding: var(--space-sm) var(--space-md); */
+  /* border: var(--border-width) solid var(--color-border); */
+  /* box-shadow: var(--shadow-hard); */
 }
 
 .faq-list {
@@ -10261,10 +10267,10 @@ button[class*="icon"],
 }
 
 .profile-avatar-image {
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
   border: var(--border-width) solid var(--color-border);
-  box-shadow: var(--shadow-hard);
+  box-shadow: var(--shadow-subtle);
   border-radius: var(--radius-md);
   object-fit: cover;
 }
