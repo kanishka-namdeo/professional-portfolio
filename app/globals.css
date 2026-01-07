@@ -9815,6 +9815,7 @@ button[class*="icon"],
 .big-bang-card.variant-primary .big-bang-expand-btn.expanded {
   background: var(--accent-purple);
   color: #ffffff;
+  border: 2px solid var(--color-border);
 }
 
 .big-bang-card.variant-primary .big-bang-logo {
@@ -9839,6 +9840,7 @@ button[class*="icon"],
 .big-bang-card.variant-teal .big-bang-expand-btn.expanded {
   background: var(--accent-teal);
   color: #ffffff;
+  border: 2px solid var(--color-border);
 }
 
 .big-bang-card.variant-teal .big-bang-logo {
@@ -9863,6 +9865,7 @@ button[class*="icon"],
 .big-bang-card.variant-amber .big-bang-expand-btn.expanded {
   background: var(--accent-amber);
   color: #ffffff;
+  border: 2px solid var(--color-border);
 }
 
 .big-bang-card.variant-amber .big-bang-logo {
@@ -9914,6 +9917,18 @@ button[class*="icon"],
 [data-theme="dark"] .big-bang-expand-btn.expanded {
   background: var(--color-text);
   color: var(--color-surface);
+}
+
+[data-theme="dark"] .big-bang-card.variant-primary .big-bang-expand-btn.expanded {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="dark"] .big-bang-card.variant-teal .big-bang-expand-btn.expanded {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="dark"] .big-bang-card.variant-amber .big-bang-expand-btn.expanded {
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 /* Dark mode logo colors - maintain visibility on dark backgrounds */
