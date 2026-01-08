@@ -187,6 +187,28 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#0a0a0a" />
         <meta name="msapplication-tap-highlight" content="no" />
         <meta name="format-detection" content="telephone=no" />
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
+        <meta name="description" content={metadata.description || ''} />
+        <meta name="keywords" content={Array.isArray(metadata.keywords) ? metadata.keywords.join(', ') : (metadata.keywords || '')} />
+        {/* Open Graph */}
+        <meta property="og:title" content={(metadata.openGraph?.title as string) || ''} />
+        <meta property="og:description" content={(metadata.openGraph?.description as string) || ''} />
+        <meta property="og:type" content={(metadata.openGraph as { type?: string })?.type || 'website'} />
+        <meta property="og:url" content={(metadata.openGraph?.url as string) || ''} />
+        <meta property="og:site_name" content={(metadata.openGraph?.siteName as string) || ''} />
+        <meta property="og:locale" content={(metadata.openGraph?.locale as string) || 'en_US'} />
+        {Array.isArray(metadata.openGraph?.images) && (metadata.openGraph?.images as Array<{ url: string; width?: number; height?: number; alt?: string }>).map((img, index) => (
+          <meta key={index} property="og:image" content={img.url} />
+        ))}
+        {/* Twitter */}
+        <meta name="twitter:card" content={((metadata.twitter as { card?: string })?.card) || 'summary_large_image'} />
+        <meta name="twitter:site" content={(metadata.twitter?.site as string) || ''} />
+        <meta name="twitter:creator" content={(metadata.twitter?.creator as string) || ''} />
+        <meta name="twitter:title" content={(metadata.twitter?.title as string) || ''} />
+        <meta name="twitter:description" content={metadata.twitter?.description as string} />
+        {Array.isArray(metadata.twitter?.images) && (metadata.twitter?.images as string[]).map((img, index) => (
+          <meta key={index} name="twitter:image" content={img} />
+        ))}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />

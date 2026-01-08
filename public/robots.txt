@@ -11,9 +11,6 @@ Disallow: /_next/
 Sitemap: https://kanishkanamdeo.com/sitemap.xml
 Sitemap: https://kanishkanamdeo.com/rss.xml
 
-# Crawl delay for polite crawling
-Crawl-delay: 10
-
 # Host directive
 Host: https://kanishkanamdeo.com
 
@@ -47,3 +44,13 @@ User-agent: bingbot
 Allow: /
 User-agent: msnbot
 Allow: /
+
+# Anthropic AI bot (Claude)
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-Web
+Allow: /
+
+# Bytespider (TikTok)
+User-agent: Bytespider
+Disallow: /

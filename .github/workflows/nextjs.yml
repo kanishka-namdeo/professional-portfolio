@@ -58,6 +58,10 @@ jobs:
         env:
           NEXT_BASE_PATH: /${{ github.event.repository.name }}
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+      - name: Generate Sitemap
+        run: pnpm exec next-sitemap --config next-sitemap.config.js
+        env:
+          SITE_URL: https://kanishkanamdeo.com
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
