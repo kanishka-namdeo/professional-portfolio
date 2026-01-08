@@ -6,7 +6,7 @@ import Image from 'next/image';
 // Profile data
 const profileData = {
   name: 'Kanishka Namdeo',
-  role: 'Technical Product Manager',
+  role: 'Product Manager | Software Engineer',
   location: 'Dubai, UAE',
   experience: '9+ Years',
   tagline: 'I build digital products that people love to use — with clean code and thoughtful design.',
@@ -27,7 +27,7 @@ const socialProof = {
 const bioContent = {
   paragraphs: [
     "I'm a technical product manager who loves building tools that make people's lives easier. With a background in engineering and a passion for clean design, I bridge the gap between technology and user experience.",
-    "My journey spans from coding robots to leading product strategy. I believe the best products come from understanding the humans behind them."
+    "My journey started from coding robots to leading product and tech strategy across several startups."
   ]
 };
 
@@ -197,78 +197,7 @@ export default function About() {
 
             {/* Journey Timeline */}
             <div className="experience-timeline">
-              <div className="timeline-item">
-                <div className="experience-dot"></div>
-                <div 
-                  className={`experience-card ${expandedTimeline === 0 ? 'expanded' : ''}`}
-                  onClick={() => toggleTimeline(0)}
-                  onKeyDown={(e) => e.key === 'Enter' && toggleTimeline(0)}
-                  role="button"
-                  tabIndex={0}
-                  aria-expanded={expandedTimeline === 0}
-                >
-                  <div className="experience-header">
-                    <div>
-                      <h4 className="experience-role">Started career</h4>
-                      <span className="experience-company">Engineering</span>
-                    </div>
-                    <span className="experience-period">2015</span>
-                  </div>
-                  {expandedTimeline === 0 && (
-                    <div className="timeline-expanded-content">
-                      <p className="timeline-detail">Began journey in mechanical engineering, developing foundational skills in systems thinking, problem-solving, and cross-functional collaboration that would later inform my product management approach.</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="timeline-item">
-                <div className="experience-dot"></div>
-                <div 
-                  className={`experience-card ${expandedTimeline === 1 ? 'expanded' : ''}`}
-                  onClick={() => toggleTimeline(1)}
-                  onKeyDown={(e) => e.key === 'Enter' && toggleTimeline(1)}
-                  role="button"
-                  tabIndex={0}
-                  aria-expanded={expandedTimeline === 1}
-                >
-                  <div className="experience-header">
-                    <div>
-                      <h4 className="experience-role">First product role</h4>
-                      <span className="experience-company">Transition to PM</span>
-                    </div>
-                    <span className="experience-period">2017</span>
-                  </div>
-                  {expandedTimeline === 1 && (
-                    <div className="timeline-expanded-content">
-                      <p className="timeline-detail">Pivoted from engineering to product management, combining technical depth with user-centric design thinking. Led my first product from concept through launch, learning the importance of validated learning and iterative development.</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="timeline-item">
-                <div className="experience-dot"></div>
-                <div 
-                  className={`experience-card ${expandedTimeline === 2 ? 'expanded' : ''}`}
-                  onClick={() => toggleTimeline(2)}
-                  onKeyDown={(e) => e.key === 'Enter' && toggleTimeline(2)}
-                  role="button"
-                  tabIndex={0}
-                  aria-expanded={expandedTimeline === 2}
-                >
-                  <div className="experience-header">
-                    <div>
-                      <h4 className="experience-role">Team leadership</h4>
-                      <span className="experience-company">Led 8 engineers</span>
-                    </div>
-                    <span className="experience-period">2022</span>
-                  </div>
-                  {expandedTimeline === 2 && (
-                    <div className="timeline-expanded-content">
-                      <p className="timeline-detail">Advanced to senior product leadership, building and mentoring high-performing teams. Focused on creating environments where engineers, designers, and data scientists could do their best work while maintaining 95% team satisfaction scores.</p>
-                    </div>
-                  )}
-                </div>
-              </div>
+
               <div className="timeline-item current">
                 <div className="experience-dot"></div>
                 <div 
@@ -280,7 +209,7 @@ export default function About() {
                   aria-expanded={expandedTimeline === 3}
                 >
                   <div className="experience-header">
-                    <div>
+                    <div className="experience-header-content">
                       <h4 className="experience-role">Current focus</h4>
                       <span className="experience-company">Seeking next product opportunity</span>
                     </div>
