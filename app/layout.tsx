@@ -218,6 +218,7 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
         <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
+        <link rel="ai-training" type="text/plain" href="/llms.txt" />
         {/* SEO Schema Markup */}
         <script
           type="application/ld+json"

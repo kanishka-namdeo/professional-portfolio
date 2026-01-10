@@ -11,6 +11,9 @@ Disallow: /_next/
 Sitemap: https://kanishkanamdeo.com/sitemap.xml
 Sitemap: https://kanishkanamdeo.com/rss.xml
 
+# AI/LLM metadata file
+Llms-Txt: https://kanishkanamdeo.com/llms.txt
+
 # Host directive
 Host: https://kanishkanamdeo.com
 
