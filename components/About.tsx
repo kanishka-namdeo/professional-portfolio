@@ -131,6 +131,8 @@ export default function About() {
                 height={100}
                 className="profile-avatar-image"
                 priority
+                sizes="(max-width: 768px) 100px, 100px"
+                quality={85}
               />
             </div>
             <div className="profile-info">
