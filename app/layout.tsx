@@ -5,6 +5,7 @@ import Navigation from '@/components/Navigation';
 import ScrollNav from '@/components/ScrollNav';
 import Footer from '@/components/Footer';
 import SmoothScrollInit from '@/components/SmoothScrollInit';
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -239,6 +240,7 @@ export default function RootLayout({
         <ScrollNav />
         <main id="main-content">{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
