@@ -14,7 +14,7 @@ module.exports = {
     ],
     // Note: crawlDelay is deprecated and ignored by most crawlers including Google
   },
-  transformper: async (config, path) => {
+  transform: async (config, path) => {
     // Customize priority based on page depth
     let priority = 0.5;
     let changefreq = 'monthly';

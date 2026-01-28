@@ -74,6 +74,12 @@ export const metadata: Metadata = {
       'text/html': 'https://kanishkanamdeo.com',
     },
   },
+  other: {
+    'article:published_time': '2026-01-01T00:00:00Z',
+    'article:modified_time': '2026-01-28T00:00:00Z',
+    'article:author': 'Kanishka Namdeo',
+    'article:section': 'Technology',
+  },
   category: 'technology',
   formatDetection: {
     telephone: false,
@@ -191,6 +197,12 @@ export default function RootLayout({
         <meta name="referrer" content="strict-origin-when-cross-origin" />
         <meta name="description" content={metadata.description || ''} />
         <meta name="keywords" content={Array.isArray(metadata.keywords) ? metadata.keywords.join(', ') : (metadata.keywords || '')} />
+        <meta name="author" content="Kanishka Namdeo" />
+        <meta name="subject" content="Product Management Portfolio" />
+        <meta name="classification" content="Business" />
+        <meta name="language" content="English" />
+        <meta name="geo.region" content="AE-DU" />
+        <meta name="geo.placename" content="Dubai" />
         {/* Open Graph */}
         <meta property="og:title" content={(metadata.openGraph?.title as string) || ''} />
         <meta property="og:description" content={(metadata.openGraph?.description as string) || ''} />
@@ -208,7 +220,10 @@ export default function RootLayout({
         <meta name="twitter:title" content={(metadata.twitter?.title as string) || ''} />
         <meta name="twitter:description" content={metadata.twitter?.description as string} />
         {Array.isArray(metadata.twitter?.images) && (metadata.twitter?.images as string[]).map((img, index) => (
-          <meta key={index} name="twitter:image" content={img} />
+          <>
+            <meta key={`url-${index}`} name="twitter:image" content={img} />
+            <meta key={`alt-${index}`} name="twitter:image:alt" content="Kanishka Namdeo - Product Manager Portfolio Preview" />
+          </>
         ))}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
