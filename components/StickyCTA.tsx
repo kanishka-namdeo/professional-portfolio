@@ -10,22 +10,22 @@ export default function StickyCTA() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // If RAF already pending, skip this event
       if (rafRef.current !== null) return;
 
       rafRef.current = requestAnimationFrame(() => {
         try {
           const currentScrollY = window.scrollY;
-          
-          if (!hasDismissed && currentScrollY > 300) {
+          const sessionDismissed = sessionStorage.getItem('stickyCtaDismissed');
+
+          if (!sessionDismissed && currentScrollY > 300) {
             setIsVisible(true);
-          } else if (hasDismissed) {
+          } else if (sessionDismissed) {
             setIsVisible(false);
           }
         } catch (error) {
           console.error('StickyCTA scroll handler error:', error);
         } finally {
-          rafRef.current = null; // Reset RAF flag
+          rafRef.current = null;
         }
       });
     };
@@ -43,6 +43,7 @@ export default function StickyCTA() {
 
   const handleDismiss = () => {
     setIsVisible(false);
+    sessionStorage.setItem('stickyCtaDismissed', 'true');
     setHasDismissed(true);
   };
 

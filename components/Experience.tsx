@@ -365,21 +365,40 @@ export default function Experience() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCompany, filteredExperiences]);
 
+  // Cleanup: Restore body scroll on unmount
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   const toggleCard = (index: number) => {
     // When manually toggling, clear auto-expanded state for that card
     const newAutoExpanded = autoExpandedCard === index ? null : autoExpandedCard;
     setAutoExpandedCard(newAutoExpanded);
-    
+
     const newExpanded = new Set(expandedCards);
-    if (newExpanded.has(index)) {
+    const wasExpanded = newExpanded.has(index);
+
+    if (wasExpanded) {
       // User is collapsing the card
       newExpanded.delete(index);
       setUserInteracted(true); // Mark that user manually changed the state
+
+      // Unlock body scroll on mobile
+      if (typeof window !== 'undefined' && window.innerWidth <= 640) {
+        document.body.style.overflow = '';
+      }
     } else {
       // User is expanding the card
       newExpanded.add(index);
       // Clear user interaction flag since they're now expanding
       setUserInteracted(false);
+
+      // Lock body scroll on mobile
+      if (typeof window !== 'undefined' && window.innerWidth <= 640) {
+        document.body.style.overflow = 'hidden';
+      }
     }
     setExpandedCards(newExpanded);
   };
@@ -533,7 +552,11 @@ export default function Experience() {
                     </>
                   )}
                 </button>
-                
+
+                {expanded && (
+                  <div className="big-bang-backdrop" onClick={() => toggleCard(globalIndex)} />
+                )}
+
                 <div className={`big-bang-content ${expanded ? 'active' : ''}`}>
                   <div className="big-bang-body">
                     {/* Key Responsibilities */}

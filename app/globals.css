@@ -298,11 +298,11 @@ h4 {
 }
 
 h5 {
-  font-size: 1.25rem;
+  font-size: clamp(1.1rem, 1.5vw, 1.25rem);
 }
 
 h6 {
-  font-size: 1rem;
+  font-size: clamp(1rem, 1.25vw, 1rem);
 }
 
 /* Text Readability - Prevent content stretching on wide screens */
@@ -382,7 +382,7 @@ p,
   color: var(--color-text);
   text-decoration: none;
   font-weight: 500;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 1.25vw, 1rem);
   padding: var(--space-xs) var(--space-sm);
   border: 2px solid transparent;
   border-radius: var(--radius-sm);
@@ -1113,7 +1113,7 @@ p,
    ============================================ */
 
 /* Base Mobile Styles - Applied to all mobile devices */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
 
   /* Typography Scaling for Mobile */
   html {
@@ -1385,16 +1385,19 @@ p,
   }
 
   .mobile-nav .nav-link {
-    display: block;
-    width: 100%;
-    padding: var(--space-md);
-    font-size: 1.25rem;
-    font-weight: 600;
-    text-decoration: none;
-    color: var(--color-text);
-    border-radius: var(--radius-md);
-    transition: all 0.2s ease;
-  }
+  display: block;
+  width: 100%;
+  padding: var(--space-lg);
+  /* Increased from var(--space-md) for better spacing */
+  min-height: 48px;
+  /* WCAG minimum touch target size requirement */
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--color-text);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
 
   .mobile-nav .nav-link:hover,
   .mobile-nav .nav-link.active {
@@ -1407,7 +1410,7 @@ p,
     min-height: 100vh;
     display: flex;
     align-items: center;
-    padding: 80px var(--space-md) var(--space-xl);
+    padding: max(80px, env(safe-area-inset-top)) var(--space-md) var(--space-xl);
   }
 
   .hero-content-wrapper {
@@ -1457,16 +1460,8 @@ p,
     margin-bottom: var(--space-lg);
   }
 
-  /* Particle Mesh - Simplified for mobile */
+  /* Particle Mesh - Hidden on mobile for performance */
   .particle-mesh-container {
-    opacity: 0.4;
-  }
-
-  .particle-mesh {
-    display: none;
-  }
-
-  .particle-mesh-lines {
     display: none;
   }
 
@@ -1481,10 +1476,23 @@ p,
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     overscroll-behavior-x: contain;
+    position: relative;
   }
 
   .experience-tab-navigation::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Scroll indicator for tab navigation */
+  .experience-tab-navigation::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    background: linear-gradient(to left, var(--color-background) 0%, transparent 100%);
+    pointer-events: none;
   }
 
   .experience-tab-button {
@@ -1647,9 +1655,22 @@ p,
     background: var(--color-surface);
     z-index: 1000;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     transform: translateY(100%);
     transition: transform 0.3s ease;
     padding: var(--space-xl) var(--space-md);
+  }
+
+  .big-bang-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .big-bang-content.active {
@@ -1748,11 +1769,11 @@ p,
   }
 
   .carousel-prev {
-    left: var(--space-sm);
+    left: max(var(--space-sm), env(safe-area-inset-left));
   }
 
   .carousel-next {
-    right: var(--space-sm);
+    right: max(var(--space-sm), env(safe-area-inset-right));
   }
 
   .showcase-carousel-container {
@@ -2185,6 +2206,44 @@ p,
   .big-bang-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  /* Improve navigation spacing for tablet */
+  .nav-links-desktop {
+    gap: var(--space-sm);
+    /* Reduced from var(--space-md) to 24px for better fit */
+  }
+
+  .nav-links-desktop .nav-link {
+    padding: var(--space-xs) var(--space-md);
+    /* Increased padding for better touch targets */
+    font-size: 0.95rem;
+    /* Slightly smaller font for better fit */
+  }
+
+  /* Improve card density on tablet - add more breathing room */
+  .experience-card {
+    padding: var(--space-2xl);
+    /* Increased from var(--space-xl) to reduce cramped feeling */
+  }
+
+  .experience-header {
+    gap: var(--space-sm);
+    /* Increased from var(--space-xs) for better element separation */
+    margin-bottom: var(--space-md);
+    /* Increased from var(--space-sm) */
+  }
+
+  .company-info {
+    gap: var(--space-lg);
+    /* Increased from var(--space-md) */
+  }
+
+  /* Improve carousel dots for tablet touch targets */
+  .carousel-dot {
+    width: 16px;
+    height: 16px;
+    /* Increased from 10px to 16px for better touch targets */
+  }
 }
 
 /* Transformable Sticky CTA */
@@ -2293,8 +2352,10 @@ p,
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  /* Increased from 36px to meet WCAG 44px minimum touch target */
+  height: 48px;
+  /* Increased from 36px to meet WCAG 44px minimum touch target */
   background: var(--color-bg);
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-sm);
@@ -2562,8 +2623,10 @@ p,
 .mobile-fab {
   display: none;
   position: fixed;
-  bottom: max(var(--space-lg), env(safe-area-inset-bottom));
-  right: max(var(--space-lg), env(safe-area-inset-right));
+  bottom: max(calc(var(--space-lg) + 16px), env(safe-area-inset-bottom));
+  /* Added extra spacing to prevent cut-off */
+  left: max(calc(var(--space-lg) + 16px), env(safe-area-inset-left));
+  /* Changed from right to left for better thumb reachability for right-handed users */
   width: 64px;
   height: 64px;
   background: var(--accent-navy);
@@ -2572,11 +2635,19 @@ p,
   border-radius: 50%;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-base);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+  /* Enhanced shadow for better visibility against content */
   z-index: var(--z-sticky-widgets);
   transition: all 0.2s ease;
   animation: popIn 0.3s ease;
   will-change: transform, box-shadow;
+}
+
+/* Hide FAB when mobile menu is open to prevent cut-off */
+body.mobile-menu-open .mobile-fab {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale3d(0.8, 0.8, 1);
 }
 
 @keyframes popIn {
@@ -2593,7 +2664,8 @@ p,
 
 .mobile-fab:hover {
   transform: translate3d(-2px, -2px, 0) scale3d(1.05, 1.05, 1);
-  box-shadow: var(--shadow-hover);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3);
+  /* Stronger shadow on hover */
   will-change: transform, box-shadow;
 }
 
@@ -2634,8 +2706,8 @@ section {
 
 .section-subtitle {
   color: var(--color-text-muted);
-  font-size: 1.125rem;
-  /* 18px: readable, not oversized */
+  font-size: clamp(1rem, 1.25vw, 1.125rem);
+  /* 16-18px: readable, not oversized */
   font-weight: 400;
 }
 
@@ -5660,6 +5732,14 @@ section {
 
   .mobile-fab {
     display: flex;
+  }
+
+  /* FAB size optimization for very small screens */
+  @media (max-width: 360px) {
+    .mobile-fab {
+      width: 56px;
+      height: 56px;
+    }
   }
 
   /* Tabbed Interface Mobile */
@@ -8991,6 +9071,30 @@ button[class*="icon"],
   background: rgba(0, 0, 0, 0.3);
 }
 
+/* Big Bang Content - Desktop: Collapsible */
+.big-bang-content {
+  display: none;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.big-bang-content.active {
+  display: block;
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Mobile responsiveness */
 @media (max-width: 640px) {
   .big-bang-company-row {
@@ -9263,16 +9367,6 @@ button[class*="icon"],
     font-size: 0.7rem;
     padding: 2px 6px;
   }
-}
-
-.big-bang-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.big-bang-content.active {
-  max-height: 5000px;
 }
 
 .big-bang-body {
@@ -10332,19 +10426,12 @@ button[class*="icon"],
 }
 
 .profile-avatar-image {
-  width: 200px;
-  height: 200px;
+  width: clamp(100px, 20vw, 200px);
+  height: clamp(100px, 20vw, 200px);
   border: var(--border-width) solid var(--color-border);
   box-shadow: var(--shadow-subtle);
   border-radius: var(--radius-md);
   object-fit: cover;
-}
-
-@media (max-width: 480px) {
-  .profile-avatar-image {
-    width: 80px;
-    height: 80px;
-  }
 }
 
 .profile-info {
@@ -10369,7 +10456,7 @@ button[class*="icon"],
 }
 
 .profile-tagline {
-  font-size: 1.05rem;
+  font-size: clamp(0.95rem, 1.25vw, 1.05rem);
   font-weight: 600;
   color: var(--color-text);
   margin: 0 0 var(--space-md) 0;
@@ -10406,7 +10493,7 @@ button[class*="icon"],
 }
 
 /* Responsive adjustments */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
 
   .overview-bio-card,
   .skill-category-card,

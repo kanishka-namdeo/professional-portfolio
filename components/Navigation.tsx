@@ -23,12 +23,15 @@ export default function Navigation() {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      document.body.classList.add('mobile-menu-open');
     } else {
       document.body.style.overflow = '';
+      document.body.classList.remove('mobile-menu-open');
     }
 
     return () => {
       document.body.style.overflow = '';
+      document.body.classList.remove('mobile-menu-open');
     };
   }, [isOpen]);
 

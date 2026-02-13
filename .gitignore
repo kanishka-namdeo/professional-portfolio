@@ -1,50 +1,72 @@
-# Dependencies (root)
-/node_modules
-/.pnp
-/.pnp.*
+# Dependencies
+node_modules/
 
 # Next.js build output
-/.next
-/out
-/deployment
+.next/
+out/
+.turbo/
+.swc/
 
-# Next.js caches
-.vercel
-.turbo
-.swc
-.vercel/output
+# TypeScript cache
+tsconfig.tsbuildinfo
 
-# Env files
-/.env
-/.env.local
-/.env.development.local
-/.env.test.local
-/.env.production.local
+# Testing
+coverage/
+*.lcov
+.nyc_output/
+test-results/
+playwright-report/
+playwright/.cache/
 
-# Logs and diagnostics
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-logs
+# Visual test screenshots (test artifacts)
+tests/screenshots/
+
+# Python (for testing scripts)
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+
+# Logs
 *.log
-*.tsbuildinfo
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Cache directories
+.cache/
+.parcel-cache/
+
+# ESLint & Stylelint cache
 .eslintcache
 .stylelintcache
-.nyc_output
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editors and IDEs
+.idea/
 *.swp
 *.swo
 *~
+.history/
 
-# Editors and system files
-.DS_Store
-Thumbs.db
-.idea/
-.vscode/
-.pnpm-store/
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
 
 # Misc
-coverage
-package-lock.json
-yarn.lock
-SECURITY.md
+.electron/
+.netlify/
