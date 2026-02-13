@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Metadata } from 'next';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
@@ -185,7 +186,7 @@ export default function RootLayout({
           })();
         ` }} />
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
         <meta name="theme-color" content="#0a0a0a" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -220,10 +221,10 @@ export default function RootLayout({
         <meta name="twitter:title" content={(metadata.twitter?.title as string) || ''} />
         <meta name="twitter:description" content={metadata.twitter?.description as string} />
         {Array.isArray(metadata.twitter?.images) && (metadata.twitter?.images as string[]).map((img, index) => (
-          <>
-            <meta key={`url-${index}`} name="twitter:image" content={img} />
-            <meta key={`alt-${index}`} name="twitter:image:alt" content="Kanishka Namdeo - Product Manager Portfolio Preview" />
-          </>
+          <React.Fragment key={index}>
+            <meta name="twitter:image" content={img} />
+            <meta name="twitter:image:alt" content="Kanishka Namdeo - Product Manager Portfolio Preview" />
+          </React.Fragment>
         ))}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

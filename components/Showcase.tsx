@@ -130,7 +130,7 @@ export default function Showcase() {
     // Initialize position after stride is calculated
     if (!isInitializedRef.current && scrollRef.current) {
       scrollRef.current.style.transition = 'none';
-      scrollRef.current.style.transform = `translateX(0px)`;
+      scrollRef.current.style.transform = `translate3d(0, 0, 0)`;
       isInitializedRef.current = true;
     }
   }, []);
@@ -139,8 +139,8 @@ export default function Showcase() {
   const scrollTo = useCallback((index: number, smooth: boolean = true) => {
     const stride = cardStride || 412;
     if (scrollRef.current) {
-      scrollRef.current.style.transition = smooth ? 'transform 0.3s ease-out' : 'none';
-      scrollRef.current.style.transform = `translateX(-${index * stride}px)`;
+      scrollRef.current.style.transition = smooth ? 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)' : 'none';
+      scrollRef.current.style.transform = `translate3d(-${index * stride}px, 0, 0)`;
     }
     setCurrentIndex(index);
   }, [cardStride]);
@@ -182,7 +182,8 @@ export default function Showcase() {
       newTranslate = bounds.max + (over * 0.3);
     }
 
-    scrollRef.current.style.transform = `translateX(${newTranslate}px)`;
+    // Use translate3d for GPU acceleration
+    scrollRef.current.style.transform = `translate3d(${newTranslate}px, 0, 0)`;
 
     // Calculate velocity
     const now = Date.now();
@@ -416,7 +417,8 @@ export default function Showcase() {
                 display: 'flex', 
                 gap: 'var(--space-lg)', 
                 willChange: 'transform',
-                cursor: 'grab'
+                cursor: 'grab',
+                transform: 'translate3d(0, 0, 0)'
               }}
               onMouseDown={onMouseDown}
               onMouseMove={onMouseMove}

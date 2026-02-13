@@ -19,6 +19,10 @@ const nextConfig = {
     // Remove console.log in production
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  // Disable TypeScript errors during build (use separate type-check command)
+  typescript: {
+    ignoreBuildErrors: false,
+  },
   // Security headers for all routes
   async headers() {
     return [
@@ -66,4 +70,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

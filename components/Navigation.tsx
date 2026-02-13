@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import ThemeToggle from './ThemeToggle';
 
 const navLinks = [
@@ -13,7 +13,8 @@ export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const [isHidden, setIsHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = useRef(0);
+  const rafRef = useRef<number | null>(null);
 
   const closeMenu = useCallback(() => {
     setIsOpen(false);
@@ -33,27 +34,40 @@ export default function Navigation() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      if (currentScrollY > lastScrollY && currentScrollY > 200) {
-        setIsHidden(true);
-      } else {
-        setIsHidden(false);
-      }
-      
-      setLastScrollY(currentScrollY);
+      if (rafRef.current !== null) return;
 
-      const sections = document.querySelectorAll('section[id]');
-      let current = '';
-      
-      sections.forEach((section) => {
-        const sectionTop = section.getBoundingClientRect().top;
-        if (sectionTop <= 200) {
-          current = section.getAttribute('id') || '';
+      rafRef.current = requestAnimationFrame(() => {
+        try {
+          const currentScrollY = window.scrollY;
+
+          // Don't hide navigation when mobile menu is open
+          if (!isOpen) {
+            if (currentScrollY > lastScrollYRef.current && currentScrollY > 200) {
+              setIsHidden(true);
+            } else {
+              setIsHidden(false);
+            }
+          }
+
+          lastScrollYRef.current = currentScrollY;
+
+          const sections = document.querySelectorAll('section[id]');
+          let current = '';
+
+          sections.forEach((section) => {
+            const sectionTop = section.getBoundingClientRect().top;
+            if (sectionTop <= 200) {
+              current = section.getAttribute('id') || '';
+            }
+          });
+
+          setActiveSection(current);
+        } catch (error) {
+          console.error('Navigation scroll handler error:', error);
+        } finally {
+          rafRef.current = null;
         }
       });
-      
-      setActiveSection(current);
     };
 
     const handleClickOutside = (e: MouseEvent) => {
@@ -63,20 +77,25 @@ export default function Navigation() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     document.addEventListener('click', handleClickOutside);
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('click', handleClickOutside);
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
     };
-  }, [lastScrollY, isOpen, closeMenu]);
+  }, [isOpen, closeMenu]);
 
   const handleNavClick = (href: string) => {
     closeMenu();
     const target = document.querySelector(href);
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      console.warn(`Navigation target not found: ${href}`);
     }
   };
 

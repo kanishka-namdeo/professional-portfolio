@@ -1,23 +1,44 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function StickyCTA() {
   const [isVisible, setIsVisible] = useState(false);
   const [hasDismissed, setHasDismissed] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!hasDismissed && window.scrollY > 300) {
-        setIsVisible(true);
-      } else if (hasDismissed) {
-        setIsVisible(false);
-      }
+      // If RAF already pending, skip this event
+      if (rafRef.current !== null) return;
+
+      rafRef.current = requestAnimationFrame(() => {
+        try {
+          const currentScrollY = window.scrollY;
+          
+          if (!hasDismissed && currentScrollY > 300) {
+            setIsVisible(true);
+          } else if (hasDismissed) {
+            setIsVisible(false);
+          }
+        } catch (error) {
+          console.error('StickyCTA scroll handler error:', error);
+        } finally {
+          rafRef.current = null; // Reset RAF flag
+        }
+      });
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+    };
   }, [hasDismissed]);
 
   const handleDismiss = () => {

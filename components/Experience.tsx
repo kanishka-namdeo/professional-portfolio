@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 type ResponsibilityCategory =
   | 'Strategy & Leadership'
@@ -338,9 +338,12 @@ export default function Experience() {
   const [autoExpandedCard, setAutoExpandedCard] = useState<number | null>(null);
   const [userInteracted, setUserInteracted] = useState(false);
 
-  const filteredExperiences = activeCompany === null 
-    ? experiences 
-    : experiences.filter(exp => exp.company === activeCompany);
+  const filteredExperiences = useMemo(() => 
+    activeCompany === null 
+      ? experiences 
+      : experiences.filter(exp => exp.company === activeCompany),
+    [activeCompany]
+  );
 
   // Auto-expand when only one card is shown, collapse when showing multiple
   useEffect(() => {
@@ -351,16 +354,15 @@ export default function Experience() {
       const singleExp = filteredExperiences[0];
       const globalIndex = experiences.indexOf(singleExp);
       
-      // Only auto-expand if user hasn't manually collapsed it
-      if (!userInteracted || !expandedCards.has(globalIndex)) {
-        setExpandedCards(new Set([globalIndex]));
-        setAutoExpandedCard(globalIndex);
-      }
+      // Auto-expand the single card
+      setExpandedCards(new Set([globalIndex]));
+      setAutoExpandedCard(globalIndex);
     } else {
       // When showing multiple cards, collapse all
       setExpandedCards(new Set());
       setAutoExpandedCard(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCompany, filteredExperiences]);
 
   const toggleCard = (index: number) => {
@@ -517,19 +519,19 @@ export default function Experience() {
                   onClick={() => toggleCard(globalIndex)}
                   aria-expanded={expanded}
                 >
-                  {expanded && autoExpandedCard !== globalIndex ? (
+                  {expanded ? (
                     <>
                       <CloseIcon />
                       <span>Close Case Study</span>
                     </>
-                  ) : !expanded ? (
+                  ) : (
                     <>
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                       </svg>
                       <span>Read Full Case Study</span>
                     </>
-                  ) : null}
+                  )}
                 </button>
                 
                 <div className={`big-bang-content ${expanded ? 'active' : ''}`}>
