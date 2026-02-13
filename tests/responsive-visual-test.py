@@ -2,6 +2,8 @@ from playwright.sync_api import sync_playwright
 from datetime import datetime
 import os
 
+BASE_URL = os.getenv('BASE_URL', 'http://localhost:3000')
+
 VIEWPORTS = [
     {'name': 'mobile-xs', 'width': 320, 'height': 568},
     {'name': 'mobile-sm', 'width': 375, 'height': 667},
@@ -27,7 +29,7 @@ def test_responsive_layouts():
             context = browser.new_context(viewport={'width': viewport['width'], 'height': viewport['height']})
             page = context.new_page()
             
-            page.goto('http://localhost:3000')
+            page.goto(BASE_URL)
             page.wait_for_load_state('networkidle')
             
             viewport_dir = f'{OUTPUT_DIR}/{TIMESTAMP}/{viewport["name"]}'

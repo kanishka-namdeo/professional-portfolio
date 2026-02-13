@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node scripts/copy-headers.cjs",
+    "build": "next build",
+    "build:github": "next build && node scripts/copy-headers.cjs",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",

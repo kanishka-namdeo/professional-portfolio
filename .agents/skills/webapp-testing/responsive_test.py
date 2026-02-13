@@ -2,6 +2,9 @@ from playwright.sync_api import sync_playwright, Page, Browser
 from typing import List, Dict, Any
 import json
 from pathlib import Path
+import os
+
+BASE_URL = os.getenv('BASE_URL', 'http://localhost:3000')
 
 # Viewport configurations for comprehensive testing
 VIEWPORTS = {
@@ -484,7 +487,7 @@ def run_viewport_tests(page: Page, viewport_name: str, viewport: Dict[str, Any])
     
     # Set viewport
     page.set_viewport_size(viewport)
-    page.goto('http://localhost:3000')
+    page.goto(BASE_URL)
     page.wait_for_load_state('networkidle')
     page.wait_for_timeout(500)
     

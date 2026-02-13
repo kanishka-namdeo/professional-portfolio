@@ -1,11 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Use static export only for GitHub Pages, not for Vercel
+  output: process.env.GITHUB_ACTIONS ? 'export' : undefined,
   // basePath and assetPrefix derived from NEXT_BASE_PATH for GitHub Pages project sites
-  output: 'export',
-  basePath: process.env.NEXT_BASE_PATH || '',
-  assetPrefix: process.env.NEXT_BASE_PATH ? `${process.env.NEXT_BASE_PATH}/` : '',
+  basePath: process.env.GITHUB_ACTIONS ? (process.env.NEXT_BASE_PATH || '') : '',
+  assetPrefix: process.env.GITHUB_ACTIONS && process.env.NEXT_BASE_PATH ? `${process.env.NEXT_BASE_PATH}/` : '',
   images: {
-    unoptimized: true,
+    unoptimized: process.env.GITHUB_ACTIONS,
     // For static export, we can't use Next.js image optimization API
     // but next/image still provides lazy loading and proper src attributes
     formats: ['image/avif', 'image/webp'],

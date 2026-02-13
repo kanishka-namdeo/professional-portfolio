@@ -56,8 +56,9 @@ jobs:
       - name: Run security audit
         run: pnpm audit --audit-level=moderate
       - name: Build with Next.js
-        run: pnpm next build
+        run: pnpm run build:github
         env:
+          GITHUB_ACTIONS: "true"
           NEXT_BASE_PATH: /${{ github.event.repository.name }}
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
       - name: Generate Sitemap
