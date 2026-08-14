@@ -1,10 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-
-// Icons - matching ScrollNav's emoji style
-const SunIcon = () => <span className="theme-toggle-icon-emoji">☀️</span>;
-const MoonIcon = () => <span className="theme-toggle-icon-emoji">🌙</span>;
+import { Sun, Moon } from 'lucide-react';
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -72,7 +69,7 @@ export default function ThemeToggle() {
       title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
     >
       <span className="theme-toggle-icon">
-        {theme === 'light' ? <MoonIcon /> : <SunIcon />}
+        {theme === 'light' ? <Moon size={20} strokeWidth={2} /> : <Sun size={20} strokeWidth={2} />}
       </span>
     </button>
   );

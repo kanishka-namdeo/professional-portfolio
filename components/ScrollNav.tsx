@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useScroll, useMotionValueEvent } from 'motion/react';
 
 const navSections = [
   { id: 'experience', label: 'Experience', icon: '💼' },
@@ -17,6 +18,7 @@ export default function ScrollNav() {
   const [showActiveTooltip, setShowActiveTooltip] = useState(false);
   const prevSectionRef = useRef<string>('');
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const { scrollY } = useScroll();
 
   useEffect(() => {
     setMounted(true);
@@ -74,8 +76,8 @@ export default function ScrollNav() {
     }
   }, []);
 
-  const handleScroll = useCallback(() => {
-    if (window.scrollY > 400) {
+  const handleScrollChange = useCallback((currentScrollY: number) => {
+    if (currentScrollY > 400) {
       setIsVisible(true);
     } else {
       setIsVisible(false);
@@ -105,25 +107,13 @@ export default function ScrollNav() {
     }
   }, [clearTooltipTimeout]);
 
-  useEffect(() => {
-    let ticking = false;
-    
-    const throttledHandleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
+  useMotionValueEvent(scrollY, 'change', handleScrollChange);
 
-    window.addEventListener('scroll', throttledHandleScroll, { passive: true });
+  useEffect(() => {
     return () => {
-      window.removeEventListener('scroll', throttledHandleScroll);
       clearTooltipTimeout();
     };
-  }, [handleScroll, clearTooltipTimeout]);
+  }, [clearTooltipTimeout]);
 
   const handleScrollTo = (sectionId: string) => {
     const target = document.querySelector(`#${sectionId}`);

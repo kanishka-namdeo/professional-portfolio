@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { X, ExternalLink, Grid3X3, Newspaper, BookOpen, ArrowRight } from 'lucide-react';
 
 type ResponsibilityCategory =
   | 'Strategy & Leadership'
@@ -51,12 +52,9 @@ const getCompanyInitial = (company: string): string => {
   return company.charAt(0).toUpperCase();
 };
 
-// Normalized color variants - Structural Color System
-// Color applied via hard shadows only, not backgrounds
-// Creates visual consistency with rest of portfolio
+// Cycle through color variants for visual variety
 const getColorVariant = (index: number): string => {
-  // Strict Triad: Purple (Featured) -> Teal (Product) -> Amber (Consulting)
-  const variants = ['variant-primary', 'variant-teal', 'variant-amber', 'variant-teal', 'variant-amber', 'variant-amber', 'variant-primary'];
+  const variants = ['variant-primary', 'variant-teal', 'variant-amber', 'variant-rose', 'variant-violet'];
   return variants[index % variants.length];
 };
 
@@ -84,19 +82,37 @@ const getKeyMetric = (exp: Experience): { value: string; label: string } | null 
   return { value: 'Now', label: 'Hiring' };
 };
 
-const CloseIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} className="w-5 h-5">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-  </svg>
-);
-
-const ExternalLinkIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-  </svg>
-);
-
 const experiences: Experience[] = [
+  {
+    title: 'Product & AI Consultant',
+    company: 'AvloAI',
+    url: '',
+    date: 'Jan 2026 - Present',
+    summary: 'AvloAI is building an AI-powered children\'s storytelling platform with multi-agent orchestration, voice cloning, and multilingual content generation.',
+    responsibilities: [
+      {
+        category: 'Product Strategy & MVP Execution',
+        items: [
+          "Advised founding team on product strategy and technical architecture for AI storytelling platform, guiding transition from prototype to production-grade freemium service.",
+          "Architected multi-agent story generation pipeline (SafetyGuardian → StoryWriter → Illustrator → Narrator → LearningAdvisor) coordinating CDC milestone-mapped and APA Bright Futures aligned content for ages 2-8.",
+          "Designed ElevenLabs voice cloning integration enabling 30-second voice capture and instant voice model generation, preserving family storytelling across distances with grandparent voice cloning as premium differentiator.",
+          "Built multilingual story engine supporting 22 natively-written languages (Hinglish, Spanglish, Tamil, French, and others) using language-specific prompt engineering rather than translation pipelines.",
+          "Designed COPPA 2.0 compliant data architecture following April 2026 amendments, implementing verifiable parental consent flows, biometric data handling for voiceprints, and automated retention policies."
+        ],
+      },
+    ],
+    skills: ["Product strategy", "Multi-agent AI orchestration", "Voice cloning (ElevenLabs)", "Multilingual AI generation", "COPPA 2.0 compliance", "Biometric data handling", "Freemium conversion optimization", "Child development frameworks", "RAG pipeline design", "Parental consent flows"],
+    achievements: ["Advised on product strategy for AI storytelling platform serving thousands of families with personalized narratives in 22 natively-written languages", "Architected ElevenLabs voice cloning pipeline enabling grandparent voice preservation in 30 seconds", "Designed COPPA 2.0 compliant data architecture addressing April 2026 amendments for biometric voice data"],
+    press: [],
+    industries: ["EdTech", "AI/ML", "Consumer SaaS", "Family Technology"],
+    caseStudy: {
+      title: "AI-Powered Children's Storytelling Platform",
+      challenge: "Parents sought personalized, educational storytelling experiences that could adapt to children's developmental milestones while preserving family voices and cultural diversity.",
+      solution: "Built a multi-agent AI platform with voice cloning, 22-language support, and adaptive learning loops that personalize story complexity and themes to each child's evolving interests.",
+      impact: "Enabled thousands of families to create personalized stories in native languages with grandparent voice cloning, establishing emotional differentiation in children's content market.",
+      metrics: ["22 languages", "30-second voice cloning", "5-agent pipeline", "COPPA 2.0 compliant"]
+    }
+  },
   {
     title: 'Senior Product Manager',
     company: 'Cognium',
@@ -169,11 +185,11 @@ const experiences: Experience[] = [
       {
         category: 'Product Growth & Strategy',
         items:
-          ["Defined product vision and roadmap, driving 10x ARR growth and 15% usage increase.", "Expanded operations to 50+ new locations, enabling international market growth.", "Improved mobile app experience, increasing adoption by 20%.", "Rolled out invoicing, ERP integrations, and payments, adding 6+ clients to the upsell pipeline.", "Managed an 8-person sprint team, doubling productivity through better prioritization."]
+          ["Defined product vision and roadmap, driving 10x ARR growth and 15x usage increase.", "Expanded operations to 50+ new locations, enabling international market growth.", "Improved mobile app experience, increasing adoption by 20%.", "Rolled out invoicing, ERP integrations, and payments, adding 6+ clients to the upsell pipeline.", "Managed an 8-person sprint team, doubling productivity through better prioritization."]
       },
     ],
     skills: ["Product scaling", "Client onboarding", "International expansion", "Feature rollout", "API integrations", "Payments and invoicing", "User experience improvement", "Market research", "Product roadmap planning", "Cross-functional leadership"],
-    achievements: ["Drove ~10x ARR growth and 15x product usage", "Onboarded 15+ enterprise clients and 60,000+ monthly users", "Expanded operations to 70+ new locations across 3 countries", "Launched features that improved user adoption and experience", "Built integrations that reduced implementation time by 40%", "Introduced payments and invoicing features to strengthen monetization"],
+    achievements: ["Drove ~10x ARR growth and 15x product usage", "Onboarded 15+ enterprise clients and 70,000+ monthly users", "Expanded operations to 70+ new locations across 3 countries", "Launched features that improved user adoption and experience", "Built integrations that reduced implementation time by 40%", "Introduced payments and invoicing features to strengthen monetization"],
     press: [
       {
         headline: "Indian Startup MoveInSync Pioneers Intelligent Commutes Across the Globe",
@@ -192,8 +208,8 @@ const experiences: Experience[] = [
       title: "Enterprise Transport Platform Scale-Up",
       challenge: "Scaling a successful TaaS platform from regional to global presence while maintaining product quality and driving revenue growth.",
       solution: "Led strategic expansion to 70+ locations across 3 countries, launched mobile-first experience improvements, and built native payments/invoicing capabilities.",
-      impact: "Achieved 10x ARR growth, expanded to 60,000+ monthly users, and established the platform as the market leader in enterprise transport management.",
-      metrics: ["~10x ARR growth", "60K+ monthly users", "70+ locations", "3 countries"]
+      impact: "Achieved 10x ARR growth, expanded to 70,000+ monthly users, and established the platform as the market leader in enterprise transport management.",
+      metrics: ["~10x ARR growth", "70K+ monthly users", "70+ locations", "3 countries"]
     },
     industries: ["Enterprise SaaS", "Transportation", "Mobility", "Corporate Travel"],
   },
@@ -259,37 +275,37 @@ const experiences: Experience[] = [
     title: 'Senior Technical Consultant',
     company: 'Medulla.AI',
     url: '',
-    date: 'Apr 2020 - Aug 2020',
-    summary: 'Medulla,AI develops custom Ai-driven solutions for healthcare and enterprise clients.',
+    date: 'Jul 2020 - Nov 2020',
+    summary: 'Medulla.AI develops custom AI-driven solutions for enterprise clients, including an automated loan processing pipeline using NLP and OCR.',
     responsibilities: [
       {
         category: 'Technical Collaboration',
         items: [
-          'Defined the vision for an AI‑based healthcare analytics product.',
-          'Designed early ML features for prediction and anomaly detection.',
-          'Created prototypes that were used by early pilot customers.',
-          'Studied hospital workflows to identify automation opportunities.',
-          'Built dashboards that supported clinical decision‑making.',
-          'Ensured the product met healthcare data standards.'
+          'Built end-to-end automated loan processing pipeline using NLP and OCR (Amazon Textract) with custom document parsing in Python/Django, reducing document analysis time by 5X vs. manual review.',
+          'Implemented document classification to auto-detect types (pay stubs, tax returns, bank statements, IDs) and route each to the appropriate parsing pipeline with NLP-driven validation against lending criteria.',
+          'Designed confidence scoring with automated fallback workflows routing low-confidence extractions for manual review, plus automated inconsistency detection flagging data mismatches across key fields.',
+          'Built async processing architecture using Celery for parallel OCR job processing without blocking API requests, with automated workflows routing parsed data to downstream underwriting systems.',
+          'Orchestrated end-to-end loan processing workflows using Apache Airflow, managing complex DAGs for document ingestion, OCR processing, classification, validation, and routing to underwriting systems.',
+          'Implemented compliance-ready infrastructure: audit logging for all application actions, PII encryption at rest and in transit, role-based access controls, and data retention policies for financial regulatory requirements.'
         ],
       },
     ],
-    skills: ["Healthcare product strategy", "Predictive analytics", "Anomaly detection", "Prototyping", "Workflow research", "Clinical dashboard design", "User interviews", "Compliance and standards", "Feature specification", "ML-driven product design"],
-    achievements: ['AI Healthcare Platform Vision', 'ML-driven Analytics Modules', 'Early Customer Validation', 'Healthcare Workflow Automation'],
+    skills: ["Python", "Django", "Amazon Textract", "OCR", "NLP", "Document parsing", "Data pipelines", "REST APIs", "Loan processing automation", "Document classification", "Confidence scoring", "Celery", "Apache Airflow", "Async processing", "Audit logging", "PII handling", "Encryption", "Financial compliance", "Underwriting systems", "Role-based access control"],
+    achievements: ['Automated loan processing pipeline (NLP + OCR + Amazon Textract) reducing document analysis time by 5X', 'Implemented confidence scoring and inconsistency detection flagging data mismatches across loan applications', 'Built compliance-ready infrastructure with accuracy tracking dashboards, audit logging, and PII encryption'],
     caseStudy: {
-      title: "AI-Driven Healthcare Analytics Platform",
-      challenge: "Healthcare providers lacked actionable insights from patient data, limiting their ability to predict outcomes and optimize operations.",
-      solution: "Designed an AI-powered analytics platform with predictive modeling, anomaly detection, and clinical decision support dashboards.",
-      impact: "Enabled healthcare teams to identify at-risk patients earlier and optimize resource allocation based on data-driven predictions.",
-      metrics: ["Early risk prediction", "Clinical dashboards", "Healthcare compliance"]
+      title: "Automated Loan Processing Pipeline",
+      challenge: "Manual loan document review was slow and error-prone, with lenders spending hours analyzing pay stubs, tax returns, bank statements, and IDs for each application.",
+      solution: "Built an end-to-end automated pipeline using NLP and OCR (Amazon Textract) with document classification, confidence scoring, Celery async processing, and Apache Airflow orchestration.",
+      impact: "Reduced document analysis time by 5X vs. manual review, with confidence scoring and automated fallback workflows maintaining accuracy at scale for financial regulatory compliance.",
+      metrics: ["5X faster analysis", "Confidence scoring", "Compliance-ready infrastructure"]
     },
-    industries: ["Healthcare", "Medical AI", "Clinical Analytics", "Enterprise AI"],
+    industries: ["FinTech", "Document Processing", "NLP/AI", "Enterprise AI"],
   },
   {
     title: 'Co-founding member & Chief Technical Officer',
     company: 'Sagar Defence Engineering',
     url: 'https://www.sagardefence.com/',
-    date: 'Jun 2016 - Jan 2020',
+    date: 'Jun 2016 - Feb 2020',
     summary: 'Sagar Defence develops unmanned aerial and maritime solutions for several defence and paramilitary agencies.',
     responsibilities: [
       {
@@ -435,9 +451,7 @@ export default function Experience() {
             aria-selected={activeCompany === null}
             role="tab"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-            </svg>
+            <Grid3X3 size={20} />
             All Companies
           </button>
           {uniqueCompanies.map((company) => (
@@ -481,9 +495,7 @@ export default function Experience() {
                             className="big-bang-website-link"
                             aria-label={`Visit ${exp.company} website`}
                           >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
+                            <ExternalLink size={16} />
                           </a>
                         )}
                       </div>
@@ -519,15 +531,13 @@ export default function Experience() {
                 {exp.press && exp.press.length > 0 && !expanded && (
                   <div className="big-bang-news-cover">
                     <div className="big-bang-news-cover-header">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="big-bang-news-cover-icon">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                      </svg>
+                      <Newspaper size={20} className="big-bang-news-cover-icon" />
                       <span className="big-bang-news-cover-label">In the News</span>
                       <span className="big-bang-news-cover-count">{exp.press.length} mention{exp.press.length > 1 ? 's' : ''}</span>
                     </div>
                     <div className="big-bang-news-cover-preview">
                       <span className="big-bang-news-cover-source">{exp.press[0].source}</span>
-                      <span className="big-bang-news-cover-divider">—</span>
+                      <span className="big-bang-news-cover-divider">-</span>
                       <span className="big-bang-news-cover-headline">{exp.press[0].headline.length > 50 ? exp.press[0].headline.substring(0, 50) + '...' : exp.press[0].headline}</span>
                     </div>
                   </div>
@@ -540,14 +550,12 @@ export default function Experience() {
                 >
                   {expanded ? (
                     <>
-                      <CloseIcon />
+                      <X size={20} strokeWidth={3} />
                       <span>Close Case Study</span>
                     </>
                   ) : (
                     <>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                      </svg>
+                      <BookOpen size={20} />
                       <span>Read Full Case Study</span>
                     </>
                   )}
@@ -642,9 +650,7 @@ export default function Experience() {
                     {exp.press && exp.press.length > 0 && (
                       <div className="big-bang-news-rail">
                         <h4 className="big-bang-news-title">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                          </svg>
+                          <Newspaper size={20} />
                           In the News
                         </h4>
                         <div className="big-bang-news-list">
@@ -659,17 +665,15 @@ export default function Experience() {
                               <div className="big-bang-news-icon">
                                 {mention.source.charAt(0)}
                               </div>
-                              <div className="big-bang-news-content">
-                                <div className="big-bang-news-meta">
-                                  <span className="big-bang-news-source">{mention.source}</span>
-                                  <span className="big-bang-news-date">{mention.date}</span>
+                                <div className="big-bang-news-content">
+                                  <div className="big-bang-news-meta">
+                                    <span className="big-bang-news-source">{mention.source}</span>
+                                    <span className="big-bang-news-date">{mention.date}</span>
+                                  </div>
+                                  <div className="big-bang-news-headline">{mention.headline}</div>
                                 </div>
-                                <div className="big-bang-news-headline">{mention.headline}</div>
-                              </div>
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="big-bang-news-arrow">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                              </svg>
-                            </a>
+                                <ArrowRight size={20} className="big-bang-news-arrow" />
+                              </a>
                           ))}
                         </div>
                       </div>

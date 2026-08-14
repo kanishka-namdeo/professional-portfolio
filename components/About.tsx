@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useReducedMotion } from 'motion/react';
+import { GraduationCap, Bot, Rocket, TrendingUp, MapPin, Briefcase, Handshake, Lightbulb, Globe, Heart, Star, Mail, Link2 } from 'lucide-react';
 
 // Profile data
 const profileData = {
@@ -9,7 +11,7 @@ const profileData = {
   role: 'Product Manager | Software Engineer',
   location: 'Dubai, UAE',
   experience: '9+ Years',
-  tagline: 'I build digital products that people love to use — with clean code and thoughtful design.',
+  tagline: 'I build digital products that people love to use, with clean code and thoughtful design.',
   avatarInitials: 'KN'
 };
 
@@ -33,43 +35,43 @@ const bioContent = {
 
 // Journey timeline
 const journeyItems = [
-  { icon: '🎓', year: '2015', label: 'Started career in engineering' },
-  { icon: '🤖', year: '2017', label: 'First product role' },
-  { icon: '🚀', year: '2022', label: 'Led team of 8 engineers' },
-  { icon: '📈', year: 'Now', label: 'Building impactful products' }
+  { icon: GraduationCap, year: '2015', label: 'Started career in engineering' },
+  { icon: Bot, year: '2017', label: 'First product role' },
+  { icon: Rocket, year: '2022', label: 'Led team of 8 engineers' },
+  { icon: TrendingUp, year: 'Now', label: 'Building impactful products' }
 ];
 
 // FAQ categories
 const faqCategories = [
-  { id: 'working-with-me', label: 'Working With Me', icon: '🤝' },
-  { id: 'my-approach', label: 'My Approach', icon: '💡' }
+  { id: 'working-with-me', label: 'Working With Me', icon: Handshake },
+  { id: 'my-approach', label: 'My Approach', icon: Lightbulb }
 ];
 
 // FAQ data with category
 const faqItems = [
   {
     category: 'working-with-me',
-    icon: '🌍',
+    icon: Globe,
     question: 'Remote work capability',
-    answer: "Absolutely — I've worked with distributed teams across multiple regions. I'm comfortable with async communication, regular video check-ins, and overlap across timezones. I use tools like Notion, Slack, and Jira to keep everything transparent and aligned."
+    answer: "Absolutely. I've worked with distributed teams across multiple regions. I'm comfortable with async communication, regular video check-ins, and overlap across timezones. I use tools like Notion, Slack, and Jira to keep everything transparent and aligned."
   },
   {
     category: 'working-with-me',
-    icon: '🤝',
+    icon: Handshake,
     question: 'Handling disagreements',
     answer: "Disagreements are healthy when handled right. I focus on the problem, not the person. I ask questions to understand the other perspective, present data when possible, and I'm always willing to compromise to keep the project moving forward."
   },
   {
     category: 'my-approach',
-    icon: '💔',
+    icon: Heart,
     question: 'Biggest failure and learnings',
-    answer: "Early in my career, I spent 3 months building analytics dashboards I was personally excited about. Launch day: only 2 users enabled it. The lesson? I solved a problem I thought users had, not one they actually had. Since then, I always validate before I build — 20+ interviews minimum."
+    answer: "Early in my career, I spent 3 months building analytics dashboards I was personally excited about. Launch day: only 2 users enabled it. The lesson? I solved a problem I thought users had, not one they actually had. Since then, I always validate before I build: 20+ interviews minimum."
   },
   {
     category: 'my-approach',
-    icon: '⭐',
+    icon: Star,
     question: 'Why hire me?',
-    answer: "I bring both technical depth and product sensibility. I don't just ship features — I think about the user, the business, and long-term maintainability. I'm low-drama and high-impact, with a track record of scaling products across mobility, SaaS, and robotics domains."
+    answer: "I bring both technical depth and product sensibility. I don't just ship features; I think about the user, the business, and long-term maintainability. I'm low-drama and high-impact, with a track record of scaling products across mobility, SaaS, and robotics domains."
   }
 ];
 
@@ -78,6 +80,7 @@ export default function About() {
   const [activeFaqTab, setActiveFaqTab] = useState('working-with-me');
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [expandedTimeline, setExpandedTimeline] = useState<number | null>(null);
+  const prefersReducedMotion = useReducedMotion();
   const basePath = (process.env.NEXT_PUBLIC_BASE_PATH || '').replace(/\/$/, '');
   const profileSrc = `${basePath}/profile.jpg`;
 
@@ -92,6 +95,11 @@ export default function About() {
   };
 
   useEffect(() => {
+    if (prefersReducedMotion) {
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -105,7 +113,7 @@ export default function About() {
     if (section) observer.observe(section);
 
     return () => observer.disconnect();
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <section 
@@ -141,15 +149,15 @@ export default function About() {
               <p className="profile-tagline">{profileData.tagline}</p>
               <div className="profile-quick-facts">
                 <span className="quick-fact">
-                  <span className="quick-fact-icon">📍</span>
+                  <MapPin size={16} className="quick-fact-icon" />
                   <span>{profileData.location}</span>
                 </span>
                 <span className="quick-fact">
-                  <span className="quick-fact-icon">💼</span>
+                  <Briefcase size={16} className="quick-fact-icon" />
                   <span>{profileData.experience}</span>
                 </span>
                 <span className="quick-fact">
-                  <span className="quick-fact-icon">🎓</span>
+                  <GraduationCap size={16} className="quick-fact-icon" />
                   <span>B.E. Mechanical</span>
                 </span>
               </div>
@@ -160,20 +168,16 @@ export default function About() {
                 href="mailto:kanishka.namdeo@gmail.com" 
                 className="profile-cta-btn email-cta"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
+                <Mail size={20} />
                 <span>Email Me</span>
               </a>
-              <a 
-                href="https://linkedin.com/in/kanishkanamdeo" 
-                target="_blank" 
+              <a
+                href="https://linkedin.com/in/kanishkanamdeo"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="profile-cta-btn linkedin-cta"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="20" height="20">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                </svg>
+                <Link2 size={20} />
                 <span>Connect on LinkedIn</span>
               </a>
             </div>
@@ -189,7 +193,7 @@ export default function About() {
             {/* Tier 2: The Story */}
             <div className="overview-bio-card">
               <div className="bio-header">
-                <span className="bio-icon">👋</span>
+                <Handshake size={24} className="bio-icon" />
                 <h4>Hey, I'm {profileData.name.split(' ')[0]}</h4>
               </div>
               {bioContent.paragraphs.map((paragraph, idx) => (
@@ -253,7 +257,7 @@ export default function About() {
                     aria-controls={`faq-panel-${category.id}`}
                     tabIndex={0}
                   >
-                    <span className="faq-tab-icon">{category.icon}</span>
+                    <category.icon size={20} className="faq-tab-icon" />
                     <span className="faq-tab-label">{category.label}</span>
                   </button>
                 ))}
@@ -273,8 +277,8 @@ export default function About() {
                     {faqItems
                       .filter(item => item.category === category.id)
                       .map((faq, idx) => (
-                        <div 
-                          key={idx} 
+                        <div
+                          key={idx}
                           className={`faq-item-card ${expandedFaq === idx && activeFaqTab === category.id ? 'expanded' : ''}`}
                           onClick={() => {
                             const actualIndex = faqItems.filter(item => item.category === category.id).indexOf(faq);
@@ -293,7 +297,7 @@ export default function About() {
                           aria-controls={`faq-answer-${category.id}-${idx}`}
                         >
                           <div className="faq-item-header">
-                            <span className="faq-indicator" style={{ '--skill-color': 'var(--accent-purple)' } as React.CSSProperties}></span>
+                            <faq.icon size={20} className="faq-indicator" style={{ '--skill-color': 'var(--accent-navy)' } as React.CSSProperties} />
                             <h4 className="faq-question-title">{faq.question}</h4>
                             <span className="faq-toggle-icon">{expandedFaq === idx && activeFaqTab === category.id ? '−' : '+'}</span>
                           </div>

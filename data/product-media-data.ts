@@ -31,11 +31,11 @@ export const products: Product[] = [
   {
     title: 'MoveInSync Business Travel Solution',
     role: 'Led',
-    description: 'Corporate car rental SaaS platform driving 8x ARR increase and 12x product usage growth with 30K+ users across 50+ locations.',
+    description: 'Corporate car rental SaaS platform driving 10x ARR increase and 15x product usage growth with 70K+ users across 50+ locations.',
     image: withBasePath('/imgs/corporate-car-rental-fleet-variety.jpg'),
     altText: 'Diverse fleet of corporate rental cars representing the MoveInSync business travel solution',
     category: 'SaaS, Mobility',
-    tags: ['8x ARR Increase', '30K+ Users', '50+ Locations'],
+    tags: ['10x ARR Increase', '70K+ Users', '50+ Locations'],
     url: 'https://moveinsync.com/corporate-car-rental-solution/',
     hasCaseStudy: true,
     caseStudyId: 'rentlz',

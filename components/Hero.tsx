@@ -1,10 +1,21 @@
 'use client';
 
+import Image from 'next/image';
 import ParticleMesh from './ParticleMesh';
 
 export default function Hero() {
   return (
     <section id="hero" className="hero-section" role="banner" aria-label="Introduction">
+      <div className="hero-background-image">
+        <Image
+          src="https://picsum.photos/seed/portfolio-hero/1600/900"
+          alt=""
+          fill
+          priority
+          className="hero-bg-img"
+          sizes="100vw"
+        />
+      </div>
       <ParticleMesh />
       <div className="container">
         <div className="hero-content-wrapper">

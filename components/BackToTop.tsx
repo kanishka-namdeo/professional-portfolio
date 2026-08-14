@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { ArrowUp } from 'lucide-react';
 
 export default function BackToTop() {
   const [isVisible, setIsVisible] = useState(false);
@@ -33,9 +34,7 @@ export default function BackToTop() {
       aria-label="Scroll back to top"
       title="Back to top"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-      </svg>
+      <ArrowUp size={24} strokeWidth={2} />
     </button>
   );
 }

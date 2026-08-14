@@ -54,8 +54,11 @@ pnpm-debug.log*
 ehthumbs.db
 Thumbs.db
 
-# Editors and IDEs
+# IDEs and editors
 .idea/
+.kiro/
+.trae/
+.cursor/
 *.swp
 *.swo
 *~
@@ -70,3 +73,5 @@ Thumbs.db
 # Misc
 .electron/
 .netlify/
+.superpowers/
+master_data.json

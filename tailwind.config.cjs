@@ -15,13 +15,6 @@ module.exports = {
         'color-text-muted': 'var(--color-text-muted)',
         'color-surface-alt': 'var(--color-surface-alt)',
         'accent-navy': 'var(--accent-navy)',
-        'accent-teal': 'var(--accent-teal)',
-        'accent-teal-dark': 'var(--accent-teal-dark)',
-        'accent-coral': 'var(--accent-coral)',
-        'accent-indigo': 'var(--accent-indigo)',
-        'accent-amber': 'var(--accent-amber)',
-        'accent-purple': 'var(--accent-purple)',
-        'accent-blue': 'var(--accent-blue)',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],

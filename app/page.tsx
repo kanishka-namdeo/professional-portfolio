@@ -16,7 +16,7 @@ const faqSchema = {
       name: 'Remote work capability',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "Absolutely — I've worked with distributed teams across multiple regions. I'm comfortable with async communication, regular video check-ins, and overlap across timezones. I use tools like Notion, Slack, and Jira to keep everything transparent and aligned.",
+        text: "Absolutely. I've worked with distributed teams across multiple regions. I'm comfortable with async communication, regular video check-ins, and overlap across timezones. I use tools like Notion, Slack, and Jira to keep everything transparent and aligned.",
       },
     },
     {
@@ -32,7 +32,7 @@ const faqSchema = {
       name: 'Biggest failure and learnings',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "Early in my career, I spent 3 months building analytics dashboards I was personally excited about. Launch day: only 2 users enabled it. The lesson? I solved a problem I thought users had, not one they actually had. Since then, I always validate before I build — 20+ interviews minimum.",
+        text: "Early in my career, I spent 3 months building analytics dashboards I was personally excited about. Launch day: only 2 users enabled it. The lesson? I solved a problem I thought users had, not one they actually had. Since then, I always validate before I build: 20+ interviews minimum.",
       },
     },
     {
@@ -40,7 +40,7 @@ const faqSchema = {
       name: 'Why hire me?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "I bring both technical depth and product sensibility. I don't just ship features — I think about the user, the business, and long-term maintainability. I'm low-drama and high-impact, with a track record of scaling products across mobility, SaaS, and robotics domains.",
+        text: "I bring both technical depth and product sensibility. I don't just ship features; I think about the user, the business, and long-term maintainability. I'm low-drama and high-impact, with a track record of scaling products across mobility, SaaS, and robotics domains.",
       },
     },
   ],

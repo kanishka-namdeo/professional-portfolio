@@ -1,6 +1,11 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
+import Image from 'next/image';
+import { useReducedMotion } from 'motion/react';
+import { SkeletonCard } from './ui/Skeleton';
+import { EmptyState } from './ui/EmptyState';
+import { Code2, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 
 interface ShowcaseItem {
   type: 'github' | 'medium';
@@ -8,6 +13,7 @@ interface ShowcaseItem {
   description: string;
   tags: string[];
   link: string;
+  thumbnail?: string;
   meta?: {
     language?: string;
     stars?: number;
@@ -16,62 +22,186 @@ interface ShowcaseItem {
   };
 }
 
-const showcaseItems: ShowcaseItem[] = [
+const githubItems: ShowcaseItem[] = [
   {
     type: 'github',
-    title: 'MarketZen Stock Analyzer',
-    description: 'A sophisticated stock market technical analysis platform with real-time indicators, signal generation, and a professional terminal-style interface. Features SMA, EMA, RSI, MACD, Bollinger Bands, and more.',
-    tags: ['React 18', 'Vite', 'Tailwind CSS', 'Recharts', 'Yahoo Finance API'],
-    link: 'https://github.com/kane111/marketzen-stock-analyzer',
+    title: 'pi-dash',
+    description: 'Multi-agent orchestration dashboard: many agents, one unified surface for managing and monitoring AI agents',
+    tags: ['TypeScript', 'React', 'Next.js', 'Multi-Agent', 'Orchestration'],
+    link: 'https://github.com/kanishka-namdeo/pi-dash',
+    thumbnail: 'https://picsum.photos/seed/pi-dash-dashboard/600/400',
     meta: {
-      language: 'JavaScript 81.5%',
+      language: 'TypeScript',
       stars: 0,
-      date: 'Jan 2026',
+      date: '2026',
+    },
+  },
+  {
+    type: 'github',
+    title: 'social-beam',
+    description: 'Full-stack social media platform with AI agents, multi-platform integration, and real-time content aggregation',
+    tags: ['TypeScript', 'Next.js', 'PostgreSQL', 'Prisma', 'AI Agents', 'Stable Diffusion'],
+    link: 'https://github.com/kanishka-namdeo/social-beam',
+    thumbnail: 'https://picsum.photos/seed/social-beam-platform/600/400',
+    meta: {
+      language: 'TypeScript',
+      stars: 0,
+      date: '2025',
+    },
+  },
+  {
+    type: 'github',
+    title: 'thetell',
+    description: 'AI-powered corporate intelligence platform: dual-agent debate, 25+ signal sources, Neo4j graph DB, confidence scoring',
+    tags: ['TypeScript', 'Next.js', 'Neo4j', 'LlamaIndex', 'Multi-Agent', 'NLP'],
+    link: 'https://github.com/kanishka-namdeo/thetell',
+    thumbnail: 'https://picsum.photos/seed/corporate-intelligence/600/400',
+    meta: {
+      language: 'TypeScript',
+      stars: 0,
+      date: '2025',
+    },
+  },
+  {
+    type: 'github',
+    title: 'yfnhanced-mcp',
+    description: 'Production-grade MCP server for Yahoo Finance with circuit breaker, rate limiting, caching',
+    tags: ['TypeScript', 'MCP', 'Redis', 'Financial Data', 'npm package'],
+    link: 'https://github.com/kanishka-namdeo/yfnhanced-mcp',
+    thumbnail: 'https://picsum.photos/seed/yahoo-finance-mcp/600/400',
+    meta: {
+      language: 'TypeScript',
+      stars: 7,
+      date: '2025',
+    },
+  },
+  {
+    type: 'github',
+    title: 'Twin',
+    description: 'Privacy-first AI meeting assistant built with Rust for local processing',
+    tags: ['Rust', 'Privacy', 'Local AI', 'Audio Processing'],
+    link: 'https://github.com/kanishka-namdeo/Twin',
+    meta: {
+      language: 'Rust',
+      stars: 0,
+      date: '2025',
     },
   },
   {
     type: 'github',
     title: 'rag-chat-v2',
-    description: 'A modern, full-stack RAG chat application with real-time streaming, document management, and configurable AI providers. Features multi-provider support and intelligent context retrieval.',
-    tags: ['Next.js 16', 'FastAPI', 'ChromaDB', 'LangChain', 'TypeScript'],
-    link: 'https://github.com/kane111/rag-chat-v2',
+    description: 'Full-stack RAG chat with document upload, vector search, multi-provider LLM support',
+    tags: ['TypeScript', 'Python', 'Next.js', 'FastAPI', 'ChromaDB', 'LangChain'],
+    link: 'https://github.com/kanishka-namdeo/rag-chat-v2',
+    thumbnail: 'https://picsum.photos/seed/rag-chatbot/600/400',
     meta: {
       language: 'TypeScript 82%',
-      stars: 0,
-      date: 'Dec 2025',
+      stars: 1,
+      date: '2026',
     },
+  },
+  {
+    type: 'github',
+    title: 'coding-plan-proxy',
+    description: 'Production-grade HTTP proxy for AI coding APIs with multi-layer rate limiting and TUI dashboard',
+    tags: ['Python', 'TUI', 'Rate Limiting', 'Circuit Breaker', 'SSE Streaming'],
+    link: 'https://github.com/kanishka-namdeo/coding-plan-proxy',
+    thumbnail: 'https://picsum.photos/seed/http-proxy-api/600/400',
+    meta: {
+      language: 'Python',
+      stars: 1,
+      date: '2026',
+    },
+  },
+  {
+    type: 'github',
+    title: 'instructify',
+    description: 'Research-backed Cursor IDE configuration for faster, smarter AI coding agents',
+    tags: ['TypeScript', 'Cursor IDE', 'AI Agent Configuration', 'Developer Tools'],
+    link: 'https://github.com/kanishka-namdeo/instructify',
+    thumbnail: 'https://picsum.photos/seed/cursor-ide-config/600/400',
+    meta: {
+      language: 'TypeScript',
+      stars: 1,
+      date: '2025',
+    },
+  },
+];
+
+const mediumArticlesFallback: ShowcaseItem[] = [
+  {
+    type: 'medium',
+    title: 'MCP File Search That Actually Works (Everywhere)',
+    description: 'Building a cross-platform MCP server for instant file search using Everything on Windows, Spotlight on macOS, and ripgrep on Linux',
+    tags: ['MCP', 'Open Source', 'Search', 'AI Tools'],
+    link: 'https://kanishkanamdeo.medium.com/mcp-file-search-that-actually-works-everywhere-d139a33dfcb1',
+    meta: { date: 'Jan 2026', readTime: '8 min read' },
   },
   {
     type: 'medium',
     title: 'Vibe Coding (and not losing my mind)',
-    description: 'Exploring the potential of vibe coding while maintaining mental well-being in tech. A candid reflection on balancing creativity with sustainability in software development.',
-    tags: ['Vibe Coding', 'Product Management', 'Mental Wellness'],
+    description: 'How I built a full RAG workbench with Next.js and FastAPI using only AI-assisted coding, lessons, prompts, and pitfalls',
+    tags: ['AI', 'Vibe Coding', 'LLM', 'Product Management'],
     link: 'https://kanishkanamdeo.medium.com/vibe-coding-and-not-losing-my-mind-ac175f123155',
-    meta: {
-      date: 'Dec 16, 2025',
-    },
+    meta: { date: 'Dec 2025', readTime: '10 min read' },
   },
   {
     type: 'medium',
     title: 'Writing A Simple Kivy-based CPU-Monitoring App in Python!',
-    description: 'A step-by-step guide to building a CPU monitoring application using Python, Kivy, and KivyMD. Learn how to create a functional desktop app with a clean interface.',
-    tags: ['Python', 'Kivy', 'KivyMD', 'Desktop App', 'CPU Monitoring'],
+    description: 'A step-by-step guide to building a cross-platform CPU monitoring dashboard with Python, Kivy, and KivyMD',
+    tags: ['Python', 'Kivy', 'UI', 'Learning'],
     link: 'https://kanishkanamdeo.medium.com/writing-a-simple-kivy-based-cpu-monitoring-app-in-python-74e1a7e872',
-    meta: {
-      date: 'Apr 12, 2020',
-    },
+    meta: { date: 'Apr 2020', readTime: '7 min read' },
   },
   {
     type: 'medium',
     title: 'My Experiments with Elementary OS: Part 1',
-    description: 'A comprehensive guide to customizing Elementary OS, one of the most elegant Ubuntu-based distributions. Learn tips and tricks to personalize your Linux experience.',
-    tags: ['Linux', 'Elementary OS', 'Ubuntu', 'Customization', 'Open Source'],
+    description: 'Customizing Elementary OS with multiple docks, battery optimization via TLP, and touchpad gestures',
+    tags: ['Linux', 'Elementary OS', 'Open Source', 'DIY'],
     link: 'https://kanishkanamdeo.medium.com/my-experiments-with-elementary-os-part-1-4a2e81777101',
-    meta: {
-      date: 'Apr 6, 2020',
-    },
+    meta: { date: 'Apr 2020', readTime: '6 min read' },
   },
 ];
+
+function extractImageFromHtml(html: string): string | null {
+  // Find all image src URLs in the HTML
+  const imgMatches = html.matchAll(/<img[^>]+src="([^"]+)"/g);
+  const urls = Array.from(imgMatches).map(match => match[1]);
+
+  // Filter out tracking pixels (1x1 images) and medium stats URLs
+  const validImage = urls.find(url => {
+    // Skip tracking pixels and stats
+    if (url.includes('/_/stat?')) return false;
+    if (url.includes('medium.com/_/stat')) return false;
+    // Skip very small images (likely icons/trackers)
+    if (url.includes('1*') && !url.includes('max')) return false;
+    // Must be a cdn-images URL from Medium
+    return url.includes('cdn-images-1.medium.com');
+  });
+
+  return validImage || null;
+}
+
+function estimateReadTime(content: string): string {
+  const wordCount = content.replace(/<[^>]*>/g, '').split(/\s+/).length;
+  const minutes = Math.max(1, Math.round(wordCount / 200));
+  return `${minutes} min read`;
+}
+
+function interleaveItems(projects: ShowcaseItem[], articles: ShowcaseItem[]): ShowcaseItem[] {
+  const result: ShowcaseItem[] = [];
+  const articleQueue = [...articles];
+  for (let i = 0; i < projects.length; i++) {
+    result.push(projects[i]);
+    if (i % 3 === 2 && articleQueue.length > 0) {
+      result.push(articleQueue.shift()!);
+    }
+  }
+  while (articleQueue.length > 0) {
+    result.push(articleQueue.shift()!);
+  }
+  return result;
+}
 
 export default function Showcase() {
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -79,6 +209,57 @@ export default function Showcase() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cardStride, setCardStride] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showcaseItems, setShowcaseItems] = useState<ShowcaseItem[]>(githubItems);
+  const prefersReducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    async function fetchMediumArticles() {
+      try {
+        const response = await fetch(
+          'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@kanishkanamdeo'
+        );
+        const data = await response.json();
+
+        if (data.status === 'ok' && data.items) {
+          const mediumItems: ShowcaseItem[] = data.items
+            .slice(0, 6)
+            .map((item: any) => {
+              const thumbnail =
+                item.thumbnail || extractImageFromHtml(item.content || item.description || '');
+              const pubDate = new Date(item.pubDate);
+              const dateStr = pubDate.toLocaleDateString('en-US', {
+                month: 'short',
+                year: 'numeric',
+              });
+
+              return {
+                type: 'medium' as const,
+                title: item.title,
+                description: item.description
+                  ?.replace(/<[^>]*>/g, '')
+                  .substring(0, 150) + '...',
+                tags: item.categories?.slice(0, 4) || [],
+                link: item.link,
+                thumbnail: thumbnail || undefined,
+                meta: {
+                  date: dateStr,
+                  readTime: estimateReadTime(item.content || item.description || ''),
+                },
+              };
+            });
+
+          const combined = interleaveItems(githubItems, mediumItems);
+          setShowcaseItems(combined);
+        }
+      } catch {
+        const combined = interleaveItems(githubItems, mediumArticlesFallback);
+        setShowcaseItems(combined);
+      }
+    }
+
+    fetchMediumArticles();
+  }, []);
 
   // Drag state using refs to avoid stale closures
   const isDraggingRef = useRef(false);
@@ -139,11 +320,12 @@ export default function Showcase() {
   const scrollTo = useCallback((index: number, smooth: boolean = true) => {
     const stride = cardStride || 412;
     if (scrollRef.current) {
-      scrollRef.current.style.transition = smooth ? 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)' : 'none';
+      const shouldAnimate = smooth && !prefersReducedMotion;
+      scrollRef.current.style.transition = shouldAnimate ? 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)' : 'none';
       scrollRef.current.style.transform = `translate3d(-${index * stride}px, 0, 0)`;
     }
     setCurrentIndex(index);
-  }, [cardStride]);
+  }, [cardStride, prefersReducedMotion]);
 
   // Scroll left or right by one item
   const scroll = (direction: 'left' | 'right') => {
@@ -337,6 +519,8 @@ export default function Showcase() {
   }, []);
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
+
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -355,6 +539,14 @@ export default function Showcase() {
     return () => {
       observerRef.current?.disconnect();
     };
+  }, [isLoading, prefersReducedMotion]);
+
+  // Simulate loading state (replace with actual data fetching logic)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 800);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -376,13 +568,29 @@ export default function Showcase() {
       <div className="container">
         <div className="section-header animate-on-scroll">
           <h2 id="showcase-title" className="section-title">
-            Code & Open Source
+            Code, Writing & Open Source
           </h2>
           <p className="section-subtitle">
-            Personal projects and technical contributions
+            Personal projects, technical articles, and contributions
           </p>
         </div>
 
+        {isLoading ? (
+          <div className="showcase-carousel-wrapper">
+            <div className="showcase-carousel-container">
+              <div
+                className="showcase-carousel"
+                style={{ display: 'flex', gap: 'var(--space-lg)' }}
+              >
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <SkeletonCard key={i} className="showcase-card" />
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : showcaseItems.length === 0 ? (
+          <EmptyState message="No projects to show yet. Check back soon!" />
+        ) : (
         <div className="showcase-carousel-wrapper">
           <button
             className="carousel-btn carousel-prev"
@@ -390,18 +598,7 @@ export default function Showcase() {
             aria-label="Previous project"
             disabled={showcaseItems.length <= 1}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              width="24"
-              height="24"
-              stroke="currentColor"
-              strokeWidth={2}
-              aria-hidden="true"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
+            <ChevronLeft size={24} aria-hidden="true" />
           </button>
 
           <div 
@@ -439,9 +636,7 @@ export default function Showcase() {
                   <div className="card-header">
                     <div className={`card-icon ${item.type}`}>
                       {item.type === 'github' ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24">
-                          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                        </svg>
+                        <Code2 size={24} />
                       ) : (
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24">
                           <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
@@ -456,12 +651,33 @@ export default function Showcase() {
                             {item.meta.language}
                           </span>
                         )}
+                        {item.type === 'medium' && item.meta.readTime && (
+                          <span className="meta-item read-time">{item.meta.readTime}</span>
+                        )}
                         {item.meta.date && (
                           <span className="meta-item date">{item.meta.date}</span>
                         )}
                       </div>
                     )}
                   </div>
+
+                  {item.thumbnail && (
+                    <div className="card-thumbnail">
+                      {item.type === 'github' ? (
+                        <Image
+                          src={item.thumbnail}
+                          alt={item.title}
+                          width={600}
+                          height={400}
+                          sizes="(max-width: 768px) 100vw, 400px"
+                          loading="lazy"
+                          className="card-thumbnail-img"
+                        />
+                      ) : (
+                        <img src={item.thumbnail} alt={item.title} loading="lazy" />
+                      )}
+                    </div>
+                  )}
 
                   <h3 className="card-title">{item.title}</h3>
                   <p className="card-description">{item.description}</p>
@@ -483,9 +699,7 @@ export default function Showcase() {
                     <span className="link-text">
                       {item.type === 'github' ? 'View Repository' : 'Read Article'}
                     </span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16" className="arrow-icon">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+                    <ArrowRight size={16} className="arrow-icon" />
                   </a>
                 </div>
               ))}
@@ -498,35 +712,27 @@ export default function Showcase() {
             aria-label="Next project"
             disabled={showcaseItems.length <= 1}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              width="24"
-              height="24"
-              stroke="currentColor"
-              strokeWidth={2}
-              aria-hidden="true"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
+            <ChevronRight size={24} aria-hidden="true" />
           </button>
         </div>
+        )}
 
-        <div className="carousel-indicators" role="tablist" aria-label="Carousel pagination">
-          {showcaseItems.map((_, index) => (
-            <button
-              key={index}
-              className={`indicator ${index === currentIndex ? 'active' : ''}`}
-              role="tab"
-              aria-label={`Go to project ${index + 1}`}
-              onClick={() => {
-                setCurrentIndex(index);
-                scrollTo(index);
-              }}
-            />
-          ))}
-        </div>
+        {!isLoading && showcaseItems.length > 0 && (
+          <div className="carousel-indicators" role="tablist" aria-label="Carousel pagination">
+            {showcaseItems.map((_, index) => (
+              <button
+                key={index}
+                className={`indicator ${index === currentIndex ? 'active' : ''}`}
+                role="tab"
+                aria-label={`Go to project ${index + 1}`}
+                onClick={() => {
+                  setCurrentIndex(index);
+                  scrollTo(index);
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

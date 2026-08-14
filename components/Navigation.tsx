@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useScroll, useMotionValueEvent } from 'motion/react';
 import ThemeToggle from './ThemeToggle';
 
 const navLinks = [
@@ -15,6 +16,7 @@ export default function Navigation() {
   const [isHidden, setIsHidden] = useState(false);
   const lastScrollYRef = useRef(0);
   const rafRef = useRef<number | null>(null);
+  const { scrollY } = useScroll();
 
   const closeMenu = useCallback(() => {
     setIsOpen(false);
@@ -35,44 +37,44 @@ export default function Navigation() {
     };
   }, [isOpen]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (rafRef.current !== null) return;
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    if (rafRef.current !== null) return;
 
-      rafRef.current = requestAnimationFrame(() => {
-        try {
-          const currentScrollY = window.scrollY;
+    rafRef.current = requestAnimationFrame(() => {
+      try {
+        const currentScrollY = latest;
 
-          // Don't hide navigation when mobile menu is open
-          if (!isOpen) {
-            if (currentScrollY > lastScrollYRef.current && currentScrollY > 200) {
-              setIsHidden(true);
-            } else {
-              setIsHidden(false);
-            }
+        // Don't hide navigation when mobile menu is open
+        if (!isOpen) {
+          if (currentScrollY > lastScrollYRef.current && currentScrollY > 200) {
+            setIsHidden(true);
+          } else {
+            setIsHidden(false);
           }
-
-          lastScrollYRef.current = currentScrollY;
-
-          const sections = document.querySelectorAll('section[id]');
-          let current = '';
-
-          sections.forEach((section) => {
-            const sectionTop = section.getBoundingClientRect().top;
-            if (sectionTop <= 200) {
-              current = section.getAttribute('id') || '';
-            }
-          });
-
-          setActiveSection(current);
-        } catch (error) {
-          console.error('Navigation scroll handler error:', error);
-        } finally {
-          rafRef.current = null;
         }
-      });
-    };
 
+        lastScrollYRef.current = currentScrollY;
+
+        const sections = document.querySelectorAll('section[id]');
+        let current = '';
+
+        sections.forEach((section) => {
+          const sectionTop = section.getBoundingClientRect().top;
+          if (sectionTop <= 200) {
+            current = section.getAttribute('id') || '';
+          }
+        });
+
+        setActiveSection(current);
+      } catch (error) {
+        console.error('Navigation scroll handler error:', error);
+      } finally {
+        rafRef.current = null;
+      }
+    });
+  });
+
+  useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (isOpen && !target.closest('.nav-container') && !target.closest('.mobile-nav')) {
@@ -80,11 +82,9 @@ export default function Navigation() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
     document.addEventListener('click', handleClickOutside);
     
     return () => {
-      window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('click', handleClickOutside);
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);
