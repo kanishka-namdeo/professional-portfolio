@@ -73,6 +73,57 @@ export default function ParticleMesh() {
     });
   };
 
+  const drawMeshLines = (
+    ctx: CanvasRenderingContext2D,
+    particles: typeof particlesRef.current,
+    isMobile: boolean
+  ) => {
+    const maxDistance = isMobile ? 150 : 200;
+
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[j].x - particles[i].x;
+        const dy = particles[j].y - particles[i].y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Connect to nearest neighbors only
+        if (distance < maxDistance) {
+          const opacity = (isMobile ? 0.06 : 0.08) * (1 - distance / maxDistance);
+
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(30, 58, 95, ${opacity})`;
+          ctx.lineWidth = isMobile ? 0.5 : 0.75;
+          ctx.stroke();
+        }
+      }
+    }
+  };
+
+  const drawParticles = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
+    const particles = particlesRef.current;
+    const isMobile = width < 768;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, width, height);
+
+    // Draw mesh lines first (behind particles)
+    if (!isMobile || width >= 480) {
+      drawMeshLines(ctx, particles, isMobile);
+    }
+
+    // Draw particles
+    particles.forEach(particle => {
+      const opacity = isMobile ? 0.5 : 0.4 + Math.random() * 0.3;
+
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(30, 58, 95, ${opacity})`; // Navy: #1e3a5f
+      ctx.fill();
+    });
+  };
+
   useEffect(() => {
     if (prefersReducedMotion) return;
 
@@ -97,6 +148,29 @@ export default function ParticleMesh() {
 
     resizeCanvas();
 
+    // Animation loop
+    let lastTime = performance.now();
+
+    const animate = (currentTime: number) => {
+      const deltaTime = currentTime - lastTime;
+
+      // Frame skipping for slow devices (skip if frame took > 20ms)
+      if (deltaTime < 20 && !document.hidden) {
+        const rect = canvas.getBoundingClientRect();
+
+        updateParticles(rect.width, rect.height, deltaTime);
+        drawParticles(ctx, rect.width, rect.height);
+      }
+
+      lastTime = currentTime;
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    // Lazy initialization after 100ms
+    const initTimeout = setTimeout(() => {
+      animationFrameRef.current = requestAnimationFrame(animate);
+    }, 100);
+
     // Debounced resize handler
     let resizeTimeout: NodeJS.Timeout;
     const handleResize = () => {
@@ -107,6 +181,8 @@ export default function ParticleMesh() {
     window.addEventListener('resize', handleResize);
 
     return () => {
+      clearTimeout(initTimeout);
+      cancelAnimationFrame(animationFrameRef.current);
       window.removeEventListener('resize', handleResize);
       clearTimeout(resizeTimeout);
     };
