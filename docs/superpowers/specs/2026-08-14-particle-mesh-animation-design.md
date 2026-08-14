@@ -69,7 +69,7 @@ ParticleMesh renders as first child inside `hero-section`, before the container 
 
 ### Particle System
 
-- **Particle count:** 8-12 particles (adaptive: 8 for mobile, 12 for desktop)
+- **Particle count:** 8-12 particles (adaptive: 8 for screens <768px, 12 for screens ≥768px)
 - **Particle properties:** `{ x, y, vx, vy, radius, phase }`
   - Position (x, y)
   - Velocity (vx, vy)
