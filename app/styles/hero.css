@@ -229,7 +229,8 @@
 /* Mobile Styles for Simplified Hero */
 @media (max-width: 768px) {
   .hero-section {
-    padding: calc(60px + var(--space-lg)) 0 var(--space-lg);
+    padding: calc(60px + var(--space-md)) 0 var(--space-md);
+    min-height: 80vh;
   }
 
   .hero-content-wrapper {
@@ -237,36 +238,44 @@
   }
 
   .hero-main-content {
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-md);
   }
 
   .hero-main-line {
-    font-size: clamp(1.6rem, 3.8vw, 2.2rem);
+    font-size: clamp(1.5rem, 5.5vw, 2rem);
     margin-bottom: var(--space-xs);
+    line-height: 1.2;
   }
 
   .hero-actions {
     flex-direction: column;
     width: 100%;
-    gap: var(--space-md);
+    gap: var(--space-sm);
   }
 
   .hero-actions .cta-button {
     width: 100%;
     justify-content: center;
+    padding: var(--space-sm) var(--space-md);
   }
 
   .hero-metrics-highlight {
-    gap: var(--space-md);
-    padding: var(--space-xs) var(--space-sm);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    margin-bottom: var(--space-md);
   }
 
   .metric-highlight-item {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+    text-align: center;
   }
 
   .metric-highlight-item strong {
-    font-size: 0.95rem;
+    font-size: 1rem;
+    display: block;
+    margin-bottom: 2px;
   }
 
   .metric-highlight-divider {
@@ -276,10 +285,26 @@
   .hero-availability-badge {
     padding: var(--space-xs) var(--space-sm);
     font-size: 0.8rem;
+    margin-bottom: var(--space-md);
   }
 
   .availability-dot {
     width: 8px;
     height: 8px;
+  }
+}
+
+/* Extra small devices (phones < 360px) */
+@media (max-width: 360px) {
+  .hero-main-line {
+    font-size: clamp(1.3rem, 5vw, 1.75rem);
+  }
+
+  .hero-metrics-highlight {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-highlight-item {
+    font-size: 0.8rem;
   }
 }

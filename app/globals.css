@@ -721,16 +721,49 @@ p,
     display: none;
   }
 
-  /* Scroll indicator for tab navigation */
+  /* Scroll indicators for tab navigation */
+  .experience-tab-navigation::before {
+    content: '→';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    background: var(--color-border);
+    color: var(--color-bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0.7;
+    animation: pulseArrow 2s ease-in-out infinite;
+  }
+
   .experience-tab-navigation::after {
     content: '';
     position: absolute;
     right: 0;
     top: 0;
     bottom: 0;
-    width: 40px;
+    width: 60px;
     background: linear-gradient(to left, var(--color-bg) 0%, transparent 100%);
     pointer-events: none;
+  }
+
+  @keyframes pulseArrow {
+    0%, 100% {
+      opacity: 0.7;
+      transform: translateY(-50%) translateX(0);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(-50%) translateX(4px);
+    }
   }
 
   .experience-tab-button {

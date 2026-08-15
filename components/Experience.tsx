@@ -415,6 +415,18 @@ export default function Experience() {
       if (typeof window !== 'undefined' && window.innerWidth <= 640) {
         document.body.style.overflow = 'hidden';
       }
+
+      // Scroll to card top on mobile for better UX
+      if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+        setTimeout(() => {
+          const cardElement = document.querySelector(`.big-bang-card:nth-child(${index + 1})`);
+          if (cardElement) {
+            const navHeight = 60; // Mobile nav height
+            const cardTop = cardElement.getBoundingClientRect().top + window.scrollY - navHeight;
+            window.scrollTo({ top: cardTop, behavior: 'smooth' });
+          }
+        }, 100);
+      }
     }
     setExpandedCards(newExpanded);
   };
