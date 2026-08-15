@@ -713,7 +713,7 @@ p,
     top: 0;
     bottom: 0;
     width: 40px;
-    background: linear-gradient(to left, var(--color-background) 0%, transparent 100%);
+    background: linear-gradient(to left, var(--color-bg) 0%, transparent 100%);
     pointer-events: none;
   }
 
@@ -736,6 +736,7 @@ p,
 
   .big-bang-card {
     width: 100%;
+    padding: var(--space-md);
   }
 
   .big-bang-header {
@@ -753,8 +754,8 @@ p,
   }
 
   .big-bang-logo {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     font-size: 1.25rem;
     flex-shrink: 0;
   }
@@ -8733,8 +8734,8 @@ button[class*="icon"],
   }
 
   .big-bang-logo {
-    width: 44px;
-    height: 44px;
+    width: 56px;
+    height: 56px;
     font-size: 1rem;
   }
 
