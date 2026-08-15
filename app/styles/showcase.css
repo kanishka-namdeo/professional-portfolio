@@ -426,4 +426,9 @@
   .showcase-card {
     min-height: 400px;
   }
+
+  .embla__dot {
+    width: 16px;
+    height: 16px;
+  }
 }
