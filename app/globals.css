@@ -342,6 +342,14 @@ p,
 /* Base Mobile Styles - Applied to all mobile devices */
 @media (max-width: 768px) {
 
+  /* Mobile Visual Polish - Lighter borders and shadows */
+  :root {
+    --border-width: 1px;
+    --shadow-hard: 4px 4px 0px 0px var(--color-border);
+    --shadow-base: 3px 3px 0px 0px var(--color-border);
+    --shadow-hover: 3px 3px 0px 0px var(--color-border);
+  }
+
   /* Typography Scaling for Mobile */
   html {
     font-size: 14px;
