@@ -416,3 +416,14 @@
   display: flex;
   gap: var(--space-sm);
 }
+
+/* Mobile overrides for Showcase carousel */
+@media (max-width: 768px) {
+  .embla__slide {
+    flex: 0 0 calc(100vw - 48px);
+  }
+
+  .showcase-card {
+    min-height: 400px;
+  }
+}

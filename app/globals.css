@@ -992,11 +992,11 @@ p,
   }
 
   .carousel-prev {
-    left: max(var(--space-sm), env(safe-area-inset-left));
+    left: max(16px, env(safe-area-inset-left));
   }
 
   .carousel-next {
-    right: max(var(--space-sm), env(safe-area-inset-right));
+    right: max(16px, env(safe-area-inset-right));
   }
 
   .showcase-carousel-container {
