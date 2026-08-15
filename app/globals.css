@@ -1032,20 +1032,7 @@ p,
   }
 
   .carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 44px;
-    height: 44px;
-    z-index: 10;
-  }
-
-  .carousel-prev {
-    left: max(16px, env(safe-area-inset-left));
-  }
-
-  .carousel-next {
-    right: max(16px, env(safe-area-inset-right));
+    display: none;
   }
 
   .showcase-carousel-container {
@@ -1070,10 +1057,10 @@ p,
   }
 
   .showcase-card {
-    flex: 0 0 calc(100% - var(--space-md));
-    min-width: 280px;
-    min-height: auto;
-    width: 100%;
+    flex: 0 0 calc(100vw - 48px);
+    min-width: calc(100vw - 48px);
+    min-height: 400px;
+    width: calc(100vw - 48px);
     scroll-snap-align: start;
     margin: 0;
   }
@@ -4598,8 +4585,9 @@ section {
 
   .showcase-card {
     padding: var(--space-lg);
-    width: 100%;
-    min-height: auto;
+    width: calc(100vw - 48px);
+    min-width: calc(100vw - 48px);
+    min-height: 400px;
   }
 
   .card-thumbnail {

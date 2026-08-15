@@ -424,11 +424,21 @@
   }
 
   .showcase-card {
+    width: calc(100vw - 48px);
+    min-width: calc(100vw - 48px);
     min-height: 400px;
   }
 
   .embla__dot {
     width: 16px;
     height: 16px;
+  }
+
+  .showcase-carousel-wrapper {
+    max-width: 100%;
+  }
+
+  .carousel-btn {
+    display: none;
   }
 }
