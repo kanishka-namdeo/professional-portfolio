@@ -60,7 +60,7 @@
   .profile-header-card {
     flex-direction: column;
     text-align: center;
-    gap: var(--space-md);
+    gap: var(--space-lg);
   }
 }
 
