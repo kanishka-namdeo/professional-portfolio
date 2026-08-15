@@ -373,6 +373,14 @@ p,
     line-height: 1.35;
   }
 
+  p,
+  .card-description,
+  .press-description,
+  .thought-excerpt,
+  .faq-answer {
+    max-width: 100%;
+  }
+
   p {
     line-height: 1.65;
     word-wrap: break-word;
@@ -383,14 +391,14 @@ p,
   .container {
     width: 100%;
     max-width: 100%;
-    padding-left: max(var(--space-md), env(safe-area-inset-left));
+    padding-left: var(--container-padding);
     padding-right: max(var(--space-md), env(safe-area-inset-right));
   }
 
   /* Section Spacing - Reduced for mobile */
   .section-full-width {
-    padding-top: var(--space-xl);
-    padding-bottom: var(--space-xl);
+    padding-top: var(--space-lg);
+    padding-bottom: var(--space-lg);
     padding-left: var(--space-md);
     padding-right: var(--space-md);
   }
