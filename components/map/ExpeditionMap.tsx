@@ -34,7 +34,13 @@ function trailD(): string {
     .join(' ');
 }
 
-export function ExpeditionMap({ activeId }: { activeId: string | null }) {
+export function ExpeditionMap({
+  activeId,
+  className = 'aspect-[3/2]',
+}: {
+  activeId: string | null;
+  className?: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
   const reduceMotion = useReducedMotion();
@@ -42,7 +48,7 @@ export function ExpeditionMap({ activeId }: { activeId: string | null }) {
   const pathLength = useSpring(scrollYProgress, { stiffness: 60, damping: 20 });
 
   return (
-    <div ref={ref} className="relative aspect-[3/2] w-full" data-testid="expedition-map">
+    <div ref={ref} className={`relative w-full ${className}`} data-testid="expedition-map">
       <Image src="/map/contours.svg" alt="" fill className="object-cover" aria-hidden />
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full" aria-hidden>
         <motion.path

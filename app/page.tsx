@@ -1,9 +1,10 @@
 import Hero from '@/components/Hero';
-import Experience from '@/components/Experience';
-import Showcase from '@/components/Showcase';
-import About from '@/components/About';
-import StickyCTA from '@/components/StickyCTA';
-import BackToTop from '@/components/BackToTop';
+import { TrailProgress } from '@/components/TrailProgress';
+import { Journey } from '@/components/journey/Journey';
+import { BaseCamp } from '@/components/camps/BaseCamp';
+import { camps } from '@/data/camps';
+import { Ledger } from '@/components/ledger/Ledger';
+import { EndOfTrail } from '@/components/EndOfTrail';
 
 const siteUrl = 'https://kanishkanamdeo.com';
 
@@ -59,20 +60,26 @@ const breadcrumbSchema = {
     {
       '@type': 'ListItem',
       position: 2,
-      name: 'Experience',
-      item: `${siteUrl}/#experience`,
+      name: 'The Journey',
+      item: `${siteUrl}/#journey`,
     },
     {
       '@type': 'ListItem',
       position: 3,
-      name: 'Code & Open Source',
-      item: `${siteUrl}/#products`,
+      name: 'Base Camps',
+      item: `${siteUrl}/#camps`,
     },
     {
       '@type': 'ListItem',
       position: 4,
-      name: 'About & FAQ',
-      item: `${siteUrl}/#about`,
+      name: 'The Ledger',
+      item: `${siteUrl}/#ledger`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 5,
+      name: 'End of the Trail',
+      item: `${siteUrl}/#contact`,
     },
   ],
 };
@@ -94,30 +101,30 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <main id="main-content" role="main">
-        <article>
-          {/* Screen reader only heading for SEO */}
-          <h1 className="sr-only">Kanishka Namdeo - Product Manager Portfolio - Dubai, UAE</h1>
+      {/* Screen reader only heading for SEO */}
+      <h1 className="sr-only">Kanishka Namdeo - Product Manager Portfolio - Dubai, UAE</h1>
 
-          {/* Hero Section */}
-          <Hero />
+      {/* Hero */}
+      <Hero />
 
-          {/* Experience Section */}
-          <Experience />
+      {/* The Journey — five career waypoints along the expedition map */}
+      <Journey />
 
-          {/* Code & Open Source Section */}
-          <Showcase />
+      {/* Base Camps — the built-in-public receipts */}
+      <section id="camps" aria-label="Base camps">
+        {camps.map((camp) => (
+          <BaseCamp key={camp.id} camp={camp} />
+        ))}
+      </section>
 
-          {/* About & FAQ Section (Merged) */}
-          <About />
-        </article>
+      {/* The Ledger — the open-source index */}
+      <Ledger />
 
-        {/* Sticky CTA */}
-        <StickyCTA />
+      {/* End of the Trail — contact */}
+      <EndOfTrail />
 
-        {/* Back to Top Button */}
-        <BackToTop />
-      </main>
+      {/* Fixed right-edge progress rail */}
+      <TrailProgress />
     </>
   );
 }

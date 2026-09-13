@@ -1,47 +1,33 @@
 'use client';
 
-import Image from 'next/image';
-import ParticleMesh from './ParticleMesh';
+import { useLenis } from 'lenis/react';
+import { ExpeditionMap } from './map/ExpeditionMap';
 
+/** Full-viewport parchment hero: title, the expedition map, one CTA. */
 export default function Hero() {
+  const lenis = useLenis();
   return (
-    <section id="hero" className="hero-section" role="banner" aria-label="Introduction">
-      <div className="hero-background-image">
-        <Image
-          src="https://picsum.photos/seed/portfolio-hero/1600/900"
-          alt=""
-          fill
-          priority
-          className="hero-bg-img"
-          sizes="100vw"
-        />
-      </div>
-      <ParticleMesh />
-      <div className="container">
-        <div className="hero-content-wrapper">
-          <div className="hero-main-content animate-on-scroll" role="status" aria-live="polite">
-            <p className="hero-main-line">MOST PMs TALK TO USERS</p>
-            <p className="hero-main-line">MOST DEVs TALK TO MACHINES</p>
-            <p className="hero-main-line hero-statement-highlight">I DO BOTH.</p>
-          </div>
-          <div className="hero-metrics-highlight animate-on-scroll animate-delay-1" role="list" aria-label="Key achievements">
-            <span className="metric-highlight-item" role="listitem"><strong>10x</strong> ARR Growth</span>
-            <span className="metric-highlight-divider" aria-hidden="true">|</span>
-            <span className="metric-highlight-item" role="listitem"><strong>70K+</strong> Users</span>
-            <span className="metric-highlight-divider" aria-hidden="true">|</span>
-            <span className="metric-highlight-item" role="listitem"><strong>50+</strong> Locations</span>
-            <span className="metric-highlight-divider" aria-hidden="true">|</span>
-            <span className="metric-highlight-item" role="listitem"><strong>9+</strong> Years Building Products</span>
-          </div>
-          <div className="hero-availability-badge animate-on-scroll animate-delay-1" role="status" aria-label="Availability status">
-            <span className="availability-dot" aria-hidden="true"></span>
-            Open to new roles
-          </div>
-          <nav className="hero-actions animate-on-scroll animate-delay-2" aria-label="Quick links">
-            <a href="#experience" className="cta-button primary">See My Work</a>
-            <a href="#contact" className="cta-button secondary">Contact</a>
-          </nav>
+    <section id="hero" aria-label="Introduction" className="relative flex min-h-[100svh] flex-col justify-center py-16">
+      <div className="mx-auto w-full max-w-7xl px-6">
+        <p className="font-[family-name:var(--font-data)] text-xs uppercase tracking-[0.25em] text-[var(--color-rust)]">
+          Dispatches
+        </p>
+        <h2 className="mt-4 max-w-4xl font-[family-name:var(--font-voice)] text-5xl font-bold leading-[1.1] text-[var(--color-ink)] md:text-6xl">
+          Kanishka Namdeo — a field log, 2016 → present
+        </h2>
+        <p className="mt-4 font-[family-name:var(--font-data)] text-sm text-[var(--color-ink)]/70">
+          Open to new roles — Dubai / remote
+        </p>
+        <div className="mt-10 max-w-3xl">
+          <ExpeditionMap activeId={null} className="aspect-[16/9] max-h-[70vh]" />
         </div>
+        <button
+          type="button"
+          onClick={() => lenis?.scrollTo('#era-origin')}
+          className="mt-10 border border-[var(--color-ink)] bg-[var(--color-ink)] px-6 py-3 font-[family-name:var(--font-data)] text-sm font-bold text-[var(--color-parchment)] hover:shadow-[4px_4px_0_var(--color-rust)]"
+        >
+          Follow the trail
+        </button>
       </div>
     </section>
   );

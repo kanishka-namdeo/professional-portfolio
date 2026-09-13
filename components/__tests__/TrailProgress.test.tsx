@@ -1,0 +1,31 @@
+// components/__tests__/TrailProgress.test.tsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import { TrailProgress } from '../TrailProgress';
+import { eras } from '@/data/journey';
+
+const mockScrollTo = jest.fn();
+jest.mock('motion/react', () => ({
+  useScroll: () => ({ scrollYProgress: { on: jest.fn(), get: () => 0 } }),
+  useSpring: (v: unknown) => v,
+  motion: { path: 'path' },
+}));
+jest.mock('lenis/react', () => ({ useLenis: () => ({ scrollTo: mockScrollTo }) }));
+
+describe('TrailProgress', () => {
+  it('renders the mini map and one number button per era', () => {
+    render(<TrailProgress />);
+    const nav = screen.getByRole('navigation', { name: /trail progress/i });
+    expect(nav).toBeInTheDocument();
+    expect(nav.querySelector('svg')).toBeInTheDocument();
+    eras.forEach((era) => {
+      const button = screen.getByRole('button', { name: `Travel to ${era.company}` });
+      expect(button).toHaveTextContent(era.number);
+    });
+    expect(screen.getAllByRole('button')).toHaveLength(5);
+  });
+  it('scrolls to the matching era when a waypoint number is clicked', () => {
+    render(<TrailProgress />);
+    fireEvent.click(screen.getByRole('button', { name: `Travel to ${eras[1].company}` }));
+    expect(mockScrollTo).toHaveBeenCalledWith('#era-logistics');
+  });
+});
