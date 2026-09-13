@@ -1,6 +1,8 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import { Inter, Space_Grotesk } from 'next/font/google';
+import { Crimson_Pro, JetBrains_Mono } from 'next/font/google';
+import { ReactLenis } from 'lenis/react';
+import 'lenis/dist/lenis.css';
 import './globals.css';
 import Navigation from '@/components/Navigation';
 import ScrollNav from '@/components/ScrollNav';
@@ -8,17 +10,8 @@ import Footer from '@/components/Footer';
 import SmoothScrollInit from '@/components/SmoothScrollInit';
 import { Analytics } from '@vercel/analytics/next';
 
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-space-grotesk',
-});
+const crimsonPro = Crimson_Pro({ subsets: ['latin'], variable: '--font-crimson-pro', display: 'swap' });
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains-mono', display: 'swap' });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://kanishkanamdeo.com'),
@@ -151,7 +144,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${crimsonPro.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: `
           // Prevent auto-scroll on page load - runs immediately
@@ -226,9 +219,6 @@ export default function RootLayout({
             <meta name="twitter:image:alt" content="Kanishka Namdeo - Product Manager Portfolio Preview" />
           </React.Fragment>
         ))}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -250,12 +240,14 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(professionalServiceSchema) }}
         />
       </head>
-      <body className="font-sans">
-        <SmoothScrollInit />
-        <Navigation />
-        <ScrollNav />
-        <main id="main-content">{children}</main>
-        <Footer />
+      <body>
+        <ReactLenis root options={{ lerp: 0.1, syncTouch: false, anchors: { offset: -80 } }}>
+          <SmoothScrollInit />
+          <Navigation />
+          <ScrollNav />
+          <main id="main-content">{children}</main>
+          <Footer />
+        </ReactLenis>
         <Analytics />
       </body>
     </html>

@@ -41,6 +41,16 @@
    ========================================================================== */
 
 :root {
+  /* Dispatches tokens */
+  --color-parchment: #F3EDE2;
+  --color-ink: #2E281E;
+  --color-inkline: rgba(90, 110, 140, 0.25);
+  --color-rust: #8C4A2F;
+  --font-voice: var(--font-crimson-pro), Georgia, 'Times New Roman', serif;
+  --font-data: var(--font-jetbrains-mono), ui-monospace, monospace;
+  /* grain overlay, applied once on body::after */
+  --grain-opacity: 0.04;
+
   /* Professional Neobrutalist Color Palette - Light Mode */
   --color-bg: #fafafa;
   --color-surface: #ffffff;
@@ -236,6 +246,17 @@ body {
   /* Prevent horizontal overflow on mobile */
   overflow-x: hidden;
   /* Balanced: readable and modern, not oversized */
+}
+
+/* Dispatches grain overlay - fixed, non-interactive, applied once on body::after */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
 }
 
 /* Screen Reader Only - Visually hidden but accessible to screen readers */
