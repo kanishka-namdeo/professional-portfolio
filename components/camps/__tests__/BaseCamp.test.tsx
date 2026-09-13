@@ -17,6 +17,7 @@ describe('BaseCamp', () => {
   it('renders the recording as muted looped video with poster and preload=none', () => {
     render(<BaseCamp camp={camps[0]} />);
     const video = screen.getByTestId('camp-recording');
+    expect(video).toHaveAttribute('autoplay');
     expect(video).toHaveAttribute('muted');
     expect(video).toHaveAttribute('loop');
     expect(video).toHaveAttribute('playsinline');

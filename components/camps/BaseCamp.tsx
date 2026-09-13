@@ -77,6 +77,7 @@ export function BaseCamp({ camp }: { camp: Camp }) {
             className="mt-4 w-full border border-[var(--color-ink)]/20"
             src={camp.recording.src}
             poster={camp.recording.poster}
+            autoPlay
             muted
             loop
             playsInline
@@ -100,7 +101,7 @@ export function BaseCamp({ camp }: { camp: Camp }) {
               className={`transition-opacity ${step === i ? 'opacity-100' : 'opacity-50'}`}
               onMouseEnter={() => setStep(i)}
             >
-              <StepBlock index={i} onEnter={() => setStep(i)} heading={s.heading} body={s.body} />
+              <StepBlock index={i} onEnter={setStep} heading={s.heading} body={s.body} />
             </li>
           ))}
         </ol>
@@ -109,12 +110,17 @@ export function BaseCamp({ camp }: { camp: Camp }) {
   );
 }
 
-function StepBlock({ index, onEnter, heading, body }: { index: number; onEnter: () => void; heading: string; body: string }) {
+function StepBlock({ index, onEnter, heading, body }: { index: number; onEnter: (step: number) => void; heading: string; body: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const visible = useInView(ref, { margin: '-40% 0px -40% 0px' });
+  // Latest-ref pattern: the effect must depend only on `visible`, never on the
+  // callback identity. A fresh onEnter closure here would re-fire this effect
+  // every render and let a later visible step override a hover-activated step.
+  const onEnterRef = useRef(onEnter);
+  onEnterRef.current = onEnter;
   useEffect(() => {
-    if (visible) onEnter();
-  }, [visible, index, onEnter]);
+    if (visible) onEnterRef.current(index);
+  }, [visible, index]);
   return (
     <div ref={ref}>
       <p className="font-[family-name:var(--font-data)] text-xs text-[var(--color-ink)]/50">STEP {index + 1}</p>
