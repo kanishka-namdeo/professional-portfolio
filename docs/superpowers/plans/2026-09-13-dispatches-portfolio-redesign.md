@@ -1461,7 +1461,7 @@ mkdirSync('public/recordings', { recursive: true });
 const camps = ['agent-canvas', 'pi-dash', 'thetell'];
 for (const id of camps) {
   execSync(`npx remotion render remotion/index.ts ${id} public/recordings/${id}.mp4 --codec=h264`, { stdio: 'inherit' });
-  execSync(`npx remotion still remotion/index.ts ${id} public/recordings/${id}.jpg --frame=30`, { stdio: 'inherit' });
+  execSync(`npx remotion still remotion/index.ts ${id} public/recordings/${id}.jpg --frame=30 --image-format=jpeg`, { stdio: 'inherit' });
 }
 ```
 
@@ -1703,6 +1703,16 @@ git add -A && git commit -m "polish: performance and content QA pass for dispatc
 
 ## Self-Review Notes
 
-- Spec coverage: map (T5, T6), hero (T13), journey+counters+postcards (T3, T7, T8, T13), camps+annotations+recordings (T4, T9, T10, T12), ledger (T4, T11), end of trail + colophon (T11), progress rail (T13), tokens/fonts/grain (T2), guardrails (T15 reduced-motion test), performance budgets (T12 size checks, T16). About/FAQ retained in compact form inside EndOfTrail (keeps FAQPage schema valid — schema stays in page.tsx).
+**Web-research verification (2026-09-14, against current official docs):**
+- Lenis: `<ReactLenis root options={{ anchors: { offset: -80 }, syncTouch: false }}>` — `anchors` accepts scrollTo options incl. offset (github.com/darkroomengineering/lenis); `syncTouch` smooths touch only when enabled (off = native mobile scroll, as intended).
+- Motion: `useInView(ref, { once: true, margin })` and `pathLength` on `motion.path` are documented in motion.dev/docs/react-use-in-view and /react-motion-component. If the installed v13 TS type rejects `%` in `margin`, switch to px equivalents (e.g. `'-120px 0px'`) — behavior unchanged.
+- Remotion: `npx remotion render <entry> <id> <out> --codec=h264 [--crf]` and `npx remotion still <entry> <id> <out> --frame --image-format=jpeg` match remotion.dev/docs/cli/render.
+- Tailwind 4: `font-[family-name:var(--font-voice)]` is the documented explicit form (tailwindcss.com/docs/font-family); `font-(--voice)` is the v4 shorthand — either works.
+- Spec/plan reconciliation: spec §7 updated to the hook-based annotation architecture and inline postcards (no `AnnotationLayer`/`PressPostcard` components) — fewer files, and the hook approach is what the rough-notation research supports.
+
+**Spec coverage:** map (T5, T6), hero (T13), journey+counters+postcards (T3, T7, T8, T13), camps+annotations+recordings (T4, T9, T10, T12), ledger (T4, T11), end of trail + colophon (T11), progress rail (T13), tokens/fonts/grain (T2), guardrails (T15 reduced-motion test), performance budgets (T12 size checks, T16). About/FAQ retained in compact form inside EndOfTrail (schema stays in page.tsx).
+
+**Known judgment calls during execution:**
 - The `JourneyChapter`/`BaseCamp` tests mock `motion/react` — verify mock shape matches installed v13 exports during implementation; adjust mocks, not production code.
 - Copy in `data/journey.ts` is the launch copy — editing is expected but keep every metric's receipt.
+- Verify the LinkedIn URL and email from the existing About/Footer/StickyCTA before shipping EndOfTrail.

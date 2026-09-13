@@ -89,11 +89,9 @@ A thin fixed **trail-progress rail** (micro-map) fills with scroll, doubles as c
 | `components/map/ExpeditionMap.tsx` | new | interactive SVG overlay (waypoints, trail draw) over static `contours.svg` |
 | `scripts/generate-map.mjs` | new | one-time contour generation: simplex-noise + d3-contour → `public/map/contours.svg` |
 | `hooks/useRoughAnnotation.ts` | new | vanilla rough-notation wrapper: show/hide per annotation step |
-| `components/journey/JourneyChapter.tsx` | new | waypoint chapter (pin, counters, postcards) |
+| `components/journey/JourneyChapter.tsx` | new | waypoint chapter (pin, counters, press-clipping postcards rendered inline) |
 | `components/journey/MetricCounter.tsx` | new | spring counter, SSR final value |
-| `components/journey/PressPostcard.tsx` | new | press clipping artifact |
-| `components/camps/BaseCamp.tsx` | new | sticky media + steps + loop |
-| `components/camps/AnnotationLayer.tsx` | new | Rough-Notation-style callouts |
+| `components/camps/BaseCamp.tsx` | new | sticky media + steps + loop (annotations driven by the hook above) |
 | `components/ledger/Ledger.tsx` | new | repos + writing index |
 | `components/Hero.tsx` | rewrite | map hero |
 | `components/Experience.tsx` | delete | replaced by Journey |
