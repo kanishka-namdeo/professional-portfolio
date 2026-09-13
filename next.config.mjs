@@ -19,6 +19,10 @@ const nextConfig = {
   },
   // Enable React strict mode for better development experience
   reactStrictMode: true,
+  // ESM-only packages used by the contour map generator (scripts/generate-map.mjs);
+  // next/jest folds these into its node_modules transformIgnorePatterns so jest can
+  // transform them to CJS. Not imported by any app code, so no production impact.
+  transpilePackages: ['d3-contour', 'd3-array', 'internmap', 'simplex-noise'],
   // Disable x-powered-by header for security
   poweredByHeader: false,
   // Enable compiler optimizations
