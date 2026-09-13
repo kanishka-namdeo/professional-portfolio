@@ -23,7 +23,7 @@ export default function Hero() {
         </div>
         <button
           type="button"
-          onClick={() => lenis?.scrollTo('#era-origin')}
+          onClick={() => (lenis ? lenis.scrollTo('#era-origin') : document.getElementById('era-origin')?.scrollIntoView({ behavior: 'smooth' }))}
           className="mt-10 border border-[var(--color-ink)] bg-[var(--color-ink)] px-6 py-3 font-[family-name:var(--font-data)] text-sm font-bold text-[var(--color-parchment)] hover:shadow-[4px_4px_0_var(--color-rust)]"
         >
           Follow the trail

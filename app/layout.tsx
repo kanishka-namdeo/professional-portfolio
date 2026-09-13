@@ -4,10 +4,6 @@ import { Crimson_Pro, JetBrains_Mono } from 'next/font/google';
 import { ReactLenis } from 'lenis/react';
 import 'lenis/dist/lenis.css';
 import './globals.css';
-import Navigation from '@/components/Navigation';
-import ScrollNav from '@/components/ScrollNav';
-import Footer from '@/components/Footer';
-import SmoothScrollInit from '@/components/SmoothScrollInit';
 import { Analytics } from '@vercel/analytics/next';
 
 const crimsonPro = Crimson_Pro({ subsets: ['latin'], variable: '--font-crimson-pro', display: 'swap' });
@@ -242,11 +238,7 @@ export default function RootLayout({
       </head>
       <body>
         <ReactLenis root options={{ lerp: 0.1, syncTouch: false, anchors: { offset: -80 } }}>
-          <SmoothScrollInit />
-          <Navigation />
-          <ScrollNav />
           <main id="main-content">{children}</main>
-          <Footer />
         </ReactLenis>
         <Analytics />
       </body>

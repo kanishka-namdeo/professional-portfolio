@@ -22,7 +22,7 @@ describe('Hero', () => {
     const { container } = render(<Hero />);
     expect(screen.getByText(/open to new roles — dubai \/ remote/i)).toBeInTheDocument();
     expect(container.innerHTML).not.toMatch(/10x/i);
-    expect(container.innerHTML).not.toMatch(/picsum/i);
+    expect(container.innerHTML).not.toMatch(/pics?um/i);
   });
   it('hosts the expedition map', () => {
     render(<Hero />);

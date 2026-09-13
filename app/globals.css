@@ -2,14 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Modular CSS Imports */
-@import './styles/about.css';
-@import './styles/hero.css';
-@import './styles/navigation.css';
-@import './styles/scroll-nav.css';
-@import './styles/sticky-cta.css';
-@import './styles/showcase.css';
-
 /* ==========================================================================
    PERFORMANCE OPTIMIZATIONS FOR SMOOTH ANIMATIONS
    ========================================================================== 
@@ -4594,16 +4586,6 @@ section {
     grid-template-columns: 1fr;
   }
 
-  /* Embla Carousel Mobile Styles */
-  .embla {
-    margin-top: var(--space-lg);
-  }
-
-  .embla__slide {
-    flex: 0 0 calc(100vw - 80px);
-    max-width: 380px;
-  }
-
   .showcase-card {
     padding: var(--space-lg);
     width: calc(100vw - 48px);
@@ -4631,15 +4613,6 @@ section {
   .showcase-card:hover .card-thumbnail img,
   .showcase-card:hover .card-thumbnail .card-thumbnail-img {
     transform: scale(1.05);
-  }
-
-  .embla__dots {
-    margin-top: var(--space-md);
-  }
-
-  .embla__button {
-    width: 40px;
-    height: 40px;
   }
 
   .mobile-toggle {
