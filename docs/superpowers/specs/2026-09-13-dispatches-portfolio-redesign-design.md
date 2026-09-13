@@ -40,23 +40,55 @@ A thin fixed **trail-progress rail** (micro-map) fills with scroll, doubles as c
 
 ## 5. Map asset
 
-**Procedural SVG contours** (user decision): contour rings generated as SVG paths (seeded, deterministic — same output every build), plus 5 waypoint markers positioned along a south-west → north-east trail (2016 origin at bottom, 2026 at top). Waypoints are interactive on the hero (click scrolls to chapter). Hand-wobble applied to trail strokes only, not contours. Estimated size < 200 KB.
+**Procedural contours, generated once at build time** (user decision: procedural SVG; validated toolchain: [simplex-noise](https://github.com/jwagner/simplex-noise.js) → [d3-contour](https://d3js.org/d3-contour) marching squares → GeoJSON MultiPolygons → static SVG paths):
 
-## 6. Motion & interaction engine
+- `scripts/generate-map.mjs` (devDependency-only libraries, run manually/one-time) renders a seeded, deterministic contour field (simplex noise, fixed seed, ~25 threshold bands) and writes `public/map/contours.svg`. The committed static SVG ships to users — **no noise/contour code in the client bundle**. Re-run the script to re-roll the terrain deliberately; never at runtime.
+- A small React SVG overlay (`ExpeditionMap.tsx`) adds the interactive layer on top of the static contours: 5 waypoint markers along a south-west → north-east trail (2016 origin at bottom, 2026 at top), clickable → scrolls to chapter, plus the live-drawn trail path.
+- Hand-wobble applies to the trail stroke only, not the contour rings. Waypoint labels rotate ±1.5°.
+- Budget: contours.svg < 200 KB (path simplification via d3 `streamLine`/rounding; verify size after generation).
 
-- `motion` (`useScroll`, `useInView`, springs) for: trail drawing, counter springs, annotation step activation, postcard entrances, progress rail. No GSAP; never two engines on one element.
-- **Lenis** for desktop smooth scroll; native touch scrolling on mobile (Lenis `syncTouch` off).
-- Annotation steps: sticky media panel + stepping text (IntersectionObserver), desktop side-by-side; stacked inline on mobile.
-- Counters: rendered server-side at final value (content exists without JS); springs enhance on view.
-- **Remotion:** devDependency; loops rendered at build time via CI/script to `public/recordings/*.mp4` + poster JPGs. Never the runtime player in the page.
-- **Guardrails:** `prefers-reduced-motion` → no pinning, trail fully drawn, counters static, loops show poster with a play button instead of autoplay. Content is 100% readable without motion (web.dev rule).
-- Mobile: no pinned scenes; map collapses to a static vertical timeline with connecting line; media stacks; loops tap-to-play.
+## 6. Motion & interaction engine (libraries validated 2026-09-13)
+
+- **`motion`** (already installed, `^13.1.0`; imports from `motion/react` — the current name for framer-motion; see [motion.dev docs](https://motion.dev/docs/react-scroll-animations)). We use only its documented scroll surface — no hand-rolled scroll math:
+  - `useScroll({ target, offset })` + `useTransform` → trail `stroke-dashoffset` draw, map re-centering, progress rail fill.
+  - `useInView` → annotation step activation, postcard entrances (`whileInView` for one-shots).
+  - `animate()` springs → metric counters (final value rendered server-side; spring enhances on view).
+- **`lenis` 1.x** ([darkroomengineering/lenis](https://github.com/darkroomengineering/lenis), MIT) via its official `lenis/react` entry (`ReactLenis` root component in `app/layout.tsx` — not the legacy `@studio-freight/lenis`). Desktop feel only: `syncTouch: false` so mobile uses native scrolling. Anchor links go through `lenis.scrollTo`.
+- **`rough-notation` 0.5.1** ([rough-stuff/rough-notation](https://github.com/rough-stuff/rough-notation), MIT — stable/"done" since 2020, 4 KB). Used **directly as vanilla JS behind a small `useRoughAnnotation()` hook** (show/hide per annotation index, driven by `useInView` steps) — no React wrapper dependency; the community wrappers (`react-rough-notation`, `@turahe/react-rough-notation`) are thin, low-activity, and add nothing we need.
+- **`remotion` 4.x** — devDependency only; render at build time via `@remotion/renderer` (local CLI render, no Lambda). **License:** free for individuals and organizations ≤ 3 employees ([license FAQ](https://www.remotion.dev/docs/license/faq)) — compliant for this personal portfolio; re-verify if the site ever becomes a company product. Output: muted `<video playsinline loop preload="none" poster>` — never the runtime player.
+- **Counters:** `motion` springs (no react-countup dependency). **Sticky/step scenes:** CSS `position: sticky` + `useInView` (no Scrollama, no GSAP — `motion` + sticky covers every pattern; never two engines on one element).
+- Optional progressive enhancement: CSS scroll-driven `animation-timeline` behind `@supports` for the progress rail only (Chrome/Edge 115+, Safari 26; harmless no-op elsewhere).
+- **Guardrails:** `prefers-reduced-motion` → no pinning, trail fully drawn, counters static, loops show poster + play button. Content is 100% readable without motion. Mobile: no pinned scenes; map collapses to a static vertical timeline; loops tap-to-play.
+
+### 6.1 Dependency decisions (all free, validated 2026-09-13)
+
+| Package | Version | License | Role | Status |
+|---|---|---|---|---|
+| `motion` | ^13.1.0 (installed) | MIT | all scroll-linked & entrance animation | current, actively maintained |
+| `lenis` | 1.x | MIT | desktop smooth scroll via `lenis/react` | current, actively maintained |
+| `rough-notation` | 0.5.1 | MIT | hand-drawn annotations (vanilla, hooked) | stable/"done"; no wrapper dep |
+| `remotion`, `@remotion/renderer` | 4.x | free license (individuals/≤3 ppl) | build-time field-recording loops | current, actively maintained |
+| `simplex-noise` | 4.x | MIT | contour field seed (build script only) | stable |
+| `d3-contour` | 4.x | ISC | marching-squares contours (build script only) | stable |
+| `next/font` (built-in) | — | — | self-host Crimson Pro + JetBrains Mono, zero layout shift | Next.js best practice |
+| `lucide-react` | ^1.31 (installed) | ISC | icons | keep |
+| `embla-carousel-react` | ^8.6 (installed) | MIT | — | **remove** (Ledger replaces the carousel) |
+| `@vercel/analytics` | keep | — | analytics | keep |
+
+### 6.2 Framework best practices (Next.js 16 App Router)
+
+- Server Components by default; `'use client'` only on interactive leaves (map overlay, chapters, counters, annotation hook, Lenis root).
+- Content lives in typed `data/*.ts` modules imported by Server Components — no client-side data fetching; GitHub ledger list is generated at build time (plain `fetch`, no octokit).
+- `next/image` for every screenshot (explicit `sizes`, lazy below fold); `next/font/google` for both typefaces (self-hosted, `display: swap`).
+- No layout-shifting animations (transform/opacity only); SSR final values so content exists without JS.
 
 ## 7. Components (new/changed)
 
 | Component | Action | Purpose |
 |---|---|---|
-| `components/map/ExpeditionMap.tsx` | new | SVG map, waypoints, trail draw |
+| `components/map/ExpeditionMap.tsx` | new | interactive SVG overlay (waypoints, trail draw) over static `contours.svg` |
+| `scripts/generate-map.mjs` | new | one-time contour generation: simplex-noise + d3-contour → `public/map/contours.svg` |
+| `hooks/useRoughAnnotation.ts` | new | vanilla rough-notation wrapper: show/hide per annotation step |
 | `components/journey/JourneyChapter.tsx` | new | waypoint chapter (pin, counters, postcards) |
 | `components/journey/MetricCounter.tsx` | new | spring counter, SSR final value |
 | `components/journey/PressPostcard.tsx` | new | press clipping artifact |
