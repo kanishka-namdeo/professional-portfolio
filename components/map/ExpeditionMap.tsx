@@ -37,9 +37,12 @@ function trailD(): string {
 export function ExpeditionMap({
   activeId,
   className = 'aspect-[3/2]',
+  priority = false,
 }: {
   activeId: string | null;
   className?: string;
+  /** Set only for the above-the-fold (hero) instance so the LCP image is not lazy. */
+  priority?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
@@ -49,7 +52,7 @@ export function ExpeditionMap({
 
   return (
     <div ref={ref} className={`relative w-full ${className}`} data-testid="expedition-map">
-      <Image src="/map/contours.svg" alt="" fill className="object-cover" aria-hidden />
+      <Image src="/map/contours.svg" alt="" fill className="object-cover" aria-hidden priority={priority} />
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full" aria-hidden>
         <motion.path
           d={trailD()}

@@ -19,7 +19,7 @@ export default function Hero() {
           Open to new roles — Dubai / remote
         </p>
         <div className="mt-10 max-w-3xl">
-          <ExpeditionMap activeId={null} className="aspect-[16/9] max-h-[70vh]" />
+          <ExpeditionMap activeId={null} className="aspect-[16/9] max-h-[70vh]" priority />
         </div>
         <button
           type="button"

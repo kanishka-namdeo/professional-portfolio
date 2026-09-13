@@ -2,7 +2,7 @@ import { ledgerRepos, writing } from '@/data/ledger';
 
 export function Ledger() {
   return (
-    <section id="ledger" aria-labelledby="ledger-title" className="border-t border-[var(--color-inkline)] py-24">
+    <section id="ledger" aria-labelledby="ledger-title" className="border-t border-[var(--color-inkline)] py-24 [content-visibility:auto] [contain-intrinsic-size:auto_1000px]">
       <div className="mx-auto max-w-4xl px-6">
         <h2 id="ledger-title" className="font-[family-name:var(--font-data)] text-xs tracking-[0.2em] text-[var(--color-rust)]">THE LEDGER — everything else, plainly</h2>
         <ul className="mt-8 divide-y divide-[var(--color-inkline)]">

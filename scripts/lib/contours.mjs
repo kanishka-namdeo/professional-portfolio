@@ -36,7 +36,8 @@ export function buildContourPaths({ width, height, bands, seed }) {
     for (const polygon of poly.coordinates) {
       for (const ring of polygon) {
         ring.forEach(([x, y], i) => {
-          d += (i === 0 ? 'M' : 'L') + `${(x * sx).toFixed(1)} ${(y * sy).toFixed(1)}`;
+          // integer coords keep the decorative background SVG small (LCP asset)
+          d += (i === 0 ? 'M' : 'L') + `${Math.round(x * sx)} ${Math.round(y * sy)}`;
         });
         d += 'Z';
       }
