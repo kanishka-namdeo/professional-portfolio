@@ -5,7 +5,10 @@ import { Ledger } from '../Ledger';
 describe('Ledger', () => {
   it('renders every repo as a row with a real link', () => {
     render(<Ledger />);
-    expect(screen.getAllByRole('link', { name: /github\.com\/kanishka-namdeo/i }).length).toBeGreaterThanOrEqual(10);
+    const repoLinks = screen.getAllByRole('link').filter(
+      (a) => (a as HTMLAnchorElement).href.startsWith('https://github.com/kanishka-namdeo/')
+    );
+    expect(repoLinks.length).toBeGreaterThanOrEqual(10);
     expect(screen.getByText('Unown')).toBeInTheDocument();
     expect(screen.getByText('the-pokemon-journey')).toBeInTheDocument();
   });

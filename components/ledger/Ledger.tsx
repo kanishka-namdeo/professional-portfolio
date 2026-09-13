@@ -8,7 +8,7 @@ export function Ledger() {
         <ul className="mt-8 divide-y divide-[var(--color-inkline)]">
           {ledgerRepos.map((r) => (
             <li key={r.name}>
-              <a href={r.url} aria-label={r.url} target="_blank" rel="noopener noreferrer" className="group grid grid-cols-[auto_1fr_auto] items-baseline gap-4 py-3 hover:bg-white/50">
+              <a href={r.url} target="_blank" rel="noopener noreferrer" className="group grid grid-cols-[auto_1fr_auto] items-baseline gap-4 py-3 hover:bg-white/50">
                 <span className="font-[family-name:var(--font-data)] text-sm font-bold text-[var(--color-ink)] group-hover:text-[var(--color-rust)]">{r.name}</span>
                 <span className="font-[family-name:var(--font-voice)] text-sm text-[var(--color-ink)]/75">{r.oneLiner}</span>
                 <span className="font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink)]/50">{r.language} · {r.year}</span>
