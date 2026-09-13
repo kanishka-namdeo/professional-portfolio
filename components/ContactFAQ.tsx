@@ -32,7 +32,7 @@ export default function ContactFAQ() {
   };
 
   return (
-    <section id="contact" aria-labelledby="contact-title" role="region" aria-label="Contact Information and Frequently Asked Questions" className="mt-16">
+    <section id="contact-faq" aria-labelledby="contact-title" role="region" aria-label="Contact Information and Frequently Asked Questions" className="mt-16">
       <header>
         <h2 id="contact-title" className="font-[family-name:var(--font-voice)] text-2xl font-bold text-[var(--color-ink)]">
           {activeTab === 'contact' ? 'Get In Touch' : 'Frequently Asked Questions'}

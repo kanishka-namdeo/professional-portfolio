@@ -229,15 +229,13 @@ html.smooth-scroll {
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  transition: background-color var(--theme-transition), color var(--theme-transition), border-color var(--theme-transition);
+  background-color: var(--color-parchment);
+  color: var(--color-ink);
+  font-family: var(--font-voice);
   line-height: 1.6;
   font-size: 18px;
   /* Prevent horizontal overflow on mobile */
   overflow-x: hidden;
-  /* Balanced: readable and modern, not oversized */
 }
 
 /* Dispatches grain overlay - fixed, non-interactive, applied once on body::after */

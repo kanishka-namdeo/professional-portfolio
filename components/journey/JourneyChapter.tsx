@@ -1,14 +1,20 @@
 // components/journey/JourneyChapter.tsx
 'use client';
 
+import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import type { Era } from '@/data/journey';
 import { MetricCounter } from './MetricCounter';
 
 export function JourneyChapter({ era, active }: { era: Era; active: boolean }) {
   const reduce = useReducedMotion();
+  // Mounted gate: motion SSRs `initial` styles, so chapters would render
+  // opacity-0 for no-JS visitors. Render static until mounted, then opt in.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const enter = (i: number) =>
-    reduce ? {} : {
+    !mounted || reduce ? {} : {
       initial: { opacity: 0, y: 24 },
       whileInView: { opacity: 1, y: 0 },
       viewport: { once: true, margin: '-15% 0px' },

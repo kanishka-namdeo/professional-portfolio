@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, type RefObject } from 'react';
+import { useEffect, useRef, type RefObject } from 'react';
 import { useReducedMotion } from 'motion/react';
 
 interface Options {
@@ -17,20 +17,30 @@ interface AnnotationHandle {
 
 /**
  * Shows rough-notation annotations with index <= step, hides the rest.
+ *
+ * Instances are created once per (container, selectors, enabled, reduceMotion)
+ * and kept in a ref; the step only toggles show()/hide(), so hovering through
+ * the story never tears down and re-annotates the marks.
  * rough-notation is dynamically imported so it stays out of the SSR bundle.
  */
 export function useRoughAnnotation({ container, selectors, step, enabled }: Options) {
   const reduceMotion = useReducedMotion();
+  const instancesRef = useRef<AnnotationHandle[]>([]);
+  // Latest-ref: creation applies visibility for whatever step is current at the
+  // moment the dynamic import resolves, without putting step in the create deps.
+  const stepRef = useRef(step);
+  stepRef.current = step;
 
+  // Effect 1: create/release instances. Runs only when the marks themselves change.
   useEffect(() => {
     if (!enabled || !container.current) return;
     let cancelled = false;
-    let instances: AnnotationHandle[] = [];
+    instancesRef.current = [];
 
     (async () => {
       const { annotate } = await import('rough-notation');
       if (cancelled || !container.current) return;
-      instances = selectors
+      instancesRef.current = selectors
         .map((selector) => {
           const el = container.current?.querySelector(selector);
           if (!el) return null;
@@ -44,12 +54,18 @@ export function useRoughAnnotation({ container, selectors, step, enabled }: Opti
         })
         .filter(Boolean) as AnnotationHandle[];
 
-      instances.forEach((inst, i) => (i <= step ? inst.show() : inst.hide()));
+      instancesRef.current.forEach((inst, i) => (i <= stepRef.current ? inst.show() : inst.hide()));
     })();
 
     return () => {
       cancelled = true;
-      instances.forEach((inst) => inst.hide());
+      instancesRef.current.forEach((inst) => inst.hide());
+      instancesRef.current = [];
     };
-  }, [container, selectors, step, enabled, reduceMotion]);
+  }, [container, selectors, enabled, reduceMotion]);
+
+  // Effect 2: step changes only toggle visibility — no teardown, no re-annotate.
+  useEffect(() => {
+    instancesRef.current.forEach((inst, i) => (i <= step ? inst.show() : inst.hide()));
+  }, [step]);
 }

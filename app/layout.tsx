@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     default: 'Kanishka Namdeo | Product Manager & Leader | Dubai, UAE',
     template: '%s | Kanishka Namdeo Portfolio',
   },
-  description: 'Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products. Led 8x ARR growth, 30K+ user acquisition, and 50+ location expansion. Expert in product strategy, NLP/LLM, and enterprise solutions.',
+  description: 'Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products. Led ~10× ARR growth, 70K+ user acquisition, and 70+ location expansion. Expert in product strategy, NLP/LLM, and enterprise solutions.',
   keywords: ['product manager', 'product management', 'Dubai', 'UAE', 'SaaS', 'mobility', 'AI', 'NLP', 'LLM', 'enterprise software', 'startup', 'robotics', '9 years experience', 'ARR growth', 'user acquisition'],
   authors: [{ name: 'Kanishka Namdeo', url: 'https://kanishkanamdeo.com' }],
   creator: 'Kanishka Namdeo',
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     title: 'Kanishka Namdeo | Product Manager & Leader',
-    description: 'Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products. Led 8x ARR growth and 30K+ user acquisition.',
+    description: 'Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products. Led ~10× ARR growth and 70K+ user acquisition.',
     siteName: 'Kanishka Namdeo Portfolio',
     locale: 'en_US',
     url: 'https://kanishkanamdeo.com',
@@ -116,7 +116,7 @@ const personSchema = {
     'Robotics',
     'B2B Software',
   ],
-  description: 'Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products. Led 8x ARR growth, 30K+ user acquisition, and 50+ location expansion.',
+  description: 'Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products. Led ~10× ARR growth, 70K+ user acquisition, and 70+ location expansion.',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Dubai',

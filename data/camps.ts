@@ -7,6 +7,8 @@ export interface CampAnnotation {
   /** CSS selector inside the screenshot container, e.g. '[data-anno="nodes"]' */
   selector: string;
   note: string;
+  /** Label position as a percentage of the screenshot box (translate -50% centered). */
+  pos: { x: number; y: number };
 }
 export interface Camp {
   id: string;
@@ -38,8 +40,8 @@ export const camps: Camp[] = [
       { heading: 'The result', body: 'Design an agentic workflow the way you’d sketch it on a whiteboard — then run it.' },
     ],
     annotations: [
-      { selector: '[data-anno="canvas"]', note: 'the design surface — agents are nodes' },
-      { selector: '[data-anno="inspector"]', note: 'typed ports: every join is checked' },
+      { selector: '[data-anno="canvas"]', note: 'the design surface — agents are nodes', pos: { x: 30, y: 30 } },
+      { selector: '[data-anno="inspector"]', note: 'typed ports: every join is checked', pos: { x: 80, y: 25 } },
     ],
     recording: { src: '/recordings/agent-canvas.mp4', poster: '/recordings/agent-canvas.jpg', caption: 'Field recording — an agent run, end to end.' },
   },
@@ -58,8 +60,8 @@ export const camps: Camp[] = [
       { heading: 'The result', body: 'Spawn, watch and steer every agent from a single pane of glass.' },
     ],
     annotations: [
-      { selector: '[data-anno="agents"]', note: 'live agents at a glance' },
-      { selector: '[data-anno="timeline"]', note: 'run history — what happened, when, and why' },
+      { selector: '[data-anno="agents"]', note: 'live agents at a glance', pos: { x: 25, y: 25 } },
+      { selector: '[data-anno="timeline"]', note: 'run history — what happened, when, and why', pos: { x: 70, y: 70 } },
     ],
     recording: { src: '/recordings/pi-dash.mp4', poster: '/recordings/pi-dash.jpg', caption: 'Field recording — a dashboard sweep.' },
   },
@@ -78,8 +80,8 @@ export const camps: Camp[] = [
       { heading: 'The result', body: 'Corporate intelligence where you can see the argument, not just the answer.' },
     ],
     annotations: [
-      { selector: '[data-anno="debate"]', note: 'the debate: two agents, one verdict' },
-      { selector: '[data-anno="graph"]', note: 'claims live in Neo4j, scored' },
+      { selector: '[data-anno="debate"]', note: 'the debate: two agents, one verdict', pos: { x: 35, y: 30 } },
+      { selector: '[data-anno="graph"]', note: 'claims live in Neo4j, scored', pos: { x: 75, y: 65 } },
     ],
     recording: { src: '/recordings/thetell.mp4', poster: '/recordings/thetell.jpg', caption: 'Field recording — signal debate visualization.' },
   },

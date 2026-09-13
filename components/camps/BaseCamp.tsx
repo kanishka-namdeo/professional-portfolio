@@ -2,20 +2,22 @@
 
 import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useInView } from 'motion/react';
+import { useInView, useReducedMotion } from 'motion/react';
 import type { Camp } from '@/data/camps';
 import { useRoughAnnotation } from '@/hooks/useRoughAnnotation';
 
-/**
- * Where annotation anchor tacks sit on the media plate, cycled per annotation.
- * Rough-notation draws on whatever element carries the data-anno attribute,
- * so these overlays let every camp's selectors resolve without per-camp markup.
- */
-const ANCHOR_SPOTS = [
-  'left-[10%] top-[16%]',
-  'right-[12%] bottom-[20%]',
-  'left-[38%] bottom-[10%]',
-] as const;
+/** SSR-safe media query: false until mounted, then tracks the live value. */
+function useMediaQuery(query: string): boolean {
+  const [matches, setMatches] = useState(false);
+  useEffect(() => {
+    const mql = window.matchMedia(query);
+    const update = () => setMatches(mql.matches);
+    update();
+    mql.addEventListener('change', update);
+    return () => mql.removeEventListener('change', update);
+  }, [query]);
+  return matches;
+}
 
 /** '[data-anno="canvas"]' -> 'canvas' */
 function annoName(selector: string): string {
@@ -24,8 +26,19 @@ function annoName(selector: string): string {
 
 export function BaseCamp({ camp }: { camp: Camp }) {
   const containerRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [step, setStep] = useState(0);
+  const [mounted, setMounted] = useState(false);
+  const [playing, setPlaying] = useState(false);
   const inView = useInView(containerRef, { margin: '-20% 0px' });
+  const reduceMotion = useReducedMotion() ?? false;
+  const isDesktop = useMediaQuery('(min-width: 768px)');
+
+  useEffect(() => setMounted(true), []);
+
+  // Spec guardrails: reduced-motion -> poster + play control; mobile -> tap to
+  // play; desktop -> muted autoplay loop. Everything else stays silent.
+  const autoPlay = mounted && isDesktop && !reduceMotion;
 
   // Stable array reference: recomputed only when the camp's annotations change,
   // so useRoughAnnotation's effect doesn't re-fire every render.
@@ -54,16 +67,23 @@ export function BaseCamp({ camp }: { camp: Camp }) {
               height={800}
               sizes="(max-width: 768px) 100vw, 50vw"
               className="h-auto w-full"
-              unoptimized
             />
-            {/* annotation anchor points overlay the screenshot */}
-            {camp.annotations.map((a, i) => (
+            {/* field-note labels pinned to regions of the screenshot; rough-notation underlines each label.
+                Edge-aware anchoring (left edge on the left half, right edge on the right half) keeps the
+                labels inside the plate so they never widen the page. */}
+            {camp.annotations.map((a) => (
               <span
                 key={a.selector}
                 data-anno={annoName(a.selector)}
-                aria-hidden="true"
-                className={`absolute block h-6 w-6 ${ANCHOR_SPOTS[i % ANCHOR_SPOTS.length]}`}
-              />
+                className="absolute block max-w-[70%] border border-[var(--color-ink)] bg-[var(--color-parchment)] px-1.5 py-0.5 font-[family-name:var(--font-data)] text-[11px] leading-tight text-[var(--color-rust)]"
+                style={{
+                  left: `${a.pos.x}%`,
+                  top: `${a.pos.y}%`,
+                  transform: a.pos.x < 50 ? 'translate(0, -50%)' : 'translate(-100%, -50%)',
+                }}
+              >
+                {a.note}
+              </span>
             ))}
           </div>
           <p className="mt-2 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink)]/60">
@@ -72,23 +92,39 @@ export function BaseCamp({ camp }: { camp: Camp }) {
               [{camp.repo} →]
             </a>
           </p>
-          <video
-            data-testid="camp-recording"
-            className="mt-4 w-full border border-[var(--color-ink)]/20"
-            src={camp.recording.src}
-            poster={camp.recording.poster}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="none"
-            aria-label={camp.recording.caption}
-            ref={(el) => {
-              if (!el) return;
-              el.muted = true; // runtime guarantee: the autoplaying field recording stays silent
-              el.setAttribute('muted', ''); // React sets `muted` as a property only, never the content attribute
-            }}
-          />
+          <div className="relative mt-4">
+            <video
+              data-testid="camp-recording"
+              className="block w-full border border-[var(--color-ink)]/20"
+              src={camp.recording.src}
+              poster={camp.recording.poster}
+              autoPlay={autoPlay}
+              muted
+              loop
+              playsInline
+              preload="none"
+              aria-label={camp.recording.caption}
+              onPlay={() => setPlaying(true)}
+              ref={(el) => {
+                videoRef.current = el;
+                if (!el) return;
+                el.muted = true; // runtime guarantee: the field recording stays silent
+                el.setAttribute('muted', ''); // React sets `muted` as a property only, never the content attribute
+              }}
+            />
+            {!autoPlay && !playing && (
+              <button
+                type="button"
+                onClick={() => videoRef.current?.play()}
+                aria-label={`Play recording: ${camp.title}`}
+                className="absolute inset-0 flex cursor-pointer items-end justify-start p-3"
+              >
+                <span className="border border-[var(--color-ink)] bg-[var(--color-parchment)] px-3 py-1.5 font-[family-name:var(--font-data)] text-[11px] uppercase tracking-[0.2em] text-[var(--color-rust)] shadow-[2px_2px_0_rgba(46,40,30,0.3)]">
+                  Play recording
+                </span>
+              </button>
+            )}
+          </div>
           <p className="mt-1 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink)]/60">{camp.recording.caption}</p>
         </div>
 

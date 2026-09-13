@@ -20,7 +20,7 @@ export function TrailProgress() {
             <button
               type="button"
               onClick={() => lenis?.scrollTo(`#era-${era.id}`)}
-              aria-label={`Travel to ${era.company}`}
+              aria-label={`Travel to ${era.company} (${era.number})`}
               className="font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink)]/60 hover:text-[var(--color-rust)]"
             >
               {era.number}

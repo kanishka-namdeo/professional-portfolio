@@ -18,14 +18,14 @@ describe('TrailProgress', () => {
     expect(nav).toBeInTheDocument();
     expect(nav.querySelector('svg')).toBeInTheDocument();
     eras.forEach((era) => {
-      const button = screen.getByRole('button', { name: `Travel to ${era.company}` });
+      const button = screen.getByRole('button', { name: `Travel to ${era.company} (${era.number})` });
       expect(button).toHaveTextContent(era.number);
     });
     expect(screen.getAllByRole('button')).toHaveLength(5);
   });
   it('scrolls to the matching era when a waypoint number is clicked', () => {
     render(<TrailProgress />);
-    fireEvent.click(screen.getByRole('button', { name: `Travel to ${eras[1].company}` }));
+    fireEvent.click(screen.getByRole('button', { name: `Travel to ${eras[1].company} (${eras[1].number})` }));
     expect(mockScrollTo).toHaveBeenCalledWith('#era-logistics');
   });
 });

@@ -52,7 +52,7 @@ export function ExpeditionMap({
 
   return (
     <div ref={ref} className={`relative w-full ${className}`} data-testid="expedition-map">
-      <Image src="/map/contours.svg" alt="" fill className="object-cover" aria-hidden priority={priority} />
+      <Image src="/map/contours.svg" alt="" fill className="object-cover" aria-hidden priority={priority} fetchPriority={priority ? 'high' : undefined} />
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full" aria-hidden>
         <motion.path
           d={trailD()}
