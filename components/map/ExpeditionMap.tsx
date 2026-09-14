@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import { useRef } from 'react';
 import { motion, useScroll, useSpring, useReducedMotion } from 'motion/react';
-import type { MotionValue } from 'motion/react';
 import { useLenis } from 'lenis/react';
 import { eras } from '@/data/journey';
 import type { Era } from '@/data/journey';
@@ -38,15 +37,20 @@ export function ExpeditionMap({
   activeId,
   className = 'aspect-[3/2]',
   priority = false,
+  showLabels = true,
 }: {
   activeId: string | null;
   className?: string;
   /** Set only for the above-the-fold (hero) instance so the LCP image is not lazy. */
   priority?: boolean;
+  /** Waypoint chips are on by default; the hero draws them too — that's the navigation. */
+  showLabels?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
   const reduceMotion = useReducedMotion();
+  const isHero = priority;
+  // Hero: the trail draws itself once on load. Journey: it draws as you travel.
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const pathLength = useSpring(scrollYProgress, { stiffness: 60, damping: 20 });
 
@@ -58,39 +62,62 @@ export function ExpeditionMap({
           d={trailD()}
           fill="none"
           stroke="var(--color-rust)"
-          strokeWidth="0.5"
+          strokeWidth="0.8"
           strokeLinecap="round"
-          style={reduceMotion ? { pathLength: 1 } : { pathLength }}
+          initial={isHero && !reduceMotion ? { pathLength: 0 } : false}
+          animate={isHero && !reduceMotion ? { pathLength: 1 } : undefined}
+          transition={isHero ? { duration: 1.8, ease: [0.16, 1, 0.3, 1] } : undefined}
+          style={isHero ? undefined : reduceMotion ? { pathLength: 1 } : { pathLength }}
         />
       </svg>
-      <ul role="list" aria-label="Career waypoints" className="absolute inset-0">
-        {eras.map((era) => (
-          <li key={era.id} className="absolute" style={{ left: `${era.coords.x}%`, top: `${era.coords.y}%` }}>
-            <button
-              type="button"
-              onClick={() => lenis?.scrollTo(`#era-${era.id}`)}
-              aria-label={`Travel to ${era.company}`}
-              className={`rounded-none border px-2 py-1 font-[family-name:var(--font-data)] text-[11px] transition-transform ${
-                activeId === era.id
-                  ? 'border-[var(--color-rust)] bg-[var(--color-rust)] text-[var(--color-parchment)]'
-                  : 'border-[var(--color-ink)] bg-[var(--color-parchment)] text-[var(--color-ink)] hover:-rotate-2'
-              }`}
-              style={{ transform: `translate(-50%, -50%) rotate(${era.coords.x % 2 ? 1.5 : -1.5}deg)` }}
-            >
-              {era.company}
-            </button>
-          </li>
-        ))}
-      </ul>
+      {/* waypoint pins — HTML so they stay circular inside the stretched viewBox */}
+      <span aria-hidden className="pointer-events-none absolute inset-0">
+        {eras.map((era, i) => {
+          const isLast = i === eras.length - 1;
+          const isActive = activeId === era.id;
+          const size = isLast || isActive ? 14 : 10;
+          return (
+            <span
+              key={era.id}
+              className="absolute rounded-full border"
+              style={{
+                left: `${era.coords.x}%`,
+                top: `${era.coords.y}%`,
+                width: size,
+                height: size,
+                transform: 'translate(-50%, -50%)',
+                borderColor: 'var(--color-rust)',
+                borderWidth: isLast ? 3 : 2,
+                backgroundColor: isLast || isActive ? 'var(--color-rust)' : 'var(--color-parchment)',
+              }}
+            />
+          );
+        })}
+      </span>
+      {showLabels && (
+        <ul role="list" aria-label="Career waypoints" className="absolute inset-0">
+          {eras.map((era) => (
+            <li key={era.id} className="absolute" style={{ left: `${era.coords.x}%`, top: `${era.coords.y}%` }}>
+              <button
+                type="button"
+                onClick={() => lenis?.scrollTo(`#era-${era.id}`)}
+                aria-label={`Travel to ${era.company}`}
+                title={era.company}
+                className={`whitespace-nowrap rounded-none border px-2 py-1 font-[family-name:var(--font-data)] text-[10px] transition-transform ${
+                  activeId === era.id
+                    ? 'border-[var(--color-rust)] bg-[var(--color-rust)] text-[var(--color-parchment)]'
+                    : 'border-[var(--color-ink)] bg-[var(--color-parchment)] text-[var(--color-ink)] hover:-rotate-2'
+                }`}
+                style={{
+                  transform: `translate(-50%, -170%) rotate(${era.coords.x % 2 ? 1.5 : -1.5}deg)`,
+                }}
+              >
+                {era.short}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
-  );
-}
-
-export function ExpeditionMapMini({ progress }: { progress: MotionValue<number> }) {
-  return (
-    <svg viewBox="0 0 100 100" className="h-16 w-16" aria-hidden>
-      <path d={trailD()} fill="none" stroke="var(--color-inkline)" strokeWidth="1" />
-      <motion.path d={trailD()} fill="none" stroke="var(--color-rust)" strokeWidth="1" style={{ pathLength: progress }} />
-    </svg>
   );
 }

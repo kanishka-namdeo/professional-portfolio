@@ -40,8 +40,8 @@ export const camps: Camp[] = [
       { heading: 'The result', body: 'Design an agentic workflow the way you’d sketch it on a whiteboard — then run it.' },
     ],
     annotations: [
-      { selector: '[data-anno="canvas"]', note: 'the design surface — agents are nodes', pos: { x: 30, y: 30 } },
-      { selector: '[data-anno="inspector"]', note: 'typed ports: every join is checked', pos: { x: 80, y: 25 } },
+      { selector: '[data-anno="canvas"]', note: 'the design surface — agents are nodes', pos: { x: 20, y: 80 } },
+      { selector: '[data-anno="inspector"]', note: 'typed ports: every join is checked', pos: { x: 76, y: 24 } },
     ],
     recording: { src: '/recordings/agent-canvas.mp4', poster: '/recordings/agent-canvas.jpg', caption: 'Field recording — an agent run, end to end.' },
   },

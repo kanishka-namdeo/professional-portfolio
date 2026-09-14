@@ -7,7 +7,7 @@ const mockScrollTo = jest.fn();
 jest.mock('motion/react', () => ({
   useScroll: () => ({ scrollYProgress: { on: jest.fn(), get: () => 0 } }),
   useSpring: (v: unknown) => v,
-  motion: { path: 'path' },
+  motion: { path: 'path', line: 'line' },
 }));
 jest.mock('lenis/react', () => ({ useLenis: () => ({ scrollTo: mockScrollTo }) }));
 

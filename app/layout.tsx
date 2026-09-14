@@ -142,46 +142,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${crimsonPro.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `
-          // Prevent auto-scroll on page load - runs immediately
-          (function() {
-            // Store the scroll position
-            const scrollY = window.scrollY || 0;
-            
-            // If there's a hash in the URL, remove it immediately
-            if (window.location.hash) {
-              history.replaceState(null, '', window.location.pathname + window.location.search);
-            }
-            
-            // Force scroll to top immediately
-            if (scrollY !== 0) {
-              window.scrollTo(0, 0);
-            }
-            
-            // Prevent any auto-scrolling for the first 500ms
-            let preventScroll = true;
-            const originalScrollTo = window.scrollTo;
-            window.scrollTo = function() {
-              if (!preventScroll) {
-                originalScrollTo.apply(window, arguments);
-              }
-            };
-            
-            setTimeout(function() {
-              preventScroll = false;
-              window.scrollTo = originalScrollTo;
-              document.documentElement.classList.add('smooth-scroll');
-            }, 500);
-          })();
-        ` }} />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
-        <meta name="theme-color" content="#0a0a0a" />
+        <meta name="theme-color" content="#F3EDE2" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Kanishka Portfolio" />
-        <meta name="msapplication-TileColor" content="#0a0a0a" />
+        <meta name="msapplication-TileColor" content="#F3EDE2" />
         <meta name="msapplication-tap-highlight" content="no" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="referrer" content="strict-origin-when-cross-origin" />

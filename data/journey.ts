@@ -14,6 +14,8 @@ export interface Era {
   id: 'origin' | 'logistics' | 'language' | 'mobility' | 'agents';
   number: string;
   company: string;
+  /** Short label for the map waypoint chips — keeps the trail navigable without collisions. */
+  short: string;
   role: string;
   period: string;
   coords: { x: number; y: number }; // % position on the map, origin bottom-left → agents top-right
@@ -29,9 +31,10 @@ export const eras: Era[] = [
     id: 'origin',
     number: '01',
     company: 'Sagar Defence Engineering',
+    short: 'Sagar Defence',
     role: 'Co-founding member & CTO',
     period: '2016 — 2020',
-    coords: { x: 12, y: 88 },
+    coords: { x: 7, y: 91 },
     terrain:
       'Defence and paramilitary agencies needed unmanned surface vehicles that could hold a course in real sea conditions — no operator, no second chances.',
     crossing:
@@ -52,9 +55,10 @@ export const eras: Era[] = [
     id: 'logistics',
     number: '02',
     company: 'Intugine Technologies',
+    short: 'Intugine',
     role: 'Technical Consultant',
     period: '2020',
-    coords: { x: 30, y: 72 },
+    coords: { x: 26, y: 73 },
     terrain:
       'Enterprise logistics teams flew blind across road, rail and air — three transport modes, three fragmented views, decisions made late.',
     crossing:
@@ -70,9 +74,10 @@ export const eras: Era[] = [
     id: 'language',
     number: '03',
     company: 'Medulla.AI · TekIP',
+    short: 'Medulla.AI',
     role: 'Senior Technical Consultant · Software Team Lead',
     period: '2020 — 2022',
-    coords: { x: 45, y: 58 },
+    coords: { x: 46, y: 56 },
     terrain:
       'Patent analysts spent hours in databases; loan officers reviewed pay stubs and tax returns by hand. Two industries, one disease: unstructured language at scale.',
     crossing:
@@ -89,9 +94,10 @@ export const eras: Era[] = [
     id: 'mobility',
     number: '04',
     company: 'MoveInSync',
+    short: 'MoveInSync',
     role: 'Senior Product Manager',
     period: '2022 — 2024',
-    coords: { x: 62, y: 40 },
+    coords: { x: 66, y: 37 },
     terrain:
       'The world’s largest enterprise transport platform needed to grow from a regional success into a global one — without breaking product quality along the way.',
     crossing:
@@ -113,9 +119,10 @@ export const eras: Era[] = [
     id: 'agents',
     number: '05',
     company: 'AvloAI · Independent consulting',
+    short: 'AvloAI',
     role: 'Product & AI Consultant',
     period: '2025 — present',
-    coords: { x: 84, y: 16 },
+    coords: { x: 91, y: 12 },
     terrain:
       'Founders keep building AI products users don’t need. The gap is not models — it is product judgment: what to build, for whom, and what to verify before writing code.',
     crossing:

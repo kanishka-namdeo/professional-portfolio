@@ -29,7 +29,7 @@ export function JourneyChapter({ era, active }: { era: Era; active: boolean }) {
         </motion.p>
         <motion.h2 {...enter(1)} className="mt-2 font-[family-name:var(--font-voice)] text-4xl font-bold text-[var(--color-ink)]">
           {era.company}
-          <span className="block text-lg font-medium italic text-[var(--color-ink)]/70">{era.role}</span>
+          <span className="mt-1 block text-xl italic text-[var(--color-ink)]/70">{era.role}</span>
         </motion.h2>
 
         <motion.div {...enter(2)} className="mt-10 space-y-6 font-[family-name:var(--font-voice)] text-lg leading-relaxed text-[var(--color-ink)]">
@@ -38,19 +38,24 @@ export function JourneyChapter({ era, active }: { era: Era; active: boolean }) {
           <p><strong className="font-[family-name:var(--font-data)] text-xs uppercase tracking-widest text-[var(--color-rust)]">Summit — </strong>{era.summit}</p>
         </motion.div>
 
-        <motion.div {...enter(3)} className="mt-10 flex flex-wrap gap-10">
-          {era.metrics.map((m) => <MetricCounter key={m.label} {...m} />)}
+        <motion.div {...enter(3)} className="mt-10">
+          <p className="font-[family-name:var(--font-data)] text-[11px] uppercase tracking-widest text-[var(--color-ink)]/45">
+            From the log
+          </p>
+          <div className="mt-3 flex flex-wrap gap-x-8 gap-y-4">
+            {era.metrics.map((m) => <MetricCounter key={m.label} {...m} />)}
+          </div>
         </motion.div>
 
         {era.press && era.press.length > 0 && (
           <motion.div {...enter(4)} className="mt-12">
             <p className="font-[family-name:var(--font-data)] text-xs uppercase tracking-widest text-[var(--color-ink)]/60">Receipts from the press</p>
-            <ul className="mt-3 space-y-3">
+            <ul className="mt-4 space-y-4">
               {era.press.map((p) => (
-                <li key={p.url} className="max-w-md rotate-[-1deg] border border-[var(--color-ink)]/20 bg-white/70 p-4 shadow-[2px_3px_6px_rgba(46,40,30,0.2)]">
-                  <a href={p.url} target="_blank" rel="noopener noreferrer" className="block hover:rotate-[0.5deg]">
+                <li key={p.url} className="max-w-md rotate-[-0.8deg] border border-[var(--color-ink)]/20 bg-white/70 p-4 shadow-[2px_3px_6px_rgba(46,40,30,0.18)] transition-transform hover:rotate-[0.4deg]">
+                  <a href={p.url} target="_blank" rel="noopener noreferrer" className="block">
                     <span className="font-[family-name:var(--font-data)] text-[11px] uppercase tracking-widest text-[var(--color-rust)]">{p.source} · {p.date}</span>
-                    <span className="mt-1 block font-[family-name:var(--font-voice)] text-base text-[var(--color-ink)]">“{p.headline}”</span>
+                    <span className="mt-2 block font-[family-name:var(--font-voice)] text-base leading-snug text-[var(--color-ink)]">“{p.headline}”</span>
                   </a>
                 </li>
               ))}
