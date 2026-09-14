@@ -52,10 +52,16 @@ export function JourneyChapter({ era, active }: { era: Era; active: boolean }) {
             <p className="font-[family-name:var(--font-data)] text-xs uppercase tracking-widest text-[var(--color-ink)]/60">Receipts from the press</p>
             <ul className="mt-4 space-y-4">
               {era.press.map((p) => (
-                <li key={p.url} className="max-w-md rotate-[-0.8deg] border border-[var(--color-ink)]/20 bg-white/70 p-4 shadow-[2px_3px_6px_rgba(46,40,30,0.18)] transition-transform hover:rotate-[0.4deg]">
+                <li key={p.url} className="group max-w-md rotate-[-0.8deg] border border-[var(--color-ink)]/20 bg-white/70 p-4 shadow-[2px_3px_6px_rgba(46,40,30,0.18)] transition-transform duration-150 ease-out hover:-translate-y-0.5 hover:rotate-0">
                   <a href={p.url} target="_blank" rel="noopener noreferrer" className="block">
                     <span className="font-[family-name:var(--font-data)] text-[11px] uppercase tracking-widest text-[var(--color-rust)]">{p.source} · {p.date}</span>
                     <span className="mt-2 block font-[family-name:var(--font-voice)] text-base leading-snug text-[var(--color-ink)]">“{p.headline}”</span>
+                    <span
+                      aria-hidden
+                      className="mt-2 block font-[family-name:var(--font-data)] text-[10px] text-[var(--color-rust)] opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
+                    >
+                      read the piece ↗
+                    </span>
                   </a>
                 </li>
               ))}

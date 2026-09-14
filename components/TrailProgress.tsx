@@ -2,10 +2,11 @@
 'use client';
 
 import { useRef } from 'react';
-import { motion, useScroll, useSpring } from 'motion/react';
+import { motion, useMotionValueEvent, useScroll, useSpring } from 'motion/react';
 import { useLenis } from 'lenis/react';
 import { eras } from '@/data/journey';
 import { useActiveEra } from '@/hooks/useActiveEra';
+import { OPEN_PALETTE_EVENT } from './WaypointPalette';
 
 /**
  * Fixed right-edge rail: a vertical track whose rust fill follows scroll,
@@ -21,6 +22,14 @@ export function TrailProgress() {
   const lenis = useLenis();
   const activeId = useActiveEra();
   const navRef = useRef<HTMLElement>(null);
+  const percentRef = useRef<HTMLSpanElement>(null);
+
+  // Honest readout: how much of the page (the trail) has been travelled.
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    if (percentRef.current) {
+      percentRef.current.textContent = `${String(Math.round(Math.max(0, Math.min(1, v)) * 100)).padStart(2, '0')}%`;
+    }
+  });
 
   const activeIndex = eras.findIndex((era) => era.id === activeId);
   const current = activeIndex >= 0 ? eras[activeIndex] : null;
@@ -112,6 +121,17 @@ export function TrailProgress() {
         )}
         <span className="mt-1 block text-[var(--color-ink)]/35">↑↓ to travel</span>
       </p>
+      <p className="mt-2 text-right font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink)]/45">
+        <span ref={percentRef}>00%</span> of the trail
+      </p>
+      <button
+        type="button"
+        onClick={() => window.dispatchEvent(new Event(OPEN_PALETTE_EVENT))}
+        className="mt-2 block w-full text-right font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink)]/45 hover:text-[var(--color-rust)]"
+        aria-label="Open the waypoint jumper"
+      >
+        ⌘K jump
+      </button>
     </nav>
   );
 }

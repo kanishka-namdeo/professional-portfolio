@@ -1,5 +1,6 @@
 import Hero from '@/components/Hero';
 import { TrailProgress } from '@/components/TrailProgress';
+import { WaypointPalette } from '@/components/WaypointPalette';
 import { Journey } from '@/components/journey/Journey';
 import { BaseCamp } from '@/components/camps/BaseCamp';
 import { camps } from '@/data/camps';
@@ -125,6 +126,9 @@ export default function Home() {
 
       {/* Fixed right-edge progress rail */}
       <TrailProgress />
+
+      {/* ⌘K waypoint jumper — keyboard-first navigation over everything above */}
+      <WaypointPalette />
     </>
   );
 }

@@ -1755,3 +1755,25 @@ gimmick), auto-marquee tickers (banned by the anti-AI rules), a second parallax
 scene, and WebGL (out of scope for a field-log aesthetic). A before/after
 comparison slider remains a candidate for a future case study — it needs a real
 before/after asset pair, which we do not have.
+
+### Interaction & easter-egg layer (same date, second pass)
+
+5. **Waypoint jumper (⌘K / Ctrl+K, or `/`)** — `components/WaypointPalette.tsx`: a
+   filterable dialog over every destination (5 waypoints, 3 camps, ledger,
+   contact, 4 articles). Arrow keys + Enter travel, Esc closes, focus is restored
+   on close, and it is announced as a real `dialog` with `listbox`/`option` roles.
+   Opens from anywhere; a "⌘K jump" button on the rail opens it for mouse users
+   via a window event (`OPEN_PALETTE_EVENT`). Ignored while typing in a field.
+6. **Completion easter egg** — `components/FieldNote.tsx` + `hooks/useVisitedEras.ts`:
+   travelling all five waypoints (each era counted once it becomes active,
+   persisted in `sessionStorage`) surfaces a hidden taped field note at the End
+   of the Trail — the Pokémon-tribute repo, framed as "the first thing I ever
+   shipped". Storage is read after mount to keep SSR/CSR identical.
+7. **Rail readout grows up**: a live `NN% of the trail` (honest, derived from
+   `scrollYProgress`) and the ⌘K trigger, alongside the era readout.
+8. **Press-clipping lift**: postcards straighten and rise 2px on hover/focus with
+   a "read the piece ↗" reveal — 150ms `ease-out`, paper-like, no layout shift.
+
+Deliberately NOT added: a second keyboard overlay (the palette footer documents
+both key sets), cursor-following gimmicks, sounds, and any fake "distance
+travelled" numbers — readouts stay honest or they don't ship.

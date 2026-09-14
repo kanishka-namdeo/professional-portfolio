@@ -1,4 +1,5 @@
 import ContactFAQ from '@/components/ContactFAQ';
+import { FieldNote } from '@/components/FieldNote';
 
 export function EndOfTrail() {
   return (
@@ -18,6 +19,7 @@ export function EndOfTrail() {
           <a href="https://www.linkedin.com/in/kanishkanamdeo/" target="_blank" rel="noopener noreferrer" className="border border-[var(--color-ink)] px-5 py-3 font-[family-name:var(--font-data)] text-sm text-[var(--color-ink)] hover:shadow-[3px_3px_0_var(--color-inkline)]">LinkedIn</a>
           <a href="https://github.com/kanishka-namdeo" target="_blank" rel="noopener noreferrer" className="border border-[var(--color-ink)] px-5 py-3 font-[family-name:var(--font-data)] text-sm text-[var(--color-ink)] hover:shadow-[3px_3px_0_var(--color-inkline)]">GitHub</a>
         </div>
+        <FieldNote />
         <div className="mt-14">
           <ContactFAQ />
         </div>
