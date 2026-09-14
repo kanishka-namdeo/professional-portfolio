@@ -2,7 +2,7 @@ import ContactFAQ from '@/components/ContactFAQ';
 
 export function EndOfTrail() {
   return (
-    <section id="contact" aria-labelledby="eot-title" className="border-t border-[var(--color-inkline)] py-24">
+    <section id="contact" aria-labelledby="eot-title" className="border-t border-[var(--color-inkline)] bg-[var(--color-parchment)] py-24">
       <div className="mx-auto max-w-4xl px-6">
         <p className="font-[family-name:var(--font-data)] text-xs tracking-[0.2em] text-[var(--color-rust)]">END OF THE TRAIL</p>
         <h2 id="eot-title" className="mt-2 font-[family-name:var(--font-voice)] text-4xl font-bold text-[var(--color-ink)]">

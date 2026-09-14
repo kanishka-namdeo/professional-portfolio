@@ -1,9 +1,0 @@
-/* ==========================================================================
-   Tailwind CSS Directives
-   This file contains only the Tailwind CSS import directives.
-   All custom CSS is organized in the styles/ directory.
-   ========================================================================== */
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
