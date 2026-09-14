@@ -8,6 +8,9 @@ jest.mock('motion/react', () => ({
   useReducedMotion: () => false,
   useInView: () => true,
   animate: () => ({ stop: jest.fn() }),
+  useMotionValue: (v: unknown) => ({ get: () => v, set: jest.fn(), on: jest.fn() }),
+  useMotionValueEvent: jest.fn(),
+  useTransform: (v: unknown) => v,
   motion: new Proxy(
     {},
     {

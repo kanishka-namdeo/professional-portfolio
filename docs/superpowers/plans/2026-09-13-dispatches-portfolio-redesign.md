@@ -1716,3 +1716,42 @@ git add -A && git commit -m "polish: performance and content QA pass for dispatc
 - The `JourneyChapter`/`BaseCamp` tests mock `motion/react` — verify mock shape matches installed v13 exports during implementation; adjust mocks, not production code.
 - Copy in `data/journey.ts` is the launch copy — editing is expected but keep every metric's receipt.
 - Verify the LinkedIn URL and email from the existing About/Footer/StickyCTA before shipping EndOfTrail.
+
+---
+
+## Post-launch additions (2026-09-14)
+
+Everything above shipped and was reviewed. This section records the scrollytelling
+elements added afterwards, correlated against the spec's four story elements
+(§2 of the spec: scroll-driven narrative · Remotion moment · live project media ·
+motion microinteractions). Research basis: scrollytelling.ai's six design patterns
+(sticky figure, scrubbed sequence, step triggers, staged reveals, parallax, WebGL)
+and Emil Kowalski's motion guidance ("parallax fits one establishing scene at most";
+"never animate keyboard-initiated actions"; animations usually < 300ms).
+
+1. **Travelling "you are here" marker** (strengthens the scroll-driven narrative).
+   A ringed marker rides the SVG trail, positioned by `path.getPointAtLength()`
+   each frame — with the hero's load draw it travels 2016→2026; in the journey it
+   tracks scroll progress, so the map is literally where you are. Positioned by
+   direct DOM writes (a state update per frame would re-render every pin).
+   Reduced motion: parked at the destination, no ride.
+2. **Contour parallax depth** (one establishing scene). The contour layer drifts
+   ±1.6% against the trail and pins as the hero scrolls away — depth without a
+   second parallax instance anywhere else, and disabled under reduced motion.
+3. **Rail readout + keyboard travel** (motion microinteractions, a11y).
+   The progress rail now shows `03 / 05 · Medulla.AI · en route` with
+   `aria-live="polite"`, marks the active button with `aria-current`, and
+   supports ↑/↓/Home/End to travel between waypoints — jumps are **instant**
+   (`lenis.scrollTo(..., { immediate: true })`) per the no-animation-on-keyboard
+   rule. Active-era tracking moved to `hooks/useActiveEra.ts`, shared with Journey.
+4. **Horizontal Field Writing strip** (variety against the vertical page).
+   The Ledger's article list became a scroll-snapped horizontal strip of dispatch
+   cards with a keyboard-focusable, labeled scroller — the researched
+   horizontal-panel pattern used where it fits (a short, browsable set), not for
+   body copy.
+
+Deliberately NOT added: scroll-velocity skew (no authoritative endorsement; risks
+gimmick), auto-marquee tickers (banned by the anti-AI rules), a second parallax
+scene, and WebGL (out of scope for a field-log aesthetic). A before/after
+comparison slider remains a candidate for a future case study — it needs a real
+before/after asset pair, which we do not have.

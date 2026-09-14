@@ -17,12 +17,31 @@ export function Ledger() {
           ))}
         </ul>
         <h3 className="mt-14 font-[family-name:var(--font-data)] text-xs tracking-[0.2em] text-[var(--color-rust)]">FIELD WRITING</h3>
-        <ul className="mt-4 divide-y divide-[var(--color-inkline)]">
+        <p className="mt-2 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink)]/45">
+          Scroll sideways — a dispatch per card. <span aria-hidden>→</span>
+        </p>
+        {/* Horizontal snap strip: variety against the vertical ledger, and the
+            articles read as dispatches rather than another plain list. */}
+        <ul
+          role="list"
+          tabIndex={0}
+          aria-label="Field writing — scroll horizontally"
+          className="-mx-6 mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
+        >
           {writing.map((w) => (
-            <li key={w.url}>
-              <a href={w.url} target="_blank" rel="noopener noreferrer" className="grid grid-cols-[1fr_auto] items-baseline gap-4 py-3 hover:bg-white/50">
-                <span className="font-[family-name:var(--font-voice)] text-sm text-[var(--color-ink)]">{w.title}</span>
-                <span className="font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink)]/50">{w.date} · {w.readTime}</span>
+            <li key={w.url} className="w-80 shrink-0 snap-start">
+              <a
+                href={w.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-full flex-col justify-between border border-[var(--color-ink)]/20 bg-white/60 p-5 transition-colors hover:bg-white/90"
+              >
+                <span className="font-[family-name:var(--font-data)] text-[11px] uppercase tracking-widest text-[var(--color-rust)]">
+                  {w.date} · {w.readTime}
+                </span>
+                <span className="mt-3 font-[family-name:var(--font-voice)] text-lg leading-snug text-[var(--color-ink)]">
+                  {w.title}
+                </span>
               </a>
             </li>
           ))}

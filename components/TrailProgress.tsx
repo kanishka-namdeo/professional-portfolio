@@ -1,17 +1,69 @@
 // components/TrailProgress.tsx
 'use client';
 
+import { useRef } from 'react';
 import { motion, useScroll, useSpring } from 'motion/react';
 import { useLenis } from 'lenis/react';
 import { eras } from '@/data/journey';
+import { useActiveEra } from '@/hooks/useActiveEra';
 
-/** Fixed right-edge rail: a vertical track that fills as you scroll, with numbered jumps. */
+/**
+ * Fixed right-edge rail: a vertical track whose rust fill follows scroll,
+ * a live "you are here" readout, and 01–05 jump buttons.
+ *
+ * Keyboard: focus the rail and use ↑/↓ (Home/End for first/last). These jumps
+ * are instant, not animated — keyboard-initiated actions repeat, and animating
+ * them makes the page feel slow.
+ */
 export function TrailProgress() {
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 80, damping: 20 });
   const lenis = useLenis();
+  const activeId = useActiveEra();
+  const navRef = useRef<HTMLElement>(null);
+
+  const activeIndex = eras.findIndex((era) => era.id === activeId);
+  const current = activeIndex >= 0 ? eras[activeIndex] : null;
+
+  const jumpTo = (index: number) => {
+    const era = eras[Math.max(0, Math.min(eras.length - 1, index))];
+    if (!era) return;
+    if (lenis) lenis.scrollTo(`#era-${era.id}`, { immediate: true });
+    else document.getElementById(`era-${era.id}`)?.scrollIntoView();
+  };
+
+  const onKeyDown = (event: React.KeyboardEvent) => {
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+    const base = activeIndex >= 0 ? activeIndex : 0;
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        jumpTo(base + 1);
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        jumpTo(base - 1);
+        break;
+      case 'Home':
+        event.preventDefault();
+        jumpTo(0);
+        break;
+      case 'End':
+        event.preventDefault();
+        jumpTo(eras.length - 1);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
-    <nav aria-label="Trail progress" className="fixed right-4 top-1/2 z-40 hidden -translate-y-1/2 md:block">
+    <nav
+      ref={navRef}
+      aria-label="Trail progress"
+      onKeyDown={onKeyDown}
+      className="fixed right-4 top-1/2 z-40 hidden -translate-y-1/2 md:block"
+    >
       <div className="flex items-stretch gap-2">
         <ul role="list" className="flex flex-col justify-between py-px">
           {eras.map((era) => (
@@ -20,7 +72,10 @@ export function TrailProgress() {
                 type="button"
                 onClick={() => lenis?.scrollTo(`#era-${era.id}`)}
                 aria-label={`Travel to ${era.company} (${era.number})`}
-                className="block font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink)]/55 hover:text-[var(--color-rust)]"
+                aria-current={activeId === era.id ? 'true' : undefined}
+                className={`block font-[family-name:var(--font-data)] text-[10px] hover:text-[var(--color-rust)] ${
+                  activeId === era.id ? 'text-[var(--color-rust)]' : 'text-[var(--color-ink)]/55'
+                }`}
               >
                 {era.number}
               </button>
@@ -40,6 +95,23 @@ export function TrailProgress() {
           />
         </svg>
       </div>
+      <p
+        aria-live="polite"
+        className="mt-2 text-right font-[family-name:var(--font-data)] text-[10px] leading-tight text-[var(--color-ink)]/60"
+      >
+        {current ? (
+          <>
+            <span className="text-[var(--color-rust)]">{current.number}</span> / {`0${eras.length}`}
+            <span className="block text-[var(--color-ink)]/75">{current.short}</span>
+          </>
+        ) : (
+          <>
+            <span className="text-[var(--color-ink)]/40">00 / {`0${eras.length}`}</span>
+            <span className="block">en route</span>
+          </>
+        )}
+        <span className="mt-1 block text-[var(--color-ink)]/35">↑↓ to travel</span>
+      </p>
     </nav>
   );
 }

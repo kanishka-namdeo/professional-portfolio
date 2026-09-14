@@ -7,7 +7,11 @@ jest.mock('motion/react', () => ({
   useScroll: () => ({ scrollYProgress: { on: jest.fn(), get: () => 0 } }),
   useSpring: (v: unknown) => v,
   useReducedMotion: () => false,
-  motion: { path: 'path' },
+  useMotionValue: (v: unknown) => ({ get: () => v, set: jest.fn(), on: jest.fn() }),
+  useMotionValueEvent: jest.fn(),
+  useTransform: (v: unknown) => v,
+  animate: () => ({ stop: jest.fn() }),
+  motion: { path: 'path', div: 'div', line: 'line' },
 }));
 jest.mock('lenis/react', () => ({ useLenis: () => ({ scrollTo: mockScrollTo }) }));
 

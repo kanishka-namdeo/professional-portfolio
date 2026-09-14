@@ -1,35 +1,18 @@
 // components/journey/Journey.tsx
 'use client';
 
-import { useEffect, useState } from 'react';
 import { eras } from '@/data/journey';
+import { useActiveEra } from '@/hooks/useActiveEra';
 import { ExpeditionMap } from '../map/ExpeditionMap';
 import { JourneyChapter } from './JourneyChapter';
 
 /**
  * The Journey: sticky expedition map on desktop, chapters beside it;
  * on mobile the chapters stack with a left timeline line and the map is hidden.
- * Active-chapter tracking: IntersectionObserver on the era sections.
+ * Active-chapter tracking lives in useActiveEra (shared with the progress rail).
  */
 export function Journey() {
-  const [activeId, setActiveId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (typeof IntersectionObserver === 'undefined') return;
-    const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-era]'));
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.getAttribute('data-era'));
-          }
-        }
-      },
-      { rootMargin: '-45% 0px -45% 0px' }
-    );
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, []);
+  const activeId = useActiveEra();
 
   return (
     <section id="journey" aria-label="The journey" className="relative py-10">

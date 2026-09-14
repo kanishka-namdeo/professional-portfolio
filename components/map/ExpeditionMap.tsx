@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useRef } from 'react';
-import { motion, useScroll, useSpring, useReducedMotion } from 'motion/react';
+import { useEffect, useRef } from 'react';
+import { animate, motion, useMotionValue, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react';
 import { useLenis } from 'lenis/react';
 import { eras } from '@/data/journey';
 import type { Era } from '@/data/journey';
@@ -54,11 +54,57 @@ export function ExpeditionMap({
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const pathLength = useSpring(scrollYProgress, { stiffness: 60, damping: 20 });
 
+  // The "you are here" marker rides the trail: with the hero's load draw, and with
+  // scroll progress in the journey map. Positioned by direct DOM writes — a state
+  // update per scroll frame would re-render every pin, and this runs at 60fps.
+  const pathRef = useRef<SVGPathElement | null>(null);
+  const markerRef = useRef<HTMLSpanElement | null>(null);
+  const heroDraw = useMotionValue(0);
+  const driver = isHero ? heroDraw : pathLength;
+
+  useEffect(() => {
+    if (!isHero || reduceMotion) return;
+    const controls = animate(heroDraw, 1, { duration: 2.4, ease: [0.16, 1, 0.3, 1], delay: 0.35 });
+    return () => controls.stop();
+  }, [isHero, reduceMotion, heroDraw]);
+
+  useMotionValueEvent(driver, 'change', (v) => {
+    const path = pathRef.current;
+    const marker = markerRef.current;
+    if (!path || !marker) return;
+    const clamped = Math.max(0, Math.min(1, v));
+    const point = path.getPointAtLength(path.getTotalLength() * clamped);
+    marker.style.left = `${point.x}%`;
+    marker.style.top = `${point.y}%`;
+    marker.style.opacity = clamped < 0.005 ? '0' : '1';
+  });
+
+  // Reduced motion: no draw, no ride — park the marker at the destination (2026).
+  useEffect(() => {
+    if (!reduceMotion) return;
+    const path = pathRef.current;
+    const marker = markerRef.current;
+    if (!path || !marker) return;
+    const end = path.getPointAtLength(path.getTotalLength());
+    marker.style.left = `${end.x}%`;
+    marker.style.top = `${end.y}%`;
+    marker.style.opacity = '1';
+  }, [reduceMotion]);
+
+  // One establishing scene of parallax (the hero map), per the motion guidelines.
+  const contourY = useTransform(scrollYProgress, [0, 1], ['-1.6%', '1.6%']);
+
   return (
     <div ref={ref} className={`relative w-full ${className}`} data-testid="expedition-map">
-      <Image src="/map/contours.svg" alt="" fill className="object-cover" aria-hidden priority={priority} fetchPriority={priority ? 'high' : undefined} />
+      <motion.div
+        className="absolute inset-0"
+        style={isHero && !reduceMotion ? { y: contourY } : undefined}
+      >
+        <Image src="/map/contours.svg" alt="" fill className="object-cover" aria-hidden priority={priority} fetchPriority={priority ? 'high' : undefined} />
+      </motion.div>
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full" aria-hidden>
         <motion.path
+          ref={pathRef}
           d={trailD()}
           fill="none"
           stroke="var(--color-rust)"
@@ -66,7 +112,7 @@ export function ExpeditionMap({
           strokeLinecap="round"
           initial={isHero && !reduceMotion ? { pathLength: 0 } : false}
           animate={isHero && !reduceMotion ? { pathLength: 1 } : undefined}
-          transition={isHero ? { duration: 1.8, ease: [0.16, 1, 0.3, 1] } : undefined}
+          transition={isHero ? { duration: 2.4, ease: [0.16, 1, 0.3, 1], delay: 0.35 } : undefined}
           style={isHero ? undefined : reduceMotion ? { pathLength: 1 } : { pathLength }}
         />
       </svg>
@@ -93,6 +139,15 @@ export function ExpeditionMap({
             />
           );
         })}
+      </span>
+      {/* the traveller: rides the trail with the draw / with scroll */}
+      <span
+        ref={markerRef}
+        aria-hidden
+        className="pointer-events-none absolute z-10 h-3.5 w-3.5 rounded-full border-2 border-[var(--color-rust)] bg-[var(--color-parchment)] shadow-[0_0_0_3px_rgba(243,237,226,0.85)]"
+        style={{ left: '0%', top: '0%', opacity: 0, transform: 'translate(-50%, -50%)' }}
+      >
+        <span className="absolute inset-[2px] rounded-full bg-[var(--color-rust)]" />
       </span>
       {showLabels && (
         <ul role="list" aria-label="Career waypoints" className="absolute inset-0">
