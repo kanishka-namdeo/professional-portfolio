@@ -75,3 +75,5 @@ Thumbs.db
 .netlify/
 .superpowers/
 master_data.json
+# Local screenshot scratch (agent/design review captures)
+.shots/
