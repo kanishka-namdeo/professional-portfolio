@@ -35,10 +35,16 @@ const nextConfig = {
       {
         source: '/(.*)',
         headers: [
-          // Content Security Policy to prevent XSS attacks
+          // Content Security Policy to prevent XSS attacks.
+          // - 'unsafe-eval' was removed: only dev tooling needed it and Turbopack dev works without it.
+          // - 'unsafe-inline' stays in script-src because the Next.js App Router inlines
+          //   flight-data <script> blocks into the HTML. Known follow-up: nonce-based CSP
+          //   via middleware to drop 'unsafe-inline'.
+          // - img-src is narrowed to the only remote image host in use: Medium thumbnails
+          //   in the Ledger (data/ledger.ts) are served from miro.medium.com.
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://va.vercel-scripts.com https://vitals.vercel-insights.com; frame-ancestors 'none';"
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://miro.medium.com https://*.medium.com; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://va.vercel-scripts.com https://vitals.vercel-insights.com; frame-ancestors 'none';"
           },
           // Prevent clickjacking attacks
           {

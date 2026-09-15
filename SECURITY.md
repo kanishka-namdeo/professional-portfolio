@@ -11,7 +11,11 @@
 This portfolio implements the following security measures:
 
 ### Security Headers
-- **Content Security Policy (CSP)**: Prevents XSS attacks by controlling resources the browser can load
+- **Content Security Policy (CSP)**: Primary XSS control — restricts which resources the browser can load. Enforced on Vercel via `next.config.mjs` (`headers()`), applied to all routes. Current policy, honestly stated:
+  - `script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com` — `'unsafe-eval'` has been removed. **Known trade-off**: `'unsafe-inline'` is still required because the Next.js App Router inlines flight-data `<script>` blocks into the HTML; it weakens the XSS guarantee, and the planned follow-up is a nonce-based CSP via middleware to drop it. `https://va.vercel-scripts.com` is required for Vercel Analytics.
+  - `img-src 'self' data: https://miro.medium.com https://*.medium.com` — Medium's image CDN is the only remote image host in use (Ledger dispatch thumbnails).
+  - `connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://va.vercel-scripts.com https://vitals.vercel-insights.com` — analytics beacons only.
+  - `default-src 'self'`; `style-src 'self' 'unsafe-inline'`; `font-src 'self'`; `frame-ancestors 'none'`.
 - **X-Frame-Options**: DENY - Prevents clickjacking attacks
 - **X-Content-Type-Options**: nosniff - Prevents MIME type sniffing
 - **X-XSS-Protection**: 1; mode=block - Enables browser XSS protection
@@ -80,6 +84,7 @@ This site follows web security best practices including:
 | Date | Type | Findings | Status |
 |------|------|----------|--------|
 | 2025-01-28 | Comprehensive | Next.js DoS vulnerability, missing security headers | Fixed |
+| 2026-09-15 | Audit follow-up | Stale `lint` script (Next 16 removed `next lint`), removed unused `lucide-react`/`next-sitemap`, dropped `next-sitemap` CI step that risked overwriting hand-maintained robots.txt/sitemap.xml, CSP tightened (`unsafe-eval` removed, `img-src` narrowed) | Fixed |
 
 ## Third-Party Services
 

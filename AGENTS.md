@@ -156,6 +156,9 @@ Default section order:
 
 When the user requests a durable behavior change, record it here or in the relevant child AGENTS.md
 
+- pnpm is the sole package manager: use pnpm only (never `npm install`), and never commit package-lock.json
+- `pnpm run lint` runs `eslint .` (Next 16 removed `next lint`)
+
 
 
 ## Child DOX Index
