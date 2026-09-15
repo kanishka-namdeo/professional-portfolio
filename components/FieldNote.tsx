@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useTrailComplete } from '@/hooks/useVisitedEras';
 
 /**
@@ -14,17 +15,28 @@ export function FieldNote() {
   return (
     <aside
       aria-label="Hidden field note — you travelled the whole trail"
-      className="mt-14 max-w-md rotate-[-0.8deg] border border-[var(--color-ink)]/25 bg-[#FBF6E9] p-5 shadow-[3px_4px_8px_rgba(46,40,30,0.18)]"
+      className="mt-14 max-w-md rotate-[-0.8deg] border border-[var(--color-ink)]/25 bg-[var(--color-notepaper)] p-5 shadow-[3px_4px_8px_var(--color-shadow-soft)]"
     >
       <p className="flex items-center gap-2 font-[family-name:var(--font-data)] text-[10px] uppercase tracking-[0.2em] text-[var(--color-rust)]">
         <span aria-hidden className="inline-block border border-[var(--color-rust)] px-1 py-[1px]">Field note</span>
         reward for completing the trail
       </p>
+      <div className="relative mx-auto mt-4 h-28 w-28 overflow-hidden rounded-full border border-[var(--color-ink)]/15">
+        <Image
+          src="/field-note-vignette.webp"
+          alt=""
+          width={480}
+          height={480}
+          className="h-full w-full object-cover"
+          loading="lazy"
+          aria-hidden
+        />
+      </div>
       <p className="mt-3 font-[family-name:var(--font-voice)] text-base leading-relaxed text-[var(--color-ink)]">
-        You travelled all nine years — most people stop at the first waypoint.
+        You made it the whole way — most people stop at the first waypoint.
         Since you made it: the very first thing I ever shipped was a tribute to
-        Pokémon, built the night before a deadline that didn’t exist. It’s still
-        up, and it’s still mine.
+        Pokémon, built the night before a deadline that didn’t exist. The repo’s
+        still up, and it’s still mine.
       </p>
       <p className="mt-3">
         <a

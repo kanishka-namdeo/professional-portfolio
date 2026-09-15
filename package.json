@@ -13,6 +13,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "map": "node scripts/generate-map.mjs",
+    "brand": "node scripts/generate-brand-assets.mjs",
     "recordings": "node scripts/render-recordings.mjs",
     "audit": "pnpm audit",
     "audit:fix": "pnpm audit --fix"

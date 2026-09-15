@@ -77,3 +77,6 @@ Thumbs.db
 master_data.json
 # Local screenshot scratch (agent/design review captures)
 .shots/
+
+# Local agent scratch
+.video_agent/

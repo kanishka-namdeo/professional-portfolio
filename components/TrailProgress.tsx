@@ -41,6 +41,13 @@ export function TrailProgress() {
     else document.getElementById(`era-${era.id}`)?.scrollIntoView();
   };
 
+  // Mouse travel stays smooth (Lenis default); keyboard jumps above are instant.
+  const travelMouse = (era: (typeof eras)[number]) => {
+    const target = `#era-${era.id}`;
+    if (lenis) lenis.scrollTo(target);
+    else document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const onKeyDown = (event: React.KeyboardEvent) => {
     if (event.metaKey || event.ctrlKey || event.altKey) return;
     const base = activeIndex >= 0 ? activeIndex : 0;
@@ -79,10 +86,10 @@ export function TrailProgress() {
             <li key={era.id}>
               <button
                 type="button"
-                onClick={() => lenis?.scrollTo(`#era-${era.id}`)}
+                onClick={() => travelMouse(era)}
                 aria-label={`Travel to ${era.company} (${era.number})`}
-                aria-current={activeId === era.id ? 'true' : undefined}
-                className={`block font-[family-name:var(--font-data)] text-[10px] hover:text-[var(--color-rust)] ${
+                aria-current={activeId === era.id ? 'step' : undefined}
+                className={`block font-[family-name:var(--font-data)] text-[10px] hover:text-[var(--color-rust)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)] ${
                   activeId === era.id ? 'text-[var(--color-rust)]' : 'text-[var(--color-ink)]/55'
                 }`}
               >
@@ -127,7 +134,7 @@ export function TrailProgress() {
       <button
         type="button"
         onClick={() => window.dispatchEvent(new Event(OPEN_PALETTE_EVENT))}
-        className="mt-2 block w-full text-right font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink)]/45 hover:text-[var(--color-rust)]"
+        className="mt-2 block w-full text-right font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink)]/45 hover:text-[var(--color-rust)] focus-visible:text-[var(--color-rust)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
         aria-label="Open the waypoint jumper"
       >
         ⌘K jump

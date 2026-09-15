@@ -4,8 +4,8 @@
   "description": "Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products. Expert in product strategy, NLP/LLM, and enterprise solutions.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#0a0a0a",
+  "background_color": "#F3EDE2",
+  "theme_color": "#F3EDE2",
   "orientation": "portrait-primary",
   "scope": "/",
   "icons": [

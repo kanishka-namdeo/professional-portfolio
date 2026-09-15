@@ -10,12 +10,7 @@ const nextConfig = {
     // For static export, we can't use Next.js image optimization API
     // but next/image still provides lazy loading and proper src attributes
     formats: ['image/avif', 'image/webp'],
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-      },
-    ],
+    remotePatterns: [],
   },
   // Enable React strict mode for better development experience
   reactStrictMode: true,
@@ -43,7 +38,7 @@ const nextConfig = {
           // Content Security Policy to prevent XSS attacks
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://va.vercel-scripts.com https://vitals.vercel-insights.com; frame-ancestors 'none';"
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://va.vercel-scripts.com https://vitals.vercel-insights.com; frame-ancestors 'none';"
           },
           // Prevent clickjacking attacks
           {

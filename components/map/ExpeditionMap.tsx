@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { animate, motion, useMotionValue, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react';
 import { useLenis } from 'lenis/react';
 import { eras } from '@/data/journey';
@@ -38,6 +38,7 @@ export function ExpeditionMap({
   className = 'aspect-[3/2]',
   priority = false,
   showLabels = true,
+  scrollTargetRef,
 }: {
   activeId: string | null;
   className?: string;
@@ -45,14 +46,56 @@ export function ExpeditionMap({
   priority?: boolean;
   /** Waypoint chips are on by default; the hero draws them too — that's the navigation. */
   showLabels?: boolean;
+  /**
+   * Optional ref to the scroll container that should drive the trail-draw progress.
+   * The Journey section passes its own ref so the trail draws as the reader scrolls
+   * through the chapters. When omitted (Hero instance), the map's own container is
+   * used — fine there because the hero trail is a one-shot load animation, not
+   * scroll-driven.
+   */
+  scrollTargetRef?: React.RefObject<HTMLElement | null>;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
   const reduceMotion = useReducedMotion();
   const isHero = priority;
   // Hero: the trail draws itself once on load. Journey: it draws as you travel.
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const pathLength = useSpring(scrollYProgress, { stiffness: 60, damping: 20 });
+  // The scroll target is the journey section (passed in) for the sticky map, or
+  // the map container itself for the hero (where scroll progress only drives the
+  // contour parallax, not the trail).
+  const scrollTarget = scrollTargetRef ?? ref;
+  const { scrollYProgress } = useScroll({ target: scrollTarget, offset: ['start end', 'end start'] });
+  const pathProgress = useSpring(scrollYProgress, { stiffness: 60, damping: 20 });
+  // Manually compute stroke-dasharray/offset for the draw animation.
+  // We use the actual path length (computed after mount) instead of pathLength="1"
+  // to avoid coordinate system conflicts.
+  const [totalLength, setTotalLength] = useState(0);
+  useEffect(() => {
+    if (pathRef.current) {
+      setTotalLength(pathRef.current.getTotalLength());
+    }
+  }, []);
+  // Use motion values for the draw animation
+  const strokeDasharrayMotion = useTransform(pathProgress, (v) => totalLength > 0 ? `${v * totalLength} ${totalLength}` : '0 0');
+  const strokeDashoffsetMotion = useTransform(pathProgress, (v) => totalLength > 0 ? (1 - v) * totalLength : 0);
+  // Apply directly to DOM for reliable SVG rendering
+  useEffect(() => {
+    if (!pathRef.current || isHero || reduceMotion) return;
+    const unsubscribe = strokeDasharrayMotion.on('change', (val) => {
+      if (pathRef.current) {
+        pathRef.current.style.strokeDasharray = String(val);
+      }
+    });
+    const unsubscribe2 = strokeDashoffsetMotion.on('change', (val) => {
+      if (pathRef.current) {
+        pathRef.current.style.strokeDashoffset = String(val);
+      }
+    });
+    return () => {
+      unsubscribe();
+      unsubscribe2();
+    };
+  }, [strokeDasharrayMotion, strokeDashoffsetMotion, isHero, reduceMotion]);
 
   // The "you are here" marker rides the trail: with the hero's load draw, and with
   // scroll progress in the journey map. Positioned by direct DOM writes — a state
@@ -60,7 +103,28 @@ export function ExpeditionMap({
   const pathRef = useRef<SVGPathElement | null>(null);
   const markerRef = useRef<HTMLSpanElement | null>(null);
   const heroDraw = useMotionValue(0);
-  const driver = isHero ? heroDraw : pathLength;
+  const driver = isHero ? heroDraw : pathProgress;
+  // For hero: animate stroke-dasharray/offset directly
+  const heroStrokeDasharrayMotion = useTransform(heroDraw, (v) => totalLength > 0 ? `${v * totalLength} ${totalLength}` : '0 0');
+  const heroStrokeDashoffsetMotion = useTransform(heroDraw, (v) => totalLength > 0 ? (1 - v) * totalLength : 0);
+  // Apply directly to DOM for reliable SVG rendering
+  useEffect(() => {
+    if (!pathRef.current || !isHero || reduceMotion) return;
+    const unsubscribe = heroStrokeDasharrayMotion.on('change', (val) => {
+      if (pathRef.current) {
+        pathRef.current.style.strokeDasharray = String(val);
+      }
+    });
+    const unsubscribe2 = heroStrokeDashoffsetMotion.on('change', (val) => {
+      if (pathRef.current) {
+        pathRef.current.style.strokeDashoffset = String(val);
+      }
+    });
+    return () => {
+      unsubscribe();
+      unsubscribe2();
+    };
+  }, [heroStrokeDasharrayMotion, heroStrokeDashoffsetMotion, isHero, reduceMotion]);
 
   useEffect(() => {
     if (!isHero || reduceMotion) return;
@@ -94,6 +158,12 @@ export function ExpeditionMap({
   // One establishing scene of parallax (the hero map), per the motion guidelines.
   const contourY = useTransform(scrollYProgress, [0, 1], ['-1.6%', '1.6%']);
 
+  const travel = (era: Era) => {
+    const target = `#era-${era.id}`;
+    if (lenis) lenis.scrollTo(target);
+    else document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div ref={ref} className={`relative w-full ${className}`} data-testid="expedition-map">
       <motion.div
@@ -110,10 +180,6 @@ export function ExpeditionMap({
           stroke="var(--color-rust)"
           strokeWidth="0.8"
           strokeLinecap="round"
-          initial={isHero && !reduceMotion ? { pathLength: 0 } : false}
-          animate={isHero && !reduceMotion ? { pathLength: 1 } : undefined}
-          transition={isHero ? { duration: 2.4, ease: [0.16, 1, 0.3, 1], delay: 0.35 } : undefined}
-          style={isHero ? undefined : reduceMotion ? { pathLength: 1 } : { pathLength }}
         />
       </svg>
       {/* waypoint pins — HTML so they stay circular inside the stretched viewBox */}
@@ -155,10 +221,10 @@ export function ExpeditionMap({
             <li key={era.id} className="absolute" style={{ left: `${era.coords.x}%`, top: `${era.coords.y}%` }}>
               <button
                 type="button"
-                onClick={() => lenis?.scrollTo(`#era-${era.id}`)}
+                onClick={() => travel(era)}
                 aria-label={`Travel to ${era.company}`}
                 title={era.company}
-                className={`whitespace-nowrap rounded-none border px-2 py-1 font-[family-name:var(--font-data)] text-[10px] transition-transform ${
+                className={`whitespace-nowrap rounded-none border px-2 py-1 font-[family-name:var(--font-data)] text-[10px] transition-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)] ${
                   activeId === era.id
                     ? 'border-[var(--color-rust)] bg-[var(--color-rust)] text-[var(--color-parchment)]'
                     : 'border-[var(--color-ink)] bg-[var(--color-parchment)] text-[var(--color-ink)] hover:-rotate-2'

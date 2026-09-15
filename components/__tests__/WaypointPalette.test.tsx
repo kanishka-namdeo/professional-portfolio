@@ -1,16 +1,33 @@
 // components/__tests__/WaypointPalette.test.tsx
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { WaypointPalette } from '../WaypointPalette';
 
 const mockScrollTo = jest.fn();
-jest.mock('lenis/react', () => ({ useLenis: () => ({ scrollTo: mockScrollTo }) }));
+const mockStop = jest.fn();
+const mockStart = jest.fn();
+// Stable instance: useLenis is called on every render, and the component's
+// open-effect must see the same object to avoid stop/start re-firing.
+const mockLenis = { scrollTo: mockScrollTo, stop: mockStop, start: mockStart };
+jest.mock('lenis/react', () => ({ useLenis: () => mockLenis }));
 
 function openWithCtrlK() {
   fireEvent.keyDown(window, { key: 'k', ctrlKey: true });
 }
 
+function focusPaletteInput() {
+  // The palette focuses its input in a requestAnimationFrame after paint;
+  // jest.setup maps that to a 0ms timeout, so flush microtasks.
+  return waitFor(() =>
+    expect(screen.getByRole('textbox', { name: /search destinations/i })).toHaveFocus(),
+  );
+}
+
 describe('WaypointPalette', () => {
-  beforeEach(() => mockScrollTo.mockClear());
+  beforeEach(() => {
+    mockScrollTo.mockClear();
+    mockStop.mockClear();
+    mockStart.mockClear();
+  });
 
   it('stays closed until the shortcut is pressed, then lists every destination', () => {
     render(<WaypointPalette />);
@@ -35,14 +52,14 @@ describe('WaypointPalette', () => {
     expect(options[0]).toHaveTextContent('Medulla.AI');
   });
 
-  it('travels to the selected waypoint with Enter and closes', () => {
+  it('travels to the selected waypoint with Enter and closes (instant, per the rail rule)', () => {
     render(<WaypointPalette />);
     openWithCtrlK();
     fireEvent.change(screen.getByRole('textbox', { name: /search destinations/i }), {
       target: { value: 'medulla' },
     });
     fireEvent.keyDown(screen.getByRole('textbox', { name: /search destinations/i }), { key: 'Enter' });
-    expect(mockScrollTo).toHaveBeenCalledWith('#era-language');
+    expect(mockScrollTo).toHaveBeenCalledWith('#era-language', { immediate: true });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
@@ -58,9 +75,40 @@ describe('WaypointPalette', () => {
       <>
         <input aria-label="notes" />
         <WaypointPalette />
-      </>
+      </>,
     );
     fireEvent.keyDown(screen.getByRole('textbox', { name: 'notes' }), { key: 'k', ctrlKey: true });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('lets Ctrl+K close the palette from its own input (the key that opened it)', async () => {
+    render(<WaypointPalette />);
+    openWithCtrlK();
+    await focusPaletteInput();
+    fireEvent.keyDown(screen.getByRole('textbox', { name: /search destinations/i }), {
+      key: 'k',
+      ctrlKey: true,
+    });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('traps Tab on the input: the modal is a single tab stop', async () => {
+    render(<WaypointPalette />);
+    openWithCtrlK();
+    const input = screen.getByRole('textbox', { name: /search destinations/i });
+    await focusPaletteInput();
+    fireEvent.keyDown(input, { key: 'Tab' });
+    expect(input).toHaveFocus();
+    fireEvent.keyDown(input, { key: 'Tab', shiftKey: true });
+    expect(input).toHaveFocus();
+  });
+
+  it('stops Lenis while open so the page behind can’t wheel-scroll, and resumes on close', async () => {
+    render(<WaypointPalette />);
+    openWithCtrlK();
+    await focusPaletteInput();
+    expect(mockStop).toHaveBeenCalledTimes(1);
+    fireEvent.keyDown(screen.getByRole('textbox', { name: /search destinations/i }), { key: 'Escape' });
+    expect(mockStart).toHaveBeenCalledTimes(1);
   });
 });

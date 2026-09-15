@@ -25,7 +25,7 @@ export function JourneyChapter({ era, active }: { era: Era; active: boolean }) {
     <section id={`era-${era.id}`} className="relative min-h-[90vh] py-24" data-era={era.id} data-active={active}>
       <div className="mx-auto max-w-3xl px-6">
         <motion.p {...enter(0)} className="font-[family-name:var(--font-data)] text-xs tracking-[0.2em] text-[var(--color-rust)]">
-          WAYPOINT {era.number} — {era.period.toUpperCase()}
+          WAYPOINT {era.number} — <time>{era.period.toUpperCase()}</time>
         </motion.p>
         <motion.h2 {...enter(1)} className="mt-2 font-[family-name:var(--font-voice)] text-4xl font-bold text-[var(--color-ink)]">
           {era.company}
@@ -52,7 +52,7 @@ export function JourneyChapter({ era, active }: { era: Era; active: boolean }) {
             <p className="font-[family-name:var(--font-data)] text-xs uppercase tracking-widest text-[var(--color-ink)]/60">Receipts from the press</p>
             <ul className="mt-4 space-y-4">
               {era.press.map((p) => (
-                <li key={p.url} className="group max-w-md rotate-[-0.8deg] border border-[var(--color-ink)]/20 bg-white/70 p-4 shadow-[2px_3px_6px_rgba(46,40,30,0.18)] transition-transform duration-150 ease-out hover:-translate-y-0.5 hover:rotate-0">
+                <li key={p.url} className="group max-w-md rotate-[-0.8deg] border border-[var(--color-ink)]/20 bg-[var(--color-paper)]/70 p-4 shadow-[2px_3px_6px_var(--color-shadow-soft)] transition-transform duration-150 ease-out hover:-translate-y-0.5 hover:rotate-0">
                   <a href={p.url} target="_blank" rel="noopener noreferrer" className="block">
                     <span className="font-[family-name:var(--font-data)] text-[11px] uppercase tracking-widest text-[var(--color-rust)]">{p.source} · {p.date}</span>
                     <span className="mt-2 block font-[family-name:var(--font-voice)] text-base leading-snug text-[var(--color-ink)]">“{p.headline}”</span>

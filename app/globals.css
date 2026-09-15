@@ -14,11 +14,19 @@
    Components reference these via Tailwind arbitrary values, e.g.
    text-[var(--color-rust)], font-[family-name:var(--font-voice)]. */
 :root {
-  /* Dispatches palette */
+  /* Dispatches palette (day) */
   --color-parchment: #F3EDE2;
   --color-ink: #2E281E;
   --color-inkline: rgba(90, 110, 140, 0.25);
   --color-rust: #8C4A2F;
+
+  /* Surfaces + chrome that invert at nightfall (paper = raised panels,
+     notepaper = field-note cards, hover = row highlight, shadows). */
+  --color-paper: #FFFFFF;
+  --color-notepaper: #FBF6E9;
+  --color-shadow-soft: rgba(46, 40, 30, 0.18);
+  --color-shadow-hard: rgba(46, 40, 30, 0.3);
+  --color-hover: rgba(255, 255, 255, 0.5);
 
   /* Two-face type system (self-hosted by next/font in app/layout.tsx). */
   --font-voice: var(--font-crimson-pro), Georgia, 'Times New Roman', serif;
@@ -26,6 +34,27 @@
 
   /* Film-grain overlay, applied once on body::after. */
   --grain-opacity: 0.04;
+
+  color-scheme: light;
+}
+
+/* Nightfall — the same pigments after dark. Components reference tokens
+   only, so the whole system inverts by overriding the values here.
+   Backgrounds keep a warm tint (no pure black); the accent is a lightened
+   rust so it clears 4.5:1 on the dark surfaces. */
+.dark {
+  --color-parchment: #1E1913;
+  --color-ink: #EDE5D3;
+  --color-inkline: rgba(237, 229, 211, 0.18);
+  --color-rust: #CE7448;
+  --color-paper: #2A2418;
+  --color-notepaper: #332A1C;
+  --color-shadow-soft: rgba(0, 0, 0, 0.4);
+  --color-shadow-hard: rgba(0, 0, 0, 0.55);
+  --color-hover: rgba(237, 229, 211, 0.07);
+  --grain-opacity: 0.05;
+
+  color-scheme: dark;
 }
 
 html {

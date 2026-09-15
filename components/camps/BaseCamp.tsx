@@ -29,7 +29,9 @@ export function BaseCamp({ camp }: { camp: Camp }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [step, setStep] = useState(0);
   const [mounted, setMounted] = useState(false);
-  const [playing, setPlaying] = useState(false);
+  // Paused mirrors the media element; the toggle below is always rendered so
+  // autoplaying recordings stay pausable (WCAG 2.2.2 Pause, Stop, Hide).
+  const [paused, setPaused] = useState(true);
   const inView = useInView(containerRef, { margin: '-20% 0px' });
   const reduceMotion = useReducedMotion() ?? false;
   const isDesktop = useMediaQuery('(min-width: 768px)');
@@ -39,6 +41,20 @@ export function BaseCamp({ camp }: { camp: Camp }) {
   // Spec guardrails: reduced-motion -> poster + play control; mobile -> tap to
   // play; desktop -> muted autoplay loop. Everything else stays silent.
   const autoPlay = mounted && isDesktop && !reduceMotion;
+
+  useEffect(() => {
+    if (!autoPlay) return;
+    // Autoplay is active, so the recording plays; reflect that on the control.
+    // (onPlay/onPause keep the state truthful afterwards.)
+    setPaused(false);
+    const video = videoRef.current;
+    if (video && video.paused) {
+      // Chromium doesn't honour a post-mount autoplay attribute flip on a
+      // preload="none" element — nudge it explicitly.
+      const played: unknown = video.play();
+      if (played instanceof Promise) played.catch(() => {});
+    }
+  }, [autoPlay]);
 
   // Stable array reference: recomputed only when the camp's annotations change,
   // so useRoughAnnotation's effect doesn't re-fire every render.
@@ -59,7 +75,7 @@ export function BaseCamp({ camp }: { camp: Camp }) {
           <p className="font-[family-name:var(--font-data)] text-xs tracking-[0.2em] text-[var(--color-rust)]">
             BASE CAMP — {camp.title.toUpperCase()} · {camp.year}
           </p>
-          <div className="relative mt-4 border border-[var(--color-ink)] bg-white p-2 shadow-[3px_3px_0_rgba(46,40,30,0.15)]">
+          <div className="relative mt-4 border border-[var(--color-ink)] bg-[var(--color-paper)] p-2 shadow-[3px_3px_0_var(--color-shadow-soft)]">
             <Image
               src={camp.screenshot}
               alt={`${camp.title} — ${camp.tagline}`}
@@ -104,7 +120,8 @@ export function BaseCamp({ camp }: { camp: Camp }) {
               playsInline
               preload="none"
               aria-label={camp.recording.caption}
-              onPlay={() => setPlaying(true)}
+              onPlay={() => setPaused(false)}
+              onPause={() => setPaused(true)}
               ref={(el) => {
                 videoRef.current = el;
                 if (!el) return;
@@ -112,24 +129,27 @@ export function BaseCamp({ camp }: { camp: Camp }) {
                 el.setAttribute('muted', ''); // React sets `muted` as a property only, never the content attribute
               }}
             />
-            {!autoPlay && !playing && (
-              <button
-                type="button"
-                onClick={() => videoRef.current?.play()}
-                aria-label={`Play recording: ${camp.title}`}
-                className="absolute inset-0 flex cursor-pointer items-end justify-start p-3"
-              >
-                <span className="border border-[var(--color-ink)] bg-[var(--color-parchment)] px-3 py-1.5 font-[family-name:var(--font-data)] text-[11px] uppercase tracking-[0.2em] text-[var(--color-rust)] shadow-[2px_2px_0_rgba(46,40,30,0.3)]">
-                  Play recording
-                </span>
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => {
+                const video = videoRef.current;
+                if (!video) return;
+                if (video.paused) void video.play();
+                else video.pause();
+              }}
+              aria-label={paused ? `Play recording: ${camp.title}` : `Pause recording: ${camp.title}`}
+              className="absolute inset-0 flex cursor-pointer items-end justify-start p-3 focus-visible:outline focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
+            >
+              <span className="border border-[var(--color-ink)] bg-[var(--color-parchment)] px-3 py-1.5 font-[family-name:var(--font-data)] text-[11px] uppercase tracking-[0.2em] text-[var(--color-rust)] shadow-[2px_2px_0_var(--color-shadow-hard)]">
+                {paused ? 'Play' : 'Pause'} recording
+              </span>
+            </button>
           </div>
           <p className="mt-1 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink)]/60">{camp.recording.caption}</p>
         </div>
 
         {/* stepping text */}
-        <ol className="space-y-10" aria-label={`${camp.title} — the story`}>
+        <ol className="space-y-10" aria-label={`${camp.title} — how it works`}>
           {camp.steps.map((s, i) => (
             <li
               key={s.heading}

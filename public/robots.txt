@@ -1,62 +1,51 @@
 # Robots.txt for Kanishka Namdeo Portfolio
 # https://kanishkanamdeo.com
 
-# Allow all crawlers
 User-agent: *
 Allow: /
-Disallow: /api/
-Disallow: /_next/
-Disallow: /private/
 
-# Crawl delay is deprecated and ignored by most crawlers
-# Crawl-delay: 1
-
-# Sitemap locations
+# Sitemap
 Sitemap: https://kanishkanamdeo.com/sitemap.xml
 
-# Googlebot specific settings
+# ── Search engine crawlers ────────────────────────────────────────────
+
 User-agent: Googlebot
 Allow: /
-Disallow: /api/
 
-# Googlebot-Image (for image search)
 User-agent: Googlebot-Image
 Allow: /
 
-# Googlebot-Video
 User-agent: Googlebot-Video
 Allow: /
 
-# Googlebot-News
-User-agent: Googlebot-News
-Allow: /
-
-# Bingbot
 User-agent: bingbot
 Allow: /
-Disallow: /api/
-Crawl-delay: 1
 
-# Applebot
 User-agent: Applebot
 Allow: /
 
-# Social media bots
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# ── Social media bots ─────────────────────────────────────────────────
+
 User-agent: Twitterbot
 Allow: /
 
 User-agent: Facebookexternalhit
 Allow: /
 
-# LinkedIn bot
 User-agent: LinkedInBot
 Allow: /
 
-# Pinterest bot
 User-agent: Pinterest
 Allow: /
 
-# AI/LLM crawlers
+# ── AI/LLM crawlers (opted in) ────────────────────────────────────────
+
 User-agent: ClaudeBot
 Allow: /
 
@@ -69,14 +58,14 @@ Allow: /
 User-agent: ChatGPT-User
 Allow: /
 
-# Common crawlers
-User-agent: Slurp
+User-agent: PerplexityBot
 Allow: /
 
-User-agent: DuckDuckBot
+User-agent: Google-Extended
 Allow: /
 
-# Block aggressive/low-quality crawlers
+# ── Block aggressive/low-quality SEO crawlers ─────────────────────────
+
 User-agent: SemrushBot
 Disallow: /
 
@@ -89,6 +78,5 @@ Disallow: /
 User-agent: DotBot
 Disallow: /
 
-# Bytespider (TikTok)
 User-agent: Bytespider
 Disallow: /

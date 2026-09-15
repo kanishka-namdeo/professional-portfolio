@@ -4,106 +4,101 @@ import { WaypointPalette } from '@/components/WaypointPalette';
 import { Journey } from '@/components/journey/Journey';
 import { BaseCamp } from '@/components/camps/BaseCamp';
 import { camps } from '@/data/camps';
+import { faqItems } from '@/data/faq';
 import { Ledger } from '@/components/ledger/Ledger';
+import { writing } from '@/data/ledger';
 import { EndOfTrail } from '@/components/EndOfTrail';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const siteUrl = 'https://kanishkanamdeo.com';
+const personId = `${siteUrl}/#person`;
 
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: 'Remote work capability',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "Absolutely. I've worked with distributed teams across multiple regions. I'm comfortable with async communication, regular video check-ins, and overlap across timezones. I use tools like Notion, Slack, and Jira to keep everything transparent and aligned.",
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Handling disagreements',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Disagreements are healthy when handled right. I focus on the problem, not the person. I ask questions to understand the other perspective, present data when possible, and I\'m always willing to compromise to keep the project moving forward.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Biggest failure and learnings',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "Early in my career, I spent 3 months building analytics dashboards I was personally excited about. Launch day: only 2 users enabled it. The lesson? I solved a problem I thought users had, not one they actually had. Since then, I always validate before I build: 20+ interviews minimum.",
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Why hire me?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "I bring both technical depth and product sensibility. I don't just ship features; I think about the user, the business, and long-term maintainability. I'm low-drama and high-impact, with a track record of scaling products across mobility, SaaS, and robotics domains.",
-      },
-    },
-  ],
-};
+// ── Page-level JSON-LD graph ──────────────────────────────────────────
+// All page schemas in a single @graph: fewer <script> tags, and crawlers
+// can correlate entities (e.g. BlogPosting.author → Person in layout graph).
 
-const breadcrumbSchema = {
+const pageJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: [
+  '@graph': [
+    // FAQ — generated from the same data ContactFAQ renders, so the schema
+    // can't drift from what readers actually see.
     {
-      '@type': 'ListItem',
-      position: 1,
-      name: 'Home',
-      item: siteUrl,
+      '@type': 'FAQPage',
+      mainEntity: faqItems.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
     },
+    // Breadcrumbs — section anchors for single-page navigation.
     {
-      '@type': 'ListItem',
-      position: 2,
-      name: 'The Journey',
-      item: `${siteUrl}/#journey`,
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'The Journey', item: `${siteUrl}/#journey` },
+        { '@type': 'ListItem', position: 3, name: 'Base Camps', item: `${siteUrl}/#camps` },
+        { '@type': 'ListItem', position: 4, name: 'The Ledger', item: `${siteUrl}/#ledger` },
+        { '@type': 'ListItem', position: 5, name: 'End of the Trail', item: `${siteUrl}/#contact` },
+      ],
     },
-    {
-      '@type': 'ListItem',
-      position: 3,
-      name: 'Base Camps',
-      item: `${siteUrl}/#camps`,
-    },
-    {
-      '@type': 'ListItem',
-      position: 4,
-      name: 'The Ledger',
-      item: `${siteUrl}/#ledger`,
-    },
-    {
-      '@type': 'ListItem',
-      position: 5,
-      name: 'End of the Trail',
-      item: `${siteUrl}/#contact`,
-    },
+    // SoftwareApplication — one per Base Camp project.
+    // Gives Google structured data about the projects (stack, repo, description).
+    ...camps.map((camp) => ({
+      '@type': 'SoftwareApplication',
+      name: camp.title,
+      description: camp.tagline,
+      url: camp.repoUrl,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Web',
+      datePublished: camp.year,
+      programmingLanguage: camp.stack,
+      author: { '@id': personId },
+      isAccessibleForFree: true,
+    })),
+    // BlogPosting — one per writing entry from the Ledger.
+    // Enables rich results for articles and links them to the author.
+    ...writing.map((entry) => ({
+      '@type': 'BlogPosting',
+      headline: entry.title,
+      description: entry.subtitle,
+      image: entry.image,
+      datePublished: entry.date,
+      url: entry.url,
+      author: { '@id': personId },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Medium',
+        url: 'https://medium.com',
+      },
+    })),
   ],
 };
 
 export default function Home() {
   return (
     <>
-      {/* Skip to main content link for accessibility */}
-      <a href="#main-content" className="skip-link">
-        Skip to main content
-      </a>
+      {/* Skip-to-content link lives in app/layout.tsx (first tab stop, targets
+          #journey) — it must sit outside <main> to actually skip anything. */}
 
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageJsonLd) }}
       />
 
       {/* Screen reader only heading for SEO */}
       <h1 className="sr-only">Kanishka Namdeo - Product Manager Portfolio - Dubai, UAE</h1>
+
+      {/* Crawler-friendly navigation — gives search engines explicit <a> links
+          to index, complementing the JS-driven waypoint navigation. */}
+      <nav aria-label="Page sections" className="sr-only">
+        <a href="#journey">The Journey</a>
+        <a href="#camps">Base Camps</a>
+        <a href="#ledger">The Ledger</a>
+        <a href="#contact">End of the Trail</a>
+      </nav>
 
       {/* Hero */}
       <Hero />
@@ -126,6 +121,9 @@ export default function Home() {
 
       {/* Fixed right-edge progress rail */}
       <TrailProgress />
+
+      {/* Day/night switch — fixed top-right corner, persists to localStorage */}
+      <ThemeToggle />
 
       {/* ⌘K waypoint jumper — keyboard-first navigation over everything above */}
       <WaypointPalette />

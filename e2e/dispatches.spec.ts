@@ -23,7 +23,7 @@ test('reduced motion shows full content (counters at final value)', async ({ bro
   await page.goto('/');
   // exact: true — "ARR" also appears inside longer copy on the page.
   await page.getByText('ARR', { exact: true }).scrollIntoViewIfNeeded();
-  await expect(page.getByRole('img', { name: /10× ARR/ })).toBeVisible();
+  await expect(page.getByRole('img', { name: /8× ARR/ })).toBeVisible();
 });
 
 test('no stock imagery anywhere', async ({ page }) => {

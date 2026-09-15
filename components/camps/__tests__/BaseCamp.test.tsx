@@ -56,6 +56,8 @@ describe('BaseCamp', () => {
     expect(video).toHaveAttribute('preload', 'none');
     expect(video).toHaveAttribute('poster', '/recordings/agent-canvas.jpg');
     expect(screen.queryByRole('button', { name: /play recording/i })).not.toBeInTheDocument();
+    // autoplaying content must stay pausable (WCAG 2.2.2)
+    expect(screen.getByRole('button', { name: 'Pause recording: AgentCanvas' })).toBeInTheDocument();
   });
   it('renders all steps as readable text', () => {
     render(<BaseCamp camp={camps[0]} />);

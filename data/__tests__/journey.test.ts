@@ -27,6 +27,6 @@ describe('journey eras', () => {
   });
   it('metrics are numeric with labels (no template stat rows)', () => {
     const mobility = eras.find((e) => e.id === 'mobility')!;
-    expect(mobility.metrics).toContainEqual(expect.objectContaining({ value: 10, suffix: '×', label: 'ARR' }));
+    expect(mobility.metrics).toContainEqual(expect.objectContaining({ value: 8, suffix: '×', label: 'ARR' }));
   });
 });

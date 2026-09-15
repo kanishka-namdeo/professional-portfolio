@@ -35,7 +35,7 @@ function buildItems(): PaletteItem[] {
       kind: 'camp' as const,
     })),
     { id: 'ledger', label: 'The Ledger', sub: 'Everything else, plainly', scrollTo: '#ledger', kind: 'section' },
-    { id: 'contact', label: 'End of the Trail', sub: 'Say hello', scrollTo: '#contact', kind: 'section' },
+    { id: 'contact', label: 'End of the Trail', sub: 'Write in', scrollTo: '#contact', kind: 'section' },
     ...writing.map((w) => ({
       id: w.url,
       label: w.title,
@@ -60,13 +60,19 @@ export function WaypointPalette() {
   const restoreFocus = useRef<Element | null>(null);
   const items = useMemo(buildItems, []);
 
+  // Mirrors `open` for the global key listener, which is registered once.
+  const openRef = useRef(open);
+  openRef.current = open;
+
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return items;
     return items.filter((item) => `${item.label} ${item.sub}`.toLowerCase().includes(q));
   }, [items, query]);
 
-  // Global opener. Ignore keystrokes while typing in a field.
+  // Global opener. Ignore "/" while typing in a field; Cmd/Ctrl+K is allowed
+  // from the palette's own input (it closes) and from anywhere else except
+  // foreign text fields (where it would corrupt the user's text).
   useEffect(() => {
     const isTypingTarget = (target: EventTarget | null) => {
       const el = target as HTMLElement | null;
@@ -74,10 +80,24 @@ export function WaypointPalette() {
       const tag = el.tagName;
       return tag === 'INPUT' || tag === 'TEXTAREA' || el.isContentEditable;
     };
+    const inPaletteInput = (target: EventTarget | null) =>
+      !!(target as HTMLElement | null)?.closest?.('[data-palette-input]');
     const onKeyDown = (event: KeyboardEvent) => {
-      if (isTypingTarget(event.target)) return;
+      const target = event.target;
+      const typing = isTypingTarget(target);
       const cmdK = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k';
-      if (cmdK || event.key === '/') {
+      if (cmdK) {
+        if (typing && inPaletteInput(target)) {
+          event.preventDefault();
+          if (openRef.current) setOpen(false);
+          return;
+        }
+        if (typing) return;
+        event.preventDefault();
+        setOpen(true);
+        return;
+      }
+      if (event.key === '/' && !typing) {
         event.preventDefault();
         setOpen((prev) => !prev);
       }
@@ -90,6 +110,16 @@ export function WaypointPalette() {
       window.removeEventListener(OPEN_PALETTE_EVENT, onOpenEvent);
     };
   }, []);
+
+  // While the dialog is open, stop the Lenis engine so wheel input can't
+  // scroll the page behind the modal (and the result list scrolls natively).
+  // Native key/wheel scrolling of the document is already inert: the page
+  // scrolls only through Lenis, which is clipped while stopped.
+  useEffect(() => {
+    if (!open || !lenis) return;
+    lenis.stop();
+    return () => lenis.start();
+  }, [open, lenis]);
 
   useEffect(() => {
     if (open) {
@@ -106,15 +136,31 @@ export function WaypointPalette() {
 
   if (!open) return null;
 
-  const travel = (item: PaletteItem) => {
+  const travel = (item: PaletteItem, opts?: { immediate?: boolean }) => {
     setOpen(false);
+    // travel() runs before the open-effect cleanup has restarted Lenis, and
+    // a stopped Lenis ignores scrollTo — so resume it explicitly first.
+    lenis?.start();
     if (item.href) {
       window.open(item.href, '_blank', 'noopener,noreferrer');
       return;
     }
     if (!item.scrollTo) return;
-    if (lenis) lenis.scrollTo(item.scrollTo);
-    else document.querySelector(item.scrollTo)?.scrollIntoView({ behavior: 'smooth' });
+    if (lenis) {
+      // Keyboard travel is instant (house rule, same as the rail); mouse is
+      // smooth. Lenis itself forces immediate under reduced motion.
+      lenis.scrollTo(item.scrollTo, opts?.immediate ? { immediate: true } : undefined);
+    } else {
+      document.querySelector(item.scrollTo)?.scrollIntoView({ behavior: opts?.immediate ? 'auto' : 'smooth' });
+    }
+  };
+
+  // The input is the dialog's only focusable element, so confining Tab to it
+  // is the whole focus trap.
+  const trapFocus = (event: React.KeyboardEvent) => {
+    if (event.key !== 'Tab') return;
+    event.preventDefault();
+    inputRef.current?.focus();
   };
 
   const onKeyDown = (event: React.KeyboardEvent) => {
@@ -134,7 +180,7 @@ export function WaypointPalette() {
       case 'Enter': {
         event.preventDefault();
         const item = results[active];
-        if (item) travel(item);
+        if (item) travel(item, { immediate: true });
         break;
       }
       default:
@@ -147,16 +193,18 @@ export function WaypointPalette() {
       role="dialog"
       aria-modal="true"
       aria-label="Jump to a waypoint"
+      onKeyDown={trapFocus}
       className="fixed inset-0 z-[70] flex items-start justify-center bg-[var(--color-ink)]/25 px-4 pt-[12vh]"
       onClick={(event) => {
         if (event.target === event.currentTarget) setOpen(false);
       }}
     >
-      <div className="w-full max-w-lg border border-[var(--color-ink)] bg-[var(--color-parchment)] shadow-[6px_6px_0_rgba(46,40,30,0.35)]">
+      <div className="w-full max-w-lg border border-[var(--color-ink)] bg-[var(--color-parchment)] shadow-[6px_6px_0_var(--color-shadow-hard)]">
         <div className="flex items-center gap-3 border-b border-[var(--color-inkline)] px-4 py-3">
           <span aria-hidden className="font-[family-name:var(--font-data)] text-xs text-[var(--color-rust)]">⌘K</span>
           <input
             ref={inputRef}
+            data-palette-input
             value={query}
             onChange={(event) => {
               setQuery(event.target.value);
@@ -200,7 +248,7 @@ export function WaypointPalette() {
           ))}
         </ul>
         <p className="border-t border-[var(--color-inkline)] px-4 py-2 font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink)]/45">
-          ↑↓ move · ↵ travel · esc close — also on the trail rail: ↑↓ jumps between waypoints
+          ↑↓ move · ↵ travel · esc / ⌘K close — also on the trail rail: ↑↓ jumps between waypoints
         </p>
       </div>
     </div>

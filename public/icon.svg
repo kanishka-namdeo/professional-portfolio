@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="20" fill="#0a0a0a"/>
-  <text x="50" y="68" font-family="system-ui, sans-serif" font-size="45" font-weight="700" fill="white" text-anchor="middle">KN</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <rect width="100" height="100" rx="16" fill="#F3EDE2"/>
+  <rect x="6.6" y="6.6" width="86.8" height="86.8" rx="11" fill="none" stroke="#2E281E" stroke-opacity="0.22" stroke-width="1.5"/>
+  <g>
+    <path d="M 17 80 C 20.83 77.33 32.83 70.00 40 64 C 47.17 58.00 52.83 51.33 60 44 C 67.17 36.67 79.17 24.00 83 20" fill="none" stroke="#8C4A2F" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="17" cy="80" r="6" fill="#8C4A2F"/>
+    <circle cx="83" cy="20" r="10.5" fill="#8C4A2F"/>
+  </g>
 </svg>
