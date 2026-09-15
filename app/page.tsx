@@ -1,14 +1,19 @@
+import dynamic from 'next/dynamic';
 import Hero from '@/components/Hero';
 import { TrailProgress } from '@/components/TrailProgress';
 import { WaypointPalette } from '@/components/WaypointPalette';
 import { Journey } from '@/components/journey/Journey';
-import { BaseCamp } from '@/components/camps/BaseCamp';
 import { camps } from '@/data/camps';
 import { faqItems } from '@/data/faq';
-import { Ledger } from '@/components/ledger/Ledger';
 import { writing } from '@/data/ledger';
-import { EndOfTrail } from '@/components/EndOfTrail';
 import { ThemeToggle } from '@/components/ThemeToggle';
+
+// Below-the-fold islands load as separate JS chunks. ssr: true (the default in
+// the App Router) keeps their HTML in the server-rendered document — this is a
+// JS-chunk split, not a content change, so no `loading` fallback is needed.
+const BaseCamp = dynamic(() => import('@/components/camps/BaseCamp').then((m) => m.BaseCamp), { ssr: true });
+const Ledger = dynamic(() => import('@/components/ledger/Ledger').then((m) => m.Ledger), { ssr: true });
+const EndOfTrail = dynamic(() => import('@/components/EndOfTrail').then((m) => m.EndOfTrail), { ssr: true });
 
 const siteUrl = 'https://kanishkanamdeo.com';
 const personId = `${siteUrl}/#person`;

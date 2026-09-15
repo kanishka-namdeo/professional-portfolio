@@ -70,12 +70,6 @@ export function ExpeditionMap({
   // We use the actual path length (computed after mount) instead of pathLength="1"
   // to avoid coordinate system conflicts.
   const [totalLength, setTotalLength] = useState(0);
-  useEffect(() => {
-    // Guard: jsdom (and non-browser SVG impls) lack SVGGeometryElement APIs.
-    if (pathRef.current && typeof pathRef.current.getTotalLength === 'function') {
-      setTotalLength(pathRef.current.getTotalLength());
-    }
-  }, []);
   // Use motion values for the draw animation
   const strokeDasharrayMotion = useTransform(pathProgress, (v) => totalLength > 0 ? `${v * totalLength} ${totalLength}` : '0 0');
   const strokeDashoffsetMotion = useTransform(pathProgress, (v) => totalLength > 0 ? (1 - v) * totalLength : 0);
@@ -99,10 +93,69 @@ export function ExpeditionMap({
   }, [strokeDasharrayMotion, strokeDashoffsetMotion, isHero, reduceMotion]);
 
   // The "you are here" marker rides the trail: with the hero's load draw, and with
-  // scroll progress in the journey map. Positioned by direct DOM writes — a state
-  // update per scroll frame would re-render every pin, and this runs at 60fps.
+  // scroll progress in the journey map. Positioned by direct DOM writes from a
+  // pre-sampled cache — a state update per scroll frame would re-render every
+  // pin, and this runs at 60fps with zero SVG geometry calls per frame.
   const pathRef = useRef<SVGPathElement | null>(null);
   const markerRef = useRef<HTMLSpanElement | null>(null);
+  // Trail sample cache: getPointAtLength is pre-sampled once per mount, so the
+  // per-frame handler interpolates between samples instead of calling SVG
+  // geometry APIs every frame.
+  const samplesRef = useRef<Pt[] | null>(null);
+  // Container px size cache: the svg is preserveAspectRatio="none", so viewBox
+  // units (0-100) are literally % of the box — % maps to px via these.
+  const sizeRef = useRef<{ w: number; h: number } | null>(null);
+  const lastProgressRef = useRef(0);
+
+  // Positions the traveller from the sample cache. Pure DOM writes — safe to
+  // call on every frame and again on resize.
+  const applyMarker = (v: number) => {
+    const marker = markerRef.current;
+    const samples = samplesRef.current;
+    const size = sizeRef.current;
+    if (!marker || !samples || samples.length < 2 || !size) return;
+    const clamped = Math.max(0, Math.min(1, v));
+    const idx = clamped * (samples.length - 1);
+    const i = Math.floor(idx);
+    const j = Math.min(samples.length - 1, i + 1);
+    const t = idx - i;
+    const x = samples[i].x + (samples[j].x - samples[i].x) * t;
+    const y = samples[i].y + (samples[j].y - samples[i].y) * t;
+    // The old translate(-50%, -50%) centring folds into the same transform.
+    marker.style.transform = `translate(calc(${(x / 100) * size.w}px - 50%), calc(${(y / 100) * size.h}px - 50%))`;
+    marker.style.opacity = clamped < 0.005 ? '0' : '1';
+    lastProgressRef.current = clamped;
+  };
+
+  // Measure + pre-sample the trail once per mount; keep the px cache fresh on
+  // resize (the marker is repositioned from the cached progress).
+  useEffect(() => {
+    const container = ref.current;
+    const path = pathRef.current;
+    if (!container) return;
+    sizeRef.current = { w: container.clientWidth, h: container.clientHeight };
+    // Guard: jsdom (and non-browser SVG impls) lack SVGGeometryElement APIs —
+    // skip measuring and sampling entirely when they are unavailable.
+    if (path && typeof path.getTotalLength === 'function' && typeof path.getPointAtLength === 'function') {
+      const total = path.getTotalLength();
+      setTotalLength(total);
+      const SAMPLE_COUNT = 200;
+      const samples: Pt[] = [];
+      for (let i = 0; i < SAMPLE_COUNT; i++) {
+        const p = path.getPointAtLength((i / (SAMPLE_COUNT - 1)) * total);
+        samples.push({ x: p.x, y: p.y });
+      }
+      samplesRef.current = samples;
+    }
+    if (typeof ResizeObserver === 'undefined') return; // jsdom guard
+    const observer = new ResizeObserver(() => {
+      sizeRef.current = { w: container.clientWidth, h: container.clientHeight };
+      applyMarker(lastProgressRef.current);
+    });
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
   const heroDraw = useMotionValue(0);
   const driver = isHero ? heroDraw : pathProgress;
   // For hero: animate stroke-dasharray/offset directly
@@ -133,27 +186,15 @@ export function ExpeditionMap({
     return () => controls.stop();
   }, [isHero, reduceMotion, heroDraw]);
 
-  useMotionValueEvent(driver, 'change', (v) => {
-    const path = pathRef.current;
-    const marker = markerRef.current;
-    if (!path || !marker || typeof path.getTotalLength !== 'function') return;
-    const clamped = Math.max(0, Math.min(1, v));
-    const point = path.getPointAtLength(path.getTotalLength() * clamped);
-    marker.style.left = `${point.x}%`;
-    marker.style.top = `${point.y}%`;
-    marker.style.opacity = clamped < 0.005 ? '0' : '1';
-  });
+  useMotionValueEvent(driver, 'change', applyMarker);
 
-  // Reduced motion: no draw, no ride — park the marker at the destination (2026).
+  // Reduced motion: no draw, no ride — park the marker at the destination (2026)
+  // using the last trail sample (applyMarker(1) interpolates to samples[N-1]).
   useEffect(() => {
     if (!reduceMotion) return;
-    const path = pathRef.current;
     const marker = markerRef.current;
-    if (!path || !marker || typeof path.getTotalLength !== 'function') return;
-    const end = path.getPointAtLength(path.getTotalLength());
-    marker.style.left = `${end.x}%`;
-    marker.style.top = `${end.y}%`;
-    marker.style.opacity = '1';
+    if (!marker || !samplesRef.current) return; // jsdom/geometry guard
+    applyMarker(1);
   }, [reduceMotion]);
 
   // One establishing scene of parallax (the hero map), per the motion guidelines.
@@ -207,12 +248,14 @@ export function ExpeditionMap({
           );
         })}
       </span>
-      {/* the traveller: rides the trail with the draw / with scroll */}
+      {/* the traveller: rides the trail with the draw / with scroll. Anchored
+          at left:0/top:0 and moved via transform from the px cache; the
+          (-50%,-50%) centring is folded into the per-frame transform. */}
       <span
         ref={markerRef}
         aria-hidden
         className="pointer-events-none absolute z-10 h-3.5 w-3.5 rounded-full border-2 border-[var(--color-rust)] bg-[var(--color-parchment)] shadow-[0_0_0_3px_rgba(243,237,226,0.85)]"
-        style={{ left: '0%', top: '0%', opacity: 0, transform: 'translate(-50%, -50%)' }}
+        style={{ left: 0, top: 0, opacity: 0, transform: 'translate(-50%, -50%)' }}
       >
         <span className="absolute inset-[2px] rounded-full bg-[var(--color-rust)]" />
       </span>

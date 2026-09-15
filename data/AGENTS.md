@@ -12,6 +12,7 @@ Static data layer - TypeScript data files for camps (project showcases), journey
 - Arrays must be `readonly` or use `as const` where immutability is required
 - IDs must be unique within their collections
 - Image paths must reference `/projects/` or `/recordings/` as appropriate
+- Camp screenshots ship pre-optimized (WebP, ≤2560w) — the GitHub Pages static export serves them unoptimized, so source files must be dieted via `scripts/optimize-images.mjs`, not committed raw
 - External URLs must be valid and reachable
 - Coordinates in journey data are percentages (0-100) for map positioning
 - Year fields use string format (e.g., '2025', '2026')

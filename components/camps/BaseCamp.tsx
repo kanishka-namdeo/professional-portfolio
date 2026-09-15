@@ -32,7 +32,10 @@ export function BaseCamp({ camp }: { camp: Camp }) {
   // Paused mirrors the media element; the toggle below is always rendered so
   // autoplaying recordings stay pausable (WCAG 2.2.2 Pause, Stop, Hide).
   const [paused, setPaused] = useState(true);
-  const inView = useInView(containerRef, { margin: '-20% 0px' });
+  // once: annotations are created on first entry and then only shown/hidden per
+  // step (useRoughAnnotation's step effect) — without `once`, every scroll
+  // re-entry tore the marks down and re-animated them from scratch.
+  const inView = useInView(containerRef, { margin: '-20% 0px', once: true });
   const reduceMotion = useReducedMotion() ?? false;
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
@@ -113,7 +116,11 @@ export function BaseCamp({ camp }: { camp: Camp }) {
           <div className="relative mt-4">
             <video
               data-testid="camp-recording"
-              className="block w-full border border-[var(--color-ink)]/20"
+              // Intrinsic 1280x720 (poster size) so the browser reserves the
+              // right box before metadata loads — kills layout shift (CLS).
+              width={1280}
+              height={720}
+              className="block h-auto w-full border border-[var(--color-ink)]/20"
               src={camp.recording.src}
               poster={camp.recording.poster}
               autoPlay={autoPlay}

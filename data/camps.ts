@@ -70,7 +70,7 @@ export const camps: Camp[] = [
     repo: 'thetell',
     title: 'thetell',
     tagline: 'Corporate intelligence: two agents in debate over 25+ signal sources.',
-    screenshot: '/projects/thetell.png',
+    screenshot: '/projects/thetell.webp',
     repoUrl: 'https://github.com/kanishka-namdeo/thetell',
     stack: ['TypeScript', 'Next.js', 'Neo4j', 'LlamaIndex'],
     year: '2025',

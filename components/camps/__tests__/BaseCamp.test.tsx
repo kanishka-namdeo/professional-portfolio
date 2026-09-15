@@ -1,10 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import { BaseCamp } from '../BaseCamp';
 import { camps } from '@/data/camps';
+import { useInView } from 'motion/react';
 
 const mockReduceMotion = jest.fn(() => true);
 jest.mock('motion/react', () => ({
-  useInView: () => true,
+  useInView: jest.fn(() => true),
   useReducedMotion: () => mockReduceMotion(),
   motion: new Proxy({}, { get: (_, tag) => tag === 'path' ? 'path' : (props: Record<string, unknown>) => <div {...props} /> }),
 }));
@@ -42,7 +43,17 @@ describe('BaseCamp', () => {
     const video = screen.getByTestId('camp-recording');
     expect(video).not.toHaveAttribute('autoplay');
     expect(video).toHaveAttribute('poster', '/recordings/agent-canvas.jpg');
+    // Intrinsic 1280x720 (poster size) so the browser reserves the box pre-metadata (CLS).
+    expect(video).toHaveAttribute('width', '1280');
+    expect(video).toHaveAttribute('height', '720');
     expect(screen.getByRole('button', { name: 'Play recording: AgentCanvas' })).toBeInTheDocument();
+  });
+  it('creates annotations once — useInView fires with once:true so re-entries never re-animate the marks', () => {
+    render(<BaseCamp camp={camps[0]} />);
+    expect(useInView).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ once: true, margin: '-20% 0px' })
+    );
   });
   it('autoplays a silent looped recording on desktop without reduced motion', () => {
     mockReduceMotion.mockReturnValue(false);

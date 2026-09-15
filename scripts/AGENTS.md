@@ -20,7 +20,9 @@ Build and generation scripts for brand assets, map generation, and video renderi
 - Keep scripts focused: one primary responsibility per file
 - Use `console.error()` for errors; `console.log()` for progress output
 - Update corresponding tests in `__tests__/` when modifying script behavior
-- Dependencies: Node.js built-ins preferred; external deps require parent approval
+- Dependencies: Node.js built-ins preferred; external deps require parent approval (`sharp` is approved for `optimize-images.mjs` — already in the dependency graph, runs offline only)
+- `optimize-images.mjs` exists because the GitHub Pages static export serves `public/` files unoptimized: oversized sources (e.g. project screenshots) must be resized/re-encoded (WebP q82, ≤2560w) before commit
+- `lib/contours.mjs` keeps `contours.svg` (the LCP image) on a byte diet: Douglas-Peucker ring simplification (`DP_TOLERANCE` 0.4 viewBox units), integer coordinate rounding, relative `l` deltas, `MIN_POINT_STEP` 0.4 — regenerate with `pnpm run map`; do not ship the raw marching-squares output
 
 ## Verification
 - Tests in `__tests__/` run with `node --test` or project test runner
@@ -30,3 +32,4 @@ Build and generation scripts for brand assets, map generation, and video renderi
 ## Child DOX Index
 - `lib/` - Script utilities (brand-mark.mjs, contours.mjs)
 - `__tests__/` - Script tests (contours.test.mjs)
+- `optimize-images.mjs` - sharp-based image diet for unoptimized static export
