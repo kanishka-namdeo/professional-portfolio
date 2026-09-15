@@ -18,6 +18,7 @@ Custom React hooks for state management and side effects
 - Export types alongside hooks when interfaces are complex
 - Document hook parameters and return values with JSDoc
 - Prefer composition over complex internal state
+- Hooks that paint with theme tokens (e.g. `useRoughAnnotation` reads `--color-rust`) must read the token live at creation time via `getComputedStyle` — never hardcode a day-theme hex — and must re-create their output when the `dark` class flips on `<html>` (MutationObserver on documentElement's class attribute, cleaned up on unmount)
 
 ## Verification
 - Unit tests in __tests__/ subdirectory

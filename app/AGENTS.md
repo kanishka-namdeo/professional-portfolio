@@ -22,6 +22,7 @@ Owns the Next.js App Router entry points: root layout with theme/font providers,
   - Base Camps (projects)
   - Ledger (skills/tools)
   - End of Trail (contact)
+  - Below-the-fold islands (BaseCamp, Ledger, EndOfTrail) load via `next/dynamic` with `ssr: true` — a JS-chunk split only: their HTML stays server-rendered, no `loading` fallback. Hero and Journey stay in the critical-path import graph.
   - Fixed UI: TrailProgress, ThemeToggle, WaypointPalette
   - Page-level JSON-LD in single `@graph` (FAQPage, BreadcrumbList, SoftwareApplication per camp, BlogPosting per writing entry); BlogPosting `datePublished` converts ledger "Mon YYYY" display dates to ISO 8601 via `toISODate` in page.tsx
   - Crawler-friendly `<nav>` with explicit section links (each link is `sr-only-focusable`: clipped until keyboard focus reveals it as a chip — no invisible tab stops); the four section roots (`#journey`, `#camps`, `#ledger`, `#contact`) carry `tabIndex={-1}` so skip/anchor jumps land focus on the section

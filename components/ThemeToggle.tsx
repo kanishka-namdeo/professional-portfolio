@@ -5,8 +5,12 @@ import { useEffect, useState } from 'react';
 const STORAGE_KEY = 'dispatches-theme';
 
 function setThemeMeta(dark: boolean) {
-  const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', dark ? '#1E1913' : '#F3EDE2');
+  // layout.tsx emits two media-scoped metas (light + dark); after a toggle the
+  // active palette wins everywhere, so point both at the active colour.
+  const color = dark ? '#1E1913' : '#F3EDE2';
+  document.querySelectorAll('meta[name="theme-color"]').forEach((meta) => {
+    meta.setAttribute('content', color);
+  });
 }
 
 /**

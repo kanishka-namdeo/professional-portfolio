@@ -195,3 +195,61 @@ body::after {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================================================
+   Print — the field log (/field-log) is the print-first surface, but any page
+   prints as expedition paperwork: fixed chrome off, day palette forced so
+   dark-mode readers still get ink on parchment.
+   ============================================================================ */
+@media print {
+  /* Same specificity as the token blocks above and later in source order,
+     so the light values win even when html carries .dark. */
+  :root,
+  .dark {
+    --color-parchment: #F3EDE2;
+    --color-ink: #2E281E;
+    --color-inkline: rgba(90, 110, 140, 0.25);
+    --color-rust: #8C4A2F;
+    --color-ink-muted: #6B6153;
+    --color-on-rust: #F3EDE2;
+    --color-rust-text: #8C4A2F;
+    --color-paper: #FFFFFF;
+    --color-notepaper: #FBF6E9;
+    --color-shadow-soft: rgba(46, 40, 30, 0.18);
+    --color-shadow-hard: rgba(46, 40, 30, 0.3);
+    --color-hover: rgba(255, 255, 255, 0.5);
+    --grain-opacity: 0;
+    color-scheme: light;
+  }
+
+  /* No chrome, no grain, no recordings — paper gets the story only. */
+  nav[aria-label='Trail progress'],
+  button[aria-label^='Open waypoint jumper'],
+  button[aria-label='Toggle dark theme'],
+  [role='dialog'],
+  body::after,
+  video {
+    display: none !important;
+  }
+
+  /* Chapters, field cards and log rows keep together across page breaks. */
+  article,
+  figure,
+  blockquote,
+  li {
+    break-inside: avoid;
+  }
+
+  /* A4-friendly page setup + the field log's print-first sizing. */
+  @page {
+    margin: 12mm;
+  }
+
+  body {
+    background: var(--color-parchment);
+  }
+
+  .field-log {
+    font-size: 11pt;
+  }
+}

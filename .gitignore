@@ -80,3 +80,6 @@ master_data.json
 
 # Local agent scratch
 .video_agent/
+
+# scratch held by a zombie process; delete when free
+.mock/

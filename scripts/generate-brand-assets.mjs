@@ -5,8 +5,10 @@
 //   public/favicon.ico           16/32/48, PNG-in-ICO
 //   public/apple-touch-icon.png  180x180, opaque
 //   public/icon.svg              the scalable favicon
-//   public/icon-192.png           maskable PWA
-//   public/icon-512.png           maskable PWA
+//   public/icon-192.png          PWA icon (purpose "any")
+//   public/icon-512.png          PWA icon (purpose "any")
+//   public/icon-192-maskable.png PWA icon (purpose "maskable")
+//   public/icon-512-maskable.png PWA icon (purpose "maskable")
 //
 // The mark is drawn as SVG and rasterized with sharp; the social card is
 // composed as HTML and screenshotted in Chromium at 2x, so the display type is
@@ -198,11 +200,19 @@ async function writeIcons() {
     .png({ compressionLevel: 9 })
     .toFile(join(PUBLIC, 'apple-touch-icon.png'));
 
-  // PWA icons are declared "any maskable": full-bleed ground, route pulled into
-  // the 80% safe circle so a circular or squircle mask never clips the waypoint.
+  // PWA icons are declared "any": the general-purpose rendition of the mark.
   for (const size of [192, 512]) {
     const png = await markPng({ size, plate: false, rounded: false, scale: 0.7 });
     writeFileSync(join(PUBLIC, `icon-${size}.png`), png);
+  }
+
+  // Maskable variants (purpose "maskable"): full-bleed parchment ground with
+  // the mark shrunk into the ~80% safe circle. At scale 0.7 the farthest ink
+  // (the summit waypoint's rim) sits ~38.5/50 from centre, inside the 40/50
+  // safe radius — a circular or squircle mask never clips the trail.
+  for (const size of [192, 512]) {
+    const png = await markPng({ size, plate: false, rounded: false, scale: 0.7 });
+    writeFileSync(join(PUBLIC, `icon-${size}-maskable.png`), png);
   }
 }
 
@@ -212,7 +222,7 @@ async function main() {
   const css = await fontCss();
   await writeIcons();
   await writeOgImage(css);
-  console.log('wrote public/: og-image.jpg, favicon.ico, apple-touch-icon.png, icon.svg, icon-192.png, icon-512.png');
+  console.log('wrote public/: og-image.jpg, favicon.ico, apple-touch-icon.png, icon.svg, icon-192.png, icon-512.png, icon-192-maskable.png, icon-512-maskable.png');
 }
 
 main().catch((err) => {

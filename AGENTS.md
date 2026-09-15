@@ -175,5 +175,5 @@ When the user requests a durable behavior change, record it here or in the relev
 - `hooks/` — Custom React hooks (useActiveEra, useVisitedEras)
 - `public/` — Static assets: images, icons, fonts, PWA manifest
 - `remotion/` — Remotion video generation and compositions
-- `scripts/` — Build scripts: brand assets, map generation
+- `scripts/` — Build scripts: brand assets, map generation (dieted contours.svg), image optimization
 

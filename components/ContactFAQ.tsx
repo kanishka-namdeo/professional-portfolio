@@ -44,7 +44,7 @@ export default function ContactFAQ() {
                   height="14"
                   aria-hidden="true"
                   className={`shrink-0 transition duration-200 ease-out ${
-                    isOpen ? 'rotate-180 text-[var(--color-rust)]' : 'text-[var(--color-ink)]/35'
+                    isOpen ? 'rotate-180 text-[var(--color-rust)]' : 'text-[var(--color-ink-muted)]'
                   }`}
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />

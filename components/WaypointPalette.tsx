@@ -205,12 +205,15 @@ export function WaypointPalette() {
       aria-modal="true"
       aria-label="Jump to a waypoint"
       onKeyDown={trapFocus}
-      className="fixed inset-0 z-[70] flex items-start justify-center bg-[var(--color-ink)]/25 px-4 pt-[12vh]"
+      // Desktop keeps the centred drop panel (items-start + 12vh); below md it
+      // docks to the bottom edge as a full-width sheet (thumb reach, and the
+      // panel never covers the MobileTrailChip the tap came from).
+      className="fixed inset-0 z-[70] flex items-end justify-center bg-[var(--color-ink)]/25 md:items-start md:px-4 md:pt-[12vh]"
       onClick={(event) => {
         if (event.target === event.currentTarget) setOpen(false);
       }}
     >
-      <div className="w-full max-w-lg border border-[var(--color-ink)] bg-[var(--color-parchment)] shadow-[6px_6px_0_var(--color-shadow-hard)]">
+      <div className="max-h-[80dvh] w-full max-w-lg overflow-y-auto rounded-t-lg border border-[var(--color-ink)] bg-[var(--color-parchment)] shadow-[6px_6px_0_var(--color-shadow-hard)] md:max-h-none md:overflow-visible md:rounded-none">
         <div className="flex items-center gap-3 border-b border-[var(--color-inkline)] px-4 py-3">
           <span aria-hidden className="font-[family-name:var(--font-data)] text-xs text-[var(--color-rust)]">⌘K</span>
           <input
@@ -260,7 +263,7 @@ export function WaypointPalette() {
             </li>
           ))}
         </ul>
-        <p className="border-t border-[var(--color-inkline)] px-4 py-2 font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink-muted)]">
+        <p className="border-t border-[var(--color-inkline)] px-4 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink-muted)] md:pb-2">
           ↑↓ move · ↵ travel · esc / ⌘K close — also on the trail rail: ↑↓ jumps between waypoints
         </p>
       </div>

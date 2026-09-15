@@ -30,7 +30,7 @@ export function MetricCounter({ value, suffix, label }: EraMetric) {
         <span ref={ref}>{value}</span>
         {suffix && <span className="text-[var(--color-rust)]">{suffix}</span>}
       </span>
-      <span className="font-[family-name:var(--font-data)] text-[11px] leading-tight text-[var(--color-ink)]/60">{label}</span>
+      <span className="font-[family-name:var(--font-data)] text-[11px] leading-tight text-[var(--color-ink-muted)]">{label}</span>
     </div>
   );
 }

@@ -6,10 +6,14 @@ import { useActiveEra } from './useActiveEra';
 
 const STORAGE_KEY = 'dispatches:visited-eras';
 
+/** An era only counts once the reader has stayed in it this long. */
+const DWELL_MS = 1500;
+
 /**
- * Records every era the reader has travelled through (an era counts as visited
- * once it becomes the active chapter). Survives reloads within the session, so
- * the completion easter egg doesn't reset on refresh.
+ * Records every era the reader has actually travelled through. An era counts
+ * as visited only after ~1.5s of continuous active time — scrolling past a
+ * chapter without pausing doesn't count, so the completion easter egg stays
+ * something you earn by reading. Survives reloads within the session.
  */
 export function useVisitedEras(): Set<string> {
   const activeId = useActiveEra();
@@ -31,17 +35,22 @@ export function useVisitedEras(): Set<string> {
 
   useEffect(() => {
     if (!activeId) return;
-    setVisited((prev) => {
-      if (prev.has(activeId)) return prev;
-      const next = new Set(prev);
-      next.add(activeId);
-      try {
-        window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify([...next]));
-      } catch {
-        // Storage unavailable — continue in-memory.
-      }
-      return next;
-    });
+    // The timer restarts whenever the active era changes: leaving early
+    // cancels the dwell, and coming back starts it over.
+    const timer = window.setTimeout(() => {
+      setVisited((prev) => {
+        if (prev.has(activeId)) return prev;
+        const next = new Set(prev);
+        next.add(activeId);
+        try {
+          window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify([...next]));
+        } catch {
+          // Storage unavailable — continue in-memory.
+        }
+        return next;
+      });
+    }, DWELL_MS);
+    return () => window.clearTimeout(timer);
   }, [activeId]);
 
   return visited;

@@ -80,7 +80,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#F3EDE2',
+  // Media-scoped so the browser chrome follows the system theme; ThemeToggle
+  // keeps both metas pointed at the active palette after a manual toggle.
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F3EDE2' },
+    { media: '(prefers-color-scheme: dark)', color: '#1E1913' },
+  ],
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
