@@ -3,27 +3,92 @@
   <channel>
     <title>Kanishka Namdeo - Product Manager Portfolio</title>
     <link>https://kanishkanamdeo.com</link>
-    <description>Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products. Read about product strategy, leadership, and tech insights.</description>
+    <description>Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products — 8× ARR growth to 70K+ monthly users and 30K+ new users onboarded across 50+ locations. Notes on product strategy, leadership, and tech.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 02 Jan 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 15 Sep 2026 12:00:00 GMT</lastBuildDate>
     <pubDate>Thu, 02 Jan 2026 12:00:00 GMT</pubDate>
     <ttl>1440</ttl>
     <atom:link href="https://kanishkanamdeo.com/rss.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title>MCP File Search That Actually Works (Everywhere)</title>
+      <link>https://kanishkanamdeo.medium.com/mcp-file-search-that-actually-works-everywhere-d139a33dfcb1</link>
+      <description>Native OS search engines (Everything, Spotlight, ripgrep) wired into MCP for instant, secure AI-assisted file retrieval.</description>
+      <pubDate>Thu, 01 Jan 2026 00:00:00 GMT</pubDate>
+      <guid>https://kanishkanamdeo.medium.com/mcp-file-search-that-actually-works-everywhere-d139a33dfcb1</guid>
+      <category>MCP</category>
+      <category>File Search</category>
+      <category>AI</category>
+    </item>
+    
+    <item>
+      <title>coding-plan-proxy - Open Source Release</title>
+      <link>https://github.com/kanishka-namdeo/coding-plan-proxy</link>
+      <description>HTTP proxy for AI coding APIs, with a TUI dashboard.</description>
+      <pubDate>Thu, 01 Jan 2026 00:00:00 GMT</pubDate>
+      <guid>https://github.com/kanishka-namdeo/coding-plan-proxy</guid>
+      <category>Open Source</category>
+      <category>Python</category>
+      <category>MCP</category>
+    </item>
+    
+    <item>
+      <title>Unown - Open Source Release</title>
+      <link>https://github.com/kanishka-namdeo/Unown</link>
+      <description>A coding agent that gets better with use.</description>
+      <pubDate>Thu, 01 Jan 2026 00:00:00 GMT</pubDate>
+      <guid>https://github.com/kanishka-namdeo/Unown</guid>
+      <category>Open Source</category>
+      <category>TypeScript</category>
+      <category>AI Agents</category>
+    </item>
+    
+    <item>
+      <title>rust-sim - Open Source Release</title>
+      <link>https://github.com/kanishka-namdeo/rust-sim</link>
+      <description>A fast simulation framework for experiments.</description>
+      <pubDate>Thu, 01 Jan 2026 00:00:00 GMT</pubDate>
+      <guid>https://github.com/kanishka-namdeo/rust-sim</guid>
+      <category>Open Source</category>
+      <category>Rust</category>
+    </item>
+    
+    <item>
       <title>Vibe Coding (and not losing my mind)</title>
       <link>https://kanishkanamdeo.medium.com/vibe-coding-and-not-losing-my-mind-ac175f123155</link>
-      <description>Exploring the potential of vibe coding while maintaining mental well-being in tech. A candid reflection on balancing creativity with sustainability in software development.</description>
+      <description>Building a RAG workbench with LLMs — structured prompting and iterative refinement.</description>
       <pubDate>Mon, 16 Dec 2025 00:00:00 GMT</pubDate>
       <guid>https://kanishkanamdeo.medium.com/vibe-coding-and-not-losing-my-mind-ac175f123155</guid>
-      <category>Product Management</category>
-      <category>Mental Wellness</category>
+      <category>AI</category>
+      <category>RAG</category>
+    </item>
+    
+    <item>
+      <title>yfnhanced-mcp - Open Source Release</title>
+      <link>https://github.com/kanishka-namdeo/yfnhanced-mcp</link>
+      <description>MCP server for Yahoo Finance data with circuit breaker, rate limiting, and caching — published as an npm package.</description>
+      <pubDate>Wed, 01 Jan 2025 00:00:00 GMT</pubDate>
+      <guid>https://github.com/kanishka-namdeo/yfnhanced-mcp</guid>
+      <category>Open Source</category>
+      <category>TypeScript</category>
+      <category>MCP</category>
+    </item>
+    
+    <item>
+      <title>electron-mcp - Open Source Release</title>
+      <link>https://github.com/kanishka-namdeo/electron-mcp</link>
+      <description>MCP server for Electron testing and automation.</description>
+      <pubDate>Wed, 01 Jan 2025 00:00:00 GMT</pubDate>
+      <guid>https://github.com/kanishka-namdeo/electron-mcp</guid>
+      <category>Open Source</category>
+      <category>TypeScript</category>
+      <category>MCP</category>
     </item>
     
     <item>
       <title>Writing A Simple Kivy-based CPU-Monitoring App in Python!</title>
       <link>https://kanishkanamdeo.medium.com/writing-a-simple-kivy-based-cpu-monitoring-app-in-python-74e1a7e872</link>
-      <description>A step-by-step guide to building a CPU monitoring application using Python, Kivy, and KivyMD. Learn how to create a functional desktop app with a clean interface.</description>
+      <description>Cross-platform CPU monitor with Kivy, psutil, and threaded UI updates.</description>
       <pubDate>Sun, 12 Apr 2020 00:00:00 GMT</pubDate>
       <guid>https://kanishkanamdeo.medium.com/writing-a-simple-kivy-based-cpu-monitoring-app-in-python-74e1a7e872</guid>
       <category>Python</category>
@@ -34,34 +99,12 @@
     <item>
       <title>My Experiments with Elementary OS: Part 1</title>
       <link>https://kanishkanamdeo.medium.com/my-experiments-with-elementary-os-part-1-4a2e81777101</link>
-      <description>A comprehensive guide to customizing Elementary OS, one of the most elegant Ubuntu-based distributions. Learn tips and tricks to personalize your Linux experience.</description>
+      <description>Customizing Elementary OS — multiple docks, TLP for battery, and touchpad gestures.</description>
       <pubDate>Mon, 06 Apr 2020 00:00:00 GMT</pubDate>
       <guid>https://kanishkanamdeo.medium.com/my-experiments-with-elementary-os-part-1-4a2e81777101</guid>
       <category>Linux</category>
       <category>Elementary OS</category>
       <category>Open Source</category>
-    </item>
-    
-    <item>
-      <title>MarketZen Stock Analyzer - Open Source Project</title>
-      <link>https://github.com/kane111/marketzen-stock-analyzer</link>
-      <description>A sophisticated stock market technical analysis platform with real-time indicators, signal generation, and a professional terminal-style interface.</description>
-      <pubDate>Thu, 01 Jan 2026 00:00:00 GMT</pubDate>
-      <guid>https://github.com/kane111/marketzen-stock-analyzer</guid>
-      <category>Open Source</category>
-      <category>React</category>
-      <category>Finance</category>
-    </item>
-    
-    <item>
-      <title>rag-chat-v2 - RAG Chat Application</title>
-      <link>https://github.com/kane111/rag-chat-v2</link>
-      <description>A modern, full-stack RAG chat application with real-time streaming, document management, and configurable AI providers.</description>
-      <pubDate>Thu, 01 Jan 2026 00:00:00 GMT</pubDate>
-      <guid>https://github.com/kane111/rag-chat-v2</guid>
-      <category>Open Source</category>
-      <category>Next.js</category>
-      <category>AI</category>
     </item>
   </channel>
 </rss>

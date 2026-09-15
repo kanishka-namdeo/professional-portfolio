@@ -29,4 +29,29 @@ describe('journey eras', () => {
     const mobility = eras.find((e) => e.id === 'mobility')!;
     expect(mobility.metrics).toContainEqual(expect.objectContaining({ value: 8, suffix: '×', label: 'ARR' }));
   });
+  it('agents era covers all three consulting engagements (2024 — present)', () => {
+    const agents = eras.find((e) => e.id === 'agents')!;
+    expect(agents.period).toBe('2024 — present');
+    expect(agents.crossing).toMatch(/Flipr/);
+    expect(agents.crossing).toMatch(/Cognium/);
+    expect(agents.crossing).toMatch(/AvloAI/);
+    expect(agents.metrics).toContainEqual(expect.objectContaining({ value: 50, suffix: 'K' }));
+  });
+  it('states the families figure precisely, never "Thousands"', () => {
+    const agents = eras.find((e) => e.id === 'agents')!;
+    expect(agents.summit).toMatch(/2,000\+ families/);
+    expect(agents.summit).not.toMatch(/thousands/i);
+  });
+  it('mobility era carries the Wipro testimonial and the RentLz case-study link', () => {
+    const mobility = eras.find((e) => e.id === 'mobility')!;
+    expect(mobility.testimonial).toMatchObject({
+      name: 'Nittan Bhalla',
+      title: expect.stringMatching(/Wipro/),
+    });
+    expect(mobility.testimonial!.quote).toMatch(/employee transportation across 8 cities/);
+    expect(mobility.caseStudy).toEqual({
+      href: '/case-study-rentlz.html',
+      label: 'Read the full RentLz case study',
+    });
+  });
 });

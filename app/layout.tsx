@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: '%s | Kanishka Namdeo Portfolio',
   },
   description:
-    'Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products. Led 8× ARR growth, 70K+ user acquisition, and 50+ location expansion.',
+    'Product Manager with 9+ years across SaaS, mobility, and AI. Led 8× ARR growth to 70K+ monthly users and 30K+ new users onboarded across 50+ locations.',
   authors: [{ name: 'Kanishka Namdeo', url: 'https://kanishkanamdeo.com' }],
   creator: 'Kanishka Namdeo',
   publisher: 'Kanishka Namdeo',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     type: 'website',
     title: 'Kanishka Namdeo | Product Manager',
     description:
-      'Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products. Led 8× ARR growth and 70K+ user acquisition.',
+      'Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products. Led 8× ARR growth to 70K+ monthly users and 30K+ new users onboarded across 50+ locations.',
     siteName: 'Kanishka Namdeo Portfolio',
     locale: 'en_US',
     url: 'https://kanishkanamdeo.com',
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     site: '@kanishkanamdeo',
     title: 'Kanishka Namdeo | Product Manager',
     description:
-      'Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products.',
+      'Product Manager with 9+ years across SaaS, mobility, and AI. 8× ARR · 70K+ monthly users · 50+ locations.',
     images: ['/og-image.jpg'],
   },
   alternates: {
@@ -126,7 +126,7 @@ const jsonLd = {
       name: 'Kanishka Namdeo',
       jobTitle: 'Product Manager',
       url: siteUrl,
-      email: 'mailto:kanishka-namdeo@hotmail.com',
+      email: 'mailto:kanishkanamdeo@hotmail.com',
       image: `${siteUrl}/profile.jpg`,
       description: metadata.description,
       address: {
@@ -136,7 +136,7 @@ const jsonLd = {
       },
       contactPoint: {
         '@type': 'ContactPoint',
-        email: 'kanishka-namdeo@hotmail.com',
+        email: 'kanishkanamdeo@hotmail.com',
         contactType: 'professional',
         availableLanguage: ['English'],
       },
@@ -159,23 +159,13 @@ const jsonLd = {
         'B2B Software',
       ],
       // Employment history from journey data — gives crawlers structured
-      // career progression instead of just a flat job title.
+      // career progression instead of just a flat job title. Era companies can
+      // be compound ("Medulla.AI · TekIP"); Organizations take the first name.
       worksFor: eras.map((era) => ({
         '@type': 'Organization',
-        name: era.company,
+        name: era.company.split('·')[0].trim(),
         description: era.role,
       })),
-    },
-    {
-      '@type': 'ProfessionalService',
-      '@id': `${siteUrl}/#service`,
-      name: 'Kanishka Namdeo - Product Management Consulting',
-      url: siteUrl,
-      description:
-        'Product and AI consulting: agent pipelines, MCP tooling, and user research that decides what to build.',
-      areaServed: 'Worldwide',
-      serviceType: 'Product Management Consulting',
-      provider: { '@id': `${siteUrl}/#person` },
     },
   ],
 };

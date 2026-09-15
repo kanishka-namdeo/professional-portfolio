@@ -68,6 +68,30 @@ export function JourneyChapter({ era, active }: { era: Era; active: boolean }) {
             </ul>
           </motion.div>
         )}
+        {era.testimonial && (
+          <motion.figure
+            {...enter(5)}
+            className="mt-10 max-w-md rotate-[0.8deg] border border-[var(--color-ink)]/20 bg-[var(--color-paper)]/70 p-4 shadow-[2px_3px_6px_var(--color-shadow-soft)] transition-transform duration-150 ease-out hover:rotate-0"
+          >
+            <blockquote className="font-[family-name:var(--font-voice)] text-base leading-snug text-[var(--color-ink)]">
+              “{era.testimonial.quote}”
+            </blockquote>
+            <figcaption className="mt-2 font-[family-name:var(--font-data)] text-[11px] uppercase tracking-widest text-[var(--color-rust)]">
+              {era.testimonial.name} — <cite className="not-italic">{era.testimonial.title}</cite>
+            </figcaption>
+          </motion.figure>
+        )}
+
+        {era.caseStudy && (
+          <motion.div {...enter(6)} className="mt-6">
+            <a
+              href={era.caseStudy.href}
+              className="inline-block border border-[var(--color-ink)]/30 bg-[var(--color-paper)]/60 px-3 py-1.5 font-[family-name:var(--font-data)] text-[11px] uppercase tracking-widest text-[var(--color-ink)]/70 transition-colors duration-150 hover:border-[var(--color-rust)] hover:text-[var(--color-rust)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)] focus-visible:outline-offset-2"
+            >
+              {era.caseStudy.label}
+            </a>
+          </motion.div>
+        )}
       </div>
     </section>
   );

@@ -15,6 +15,14 @@ export default function Hero() {
         <h2 className="mt-5 max-w-5xl font-[family-name:var(--font-voice)] text-5xl font-bold leading-[1.08] text-[var(--color-ink)] md:text-6xl">
           Kanishka Namdeo — a field log, 2016 → present
         </h2>
+        <div className="mt-4 font-[family-name:var(--font-data)]">
+          <p className="text-lg text-[var(--color-ink)]/85">
+            Product Manager · 9+ years · SaaS, mobility &amp; AI
+          </p>
+          <p className="mt-2 text-sm text-[var(--color-ink)]/60">
+            8× ARR · 70K+ monthly users · 50+ locations
+          </p>
+        </div>
         <div className="mt-6 flex flex-wrap items-baseline gap-x-6 gap-y-2">
           <p className="font-[family-name:var(--font-data)] text-base text-[var(--color-ink)]/70">
             Open to new roles — Dubai / remote

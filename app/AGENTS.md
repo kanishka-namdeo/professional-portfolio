@@ -13,7 +13,7 @@ Owns the Next.js App Router entry points: root layout with theme/font providers,
   - ReactLenis for smooth scroll
   - SEO metadata via Next.js `metadata` export (OpenGraph, Twitter, canonical) — no manual `<meta>` tags
   - Viewport config via separate `viewport` export (themeColor, width, initialScale)
-  - JSON-LD structured data in single `@graph` (WebSite, WebPage, Person with worksFor, ProfessionalService)
+  - JSON-LD structured data in single `@graph` (WebSite, WebPage, Person with worksFor) — no ProfessionalService entry (job-seeker, not a consulting business); worksFor maps each era's compound `company` ("Medulla.AI · TekIP") to the first segment before '·'; Person/contactPoint email is the no-hyphen `kanishkanamdeo@hotmail.com`
   - Theme pre-paint script to prevent flash (reads `dispatches-theme` from localStorage)
   - Skip-to-content link for a11y
 - **Page** (`page.tsx`): Single-page scrollytelling portfolio with:
@@ -23,7 +23,7 @@ Owns the Next.js App Router entry points: root layout with theme/font providers,
   - Ledger (skills/tools)
   - End of Trail (contact)
   - Fixed UI: TrailProgress, ThemeToggle, WaypointPalette
-  - Page-level JSON-LD in single `@graph` (FAQPage, BreadcrumbList, SoftwareApplication per camp, BlogPosting per writing entry)
+  - Page-level JSON-LD in single `@graph` (FAQPage, BreadcrumbList, SoftwareApplication per camp, BlogPosting per writing entry); BlogPosting `datePublished` converts ledger "Mon YYYY" display dates to ISO 8601 via `toISODate` in page.tsx
   - Crawler-friendly `<nav>` with explicit section links (sr-only)
 - **Styles** (`globals.css`): Tailwind v4 CSS-first config with:
   - Dispatches design tokens (parchment, ink, rust palette)

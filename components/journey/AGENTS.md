@@ -12,6 +12,7 @@ Journey chapter components for narrative progression. Provides JourneyChapter, c
 - Tests co-located in __tests__/
 - Journey components handle narrative flow and chapter transitions
 - `JourneyChapter.tsx` uses `<time>` elements for period dates (semantic HTML for SEO)
+- `JourneyChapter.tsx` renders optional era fields after the press row: `testimonial` as an ink-on-paper blockquote card (`figure` > `blockquote` + `figcaption`/`cite`, reuses the press-postcard classes) and `caseStudy` as a small mono stamp link to the internal case study — no new design language
 
 ## Work Guidance
 - Journey components drive the narrative structure

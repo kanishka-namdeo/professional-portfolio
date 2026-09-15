@@ -22,6 +22,12 @@ describe('Hero', () => {
     fireEvent.click(cta);
     expect(mockScrollTo).toHaveBeenCalledWith('#era-origin');
   });
+  it('states the role and headline metrics in visible text (5-second rule)', () => {
+    render(<Hero />);
+    expect(screen.getByText(/product manager/i)).toBeInTheDocument();
+    expect(screen.getByText(/9\+ years/i)).toBeInTheDocument();
+    expect(screen.getByText(/8× ARR · 70K\+ monthly users · 50\+ locations/)).toBeInTheDocument();
+  });
   it('states availability as plain text, with no stat rows or stock placeholders', () => {
     const { container } = render(<Hero />);
     expect(screen.getByText(/open to new roles — dubai \/ remote/i)).toBeInTheDocument();

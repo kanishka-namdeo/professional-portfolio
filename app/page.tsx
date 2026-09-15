@@ -13,6 +13,16 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 const siteUrl = 'https://kanishkanamdeo.com';
 const personId = `${siteUrl}/#person`;
 
+// Ledger display dates are "Mon YYYY"; schema.org datePublished needs ISO 8601.
+const MONTH_INDEX: Record<string, string> = {
+  Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
+  Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12',
+};
+const toISODate = (date: string) => {
+  const match = /^([A-Za-z]{3}) (\d{4})$/.exec(date);
+  return match ? `${match[2]}-${MONTH_INDEX[match[1]]}-01` : date;
+};
+
 // ── Page-level JSON-LD graph ──────────────────────────────────────────
 // All page schemas in a single @graph: fewer <script> tags, and crawlers
 // can correlate entities (e.g. BlogPosting.author → Person in layout graph).
@@ -65,7 +75,7 @@ const pageJsonLd = {
       headline: entry.title,
       description: entry.subtitle,
       image: entry.image,
-      datePublished: entry.date,
+      datePublished: toISODate(entry.date),
       url: entry.url,
       author: { '@id': personId },
       publisher: {

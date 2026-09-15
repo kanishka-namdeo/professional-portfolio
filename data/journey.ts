@@ -10,6 +10,15 @@ export interface PressMention {
   url: string;
   date: string;
 }
+export interface EraTestimonial {
+  quote: string;
+  name: string;
+  title: string;
+}
+export interface EraCaseStudy {
+  href: '/case-study-rentlz.html';
+  label: string;
+}
 export interface Era {
   id: 'origin' | 'logistics' | 'language' | 'mobility' | 'agents';
   number: string;
@@ -24,6 +33,8 @@ export interface Era {
   summit: string; // the impact
   metrics: EraMetric[];
   press?: PressMention[];
+  testimonial?: EraTestimonial;
+  caseStudy?: EraCaseStudy;
 }
 
 export const eras: Era[] = [
@@ -125,26 +136,36 @@ export const eras: Era[] = [
       { source: 'Impakter', headline: 'Indian Startup MoveInSync Pioneers Intelligent Commutes Across the Globe', url: 'https://impakter.com/indian-startup-moveinsync-pioneers-intelligent-commutes-across-the-globe/', date: '2024' },
       { source: 'MoveInSync', headline: 'Business RentLZ — Enterprise Vehicle Management Solution', url: 'https://moveinsync.com/business-rentlz', date: '2024' },
     ],
+    testimonial: {
+      quote:
+        'MoveInSync manages Wipro’s employee transportation across 8 cities. We chose them for their app’s ability to ensure employee safety and security, operational transparency, and cost efficiency, replacing our previous manual management approach.',
+      name: 'Nittan Bhalla',
+      title: 'Senior VP & Global Head - Workplace Operations, Wipro',
+    },
+    caseStudy: {
+      href: '/case-study-rentlz.html',
+      label: 'Read the full RentLz case study',
+    },
   },
   {
     id: 'agents',
     number: '05',
-    company: 'AvloAI · Independent consulting',
-    short: 'AvloAI',
-    role: 'Product & AI Consultant',
-    period: '2025 — present',
+    company: 'Flipr · Cognium · AvloAI',
+    short: 'Consulting',
+    role: 'Product Consultant · Senior PM · Product & AI Consultant',
+    period: '2024 — present',
     coords: { x: 91, y: 12 },
     terrain:
       'Founders keep building AI products users don’t need. The missing piece is product judgment: what to build, for whom, and what to verify before writing code.',
     crossing:
-      'I architected a 5-agent children’s storytelling pipeline (22 natively-written languages, 30-second ElevenLabs voice cloning, COPPA 2.0 data architecture). At Cognium I ran 20+ user interviews and secured the first beta customer before the prototype existed. In the open, I build the MCP tooling this site documents.',
+      'Three engagements, back to back. Flipr hired me to scope and ship a video-retrieval MVP for Flipkart — automated dispute resolution wired into their Order Management System, built for ~50K daily orders. At Cognium in Dubai I was Senior PM on an AI-native wealth platform: 20+ user interviews, LLM guardrails, and the first beta customer secured before the prototype existed. Since January 2026 I’ve owned product and architecture at AvloAI, a children’s storytelling platform.',
     summit:
-      'Thousands of families generate personalized stories in their own languages. A wealth-management platform found product-market signal before writing production code. The base camps below are the receipts.',
+      '2,000+ families generate personalized stories in their own languages at AvloAI. Flipkart’s dispute teams got a working MVP on schedule. A wealth-management platform found product-market signal before writing production code. The base camps below are the receipts.',
     metrics: [
-      { value: 22, label: 'languages' },
+      { value: 50, suffix: 'K', label: 'daily orders through the Flipr MVP' },
+      { value: 20, suffix: '+', label: 'Cognium user interviews' },
+      { value: 22, label: 'AvloAI languages' },
       { value: 30, suffix: 's', label: 'voice cloning' },
-      { value: 5, label: 'agent pipeline' },
-      { value: 20, suffix: '+', label: 'user interviews' },
     ],
   },
 ];

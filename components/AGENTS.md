@@ -37,6 +37,10 @@ React component library for the portfolio. Organized by feature domain (camps, j
 2. Create matching test file in `__tests__/` (or co-located `__tests__/` subdirectory)
 3. Use existing components as templates (see `Hero.tsx`, `BaseCamp.tsx`)
 
+### Hero Contract
+- `Hero.tsx` must state role, years, and headline metrics in visible text directly under the name (5-second rule): "Product Manager · 9+ years · SaaS, mobility & AI" plus the mono metrics line "8× ARR · 70K+ monthly users · 50+ locations"
+- Keep the "Follow the trail ↓" CTA and the availability line; no badges/gradients
+
 ### Feature Domains
 - `camps/` - Base camp components (portfolio project showcases)
 - `journey/` - Journey chapter components (career timeline)
