@@ -102,12 +102,14 @@ export default function Home() {
       <h1 className="sr-only">Kanishka Namdeo - Product Manager Portfolio - Dubai, UAE</h1>
 
       {/* Crawler-friendly navigation — gives search engines explicit <a> links
-          to index, complementing the JS-driven waypoint navigation. */}
-      <nav aria-label="Page sections" className="sr-only">
-        <a href="#journey">The Journey</a>
-        <a href="#camps">Base Camps</a>
-        <a href="#ledger">The Ledger</a>
-        <a href="#contact">End of the Trail</a>
+          to index, complementing the JS-driven waypoint navigation. Each link
+          is sr-only-focusable: clipped until keyboard focus reveals it as a
+          chip, so there are no invisible tab stops (WCAG 2.4.7/2.4.11). */}
+      <nav aria-label="Page sections">
+        <a href="#journey" className="sr-only-focusable">The Journey</a>
+        <a href="#camps" className="sr-only-focusable">Base Camps</a>
+        <a href="#ledger" className="sr-only-focusable">The Ledger</a>
+        <a href="#contact" className="sr-only-focusable">End of the Trail</a>
       </nav>
 
       {/* Hero */}
@@ -116,8 +118,9 @@ export default function Home() {
       {/* The Journey — five career waypoints along the expedition map */}
       <Journey />
 
-      {/* Base Camps — the built-in-public receipts */}
-      <section id="camps" aria-label="Base camps">
+      {/* Base Camps — the built-in-public receipts. tabIndex={-1} lets the
+          skip/anchor jump land focus here (see [tabindex='-1'] in globals.css). */}
+      <section id="camps" aria-label="Base camps" tabIndex={-1}>
         {camps.map((camp) => (
           <BaseCamp key={camp.id} camp={camp} />
         ))}

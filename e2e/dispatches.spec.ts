@@ -2,10 +2,13 @@
 import { test, expect } from '@playwright/test';
 
 test('no horizontal overflow at mobile width', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-  expect(overflow).toBeLessThanOrEqual(2);
+  // 390 = common phone; 320 = smallest WCAG-reflow-style viewport (1.4.10).
+  for (const width of [390, 320]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto('/');
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    expect(overflow).toBeLessThanOrEqual(2);
+  }
 });
 
 test('trail rail and all five waypoint anchors exist', async ({ page }) => {

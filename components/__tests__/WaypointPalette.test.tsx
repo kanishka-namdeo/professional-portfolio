@@ -52,6 +52,16 @@ describe('WaypointPalette', () => {
     expect(options[0]).toHaveTextContent('Medulla.AI');
   });
 
+  it('renders the empty state as presentation, not a phantom option', () => {
+    render(<WaypointPalette />);
+    openWithCtrlK();
+    fireEvent.change(screen.getByRole('textbox', { name: /search destinations/i }), {
+      target: { value: 'zzzz-no-such-waypoint' },
+    });
+    expect(screen.queryAllByRole('option')).toHaveLength(0);
+    expect(screen.getByText(/no destination matches/i)).toHaveAttribute('role', 'presentation');
+  });
+
   it('travels to the selected waypoint with Enter and closes (instant, per the rail rule)', () => {
     render(<WaypointPalette />);
     openWithCtrlK();

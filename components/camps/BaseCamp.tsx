@@ -72,9 +72,11 @@ export function BaseCamp({ camp }: { camp: Camp }) {
       <div className="mx-auto grid max-w-6xl gap-10 px-6 md:grid-cols-2">
         {/* sticky media plate */}
         <div className="md:sticky md:top-24 md:self-start">
-          <p className="font-[family-name:var(--font-data)] text-xs tracking-[0.2em] text-[var(--color-rust)]">
+          {/* Camp heading: h2 so camps surface in the heading outline (h1 →
+              journey/camp h2s); the mono eyebrow styling is unchanged. */}
+          <h2 className="font-[family-name:var(--font-data)] text-xs tracking-[0.2em] text-[var(--color-rust)]">
             BASE CAMP — {camp.title.toUpperCase()} · {camp.year}
-          </p>
+          </h2>
           <div className="relative mt-4 border border-[var(--color-ink)] bg-[var(--color-paper)] p-2 shadow-[3px_3px_0_var(--color-shadow-soft)]">
             <Image
               src={camp.screenshot}
@@ -102,7 +104,7 @@ export function BaseCamp({ camp }: { camp: Camp }) {
               </span>
             ))}
           </div>
-          <p className="mt-2 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink)]/60">
+          <p className="mt-2 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink-muted)]">
             fig. — {camp.tagline}{' '}
             <a className="text-[var(--color-rust)] underline" href={camp.repoUrl} target="_blank" rel="noopener noreferrer">
               [{camp.repo} →]
@@ -145,19 +147,20 @@ export function BaseCamp({ camp }: { camp: Camp }) {
               </span>
             </button>
           </div>
-          <p className="mt-1 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink)]/60">{camp.recording.caption}</p>
+          <p className="mt-1 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink-muted)]">{camp.recording.caption}</p>
         </div>
 
-        {/* stepping text */}
+        {/* stepping text. Dim state never fades the whole <li> (opacity stacks
+            on text and drops it under 4.5:1 in both themes, WCAG 1.4.3) —
+            inactive steps switch to the --color-ink-muted token instead. */}
         <ol className="space-y-10" aria-label={`${camp.title} — how it works`}>
           {camp.steps.map((s, i) => (
             <li
               key={s.heading}
               data-step={i}
-              className={`transition-opacity ${step === i ? 'opacity-100' : 'opacity-50'}`}
               onMouseEnter={() => setStep(i)}
             >
-              <StepBlock index={i} onEnter={setStep} heading={s.heading} body={s.body} />
+              <StepBlock index={i} onEnter={setStep} heading={s.heading} body={s.body} active={step === i} />
             </li>
           ))}
         </ol>
@@ -166,7 +169,7 @@ export function BaseCamp({ camp }: { camp: Camp }) {
   );
 }
 
-function StepBlock({ index, onEnter, heading, body }: { index: number; onEnter: (step: number) => void; heading: string; body: string }) {
+function StepBlock({ index, onEnter, heading, body, active }: { index: number; onEnter: (step: number) => void; heading: string; body: string; active: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const visible = useInView(ref, { margin: '-40% 0px -40% 0px' });
   // Latest-ref pattern: the effect must depend only on `visible`, never on the
@@ -179,9 +182,23 @@ function StepBlock({ index, onEnter, heading, body }: { index: number; onEnter: 
   }, [visible, index]);
   return (
     <div ref={ref}>
-      <p className="font-[family-name:var(--font-data)] text-xs text-[var(--color-ink)]/50">STEP {index + 1}</p>
-      <h3 className="mt-1 font-[family-name:var(--font-voice)] text-2xl font-bold text-[var(--color-ink)]">{heading}</h3>
-      <p className="mt-2 font-[family-name:var(--font-voice)] text-base leading-relaxed text-[var(--color-ink)]/80">{body}</p>
+      {/* Dim text = --color-ink-muted (≥4.5:1 on both themes' surfaces);
+          active text returns to full ink. Never opacity on text. */}
+      <p className="font-[family-name:var(--font-data)] text-xs text-[var(--color-ink-muted)]">STEP {index + 1}</p>
+      <h3
+        className={`mt-1 font-[family-name:var(--font-voice)] text-2xl font-bold transition-colors ${
+          active ? 'text-[var(--color-ink)]' : 'text-[var(--color-ink-muted)]'
+        }`}
+      >
+        {heading}
+      </h3>
+      <p
+        className={`mt-2 font-[family-name:var(--font-voice)] text-base leading-relaxed transition-colors ${
+          active ? 'text-[var(--color-ink)]/80' : 'text-[var(--color-ink-muted)]'
+        }`}
+      >
+        {body}
+      </p>
     </div>
   );
 }

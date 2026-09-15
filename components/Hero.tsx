@@ -19,7 +19,7 @@ export default function Hero() {
           <p className="text-lg text-[var(--color-ink)]/85">
             Product Manager · 9+ years · SaaS, mobility &amp; AI
           </p>
-          <p className="mt-2 text-sm text-[var(--color-ink)]/60">
+          <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
             8× ARR · 70K+ monthly users · 50+ locations
           </p>
         </div>
@@ -27,7 +27,7 @@ export default function Hero() {
           <p className="font-[family-name:var(--font-data)] text-base text-[var(--color-ink)]/70">
             Open to new roles — Dubai / remote
           </p>
-          <p className="font-[family-name:var(--font-data)] text-sm text-[var(--color-ink)]/50">
+          <p className="font-[family-name:var(--font-data)] text-sm text-[var(--color-ink-muted)]">
             Click a waypoint to travel there.
           </p>
         </div>

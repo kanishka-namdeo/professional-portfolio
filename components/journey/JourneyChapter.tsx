@@ -39,7 +39,7 @@ export function JourneyChapter({ era, active }: { era: Era; active: boolean }) {
         </motion.div>
 
         <motion.div {...enter(3)} className="mt-10">
-          <p className="font-[family-name:var(--font-data)] text-[11px] uppercase tracking-widest text-[var(--color-ink)]/45">
+          <p className="font-[family-name:var(--font-data)] text-[11px] uppercase tracking-widest text-[var(--color-ink-muted)]">
             From the log
           </p>
           <div className="mt-3 flex flex-wrap gap-x-8 gap-y-4">
@@ -49,7 +49,7 @@ export function JourneyChapter({ era, active }: { era: Era; active: boolean }) {
 
         {era.press && era.press.length > 0 && (
           <motion.div {...enter(4)} className="mt-12">
-            <p className="font-[family-name:var(--font-data)] text-xs uppercase tracking-widest text-[var(--color-ink)]/60">Receipts from the press</p>
+            <p className="font-[family-name:var(--font-data)] text-xs uppercase tracking-widest text-[var(--color-ink-muted)]">Receipts from the press</p>
             <ul className="mt-4 space-y-4">
               {era.press.map((p) => (
                 <li key={p.url} className="group max-w-md rotate-[-0.8deg] border border-[var(--color-ink)]/20 bg-[var(--color-paper)]/70 p-4 shadow-[2px_3px_6px_var(--color-shadow-soft)] transition-transform duration-150 ease-out hover:-translate-y-0.5 hover:rotate-0">

@@ -23,6 +23,10 @@ React component library for the portfolio. Organized by feature domain (camps, j
 ### Styling
 - Tailwind CSS utility classes only
 - Theme tokens via CSS variables: `var(--color-parchment)`, `var(--color-ink)`, `var(--color-rust)`
+- AA-contrast tokens (WCAG 2.2, computed in `app/globals.css` comments):
+  - `--color-ink-muted` for dimmed microcopy (captions, readouts, hints, placeholders) — never alpha-fade ink to /65 or lower, and never put `opacity` on a container holding text
+  - `--color-on-rust` for text/icons sitting on a `bg-[var(--color-rust)]` fill (e.g. active options/chips)
+  - `--color-rust-text` for small (≤12px) rust text on tinted surfaces (e.g. FieldNote on notepaper)
 - Typography via font variables: `var(--font-voice)` (headings), `var(--font-data)` (metrics/labels)
 
 ### Motion/Animation
@@ -51,8 +55,11 @@ React component library for the portfolio. Organized by feature domain (camps, j
 ### Accessibility Requirements
 - All interactive elements need `aria-label` or visible text
 - Video elements must have pause controls (WCAG 2.2.2)
-- Respect `prefers-reduced-motion` for animations
+- Respect `prefers-reduced-motion` for animations (including scroll-driven springs)
 - Keyboard navigation must work for all interactive elements
+- Section anchor roots (`#journey`, `#camps`, `#ledger`, `#contact`) carry `tabIndex={-1}` so fragment jumps land focus there; the `[tabindex='-1']` CSS in `globals.css` suppresses the container outline and sets the scroll margin
+- Visible focus-visible outlines in rust on every interactive element; tap targets ≥ 24×24px (padding/flex hit area, not type size)
+- Heading outline stays logical: h1 (sr-only) → section h2s → subsection h3s (e.g. ContactFAQ under EndOfTrail)
 
 ## Verification
 

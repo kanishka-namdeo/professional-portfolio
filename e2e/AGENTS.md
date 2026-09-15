@@ -23,7 +23,7 @@ Playwright end-to-end tests for accessibility and user flows
 
 ## Verification
 - Playwright test suite must pass before merge
-- Accessibility tests validate WCAG 2.1 AA compliance
+- Accessibility tests validate WCAG 2.2 AA compliance (keyboard order, skip-link focus landing, visible focus chips, no-horizontal-overflow at 390px and 320px)
 - CI runs full E2E suite on PR and main branch
 
 ## Child DOX Index

@@ -63,4 +63,25 @@ describe('BaseCamp', () => {
     render(<BaseCamp camp={camps[0]} />);
     expect(screen.getByText(/Agent workflows live in YAML files/i)).toBeInTheDocument();
   });
+  it('renders the camp title as a heading so camps appear in the heading outline', () => {
+    render(<BaseCamp camp={camps[0]} />);
+    expect(screen.getByRole('heading', { level: 2, name: /base camp — agentcanvas/i })).toBeInTheDocument();
+  });
+  it('never fades inactive step text below the accessible dim token', () => {
+    render(<BaseCamp camp={camps[0]} />);
+    // Regression guard for the WCAG 1.4.3 fix: the dim state must be the
+    // --color-ink-muted token — never opacity on the <li> (which stacks on
+    // text and dropped it to 2.28-2.90:1), and no ink alpha below /70 on
+    // step text (light theme fails 4.5:1 below that).
+    for (const li of document.querySelectorAll('ol[aria-label] > li[data-step]')) {
+      expect(li.className).not.toContain('opacity-');
+    }
+    const stepTexts = Array.from(document.querySelectorAll('ol[aria-label] p, ol[aria-label] h3'));
+    const stepCount = document.querySelectorAll('ol[aria-label] > li[data-step]').length;
+    expect(stepTexts.length).toBe(stepCount * 3); // label + h3 + body per step
+    for (const el of stepTexts) {
+      expect(el.className).toMatch(/text-\[var\(--color-ink(-muted)?\)\]/);
+      expect(el.className).not.toMatch(/text-\[var\(--color-ink\)\]\/[1-6]\d/);
+    }
+  });
 });

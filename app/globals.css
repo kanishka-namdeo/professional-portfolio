@@ -19,6 +19,20 @@
   --color-ink: #2E281E;
   --color-inkline: rgba(90, 110, 140, 0.25);
   --color-rust: #8C4A2F;
+  /* Muted microcopy (captions, readouts, hints, placeholders): every "dimmed"
+     text site uses this token instead of alpha-faded ink — ink alphas at /65
+     and below drop under 4.5:1 on parchment in the light theme (WCAG 1.4.3).
+     Computed ≥5.2:1 against every light surface, and visually dimmer than ink. */
+  --color-ink-muted: #6B6153;
+  /* Text/icon colour for elements on a rust fill (palette and map active
+     options): day parchment on day-rust, near-black on night-rust. Both
+     computed ≥5.1:1 (WCAG 1.4.3). */
+  --color-on-rust: #F3EDE2;
+  /* Small (≤12px) rust text must clear 4.5:1 on its own surface (WCAG 1.4.3):
+     the day rust already does, nightfall lightens it for the dark notepaper
+     (FieldNote) where #CE7448 computes 4.18:1. Large/non-text rust accents
+     keep using --color-rust. */
+  --color-rust-text: var(--color-rust);
 
   /* Surfaces + chrome that invert at nightfall (paper = raised panels,
      notepaper = field-note cards, hover = row highlight, shadows). */
@@ -47,6 +61,9 @@
   --color-ink: #EDE5D3;
   --color-inkline: rgba(237, 229, 211, 0.18);
   --color-rust: #CE7448;
+  --color-ink-muted: #B3A78F;
+  --color-on-rust: #1E1913;
+  --color-rust-text: #DA7E4E;
   --color-paper: #2A2418;
   --color-notepaper: #332A1C;
   --color-shadow-soft: rgba(0, 0, 0, 0.4);
@@ -116,6 +133,55 @@ body::after {
   top: 1rem;
   outline: 3px solid var(--color-rust);
   outline-offset: 2px;
+}
+
+/* Focusable-until-focused pattern (WCAG 2.4.x — no invisible tab stops):
+   the crawler nav links in app/page.tsx are clipped like .sr-only until
+   keyboard focus reveals them as a chip. The parent <nav> must not clip
+   (no .sr-only on it) or the revealed link would stay hidden. */
+.sr-only-focusable {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:focus {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  background: var(--color-parchment);
+  color: var(--color-ink);
+  font-family: var(--font-data);
+  font-size: 0.875rem;
+  text-decoration: underline;
+  outline: 3px solid var(--color-rust);
+  outline-offset: 2px;
+  z-index: 9999;
+}
+
+/* Anchor/skip targets (#journey #camps #ledger #contact) carry tabIndex={-1}
+   so focus lands on them after fragment jumps. The container itself needs no
+   focus ring (all content inside stays keyboard-reachable), and the scroll
+   margin matches the Lenis anchor offset (-80) for native jumps. */
+[tabindex='-1'] {
+  scroll-margin-top: 80px;
+}
+
+[tabindex='-1']:focus {
+  outline: none;
 }
 
 /* Reduced motion: kill animations and transitions; the trail renders fully

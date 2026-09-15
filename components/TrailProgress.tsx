@@ -2,7 +2,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { motion, useMotionValueEvent, useScroll, useSpring } from 'motion/react';
+import { motion, useMotionValueEvent, useReducedMotion, useScroll, useSpring } from 'motion/react';
 import { useLenis } from 'lenis/react';
 import { eras } from '@/data/journey';
 import { useActiveEra } from '@/hooks/useActiveEra';
@@ -18,7 +18,11 @@ import { OPEN_PALETTE_EVENT } from './WaypointPalette';
  */
 export function TrailProgress() {
   const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 80, damping: 20 });
+  const reduceMotion = useReducedMotion() ?? false;
+  // Rail fill: springy for mouse travellers; under reduced motion the raw
+  // scroll progress drives it directly (no lag/overshoot animation).
+  const springProgress = useSpring(scrollYProgress, { stiffness: 80, damping: 20 });
+  const progress = reduceMotion ? scrollYProgress : springProgress;
   const lenis = useLenis();
   const activeId = useActiveEra();
   const navRef = useRef<HTMLElement>(null);
@@ -89,8 +93,8 @@ export function TrailProgress() {
                 onClick={() => travelMouse(era)}
                 aria-label={`Travel to ${era.company} (${era.number})`}
                 aria-current={activeId === era.id ? 'step' : undefined}
-                className={`block font-[family-name:var(--font-data)] text-[10px] hover:text-[var(--color-rust)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)] ${
-                  activeId === era.id ? 'text-[var(--color-rust)]' : 'text-[var(--color-ink)]/55'
+                className={`flex min-h-[24px] min-w-[24px] items-center justify-center font-[family-name:var(--font-data)] text-[10px] hover:text-[var(--color-rust)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)] ${
+                  activeId === era.id ? 'text-[var(--color-rust)]' : 'text-[var(--color-ink-muted)]'
                 }`}
               >
                 {era.number}
@@ -113,7 +117,7 @@ export function TrailProgress() {
       </div>
       <p
         aria-live="polite"
-        className="mt-2 text-right font-[family-name:var(--font-data)] text-[10px] leading-tight text-[var(--color-ink)]/60"
+        className="mt-2 text-right font-[family-name:var(--font-data)] text-[10px] leading-tight text-[var(--color-ink-muted)]"
       >
         {current ? (
           <>
@@ -122,19 +126,19 @@ export function TrailProgress() {
           </>
         ) : (
           <>
-            <span className="text-[var(--color-ink)]/40">00 / {`0${eras.length}`}</span>
+            <span>00 / {`0${eras.length}`}</span>
             <span className="block">en route</span>
           </>
         )}
-        <span className="mt-1 block text-[var(--color-ink)]/35">↑↓ to travel</span>
+        <span className="mt-1 block">↑↓ to travel</span>
       </p>
-      <p className="mt-2 text-right font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink)]/45">
+      <p className="mt-2 text-right font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink-muted)]">
         <span ref={percentRef}>00%</span> of the trail
       </p>
       <button
         type="button"
         onClick={() => window.dispatchEvent(new Event(OPEN_PALETTE_EVENT))}
-        className="mt-2 block w-full text-right font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink)]/45 hover:text-[var(--color-rust)] focus-visible:text-[var(--color-rust)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
+        className="mt-2 flex min-h-[24px] w-full items-center justify-end text-right font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink-muted)] hover:text-[var(--color-rust)] focus-visible:text-[var(--color-rust)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
         aria-label="Open the waypoint jumper"
       >
         ⌘K jump

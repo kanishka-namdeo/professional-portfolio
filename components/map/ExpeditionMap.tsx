@@ -217,17 +217,32 @@ export function ExpeditionMap({
         <span className="absolute inset-[2px] rounded-full bg-[var(--color-rust)]" />
       </span>
       {showLabels && (
-        <ul role="list" aria-label="Career waypoints" className="absolute inset-0">
+        // overflow-clip: the chips' nowrap layout boxes hang past the map on
+        // narrow viewports (Blink counts the pre-transform box in scrollable
+        // overflow → 10-16px horizontal overflow). clip never creates a scroll
+        // container. overflow-clip-margin keeps the chips' visual overhang
+        // (top translate ≈ 32px, rotated right edge ≈ 20px) painting freely;
+        // it also widens the scrollable overflow by that margin on every side,
+        // so it must stay under the hero's px-10 (40px) viewport slack — 36px
+        // keeps 320px viewports overflow-free while covering the overhang.
+        <ul
+          role="list"
+          aria-label="Career waypoints"
+          className="absolute inset-0 overflow-clip [overflow-clip-margin:36px]"
+        >
           {eras.map((era) => (
-            <li key={era.id} className="absolute" style={{ left: `${era.coords.x}%`, top: `${era.coords.y}%` }}>
+            // Zero-size anchor: the chip's layout box must not widen the
+            // document on narrow viewports (the button's translate(-50%)
+            // centres it visually, and post-transform boxes don't overflow).
+            <li key={era.id} className="absolute h-0 w-0" style={{ left: `${era.coords.x}%`, top: `${era.coords.y}%` }}>
               <button
                 type="button"
                 onClick={() => travel(era)}
                 aria-label={`Travel to ${era.company}`}
                 title={era.company}
-                className={`whitespace-nowrap rounded-none border px-2 py-1 font-[family-name:var(--font-data)] text-[10px] transition-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)] ${
+                className={`inline-flex min-h-[24px] items-center whitespace-nowrap rounded-none border px-2 py-1 font-[family-name:var(--font-data)] text-[10px] transition-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)] ${
                   activeId === era.id
-                    ? 'border-[var(--color-rust)] bg-[var(--color-rust)] text-[var(--color-parchment)]'
+                    ? 'border-[var(--color-rust)] bg-[var(--color-rust)] text-[var(--color-on-rust)]'
                     : 'border-[var(--color-ink)] bg-[var(--color-parchment)] text-[var(--color-ink)] hover:-rotate-2'
                 }`}
                 style={{

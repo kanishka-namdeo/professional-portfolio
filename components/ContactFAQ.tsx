@@ -12,9 +12,11 @@ export default function ContactFAQ() {
 
   return (
     <section aria-label="Field notes, asked often">
-      <p className="font-[family-name:var(--font-data)] text-xs uppercase tracking-[0.2em] text-[var(--color-rust)]">
+      {/* h3: the FAQ is a subsection of EndOfTrail's h2 — keep it in the
+          heading outline for heading navigation (WCAG 1.3.1 / 2.4.6). */}
+      <h3 className="font-[family-name:var(--font-data)] text-xs uppercase tracking-[0.2em] text-[var(--color-rust)]">
         Field Notes — Asked Often
-      </p>
+      </h3>
 
       <div>
         {faqItems.map((item, index) => {

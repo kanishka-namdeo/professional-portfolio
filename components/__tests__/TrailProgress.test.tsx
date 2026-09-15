@@ -7,6 +7,8 @@ const mockScrollTo = jest.fn();
 jest.mock('motion/react', () => ({
   useScroll: () => ({ scrollYProgress: { on: jest.fn(), get: () => 0 } }),
   useSpring: (v: unknown) => v,
+  // The rail fill bypasses the spring under reduced motion; jsdom default is off.
+  useReducedMotion: () => false,
   useMotionValueEvent: jest.fn(),
   motion: { path: 'path', line: 'line' },
 }));

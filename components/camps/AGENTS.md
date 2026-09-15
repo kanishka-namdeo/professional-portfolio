@@ -11,6 +11,8 @@ Base camp components for expedition waypoints. Provides the BaseCamp component a
 - Components follow the project component patterns
 - Tests co-located in __tests__/
 - Camp components are themed around expedition/base camp metaphor
+- `BaseCamp.tsx` renders the camp eyebrow (`BASE CAMP — TITLE · YEAR`) as the camp's `h2` with unchanged styling, so camps appear in the heading outline (h1 → section h2s)
+- Step "dim" state switches text to `--color-ink-muted`; the step `<li>` must never take `opacity` (stacked opacity drops text below 4.5:1 in both themes)
 
 ## Work Guidance
 - Keep camp components focused on waypoint presentation

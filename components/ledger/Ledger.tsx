@@ -45,7 +45,9 @@ function onStripKeyDown(event: KeyboardEvent<HTMLUListElement>) {
 
 export function Ledger() {
   return (
-    <section id="ledger" aria-labelledby="ledger-title" className="border-t border-[var(--color-inkline)] py-24 [content-visibility:auto] [contain-intrinsic-size:auto_1000px]">
+    // tabIndex={-1}: skip/anchor jumps land focus here (see [tabindex='-1']
+    // in globals.css).
+    <section id="ledger" aria-labelledby="ledger-title" className="border-t border-[var(--color-inkline)] py-24 [content-visibility:auto] [contain-intrinsic-size:auto_1000px]" tabIndex={-1}>
       <div className="mx-auto max-w-4xl px-6">
         <h2 id="ledger-title" className="font-[family-name:var(--font-data)] text-xs tracking-[0.2em] text-[var(--color-rust)]">THE LEDGER — everything else, plainly</h2>
         <ul className="mt-8 divide-y divide-[var(--color-inkline)]">
@@ -53,16 +55,18 @@ export function Ledger() {
             <li key={r.name}>
               <a href={r.url} target="_blank" rel="noopener noreferrer" className="group grid grid-cols-[auto_1fr_auto] items-baseline gap-4 py-3 hover:bg-[var(--color-hover)] focus-visible:bg-[var(--color-hover)] focus-visible:outline focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-[var(--color-rust)]">
                 <span className="font-[family-name:var(--font-data)] text-sm font-bold text-[var(--color-ink)] group-hover:text-[var(--color-rust)]">{r.name}</span>
-                <span className="font-[family-name:var(--font-voice)] text-sm text-[var(--color-ink)]/75">{r.oneLiner}</span>
-                <span className="font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink)]/50">{r.language} · {r.year}</span>
+                {/* min-w-0: let the one-liner column shrink below min-content so
+                    the year never pushes past the viewport on narrow screens. */}
+                <span className="min-w-0 font-[family-name:var(--font-voice)] text-sm text-[var(--color-ink)]/75">{r.oneLiner}</span>
+                <span className="font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink-muted)]">{r.language} · {r.year}</span>
               </a>
             </li>
           ))}
         </ul>
         <h3 className="mt-14 font-[family-name:var(--font-data)] text-xs tracking-[0.2em] text-[var(--color-rust)]">FIELD WRITING</h3>
-        <p className="mt-2 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink)]/45">
+        <p className="mt-2 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink-muted)]">
           Scroll sideways — a dispatch per card. <span aria-hidden>→</span>{' '}
-          <span className="text-[var(--color-ink)]/60">Arrow keys scroll when focused.</span>
+          <span>Arrow keys scroll when focused.</span>
         </p>
         {/* Horizontal snap strip: variety against the vertical ledger, and the
             articles read as dispatches rather than another plain list. */}
@@ -79,7 +83,7 @@ export function Ledger() {
                 href={w.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-full flex-col border border-[var(--color-ink)]/20 bg-[var(--color-paper)]/60 transition-colors hover:bg-[var(--color-paper)]/90"
+                className="flex h-full flex-col border border-[var(--color-ink)]/20 bg-[var(--color-paper)]/60 transition-colors hover:bg-[var(--color-paper)]/90 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[var(--color-rust)]"
               >
                 <img
                   src={w.image}
@@ -95,7 +99,7 @@ export function Ledger() {
                   <span className="mt-3 font-[family-name:var(--font-voice)] text-lg leading-snug text-[var(--color-ink)]">
                     {w.title}
                   </span>
-                  <span className="mt-2 font-[family-name:var(--font-voice)] text-sm leading-snug text-[var(--color-ink)]/65">
+                  <span className="mt-2 font-[family-name:var(--font-voice)] text-sm leading-snug text-[var(--color-ink-muted)]">
                     {w.subtitle}
                   </span>
                 </div>

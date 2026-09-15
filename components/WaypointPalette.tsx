@@ -57,6 +57,7 @@ export function WaypointPalette() {
   const [active, setActive] = useState(0);
   const lenis = useLenis();
   const inputRef = useRef<HTMLInputElement>(null);
+  const listboxRef = useRef<HTMLUListElement>(null);
   const restoreFocus = useRef<Element | null>(null);
   const items = useMemo(buildItems, []);
 
@@ -133,6 +134,16 @@ export function WaypointPalette() {
       restoreFocus.current = null;
     }
   }, [open]);
+
+  // Keep the active option in view while arrowing through long/filtered lists.
+  // (Guarded: jsdom and some SSR environments don't implement scrollIntoView.)
+  useEffect(() => {
+    if (!open) return;
+    const activeOption = listboxRef.current?.querySelector('[aria-selected="true"]');
+    if (activeOption && typeof activeOption.scrollIntoView === 'function') {
+      activeOption.scrollIntoView({ block: 'nearest' });
+    }
+  }, [open, active, results]);
 
   if (!open) return null;
 
@@ -215,12 +226,14 @@ export function WaypointPalette() {
             aria-label="Search destinations"
             aria-controls="palette-list"
             aria-activedescendant={results[active] ? `palette-${results[active].id}` : undefined}
-            className="w-full bg-transparent font-[family-name:var(--font-data)] text-sm text-[var(--color-ink)] outline-none placeholder:text-[var(--color-ink)]/40"
+            className="w-full bg-transparent font-[family-name:var(--font-data)] text-sm text-[var(--color-ink)] outline-none placeholder:text-[var(--color-ink-muted)]"
           />
         </div>
-        <ul id="palette-list" role="listbox" aria-label="Destinations" className="max-h-[50vh] overflow-y-auto py-2">
+        <ul id="palette-list" role="listbox" aria-label="Destinations" className="max-h-[50vh] overflow-y-auto py-2" ref={listboxRef}>
           {results.length === 0 && (
-            <li className="px-4 py-3 font-[family-name:var(--font-data)] text-xs text-[var(--color-ink)]/50">
+            // role="presentation": a listbox's children must be options — the
+            // empty-state row must not read as a phantom option.
+            <li role="presentation" className="px-4 py-3 font-[family-name:var(--font-data)] text-xs text-[var(--color-ink-muted)]">
               No destination matches “{query}”.
             </li>
           )}
@@ -233,13 +246,13 @@ export function WaypointPalette() {
               onMouseEnter={() => setActive(index)}
               onClick={() => travel(item)}
               className={`mx-2 cursor-pointer px-3 py-2 ${
-                index === active ? 'bg-[var(--color-rust)] text-[var(--color-parchment)]' : 'text-[var(--color-ink)]'
+                index === active ? 'bg-[var(--color-rust)] text-[var(--color-on-rust)]' : 'text-[var(--color-ink)]'
               }`}
             >
               <span className="block font-[family-name:var(--font-voice)] text-base leading-snug">{item.label}</span>
               <span
                 className={`block font-[family-name:var(--font-data)] text-[11px] ${
-                  index === active ? 'text-[var(--color-parchment)]/80' : 'text-[var(--color-ink)]/55'
+                  index === active ? 'text-[var(--color-on-rust)]' : 'text-[var(--color-ink-muted)]'
                 }`}
               >
                 {item.sub}
@@ -247,7 +260,7 @@ export function WaypointPalette() {
             </li>
           ))}
         </ul>
-        <p className="border-t border-[var(--color-inkline)] px-4 py-2 font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink)]/45">
+        <p className="border-t border-[var(--color-inkline)] px-4 py-2 font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink-muted)]">
           ↑↓ move · ↵ travel · esc / ⌘K close — also on the trail rail: ↑↓ jumps between waypoints
         </p>
       </div>

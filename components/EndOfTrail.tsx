@@ -3,7 +3,9 @@ import { FieldNote } from '@/components/FieldNote';
 
 export function EndOfTrail() {
   return (
-    <section id="contact" aria-labelledby="eot-title" className="border-t border-[var(--color-inkline)] bg-[var(--color-parchment)] py-24">
+    // tabIndex={-1}: skip/anchor jumps land focus here (see [tabindex='-1']
+    // in globals.css).
+    <section id="contact" aria-labelledby="eot-title" className="border-t border-[var(--color-inkline)] bg-[var(--color-parchment)] py-24" tabIndex={-1}>
       <div className="mx-auto max-w-4xl px-6">
         <p className="font-[family-name:var(--font-data)] text-xs tracking-[0.2em] text-[var(--color-rust)]">END OF THE TRAIL</p>
         <h2 id="eot-title" className="mt-2 font-[family-name:var(--font-voice)] text-4xl font-bold text-[var(--color-ink)]">
@@ -25,7 +27,7 @@ export function EndOfTrail() {
         <div className="mt-14">
           <ContactFAQ />
         </div>
-        <p className="mt-16 border-t border-[var(--color-inkline)] pt-6 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink)]/50">
+        <p className="mt-16 border-t border-[var(--color-inkline)] pt-6 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink-muted)]">
           Set in Crimson Pro & JetBrains Mono. Contours drawn with simplex noise, committed as SVG. Built by hand in Next.js. No stock photos; every image is the work.
         </p>
       </div>

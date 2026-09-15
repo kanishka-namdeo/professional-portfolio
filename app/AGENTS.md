@@ -24,12 +24,12 @@ Owns the Next.js App Router entry points: root layout with theme/font providers,
   - End of Trail (contact)
   - Fixed UI: TrailProgress, ThemeToggle, WaypointPalette
   - Page-level JSON-LD in single `@graph` (FAQPage, BreadcrumbList, SoftwareApplication per camp, BlogPosting per writing entry); BlogPosting `datePublished` converts ledger "Mon YYYY" display dates to ISO 8601 via `toISODate` in page.tsx
-  - Crawler-friendly `<nav>` with explicit section links (sr-only)
+  - Crawler-friendly `<nav>` with explicit section links (each link is `sr-only-focusable`: clipped until keyboard focus reveals it as a chip — no invisible tab stops); the four section roots (`#journey`, `#camps`, `#ledger`, `#contact`) carry `tabIndex={-1}` so skip/anchor jumps land focus on the section
 - **Styles** (`globals.css`): Tailwind v4 CSS-first config with:
-  - Dispatches design tokens (parchment, ink, rust palette)
+  - Dispatches design tokens (parchment, ink, rust palette) plus AA-contrast tokens: `--color-ink-muted` (microcopy), `--color-on-rust` (text on rust fills), `--color-rust-text` (small rust text; light = rust, dark = lightened)
   - Day/night theming via `.dark` class
   - Film grain overlay
-  - Accessibility utilities (sr-only, skip-link)
+  - Accessibility utilities (`sr-only`, `sr-only-focusable` reveal-on-focus nav chips, `skip-link`, `[tabindex='-1']` anchor-target rules: outline suppressed + `scroll-margin-top: 80px`)
   - Reduced motion support
 
 ## Work Guidance

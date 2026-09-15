@@ -20,19 +20,21 @@ export function Journey() {
   const journeyRef = useRef<HTMLElement>(null);
 
   return (
-    <section id="journey" aria-label="The journey" className="relative py-10" ref={journeyRef}>
+    // tabIndex={-1}: skip/anchor jumps land focus here (see [tabindex='-1']
+    // in globals.css).
+    <section id="journey" aria-label="The journey" className="relative py-10" ref={journeyRef} tabIndex={-1}>
       <div className="mx-auto grid max-w-7xl gap-10 px-6 md:grid-cols-[minmax(0,34rem)_1fr] lg:gap-14">
         <div className="hidden md:block">
           <div className="sticky top-24">
             <ExpeditionMap activeId={activeId} className="aspect-[4/3]" scrollTargetRef={journeyRef} />
-            <p className="mt-3 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink)]/60">
+            <p className="mt-3 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink-muted)]">
               The trail draws itself as you travel.
             </p>
             <ol className="mt-4 space-y-1">
               {eras.map((era) => (
                 <li key={era.id} className="flex gap-3 font-[family-name:var(--font-data)] text-[11px]">
-                  <span className={activeId === era.id ? 'text-[var(--color-rust)]' : 'text-[var(--color-ink)]/45'}>{era.number}</span>
-                  <span className={activeId === era.id ? 'text-[var(--color-ink)]' : 'text-[var(--color-ink)]/60'}>{era.short}</span>
+                  <span className={activeId === era.id ? 'text-[var(--color-rust)]' : 'text-[var(--color-ink-muted)]'}>{era.number}</span>
+                  <span className={activeId === era.id ? 'text-[var(--color-ink)]' : 'text-[var(--color-ink-muted)]'}>{era.short}</span>
                 </li>
               ))}
             </ol>

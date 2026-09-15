@@ -20,6 +20,21 @@ test.describe('keyboard navigation', () => {
     // The anchor offset (-80) parks the journey section just under the top edge.
     await expect(page.locator('#journey')).toBeVisible();
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(300);
+    // tabIndex={-1} on the section makes it the fragment focus target: focus
+    // must land on the journey section itself, not fall back to <body>
+    // (WCAG 2.4.1 Bypass Blocks / 2.4.3 Focus Order).
+    await expect(page.locator('#journey')).toBeFocused();
+  });
+
+  test('section nav links stay invisible until focused, then reveal as chips', async ({ page }) => {
+    await gotoReady(page);
+    const chip = page.getByRole('link', { name: 'The Journey', exact: true });
+    // Clipped to a 1px box while unfocused — never an invisible tab stop that
+    // renders as nothing (WCAG 2.4.7 Focus Visible).
+    const hiddenBox = await chip.boundingBox();
+    expect(hiddenBox === null || hiddenBox.width < 8).toBeTruthy();
+    await chip.focus();
+    await expect.poll(async () => (await chip.boundingBox())?.width ?? 0).toBeGreaterThan(20);
   });
 
   test('waypoint palette traps Tab and closes with Ctrl+K or Escape', async ({ page }) => {
