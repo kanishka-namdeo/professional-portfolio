@@ -71,7 +71,8 @@ export function ExpeditionMap({
   // to avoid coordinate system conflicts.
   const [totalLength, setTotalLength] = useState(0);
   useEffect(() => {
-    if (pathRef.current) {
+    // Guard: jsdom (and non-browser SVG impls) lack SVGGeometryElement APIs.
+    if (pathRef.current && typeof pathRef.current.getTotalLength === 'function') {
       setTotalLength(pathRef.current.getTotalLength());
     }
   }, []);
@@ -92,8 +93,8 @@ export function ExpeditionMap({
       }
     });
     return () => {
-      unsubscribe();
-      unsubscribe2();
+      unsubscribe?.();
+      unsubscribe2?.();
     };
   }, [strokeDasharrayMotion, strokeDashoffsetMotion, isHero, reduceMotion]);
 
@@ -121,8 +122,8 @@ export function ExpeditionMap({
       }
     });
     return () => {
-      unsubscribe();
-      unsubscribe2();
+      unsubscribe?.();
+      unsubscribe2?.();
     };
   }, [heroStrokeDasharrayMotion, heroStrokeDashoffsetMotion, isHero, reduceMotion]);
 
@@ -135,7 +136,7 @@ export function ExpeditionMap({
   useMotionValueEvent(driver, 'change', (v) => {
     const path = pathRef.current;
     const marker = markerRef.current;
-    if (!path || !marker) return;
+    if (!path || !marker || typeof path.getTotalLength !== 'function') return;
     const clamped = Math.max(0, Math.min(1, v));
     const point = path.getPointAtLength(path.getTotalLength() * clamped);
     marker.style.left = `${point.x}%`;
@@ -148,7 +149,7 @@ export function ExpeditionMap({
     if (!reduceMotion) return;
     const path = pathRef.current;
     const marker = markerRef.current;
-    if (!path || !marker) return;
+    if (!path || !marker || typeof path.getTotalLength !== 'function') return;
     const end = path.getPointAtLength(path.getTotalLength());
     marker.style.left = `${end.x}%`;
     marker.style.top = `${end.y}%`;
