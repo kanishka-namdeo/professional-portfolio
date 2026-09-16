@@ -23,8 +23,9 @@ Playwright end-to-end tests for accessibility and user flows
 
 ## Verification
 - Playwright test suite must pass before merge
-- Accessibility tests validate WCAG 2.2 AA compliance (keyboard order, skip-link focus landing, visible focus chips, no-horizontal-overflow at 390px and 320px)
-- CI runs full E2E suite on PR and main branch
+- Accessibility tests validate WCAG 2.2 AA compliance (keyboard order, skip-link focus landing on `#main-content`, visible focus chips, no-horizontal-overflow at 390px and 320px)
+- `a11y.spec.ts` runs the axe gate over every route (`/`, `/field-log`, `/case-study/rentlz`) in both themes and both viewports — add new routes to `ROUTES`
+- CI: the deploy workflow (`.github/workflows/nextjs.yml`) runs lint, type-check, and unit tests before the deploy build; the Playwright suite runs on every push to main via the separate `.github/workflows/e2e.yml` (non-blocking for deploys, but red runs are visible) — still run it locally before merging UI changes
 
 ## Child DOX Index
 - No child docs

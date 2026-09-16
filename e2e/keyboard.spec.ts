@@ -11,19 +11,17 @@ async function gotoReady(page: import('@playwright/test').Page) {
 }
 
 test.describe('keyboard navigation', () => {
-  test('skip link is the first tab stop and lands on the journey', async ({ page }) => {
+  test('skip link is the first tab stop and lands on the page content', async ({ page }) => {
     await gotoReady(page);
     await page.keyboard.press('Tab');
     const skip = page.getByRole('link', { name: 'Skip to content' });
     await expect(skip).toBeFocused();
     await skip.press('Enter');
-    // The anchor offset (-80) parks the journey section just under the top edge.
-    await expect(page.locator('#journey')).toBeVisible();
-    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(300);
-    // tabIndex={-1} on the section makes it the fragment focus target: focus
-    // must land on the journey section itself, not fall back to <body>
+    // tabIndex={-1} on <main> makes it the fragment focus target on every
+    // route (the old #journey target only existed on the home page): focus
+    // must land on the content itself, not fall back to <body>
     // (WCAG 2.4.1 Bypass Blocks / 2.4.3 Focus Order).
-    await expect(page.locator('#journey')).toBeFocused();
+    await expect(page.locator('#main-content')).toBeFocused();
   });
 
   test('section nav links stay invisible until focused, then reveal as chips', async ({ page }) => {
@@ -42,7 +40,7 @@ test.describe('keyboard navigation', () => {
     await page.keyboard.press('/');
     const dialog = page.getByRole('dialog', { name: /jump to a waypoint/i });
     await expect(dialog).toBeVisible();
-    const input = page.getByRole('textbox', { name: /search destinations/i });
+    const input = page.getByRole('combobox', { name: /search destinations/i });
     await expect(input).toBeFocused();
 
     // Tab cycles the dialog's single tab stop (the input) — it never leaks out.
@@ -67,7 +65,7 @@ test.describe('keyboard navigation', () => {
   test('Enter travels instantly to the selected waypoint', async ({ page }) => {
     await gotoReady(page);
     await page.keyboard.press('/');
-    const input = page.getByRole('textbox', { name: /search destinations/i });
+    const input = page.getByRole('combobox', { name: /search destinations/i });
     await expect(input).toBeFocused();
     await input.fill('MoveInSync');
     await page.keyboard.press('Enter');
