@@ -12,6 +12,7 @@ Playwright end-to-end tests for accessibility and user flows
 - Page objects pattern preferred for maintainable selectors
 - Tests run against local dev server or staging environment
 - Snapshots and screenshots must be reviewed before committing
+- `axe-core` is a DIRECT devDependency: `a11y.spec.ts` imports its `Result` type, and a transitive-only resolution once passed on a dev machine (stale hoisted node_modules) while failing fresh checkouts — breaking the CI type-check gate AND the Vercel `next build` type check (tsconfig includes `e2e/`). Any package imported by specs or app code must be declared in package.json
 
 ## Work Guidance
 - Add tests for new user flows in `{feature}.spec.ts`
