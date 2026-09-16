@@ -27,7 +27,7 @@ describe('MobileTrailChip', () => {
   function fireProgress(value: number) {
     // The chip registers (motionValue, event, handler); invoke the handler
     // the way motion would on a scroll change.
-    const call = mockUseMotionValueEvent.mock.calls.find(([mv, event]) => event === 'change');
+    const call = mockUseMotionValueEvent.mock.calls.find(([, event]) => event === 'change');
     expect(call).toBeDefined();
     act(() => {
       (call as unknown as [unknown, string, (v: number) => void])[2](value);
@@ -41,7 +41,9 @@ describe('MobileTrailChip', () => {
     expect(chip).toHaveTextContent('03 · Medulla.AI');
     fireProgress(0.412);
     expect(chip).toHaveTextContent('41%');
-    expect(chip).toHaveAccessibleName('Open waypoint jumper — currently at Medulla.AI');
+    // Label in Name (WCAG 2.5.3): the accessible name carries the exact
+    // visible readout so speech input ("click 03 · Medulla.AI · 41%") matches.
+    expect(chip).toHaveAccessibleName('Open waypoint jumper — 03 · Medulla.AI · 41%');
   });
 
   it('reads "en route" before the first waypoint is reached', () => {

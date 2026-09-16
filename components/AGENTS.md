@@ -47,19 +47,21 @@ React component library for the portfolio. Organized by feature domain (camps, j
 
 ### Feature Domains
 - `camps/` - Base camp components (portfolio project showcases)
-- `journey/` - Journey chapter components (career timeline)
+- `journey/` - Journey chapter components (career timeline) + shared case-study dossier reader
 - `ledger/` - Ledger/dispatches components (blog/writing)
 - `map/` - Expedition map components (interactive navigation)
 - `ui/` - UI primitives (buttons, inputs, etc. - currently minimal)
 
 ### Accessibility Requirements
-- All interactive elements need `aria-label` or visible text
-- Video elements must have pause controls (WCAG 2.2.2)
-- Respect `prefers-reduced-motion` for animations (including scroll-driven springs)
+- All interactive elements need `aria-label` or visible text; when a control has BOTH, the accessible name must contain the exact visible readout (Label in Name, WCAG 2.5.3 — e.g. MobileTrailChip's name includes "03 · Medulla.AI · 41%")
+- Video elements must have pause controls (WCAG 2.2.2); recordings autoplay ONLY while their camp is in the viewport (second `useInView` watch in BaseCamp) and never under reduced motion or on mobile
+- Respect `prefers-reduced-motion` for animations (including scroll-driven springs) AND for every smooth-scroll fallback (`scrollIntoView({ behavior: 'smooth' })` must check the media query first — Lenis handles it internally, hand-rolled fallbacks don't)
 - Keyboard navigation must work for all interactive elements
+- Dialog triggers carry `aria-haspopup="dialog"` (rail ⌘K button, MobileTrailChip, case-study stamp); the palette's combobox input keeps `aria-expanded={true}` while the dialog is open — the listbox (empty state included) is always visible
+- The ⌘K palette never opens over another `[data-modal-dialog]` overlay (stacked modals trap focus twice and travel would scroll a hidden page)
 - Section anchor roots (`#journey`, `#camps`, `#ledger`, `#contact`) carry `tabIndex={-1}` so fragment jumps land focus there; the `[tabindex='-1']` CSS in `globals.css` suppresses the container outline and sets the scroll margin
-- Visible focus-visible outlines in rust on every interactive element; tap targets ≥ 24×24px (padding/flex hit area, not type size)
-- Heading outline stays logical: h1 (sr-only) → section h2s → subsection h3s (e.g. ContactFAQ under EndOfTrail)
+- Visible focus-visible outlines in rust on every interactive element — including text inputs (the palette input uses the standard rust focus-visible outline, never bare `outline-none`); tap targets ≥ 24×24px (padding/flex hit area, not type size)
+- Heading outline stays logical: h1 (sr-only) → section h2s → subsection h3s (e.g. ContactFAQ under EndOfTrail); `CaseStudyArticle` derives its section/inner heading levels from `titleAs` so the standalone route runs h1 → h2 → h3 without skips
 
 ## Verification
 

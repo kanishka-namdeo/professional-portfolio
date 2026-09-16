@@ -40,8 +40,13 @@ export function useRoughAnnotation({ container, selectors, step, enabled }: Opti
   const instancesRef = useRef<AnnotationHandle[]>([]);
   // Latest-ref: creation applies visibility for whatever step is current at the
   // moment the dynamic import resolves, without putting step in the create deps.
+  // Synced in an effect (never during render): the import resolves orders of
+  // magnitude later than an effect flush, so the read below always sees the
+  // committed step.
   const stepRef = useRef(step);
-  stepRef.current = step;
+  useEffect(() => {
+    stepRef.current = step;
+  }, [step]);
   // Bumped when the documentElement class changes; its only job is to re-run
   // the creation effect so annotations re-read the color token for the theme.
   const [themeKey, setThemeKey] = useState(0);

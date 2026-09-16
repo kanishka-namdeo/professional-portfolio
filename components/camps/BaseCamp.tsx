@@ -36,26 +36,43 @@ export function BaseCamp({ camp }: { camp: Camp }) {
   // step (useRoughAnnotation's step effect) — without `once`, every scroll
   // re-entry tore the marks down and re-animated them from scratch.
   const inView = useInView(containerRef, { margin: '-20% 0px', once: true });
+  // Separate, sticky viewport watch for the recording: all three camps render
+  // at page load, so an unconditional desktop autoplay would fetch and decode
+  // ~2.2MB of below-fold video while the reader is still at the hero.
+  const videoInView = useInView(containerRef, { margin: '-10% 0px' });
   const reduceMotion = useReducedMotion() ?? false;
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   useEffect(() => setMounted(true), []);
 
   // Spec guardrails: reduced-motion -> poster + play control; mobile -> tap to
-  // play; desktop -> muted autoplay loop. Everything else stays silent.
-  const autoPlay = mounted && isDesktop && !reduceMotion;
+  // play; desktop -> muted autoplay loop, but only while the camp is on screen.
+  const autoPlay = mounted && isDesktop && !reduceMotion && videoInView;
+
+  // Whether playback was ever auto-started: only an auto-started video pauses
+  // on viewport exit — a tap-to-play video (mobile/reduced motion) keeps
+  // playing, and a user's manual pause survives scroll round-trips.
+  const wasAutoStarted = useRef(false);
+  const userPaused = useRef(false);
 
   useEffect(() => {
-    if (!autoPlay) return;
-    // Autoplay is active, so the recording plays; reflect that on the control.
-    // (onPlay/onPause keep the state truthful afterwards.)
-    setPaused(false);
     const video = videoRef.current;
-    if (video && video.paused) {
-      // Chromium doesn't honour a post-mount autoplay attribute flip on a
-      // preload="none" element — nudge it explicitly.
-      const played: unknown = video.play();
-      if (played instanceof Promise) played.catch(() => {});
+    if (!video) return;
+    if (autoPlay) {
+      wasAutoStarted.current = true;
+      // Autoplay is active, so the recording plays; reflect that on the control
+      // immediately (onPlay/onPause keep it truthful afterwards — jsdom never
+      // fires play events, so the event alone can't drive the label).
+      setPaused(false);
+      if (userPaused.current) return;
+      if (video.paused) {
+        // Chromium doesn't honour a post-mount autoplay attribute flip on a
+        // preload="none" element — nudge it explicitly.
+        const played: unknown = video.play();
+        if (played instanceof Promise) played.catch(() => {});
+      }
+    } else if (wasAutoStarted.current && !video.paused) {
+      video.pause();
     }
   }, [autoPlay]);
 
@@ -84,8 +101,10 @@ export function BaseCamp({ camp }: { camp: Camp }) {
             <Image
               src={camp.screenshot}
               alt={`${camp.title} — ${camp.tagline}`}
-              width={1200}
-              height={800}
+              // Intrinsic size from data: a mismatched box re-layouts the plate
+              // (and everything under it) when the lazy image loads (CLS).
+              width={camp.screenshotWidth}
+              height={camp.screenshotHeight}
               sizes="(max-width: 768px) 100vw, 50vw"
               className="h-auto w-full"
             />
@@ -143,8 +162,13 @@ export function BaseCamp({ camp }: { camp: Camp }) {
               onClick={() => {
                 const video = videoRef.current;
                 if (!video) return;
-                if (video.paused) void video.play();
-                else video.pause();
+                if (video.paused) {
+                  userPaused.current = false;
+                  void video.play();
+                } else {
+                  userPaused.current = true;
+                  video.pause();
+                }
               }}
               aria-label={paused ? `Play recording: ${camp.title}` : `Pause recording: ${camp.title}`}
               className="absolute inset-0 flex cursor-pointer items-end justify-start p-3 focus-visible:outline focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
@@ -183,7 +207,9 @@ function StepBlock({ index, onEnter, heading, body, active }: { index: number; o
   // callback identity. A fresh onEnter closure here would re-fire this effect
   // every render and let a later visible step override a hover-activated step.
   const onEnterRef = useRef(onEnter);
-  onEnterRef.current = onEnter;
+  useEffect(() => {
+    onEnterRef.current = onEnter;
+  }, [onEnter]);
   useEffect(() => {
     if (visible) onEnterRef.current(index);
   }, [visible, index]);

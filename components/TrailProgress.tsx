@@ -47,10 +47,14 @@ export function TrailProgress() {
   };
 
   // Mouse travel stays smooth (Lenis default); keyboard jumps above are instant.
+  // The non-Lenis fallback respects reduced motion (no animated scroll).
   const travelMouse = (era: (typeof eras)[number]) => {
     const target = `#era-${era.id}`;
     if (lenis) lenis.scrollTo(target);
-    else document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' });
+    else
+      document.querySelector(target)?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      });
   };
 
   const onKeyDown = (event: React.KeyboardEvent) => {
@@ -142,6 +146,7 @@ export function TrailProgress() {
           onClick={() => window.dispatchEvent(new Event(OPEN_PALETTE_EVENT))}
           className="mt-2 flex min-h-[24px] w-full items-center justify-end text-right font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink-muted)] hover:text-[var(--color-rust)] focus-visible:text-[var(--color-rust)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
           aria-label="Open the waypoint jumper"
+          aria-haspopup="dialog"
         >
           ⌘K jump
         </button>

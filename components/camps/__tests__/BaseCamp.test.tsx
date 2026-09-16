@@ -31,7 +31,7 @@ describe('BaseCamp', () => {
     render(<BaseCamp camp={camps[0]} />);
     // next/image rewrites src through its loader — assert on the resolved path, not exact equality
     const src = screen.getByAltText(/AgentCanvas/i).getAttribute('src') ?? '';
-    expect(decodeURIComponent(src)).toContain('/projects/agent-canvas.png');
+    expect(decodeURIComponent(src)).toContain('/projects/agent-canvas.webp');
   });
   it('renders annotation labels pinned to the screenshot regions', () => {
     render(<BaseCamp camp={camps[0]} />);

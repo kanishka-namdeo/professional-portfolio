@@ -24,8 +24,8 @@ describe('Hero', () => {
   });
   it('states the role and headline metrics in visible text (5-second rule)', () => {
     render(<Hero />);
-    expect(screen.getByText(/product manager/i)).toBeInTheDocument();
-    expect(screen.getByText(/9\+ years/i)).toBeInTheDocument();
+    // The full contracted role line (components/AGENTS.md), not just fragments.
+    expect(screen.getByText('Product Manager · 9+ years · SaaS, mobility & AI')).toBeInTheDocument();
     expect(screen.getByText(/8× ARR · 70K\+ monthly users · 50\+ locations/)).toBeInTheDocument();
   });
   it('states availability as plain text, with no stat rows or stock placeholders', () => {

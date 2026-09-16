@@ -77,9 +77,13 @@ export function ThemeToggle() {
       // would make AT announce the state twice ("Switch to day theme, pressed").
       aria-label="Toggle dark theme"
       title={dark ? 'Day' : 'Night'}
-      className="fixed right-4 top-4 z-50 flex h-9 w-9 items-center justify-center border border-[var(--color-ink)]/30 bg-[var(--color-parchment)] text-[var(--color-ink)] transition-colors hover:border-[var(--color-rust)] hover:text-[var(--color-rust)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
+      className="theme-toggle fixed right-4 top-4 z-50 flex h-9 w-9 items-center justify-center border border-[var(--color-ink)]/30 bg-[var(--color-parchment)] text-[var(--color-ink)] transition-colors hover:border-[var(--color-rust)] hover:text-[var(--color-rust)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
     >
-      {dark ? <MoonIcon /> : <SunIcon />}
+      {/* Both icons render and CSS picks the visible one from the html.dark
+          class, so the icon matches the applied theme on first paint instead
+          of lagging until this component hydrates. */}
+      <span className="theme-toggle-sun" aria-hidden><SunIcon /></span>
+      <span className="theme-toggle-moon" aria-hidden><MoonIcon /></span>
     </button>
   );
 }

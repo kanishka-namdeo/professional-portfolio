@@ -10,13 +10,16 @@ import { useTrailComplete } from '@/hooks/useVisitedEras';
  */
 export function FieldNote() {
   const complete = useTrailComplete();
-  if (!complete) return null;
 
   return (
-    <aside
-      aria-label="Hidden field note — you travelled the whole trail"
-      className="mt-14 max-w-md rotate-[-0.8deg] border border-[var(--color-ink)]/25 bg-[var(--color-notepaper)] p-5 shadow-[3px_4px_8px_var(--color-shadow-soft)]"
-    >
+    // The live region must already be in the DOM before the note is inserted,
+    // or screen readers won't announce the appearance (WCAG 4.1.3).
+    <div aria-live="polite">
+      {complete && (
+        <aside
+          aria-label="Hidden field note — you travelled the whole trail"
+          className="mt-14 max-w-md rotate-[-0.8deg] border border-[var(--color-ink)]/25 bg-[var(--color-notepaper)] p-5 shadow-[3px_4px_8px_var(--color-shadow-soft)]"
+        >
       {/* --color-rust-text: small (10-12px) rust text on the dark notepaper
           needs its own token — #CE7448 computes 4.18:1 there (WCAG 1.4.3). */}
       <p className="flex items-center gap-2 font-[family-name:var(--font-data)] text-[10px] uppercase tracking-[0.2em] text-[var(--color-rust-text)]">
@@ -50,6 +53,8 @@ export function FieldNote() {
           the-pokemon-journey ↗
         </a>
       </p>
-    </aside>
+        </aside>
+      )}
+    </div>
   );
 }

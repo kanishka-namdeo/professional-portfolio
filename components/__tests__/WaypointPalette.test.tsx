@@ -18,7 +18,7 @@ function focusPaletteInput() {
   // The palette focuses its input in a requestAnimationFrame after paint;
   // jest.setup maps that to a 0ms timeout, so flush microtasks.
   return waitFor(() =>
-    expect(screen.getByRole('textbox', { name: /search destinations/i })).toHaveFocus(),
+    expect(screen.getByRole('combobox', { name: /search destinations/i })).toHaveFocus(),
   );
 }
 
@@ -44,7 +44,7 @@ describe('WaypointPalette', () => {
   it('filters as you type', () => {
     render(<WaypointPalette />);
     openWithCtrlK();
-    fireEvent.change(screen.getByRole('textbox', { name: /search destinations/i }), {
+    fireEvent.change(screen.getByRole('combobox', { name: /search destinations/i }), {
       target: { value: 'medulla' },
     });
     const options = screen.getAllByRole('option');
@@ -55,7 +55,7 @@ describe('WaypointPalette', () => {
   it('renders the empty state as presentation, not a phantom option', () => {
     render(<WaypointPalette />);
     openWithCtrlK();
-    fireEvent.change(screen.getByRole('textbox', { name: /search destinations/i }), {
+    fireEvent.change(screen.getByRole('combobox', { name: /search destinations/i }), {
       target: { value: 'zzzz-no-such-waypoint' },
     });
     expect(screen.queryAllByRole('option')).toHaveLength(0);
@@ -65,10 +65,10 @@ describe('WaypointPalette', () => {
   it('travels to the selected waypoint with Enter and closes (instant, per the rail rule)', () => {
     render(<WaypointPalette />);
     openWithCtrlK();
-    fireEvent.change(screen.getByRole('textbox', { name: /search destinations/i }), {
+    fireEvent.change(screen.getByRole('combobox', { name: /search destinations/i }), {
       target: { value: 'medulla' },
     });
-    fireEvent.keyDown(screen.getByRole('textbox', { name: /search destinations/i }), { key: 'Enter' });
+    fireEvent.keyDown(screen.getByRole('combobox', { name: /search destinations/i }), { key: 'Enter' });
     expect(mockScrollTo).toHaveBeenCalledWith('#era-language', { immediate: true });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
@@ -76,7 +76,7 @@ describe('WaypointPalette', () => {
   it('closes on Escape', () => {
     render(<WaypointPalette />);
     openWithCtrlK();
-    fireEvent.keyDown(screen.getByRole('textbox', { name: /search destinations/i }), { key: 'Escape' });
+    fireEvent.keyDown(screen.getByRole('combobox', { name: /search destinations/i }), { key: 'Escape' });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
@@ -95,7 +95,7 @@ describe('WaypointPalette', () => {
     render(<WaypointPalette />);
     openWithCtrlK();
     await focusPaletteInput();
-    fireEvent.keyDown(screen.getByRole('textbox', { name: /search destinations/i }), {
+    fireEvent.keyDown(screen.getByRole('combobox', { name: /search destinations/i }), {
       key: 'k',
       ctrlKey: true,
     });
@@ -105,7 +105,7 @@ describe('WaypointPalette', () => {
   it('traps Tab on the input: the modal is a single tab stop', async () => {
     render(<WaypointPalette />);
     openWithCtrlK();
-    const input = screen.getByRole('textbox', { name: /search destinations/i });
+    const input = screen.getByRole('combobox', { name: /search destinations/i });
     await focusPaletteInput();
     fireEvent.keyDown(input, { key: 'Tab' });
     expect(input).toHaveFocus();
@@ -118,7 +118,7 @@ describe('WaypointPalette', () => {
     openWithCtrlK();
     await focusPaletteInput();
     expect(mockStop).toHaveBeenCalledTimes(1);
-    fireEvent.keyDown(screen.getByRole('textbox', { name: /search destinations/i }), { key: 'Escape' });
+    fireEvent.keyDown(screen.getByRole('combobox', { name: /search destinations/i }), { key: 'Escape' });
     expect(mockStart).toHaveBeenCalledTimes(1);
   });
 });

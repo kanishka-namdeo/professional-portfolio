@@ -85,6 +85,10 @@ export function Ledger() {
                 rel="noopener noreferrer"
                 className="flex h-full flex-col border border-[var(--color-ink)]/20 bg-[var(--color-paper)]/60 transition-colors hover:bg-[var(--color-paper)]/90 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[var(--color-rust)]"
               >
+                {/* Raw <img> is deliberate: remote Medium thumbnails can't go
+                    through next/image on the static export, CSP img-src is
+                    scoped to *.medium.com, and the aspect box prevents CLS. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={w.image}
                   alt=""

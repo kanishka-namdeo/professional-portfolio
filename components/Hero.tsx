@@ -32,11 +32,20 @@ export default function Hero() {
           </p>
         </div>
         <div className="mt-8">
-          <ExpeditionMap activeId={null} className="aspect-[21/9] max-h-[58vh]" priority />
+          <ExpeditionMap activeId={null} className="aspect-[21/9] max-h-[58vh]" priority mapLabel="hero map" />
         </div>
         <button
           type="button"
-          onClick={() => (lenis ? lenis.scrollTo('#era-origin') : document.getElementById('era-origin')?.scrollIntoView({ behavior: 'smooth' }))}
+          onClick={() => {
+            // Lenis respects reduced motion itself; the pre-hydration fallback
+            // must check it before animating.
+            if (lenis) {
+              lenis.scrollTo('#era-origin');
+              return;
+            }
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            document.getElementById('era-origin')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+          }}
           className="mt-8 border border-[var(--color-ink)] bg-[var(--color-ink)] px-6 py-3 font-[family-name:var(--font-data)] text-sm font-bold text-[var(--color-parchment)] hover:shadow-[4px_4px_0_var(--color-rust)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)] focus-visible:outline-offset-2"
         >
           Follow the trail ↓

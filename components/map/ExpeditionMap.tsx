@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { animate, motion, useMotionValue, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react';
 import { useLenis } from 'lenis/react';
 import { eras } from '@/data/journey';
@@ -39,6 +39,7 @@ export function ExpeditionMap({
   priority = false,
   showLabels = true,
   scrollTargetRef,
+  mapLabel,
 }: {
   activeId: string | null;
   className?: string;
@@ -46,6 +47,12 @@ export function ExpeditionMap({
   priority?: boolean;
   /** Waypoint chips are on by default; the hero draws them too — that's the navigation. */
   showLabels?: boolean;
+  /**
+   * Distinguishes the two map instances for assistive tech: the hero and the
+   * journey render identical waypoint buttons, and without this each
+   * destination is announced twice with no way to tell them apart.
+   */
+  mapLabel?: string;
   /**
    * Optional ref to the scroll container that should drive the trail-draw progress.
    * The Journey section passes its own ref so the trail draws as the reader scrolls
@@ -108,8 +115,10 @@ export function ExpeditionMap({
   const lastProgressRef = useRef(0);
 
   // Positions the traveller from the sample cache. Pure DOM writes — safe to
-  // call on every frame and again on resize.
-  const applyMarker = (v: number) => {
+  // call on every frame and again on resize. Stable identity: it only touches
+  // refs, and the motion-value subscription below would otherwise re-bind on
+  // every render.
+  const applyMarker = useCallback((v: number) => {
     const marker = markerRef.current;
     const samples = samplesRef.current;
     const size = sizeRef.current;
@@ -125,7 +134,7 @@ export function ExpeditionMap({
     marker.style.transform = `translate(calc(${(x / 100) * size.w}px - 50%), calc(${(y / 100) * size.h}px - 50%))`;
     marker.style.opacity = clamped < 0.005 ? '0' : '1';
     lastProgressRef.current = clamped;
-  };
+  }, []);
 
   // Measure + pre-sample the trail once per mount; keep the px cache fresh on
   // resize (the marker is repositioned from the cached progress).
@@ -154,7 +163,7 @@ export function ExpeditionMap({
     });
     observer.observe(container);
     return () => observer.disconnect();
-  }, []);
+  }, [applyMarker]);
 
   const heroDraw = useMotionValue(0);
   const driver = isHero ? heroDraw : pathProgress;
@@ -195,7 +204,7 @@ export function ExpeditionMap({
     const marker = markerRef.current;
     if (!marker || !samplesRef.current) return; // jsdom/geometry guard
     applyMarker(1);
-  }, [reduceMotion]);
+  }, [reduceMotion, applyMarker]);
 
   // One establishing scene of parallax (the hero map), per the motion guidelines.
   const contourY = useTransform(scrollYProgress, [0, 1], ['-1.6%', '1.6%']);
@@ -203,7 +212,11 @@ export function ExpeditionMap({
   const travel = (era: Era) => {
     const target = `#era-${era.id}`;
     if (lenis) lenis.scrollTo(target);
-    else document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' });
+    else
+      // Pre-hydration fallback: no animated scroll under reduced motion.
+      document.querySelector(target)?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      });
   };
 
   return (
@@ -270,7 +283,7 @@ export function ExpeditionMap({
         // keeps 320px viewports overflow-free while covering the overhang.
         <ul
           role="list"
-          aria-label="Career waypoints"
+          aria-label={mapLabel ? `Career waypoints — ${mapLabel}` : 'Career waypoints'}
           className="absolute inset-0 overflow-clip [overflow-clip-margin:36px]"
         >
           {eras.map((era) => (
@@ -281,7 +294,7 @@ export function ExpeditionMap({
               <button
                 type="button"
                 onClick={() => travel(era)}
-                aria-label={`Travel to ${era.company}`}
+                aria-label={mapLabel ? `Travel to ${era.company} (${mapLabel})` : `Travel to ${era.company}`}
                 title={era.company}
                 className={`inline-flex min-h-[24px] items-center whitespace-nowrap rounded-none border px-2 py-1 font-[family-name:var(--font-data)] text-[10px] transition-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)] ${
                   activeId === era.id

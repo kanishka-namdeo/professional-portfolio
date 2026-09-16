@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLenis } from 'lenis/react';
+import { modalLockCount, useModalLock } from '@/hooks/useModalLock';
 import { eras } from '@/data/journey';
 import { camps } from '@/data/camps';
 import { writing } from '@/data/ledger';
@@ -59,11 +60,14 @@ export function WaypointPalette() {
   const inputRef = useRef<HTMLInputElement>(null);
   const listboxRef = useRef<HTMLUListElement>(null);
   const restoreFocus = useRef<Element | null>(null);
-  const items = useMemo(buildItems, []);
+  const items = useMemo(() => buildItems(), []);
 
   // Mirrors `open` for the global key listener, which is registered once.
+  // Synced in an effect: refs must not be written during render.
   const openRef = useRef(open);
-  openRef.current = open;
+  useEffect(() => {
+    openRef.current = open;
+  }, [open]);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -83,6 +87,11 @@ export function WaypointPalette() {
     };
     const inPaletteInput = (target: EventTarget | null) =>
       !!(target as HTMLElement | null)?.closest?.('[data-palette-input]');
+    // Another overlay (the case-study dossier) holds a modal lock — never
+    // stack this palette on top of an open dialog: it would trap focus twice
+    // and travel() would scroll a page the reader can't see.
+    const otherModalOpen = () =>
+      !!document.querySelector('[data-modal-dialog]:not([data-modal-dialog="palette"])');
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target;
       const typing = isTypingTarget(target);
@@ -93,12 +102,12 @@ export function WaypointPalette() {
           if (openRef.current) setOpen(false);
           return;
         }
-        if (typing) return;
+        if (typing || otherModalOpen()) return;
         event.preventDefault();
         setOpen(true);
         return;
       }
-      if (event.key === '/' && !typing) {
+      if (event.key === '/' && !typing && !otherModalOpen()) {
         event.preventDefault();
         setOpen((prev) => !prev);
       }
@@ -115,12 +124,9 @@ export function WaypointPalette() {
   // While the dialog is open, stop the Lenis engine so wheel input can't
   // scroll the page behind the modal (and the result list scrolls natively).
   // Native key/wheel scrolling of the document is already inert: the page
-  // scrolls only through Lenis, which is clipped while stopped.
-  useEffect(() => {
-    if (!open || !lenis) return;
-    lenis.stop();
-    return () => lenis.start();
-  }, [open, lenis]);
+  // scrolls only through Lenis, which is clipped while stopped. The shared
+  // lock keeps this composable with the case-study dossier if both are open.
+  useModalLock(open);
 
   useEffect(() => {
     if (open) {
@@ -150,8 +156,11 @@ export function WaypointPalette() {
   const travel = (item: PaletteItem, opts?: { immediate?: boolean }) => {
     setOpen(false);
     // travel() runs before the open-effect cleanup has restarted Lenis, and
-    // a stopped Lenis ignores scrollTo — so resume it explicitly first.
-    lenis?.start();
+    // a stopped Lenis ignores scrollTo — so resume it explicitly first. Only
+    // when this palette holds the page's last modal lock, though: over a
+    // stacked overlay (dossier), releasing the lock here would scroll the
+    // page behind a modal the reader is still inside.
+    if (modalLockCount() <= 1) lenis?.start();
     if (item.href) {
       window.open(item.href, '_blank', 'noopener,noreferrer');
       return;
@@ -204,6 +213,7 @@ export function WaypointPalette() {
       role="dialog"
       aria-modal="true"
       aria-label="Jump to a waypoint"
+      data-modal-dialog="palette"
       onKeyDown={trapFocus}
       // Desktop keeps the centred drop panel (items-start + 12vh); below md it
       // docks to the bottom edge as a full-width sheet (thumb reach, and the
@@ -227,9 +237,16 @@ export function WaypointPalette() {
             onKeyDown={onKeyDown}
             placeholder="Jump to a waypoint, camp, or dispatch…"
             aria-label="Search destinations"
+            role="combobox"
+            // The listbox is rendered for the dialog's whole lifetime (the
+            // empty state included), so the popup is always expanded while
+            // this input exists — announcing "collapsed" with zero results
+            // lied to assistive tech (WCAG 4.1.2).
+            aria-expanded={true}
+            aria-autocomplete="list"
             aria-controls="palette-list"
             aria-activedescendant={results[active] ? `palette-${results[active].id}` : undefined}
-            className="w-full bg-transparent font-[family-name:var(--font-data)] text-sm text-[var(--color-ink)] outline-none placeholder:text-[var(--color-ink-muted)]"
+            className="w-full bg-transparent font-[family-name:var(--font-data)] text-sm text-[var(--color-ink)] outline-none placeholder:text-[var(--color-ink-muted)] focus-visible:outline focus-visible:-outline-offset-4 focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
           />
         </div>
         <ul id="palette-list" role="listbox" aria-label="Destinations" className="max-h-[50vh] overflow-y-auto py-2" ref={listboxRef}>

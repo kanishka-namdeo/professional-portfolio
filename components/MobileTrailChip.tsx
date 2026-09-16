@@ -32,9 +32,12 @@ export function MobileTrailChip() {
     <button
       type="button"
       onClick={() => window.dispatchEvent(new Event(OPEN_PALETTE_EVENT))}
+      aria-haspopup="dialog"
+      // Label in Name (WCAG 2.5.3): the accessible name must contain the
+      // visible readout ("03 · MoveInSync · 41%") so speech input matches.
       aria-label={
         current
-          ? `Open waypoint jumper — currently at ${current.short}`
+          ? `Open waypoint jumper — ${current.number} · ${current.short} · ${percent}%`
           : 'Open waypoint jumper — en route'
       }
       className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] left-1/2 z-40 flex min-h-[44px] -translate-x-1/2 items-center gap-2 border border-[var(--color-ink)] bg-[var(--color-parchment)] px-4 py-2 font-[family-name:var(--font-data)] text-xs text-[var(--color-ink)] shadow-[3px_3px_0_var(--color-shadow-hard)] md:hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
