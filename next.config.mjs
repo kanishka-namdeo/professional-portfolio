@@ -6,7 +6,9 @@ const nextConfig = {
   basePath: process.env.GITHUB_ACTIONS ? (process.env.NEXT_BASE_PATH || '') : '',
   assetPrefix: process.env.GITHUB_ACTIONS && process.env.NEXT_BASE_PATH ? `${process.env.NEXT_BASE_PATH}/` : '',
   images: {
-    unoptimized: process.env.GITHUB_ACTIONS,
+    // Boolean cast: GITHUB_ACTIONS arrives as the string "true" and Next 16
+    // strict config validation rejects a string here.
+    unoptimized: Boolean(process.env.GITHUB_ACTIONS),
     // For static export, we can't use Next.js image optimization API
     // but next/image still provides lazy loading and proper src attributes
     formats: ['image/avif', 'image/webp'],
@@ -20,17 +22,17 @@ const nextConfig = {
   transpilePackages: ['d3-contour', 'd3-array', 'internmap', 'simplex-noise'],
   // Disable x-powered-by header for security
   poweredByHeader: false,
-  // Enable compiler optimizations
-  compiler: {
-    // Remove console.log in production
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
   // Disable TypeScript errors during build (use separate type-check command)
   typescript: {
     ignoreBuildErrors: false,
   },
-  // Security headers for all routes
+  // Security + caching headers for all routes
   async headers() {
+    // Heavy self-hosted assets are re-committed in place (no content hashing),
+    // so pin nothing forever: one day fresh plus a week of stale-while-
+    // revalidate still skips Vercel's default revalidate-every-request
+    // round-trip on repeat views while letting updates propagate quickly.
+    const assetCache = { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' };
     return [
       {
         source: '/(.*)',
@@ -39,12 +41,15 @@ const nextConfig = {
           // - 'unsafe-eval' was removed: only dev tooling needed it and Turbopack dev works without it.
           // - 'unsafe-inline' stays in script-src because the Next.js App Router inlines
           //   flight-data <script> blocks into the HTML. Known follow-up: nonce-based CSP
-          //   via middleware to drop 'unsafe-inline'.
+          //   via middleware to drop 'unsafe-inline' (the theme pre-paint script and
+          //   JSON-LD blocks must carry the nonce when that happens).
           // - img-src is narrowed to the only remote image host in use: Medium thumbnails
-          //   in the Ledger (data/ledger.ts) are served from miro.medium.com.
+          //   in the Ledger (data/ledger.ts) are served from *.medium.com.
+          // - object-src/base-uri/form-action do NOT inherit from default-src and must be
+          //   spelled out; no <object>/<embed>/<form>/<base> exists in the app.
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://miro.medium.com https://*.medium.com; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://va.vercel-scripts.com https://vitals.vercel-insights.com; frame-ancestors 'none';"
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.medium.com; font-src 'self'; connect-src 'self' https://va.vercel-scripts.com https://vitals.vercel-insights.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';"
           },
           // Prevent clickjacking attacks
           {
@@ -61,10 +66,10 @@ const nextConfig = {
             key: 'Referrer-Policy',
             value: 'strict-origin-when-cross-origin'
           },
-          // Prevent XSS filter from being disabled by attackers
+          // Isolate the browsing context from cross-origin openers (XS-Leaks)
           {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block'
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin'
           },
           // Permissions Policy for browser features
           {
@@ -78,6 +83,9 @@ const nextConfig = {
           }] : [])
         ],
       },
+      ...['/projects/:path*', '/recordings/:path*', '/map/:path*', '/og-image.jpg', '/field-log.pdf'].map(
+        (source) => ({ source, headers: [assetCache] }),
+      ),
     ];
   },
 };
