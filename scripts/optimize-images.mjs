@@ -6,9 +6,10 @@
 import sharp from 'sharp';
 
 const TARGETS = [
-  // thetell source shot is 4415x2484 PNG (~386KB); 2560w WebP q82 is
-  // indistinguishable in the 1200w camp plate and cuts most of the weight.
-  { input: 'public/projects/thetell.png', output: 'public/projects/thetell.webp', width: 2560, quality: 82 },
+  // One entry per oversized RAW source at commit time. The committed
+  // screenshots all ship dieted (agent-canvas 1280w, pi-dash 2560w, thetell
+  // 2560w — WebP q82; their raw sources were one-shot optimized and deleted),
+  // so this list stays empty until a new raw shot lands.
 ];
 
 try {

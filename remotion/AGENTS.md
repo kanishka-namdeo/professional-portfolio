@@ -17,7 +17,7 @@ Remotion video generation - field recordings and compositions for project showca
 
 ## Work Guidance
 - **Adding a new composition**: Create a file in `compositions/`, export a component that renders `FieldRecording` with screenshot path, title, captions array, and `FRAMES_PER_BEAT` constant
-- **Screenshot assets**: Place image files in `public/projects/` and reference them with relative paths like `"projects/filename.png"`
+- **Screenshot assets**: Place pre-optimized images in `public/projects/` and reference them with relative paths like `"projects/filename.webp"` (WebP, per the public/ contract — the .png sources were one-shot optimized away)
 - **Caption timing**: Define captions as an array; each displays for `FRAMES_PER_BEAT` frames (default 75)
 - **Styling**: Keep the field recording aesthetic (dark background #2E281E, cream text #F3EDE2, monospace font, REC indicator)
 - **Registration**: Add the composition to `RemotionRoot` in `Root.tsx` with matching component import

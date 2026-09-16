@@ -122,7 +122,7 @@ body{background:${PALETTE.parchment};color:${PALETTE.ink};font-family:'JetBrains
     <h1 class="name">Kanishka<br>Namdeo</h1>
     <div class="rule"></div>
     <p class="role">Product Manager — Dubai / remote</p>
-    <p class="proof">9+ years &middot; 10&times; ARR &middot; 70K+ monthly users</p>
+    <p class="proof">9+ years &middot; 8&times; ARR &middot; 70K+ monthly users</p>
     <p class="url">kanishkanamdeo.com</p>
   </div>
   <div class="grain"></div>

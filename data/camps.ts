@@ -16,6 +16,10 @@ export interface Camp {
   title: string;
   tagline: string;
   screenshot: string;
+  /** Intrinsic pixel size of the screenshot file — the <Image> box must match
+   * it or the browser re-layouts on load (CLS) under h-auto w-full. */
+  screenshotWidth: number;
+  screenshotHeight: number;
   repoUrl: string;
   stack: string[];
   year: string;
@@ -30,7 +34,9 @@ export const camps: Camp[] = [
     repo: 'AgentCanvas',
     title: 'AgentCanvas',
     tagline: 'Your agentic designer — build agent workflows visually.',
-    screenshot: '/projects/agent-canvas.png',
+    screenshot: '/projects/agent-canvas.webp',
+    screenshotWidth: 1280,
+    screenshotHeight: 577,
     repoUrl: 'https://github.com/kanishka-namdeo/AgentCanvas',
     stack: ['TypeScript', 'Next.js', 'Socket.IO', 'Prisma'],
     year: '2026',
@@ -51,6 +57,8 @@ export const camps: Camp[] = [
     title: 'pi-dash',
     tagline: 'Many agents, one surface.',
     screenshot: '/projects/pi-dash.webp',
+    screenshotWidth: 2560,
+    screenshotHeight: 1600,
     repoUrl: 'https://github.com/kanishka-namdeo/pi-dash',
     stack: ['TypeScript', 'React', 'Next.js', 'Orchestration'],
     year: '2026',
@@ -71,6 +79,8 @@ export const camps: Camp[] = [
     title: 'thetell',
     tagline: 'Corporate intelligence: two agents in debate over 25+ signal sources.',
     screenshot: '/projects/thetell.webp',
+    screenshotWidth: 2560,
+    screenshotHeight: 1440,
     repoUrl: 'https://github.com/kanishka-namdeo/thetell',
     stack: ['TypeScript', 'Next.js', 'Neo4j', 'LlamaIndex'],
     year: '2025',

@@ -15,7 +15,7 @@ export function AgentCanvasRecording() {
   const caption = captions[Math.min(captions.length - 1, Math.floor(frame / FRAMES_PER_BEAT))];
   return (
     <FieldRecording
-      screenshot="projects/agent-canvas.png"
+      screenshot="projects/agent-canvas.webp"
       title="AgentCanvas"
       caption={caption}
       durationInFrames={300}

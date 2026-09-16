@@ -15,7 +15,7 @@ export function TheTellRecording() {
   const caption = captions[Math.min(captions.length - 1, Math.floor(frame / FRAMES_PER_BEAT))];
   return (
     <FieldRecording
-      screenshot="projects/thetell.png"
+      screenshot="projects/thetell.webp"
       title="thetell"
       caption={caption}
       durationInFrames={300}
