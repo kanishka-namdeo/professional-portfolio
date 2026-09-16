@@ -157,6 +157,7 @@ Default section order:
 When the user requests a durable behavior change, record it here or in the relevant child AGENTS.md
 
 - pnpm is the sole package manager: use pnpm only (never `npm install`), and never commit package-lock.json
+- pnpm version is pinned via `packageManager` in package.json and mirrored into pnpm-lock.yaml `packageManagerDependencies` — CI workflows and Vercel resolve the version from there; after changing the field, run `pnpm install` to refresh the lockfile and commit both together
 - `pnpm run lint` runs `eslint .` (Next 16 removed `next lint`)
 
 
