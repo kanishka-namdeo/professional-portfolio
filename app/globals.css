@@ -184,6 +184,21 @@ body::after {
   outline: none;
 }
 
+/* ThemeToggle renders both icons; the html.dark class (set by the pre-paint
+   script) picks the visible one so the icon matches the theme on first paint,
+   before React hydrates. */
+.theme-toggle-moon {
+  display: none;
+}
+
+html.dark .theme-toggle-moon {
+  display: block;
+}
+
+html.dark .theme-toggle-sun {
+  display: none;
+}
+
 /* Reduced motion: kill animations and transitions; the trail renders fully
    drawn and counters render their static SSR value (handled in components). */
 @media (prefers-reduced-motion: reduce) {

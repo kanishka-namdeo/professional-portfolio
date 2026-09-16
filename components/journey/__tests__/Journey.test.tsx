@@ -17,7 +17,7 @@ jest.mock('motion/react', () => ({
       get: (_, tag) =>
         tag === 'path'
           ? 'path'
-          : ({ initial, whileInView, viewport, transition, animate, ...rest }: Record<string, unknown>) => (
+          : ({ ...rest }: Record<string, unknown>) => (
               <div {...rest} />
             ),
     }

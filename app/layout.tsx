@@ -69,13 +69,16 @@ export const metadata: Metadata = {
     'classification': 'Business',
     'language': 'English',
   },
-  manifest: '/manifest.json',
+  // Absolute URLs: the metadata API does not rewrite icons/manifest with
+  // basePath, so root-relative values 404 on the GitHub Pages project-site
+  // mirror (same reason the hand-written sitemap/rss links below are absolute).
+  manifest: 'https://kanishkanamdeo.com/manifest.json',
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: 'https://kanishkanamdeo.com/favicon.ico', sizes: 'any' },
+      { url: 'https://kanishkanamdeo.com/icon.svg', type: 'image/svg+xml' },
     ],
-    apple: '/apple-touch-icon.png',
+    apple: 'https://kanishkanamdeo.com/apple-touch-icon.png',
   },
 };
 
@@ -98,6 +101,11 @@ export const viewport: Viewport = {
 
 const siteUrl = 'https://kanishkanamdeo.com';
 
+// JSON.stringify does not escape "/", so a string value containing "</script>"
+// (or "<!--") could terminate the JSON-LD block early. All content is
+// first-party today, but this keeps the hardening one refactor away from mattering.
+const serializeJsonLd = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003c');
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -110,28 +118,16 @@ const jsonLd = {
         'Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products.',
       inLanguage: 'en',
     },
-    {
-      '@type': 'WebPage',
-      '@id': `${siteUrl}/#webpage`,
-      url: siteUrl,
-      name: 'Kanishka Namdeo | Product Manager | Dubai, UAE',
-      description: metadata.description,
-      isPartOf: { '@id': `${siteUrl}/#website` },
-      primaryImageOfPage: {
-        '@type': 'ImageObject',
-        url: `${siteUrl}/og-image.jpg`,
-        width: 1200,
-        height: 630,
-      },
-      inLanguage: 'en',
-    },
+    // The WebPage node lives in app/page.tsx — a site-level graph describing
+    // the homepage was wrong on /field-log and /case-study/rentlz, whose
+    // canonicals differ.
     {
       '@type': 'Person',
       '@id': `${siteUrl}/#person`,
       name: 'Kanishka Namdeo',
       jobTitle: 'Product Manager',
       url: siteUrl,
-      email: 'mailto:kanishkanamdeo@hotmail.com',
+      email: 'kanishkanamdeo@hotmail.com',
       image: `${siteUrl}/profile.jpg`,
       description: metadata.description,
       address: {
@@ -190,26 +186,33 @@ export default function RootLayout({
             __html: `(function(){try{var s=localStorage.getItem('dispatches-theme');var d=s?s==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;if(d)document.documentElement.classList.add('dark')}catch(e){}})();`,
           }}
         />
-        {/* Custom link relations not covered by Next.js metadata API */}
-        <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
-        <link rel="alternate" type="application/rss+xml" title="Kanishka Namdeo — writing" href="/rss.xml" />
-        <link rel="ai-training" type="text/plain" href="/llms.txt" />
+        {/* Custom link relations not covered by Next.js metadata API. Absolute
+            URLs: raw head HTML is not rewritten with basePath, so root-relative
+            links 404 on the GitHub Pages project-site mirror. */}
+        <link rel="sitemap" type="application/xml" href={`${siteUrl}/sitemap.xml`} />
+        <link rel="alternate" type="application/rss+xml" title="Kanishka Namdeo — writing" href={`${siteUrl}/rss.xml`} />
+        <link rel="ai-training" type="text/plain" href={`${siteUrl}/llms.txt`} />
         {/* Consolidated JSON-LD graph */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
         />
       </head>
       <body>
         {/* First tab stop on the page: bypasses the hero's scenery for the
             first content section. Must live outside <main> to skip anything. */}
-        <a href="#journey" className="skip-link">
+        <a href="#main-content" className="skip-link">
           Skip to content
         </a>
         <ReactLenis root options={{ lerp: 0.1, syncTouch: false, anchors: { offset: -80 } }}>
-          <main id="main-content">{children}</main>
+          {/* tabIndex={-1}: the skip link's fragment target on every route
+              (unlike #journey, which only exists on the home page). */}
+          <main id="main-content" tabIndex={-1}>{children}</main>
         </ReactLenis>
-        <Analytics />
+        {/* Vercel Analytics only where it can load: on the Pages mirror build
+            (NEXT_BASE_PATH set) the script URL resolves under the project
+            basePath and 404s on every pageview, so skip it there. */}
+        {process.env.NEXT_BASE_PATH ? null : <Analytics />}
       </body>
     </html>
   );

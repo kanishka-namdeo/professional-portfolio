@@ -11,7 +11,24 @@ import { writing } from '@/data/ledger';
 export const metadata: Metadata = {
   title: { absolute: 'Field Log — Kanishka Namdeo' },
   description:
-    'One-page field log of Kanishka Namdeo — Product Manager, 9+ years across SaaS, mobility & AI. 8× ARR · 70K+ monthly users · 50+ locations. Career log, base camps and field writing.',
+    'One-page field log — career log, base camps and field writing. 8× ARR · 70K+ monthly users · 50+ locations.',
+  // Without a canonical override this page inherits the root layout's
+  // homepage canonical and would be indexed as a duplicate of /.
+  alternates: { canonical: '/field-log' },
+  openGraph: {
+    title: 'Field Log — Kanishka Namdeo',
+    description:
+      'One-page field log — career log, base camps and field writing. 8× ARR · 70K+ monthly users · 50+ locations.',
+    url: 'https://kanishkanamdeo.com/field-log',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Kanishka Namdeo - Field Log' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Field Log — Kanishka Namdeo',
+    description:
+      'One-page field log — career log, base camps and field writing. 8× ARR · 70K+ monthly users · 50+ locations.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 const EMAIL = 'kanishkanamdeo@hotmail.com';

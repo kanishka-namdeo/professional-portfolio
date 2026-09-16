@@ -1,22 +1,22 @@
-# llms.txt - AI/LLM Metadata for kanishkanamdeo.com
+# Kanishka Namdeo — Product Manager Portfolio
 
-## Project Overview
-
-This is a personal professional portfolio website for Kanishka Namdeo, a Product Manager with 9+ years of experience, based in Dubai, UAE and open to remote roles. The site is "Dispatches" — a single-page field log covering professional experience, project deep-dives, and writing.
+> Personal professional portfolio of Kanishka Namdeo, a Product Manager with 9+ years of experience across SaaS, mobility, and AI, based in Dubai, UAE and open to remote roles. The site is "Dispatches" — a single-page field log covering professional experience, project deep-dives, and writing.
 
 ## Content Structure
 
 The site is a single-page field log at `/` — one scroll through the expedition:
 
 - **Hero** — role, years of experience, and headline numbers up front
-- **The Journey** — five career waypoints (2016 → present), each with terrain/crossing/summit notes, metrics, press receipts, and a client testimonial
+- **The Journey** — five career waypoints (2016 → present), each with terrain/crossing/summit notes, metrics, and (where they exist) press receipts and a client testimonial
 - **Base Camps** — project deep-dives with repositories
 - **The Ledger** — open-source index and writing
 - **End of the Trail** — contact details, field-log PDF download, and FAQ
 
 ### Standalone Pages
-- **Case Study: RentLz** (`/case-study-rentlz.html`) - How MoveInSync Rentlz reached 8x ARR and 70K+ monthly users across 50+ locations
-- **Resume** (`/field-log.pdf`) - Downloadable field log (PDF)
+
+- [RentLz case study](https://kanishkanamdeo.com/case-study/rentlz) — How MoveInSync RentLz reached 8× ARR and 70K+ monthly users across 50+ locations
+- [Field log (print-first page)](https://kanishkanamdeo.com/field-log) — one-page career log, base camps and field writing, derived from the same data as the trail
+- [Field log PDF](https://kanishkanamdeo.com/field-log.pdf) — downloadable resume/field log
 
 ## Author Information
 
@@ -60,10 +60,11 @@ The site is a single-page field log at `/` — one scroll through the expedition
 
 ## Key Achievements
 
-- **8x ARR Growth** - Scaled MoveInSync Rentlz annual recurring revenue 8x over a 2.5-year tenure
-- **70K+ Monthly Users** - Grew the platform from 4K to 70,000+ monthly active users (total MAU, not acquisitions)
+- **8× ARR Growth** - Scaled MoveInSync RentLz annual recurring revenue 8× over a 2.5-year tenure
+- **70K+ Monthly Users** - Grew the platform to 70,000+ monthly active users (total MAU, not acquisitions)
 - **30K+ New Users Onboarded** - Added via 15+ enterprise client onboardings across India, the Philippines, and South Africa
 - **50+ Location Expansion** - Coordinated multi-market geographic expansion across 50+ locations
+- **Agents-era consulting (2024 — present)** - Three back-to-back engagements: shipped Flipr's video-retrieval dispute-resolution MVP for Flipkart (~50K daily orders), served as Senior PM on Cognium's AI-native wealth platform, and own product + architecture at AvloAI, where 2,000+ families generate personalized stories in their own languages
 
 ## Featured Projects
 
@@ -71,7 +72,7 @@ The site is a single-page field log at `/` — one scroll through the expedition
 - Car rental marketplace platform connecting rental companies with customers
 - Features AI-powered pricing, instant booking, and fleet management
 - Showcases full-stack product management from concept to launch
-- Full case study at `/case-study-rentlz.html`
+- Full case study at [kanishkanamdeo.com/case-study/rentlz](https://kanishkanamdeo.com/case-study/rentlz) (also opens as an in-page dossier from the mobility waypoint)
 
 ### Autonomous Drone Technology
 - Cofounded Sagar Defence Engineering; CTO of autonomous USV/UAV control software
@@ -82,6 +83,11 @@ The site is a single-page field log at `/` — one scroll through the expedition
 - Cloud-based logistics and inventory management
 - IoT/RFID integration for real-time tracking
 - Isometric and infographic design systems
+
+### AvloAI (children's storytelling)
+- Children's storytelling platform generating personalized stories in 22 languages
+- 30-second voice cloning so stories read in a familiar voice
+- 2,000+ families using the platform
 
 ## Technical Stack
 
@@ -120,10 +126,10 @@ For questions about content accuracy or to request updates, please contact:
 
 ## Related Files
 
-- `sitemap.xml` - Search engine sitemap
-- `rss.xml` - RSS feed for writing and open-source releases
-- `robots.txt` - Crawler instructions
-- `manifest.json` - PWA manifest
-- `case-study-rentlz.html` - RentLz case study
-- `field-log.pdf` - Resume / field log
+- [sitemap.xml](https://kanishkanamdeo.com/sitemap.xml) - Search engine sitemap
+- [rss.xml](https://kanishkanamdeo.com/rss.xml) - RSS feed for writing and open-source releases
+- [robots.txt](https://kanishkanamdeo.com/robots.txt) - Crawler instructions
+- [manifest.json](https://kanishkanamdeo.com/manifest.json) - PWA manifest
+- [RentLz case study](https://kanishkanamdeo.com/case-study/rentlz) - themed route; old `/case-study-rentlz.html` redirects here
+- [field-log.pdf](https://kanishkanamdeo.com/field-log.pdf) - Resume / field log
 - JSON-LD Schema - Structured data for rich search results

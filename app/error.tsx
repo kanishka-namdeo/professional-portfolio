@@ -2,6 +2,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Link from 'next/link';
 
 /**
  * Route error boundary — a dropped dispatch, not a dead end. The retry
@@ -14,7 +15,7 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  // Surfaced in the console/observability; the page itself stays on-brand.
+  // Surfaced in the console; this is the boundary's observability channel.
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -39,12 +40,12 @@ export default function Error({
         >
           Retry the transmission
         </button>
-        <a
+        <Link
           href="/"
           className="border border-[var(--color-ink)] px-5 py-3 font-[family-name:var(--font-data)] text-sm text-[var(--color-ink)] hover:shadow-[3px_3px_0_var(--color-inkline)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)] focus-visible:outline-offset-2"
         >
           Back to the trail
-        </a>
+        </Link>
       </div>
     </div>
   );

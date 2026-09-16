@@ -18,6 +18,9 @@ const EndOfTrail = dynamic(() => import('@/components/EndOfTrail').then((m) => m
 const siteUrl = 'https://kanishkanamdeo.com';
 const personId = `${siteUrl}/#person`;
 
+// JSON.stringify does not escape "/" — see layout.tsx for the rationale.
+const serializeJsonLd = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003c');
+
 // Ledger display dates are "Mon YYYY"; schema.org datePublished needs ISO 8601.
 const MONTH_INDEX: Record<string, string> = {
   Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
@@ -48,16 +51,24 @@ const pageJsonLd = {
         },
       })),
     },
-    // Breadcrumbs — section anchors for single-page navigation.
+    // This page (the homepage) — moved here from the layout graph, which
+    // described every route as the homepage. Section anchors are deliberately
+    // NOT a BreadcrumbList: Google expects crawlable page URLs in breadcrumbs,
+    // and hash fragments on one page don't qualify.
     {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
-        { '@type': 'ListItem', position: 2, name: 'The Journey', item: `${siteUrl}/#journey` },
-        { '@type': 'ListItem', position: 3, name: 'Base Camps', item: `${siteUrl}/#camps` },
-        { '@type': 'ListItem', position: 4, name: 'The Ledger', item: `${siteUrl}/#ledger` },
-        { '@type': 'ListItem', position: 5, name: 'End of the Trail', item: `${siteUrl}/#contact` },
-      ],
+      '@type': 'WebPage',
+      '@id': `${siteUrl}/#webpage`,
+      url: siteUrl,
+      name: 'Kanishka Namdeo | Product Manager | Dubai, UAE',
+      description: 'Product Manager with 9+ years across SaaS, mobility, and AI. Led 8× ARR growth to 70K+ monthly users and 30K+ new users onboarded across 50+ locations.',
+      isPartOf: { '@id': `${siteUrl}/#website` },
+      primaryImageOfPage: {
+        '@type': 'ImageObject',
+        url: `${siteUrl}/og-image.jpg`,
+        width: 1200,
+        height: 630,
+      },
+      inLanguage: 'en',
     },
     // SoftwareApplication — one per Base Camp project.
     // Gives Google structured data about the projects (stack, repo, description).
@@ -68,7 +79,9 @@ const pageJsonLd = {
       url: camp.repoUrl,
       applicationCategory: 'DeveloperApplication',
       operatingSystem: 'Web',
-      datePublished: camp.year,
+      // Camp data only pins the year; ISO 8601 needs a full date (Jan 1,
+      // same convention the BlogPosting entries use for month-precision dates).
+      datePublished: `${camp.year}-01-01`,
       programmingLanguage: camp.stack,
       author: { '@id': personId },
       isAccessibleForFree: true,
@@ -96,11 +109,12 @@ export default function Home() {
   return (
     <>
       {/* Skip-to-content link lives in app/layout.tsx (first tab stop, targets
-          #journey) — it must sit outside <main> to actually skip anything. */}
+          #main-content so it works on every route) — it must sit outside <main>
+          to actually skip anything. */}
 
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(pageJsonLd) }}
       />
 
       {/* Screen reader only heading for SEO */}

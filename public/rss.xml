@@ -5,8 +5,7 @@
     <link>https://kanishkanamdeo.com</link>
     <description>Product Manager with 9+ years experience building and scaling SaaS, mobility, and AI products — 8× ARR growth to 70K+ monthly users and 30K+ new users onboarded across 50+ locations. Notes on product strategy, leadership, and tech.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 15 Sep 2026 12:00:00 GMT</lastBuildDate>
-    <pubDate>Thu, 02 Jan 2026 12:00:00 GMT</pubDate>
+    <lastBuildDate>Wed, 16 Sep 2026 12:00:00 GMT</lastBuildDate>
     <ttl>1440</ttl>
     <atom:link href="https://kanishkanamdeo.com/rss.xml" rel="self" type="application/rss+xml"/>
     
@@ -44,6 +43,16 @@
     </item>
     
     <item>
+      <title>the-pokemon-journey - Open Source Release</title>
+      <link>https://github.com/kanishka-namdeo/the-pokemon-journey</link>
+      <description>A tribute to the franchise that shaped my childhood.</description>
+      <pubDate>Thu, 01 Jan 2026 00:00:00 GMT</pubDate>
+      <guid>https://github.com/kanishka-namdeo/the-pokemon-journey</guid>
+      <category>Open Source</category>
+      <category>HTML</category>
+    </item>
+    
+    <item>
       <title>rust-sim - Open Source Release</title>
       <link>https://github.com/kanishka-namdeo/rust-sim</link>
       <description>A fast simulation framework for experiments.</description>
@@ -57,7 +66,7 @@
       <title>Vibe Coding (and not losing my mind)</title>
       <link>https://kanishkanamdeo.medium.com/vibe-coding-and-not-losing-my-mind-ac175f123155</link>
       <description>Building a RAG workbench with LLMs — structured prompting and iterative refinement.</description>
-      <pubDate>Mon, 16 Dec 2025 00:00:00 GMT</pubDate>
+      <pubDate>Tue, 16 Dec 2025 00:00:00 GMT</pubDate>
       <guid>https://kanishkanamdeo.medium.com/vibe-coding-and-not-losing-my-mind-ac175f123155</guid>
       <category>AI</category>
       <category>RAG</category>
@@ -75,6 +84,17 @@
     </item>
     
     <item>
+      <title>everything-search-mcp - Open Source Release</title>
+      <link>https://github.com/kanishka-namdeo/everything-search-mcp</link>
+      <description>MCP server: instant file search on Windows/macOS/Linux.</description>
+      <pubDate>Wed, 01 Jan 2025 00:00:00 GMT</pubDate>
+      <guid>https://github.com/kanishka-namdeo/everything-search-mcp</guid>
+      <category>Open Source</category>
+      <category>TypeScript</category>
+      <category>MCP</category>
+    </item>
+    
+    <item>
       <title>electron-mcp - Open Source Release</title>
       <link>https://github.com/kanishka-namdeo/electron-mcp</link>
       <description>MCP server for Electron testing and automation.</description>
@@ -83,6 +103,50 @@
       <category>Open Source</category>
       <category>TypeScript</category>
       <category>MCP</category>
+    </item>
+    
+    <item>
+      <title>cursor-learning-harness - Open Source Release</title>
+      <link>https://github.com/kanishka-namdeo/cursor-learning-harness</link>
+      <description>Records AI coding sessions and improves agent behavior over time.</description>
+      <pubDate>Wed, 01 Jan 2025 00:00:00 GMT</pubDate>
+      <guid>https://github.com/kanishka-namdeo/cursor-learning-harness</guid>
+      <category>Open Source</category>
+      <category>Python</category>
+      <category>AI Agents</category>
+    </item>
+    
+    <item>
+      <title>instructify - Open Source Release</title>
+      <link>https://github.com/kanishka-namdeo/instructify</link>
+      <description>Cursor IDE configuration for AI coding agents.</description>
+      <pubDate>Wed, 01 Jan 2025 00:00:00 GMT</pubDate>
+      <guid>https://github.com/kanishka-namdeo/instructify</guid>
+      <category>Open Source</category>
+      <category>TypeScript</category>
+      <category>AI Agents</category>
+    </item>
+    
+    <item>
+      <title>Twin - Open Source Release</title>
+      <link>https://github.com/kanishka-namdeo/Twin</link>
+      <description>AI meeting assistant in Rust; runs locally.</description>
+      <pubDate>Wed, 01 Jan 2025 00:00:00 GMT</pubDate>
+      <guid>https://github.com/kanishka-namdeo/Twin</guid>
+      <category>Open Source</category>
+      <category>Rust</category>
+      <category>AI</category>
+    </item>
+    
+    <item>
+      <title>social-beam - Open Source Release</title>
+      <link>https://github.com/kanishka-namdeo/social-beam</link>
+      <description>Full-stack social platform with AI agents and real-time aggregation.</description>
+      <pubDate>Wed, 01 Jan 2025 00:00:00 GMT</pubDate>
+      <guid>https://github.com/kanishka-namdeo/social-beam</guid>
+      <category>Open Source</category>
+      <category>TypeScript</category>
+      <category>AI Agents</category>
     </item>
     
     <item>

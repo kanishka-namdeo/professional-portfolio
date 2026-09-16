@@ -166,11 +166,11 @@ When the user requests a durable behavior change, record it here or in the relev
 - `app/` — Next.js App Router: root layout, page routes, global styles and SEO metadata
 - `components/` — React component library (feature domains: camps, journey, ledger, map, ui)
   - `components/camps/` — Base camp components (BaseCamp, camp navigation)
-  - `components/journey/` — Journey chapter components (JourneyChapter)
+  - `components/journey/` — Journey chapter components (JourneyChapter, CaseStudyArticle/CaseStudyDossier)
   - `components/ledger/` — Ledger/dispatches components (Ledger)
   - `components/map/` — Map components (ExpeditionMap, map markers)
   - `components/ui/` — UI primitives
-- `data/` — Static data layer: camps, journey chapters, dispatches
+- `data/` — Static data layer: camps, journey chapters, dispatches, RentLz case study document
 - `e2e/` — Playwright end-to-end tests
 - `hooks/` — Custom React hooks (useActiveEra, useVisitedEras)
 - `public/` — Static assets: images, icons, fonts, PWA manifest

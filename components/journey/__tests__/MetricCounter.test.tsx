@@ -3,7 +3,7 @@ import { MetricCounter } from '../MetricCounter';
 
 describe('MetricCounter', () => {
   it('renders the final value in initial HTML (no-JS readable)', () => {
-    const { container } = render(<MetricCounter value={10} suffix="×" label="ARR" />);
+    render(<MetricCounter value={10} suffix="×" label="ARR" />);
     expect(screen.getByText('10')).toBeInTheDocument();
     expect(screen.getByText('×')).toBeInTheDocument();
     expect(screen.getByText('ARR')).toBeInTheDocument();

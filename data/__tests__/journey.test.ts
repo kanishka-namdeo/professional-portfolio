@@ -18,16 +18,33 @@ describe('journey eras', () => {
       expect(era.coords.y).toBeLessThanOrEqual(100);
     }
   });
-  it('every press mention has a real url', () => {
+  it('every press mention has a real https url', () => {
     for (const era of eras) {
       for (const p of era.press ?? []) {
-        expect(p.url).toMatch(/^https?:\/\//);
+        // data/AGENTS.md: external URLs must be valid — and https-only (no
+        // mixed-content or downgrade-prone http links on an https site).
+        expect(p.url).toMatch(/^https:\/\//);
+      }
+    }
+  });
+  it('every press date uses the canonical "Mon YYYY" or "YYYY" format', () => {
+    for (const era of eras) {
+      for (const p of era.press ?? []) {
+        expect(p.date).toMatch(/^((Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4}|\d{4})$/);
       }
     }
   });
   it('metrics are numeric with labels (no template stat rows)', () => {
     const mobility = eras.find((e) => e.id === 'mobility')!;
     expect(mobility.metrics).toContainEqual(expect.objectContaining({ value: 8, suffix: '×', label: 'ARR' }));
+    // Canonical MAU figure: 70K+ is the monthly-users number everywhere; 30K
+    // is reserved for new users onboarded (see caseStudy.test.ts). Locked here
+    // so a 70K→30K regression on the journey era can't pass.
+    expect(mobility.metrics).toContainEqual(
+      expect.objectContaining({ value: 70, suffix: 'K+', label: 'monthly users' }),
+    );
+    expect(mobility.summit).toMatch(/70,000\+ monthly users/);
+    expect(mobility.summit).not.toMatch(/30[,.]?000/);
   });
   it('agents era covers all three consulting engagements (2024 — present)', () => {
     const agents = eras.find((e) => e.id === 'agents')!;
@@ -50,7 +67,7 @@ describe('journey eras', () => {
     });
     expect(mobility.testimonial!.quote).toMatch(/employee transportation across 8 cities/);
     expect(mobility.caseStudy).toEqual({
-      href: '/case-study-rentlz.html',
+      href: '/case-study/rentlz',
       label: 'Read the full RentLz case study',
     });
   });

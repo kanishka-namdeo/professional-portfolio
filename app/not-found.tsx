@@ -1,5 +1,12 @@
 // app/not-found.tsx
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+// Explicit noindex: without it the layout's "index, follow" robots meta and
+// Next's auto noindex both land in 404.html (two conflicting directives).
+export const metadata: Metadata = {
+  robots: 'noindex, nofollow',
+};
 
 /**
  * Unknown route — a coordinate off the edge of the map. One way out: home.

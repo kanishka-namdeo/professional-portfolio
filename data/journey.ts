@@ -16,7 +16,7 @@ export interface EraTestimonial {
   title: string;
 }
 export interface EraCaseStudy {
-  href: '/case-study-rentlz.html';
+  href: '/case-study/rentlz';
   label: string;
 }
 export interface Era {
@@ -140,10 +140,10 @@ export const eras: Era[] = [
       quote:
         'MoveInSync manages Wipro’s employee transportation across 8 cities. We chose them for their app’s ability to ensure employee safety and security, operational transparency, and cost efficiency, replacing our previous manual management approach.',
       name: 'Nittan Bhalla',
-      title: 'Senior VP & Global Head - Workplace Operations, Wipro',
+      title: 'Senior VP & Global Head — Workplace Operations, Wipro',
     },
     caseStudy: {
-      href: '/case-study-rentlz.html',
+      href: '/case-study/rentlz',
       label: 'Read the full RentLz case study',
     },
   },

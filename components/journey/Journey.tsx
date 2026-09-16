@@ -26,7 +26,7 @@ export function Journey() {
       <div className="mx-auto grid max-w-7xl gap-10 px-6 md:grid-cols-[minmax(0,34rem)_1fr] lg:gap-14">
         <div className="hidden md:block">
           <div className="sticky top-24">
-            <ExpeditionMap activeId={activeId} className="aspect-[4/3]" scrollTargetRef={journeyRef} />
+            <ExpeditionMap activeId={activeId} className="aspect-[4/3]" scrollTargetRef={journeyRef} mapLabel="journey map" />
             <p className="mt-3 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink-muted)]">
               The trail draws itself as you travel.
             </p>
@@ -40,7 +40,10 @@ export function Journey() {
             </ol>
           </div>
         </div>
-        <div className="border-l-2 border-[var(--color-inkline)] pl-6 md:border-l-0 md:pl-0">
+        {/* min-w-0: grid item must be allowed under content width, or the
+            nowrap press-ledger headlines (truncate) floor the mobile track
+            at ~576px and force horizontal overflow. */}
+        <div className="min-w-0 border-l-2 border-[var(--color-inkline)] pl-6 md:border-l-0 md:pl-0">
           {eras.map((era) => (
             <JourneyChapter key={era.id} era={era} active={activeId === era.id} />
           ))}
