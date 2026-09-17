@@ -33,7 +33,7 @@ export const camps: Camp[] = [
     id: 'agent-canvas',
     repo: 'AgentCanvas',
     title: 'AgentCanvas',
-    tagline: 'Your agentic designer — build agent workflows visually.',
+    tagline: 'Your agentic designer — prompt it, and agents build on canvas.',
     screenshot: '/projects/agent-canvas.webp',
     screenshotWidth: 1280,
     screenshotHeight: 577,
@@ -41,15 +41,15 @@ export const camps: Camp[] = [
     stack: ['TypeScript', 'Next.js', 'Socket.IO', 'Prisma'],
     year: '2026',
     steps: [
-      { heading: 'What I saw', body: 'Agent workflows live in YAML files nobody can read. AgentCanvas makes the pipeline a drawing: nodes, edges, and joins you can point at.' },
-      { heading: 'The call', body: 'Agents connect through typed ports instead of stringly-typed prompts — a join is visible, so a broken handoff is visible too.' },
-      { heading: 'The payoff', body: 'Design an agentic workflow the way you’d sketch it on a whiteboard — then run it.' },
+      { heading: 'What I saw', body: 'Design requests live in chat threads nobody can revisit. AgentCanvas makes the conversation a surface: the agent builds directly on a canvas you can point at.' },
+      { heading: 'The call', body: 'The agent doesn’t just answer — it edits the design: frames, text, color, auto-layout. Every tool call lands where you can see it, and a self-review closes the run.' },
+      { heading: 'The payoff', body: 'Describe a screen in plain English, watch it get built, then keep editing — it’s a real canvas, not a render.' },
     ],
     annotations: [
-      { selector: '[data-anno="canvas"]', note: 'the design surface — agents are nodes', pos: { x: 20, y: 80 } },
-      { selector: '[data-anno="inspector"]', note: 'typed ports: every join is checked', pos: { x: 76, y: 24 } },
+      { selector: '[data-anno="canvas"]', note: 'the design surface — the agent builds here', pos: { x: 20, y: 80 } },
+      { selector: '[data-anno="inspector"]', note: 'layers & properties — every element editable', pos: { x: 76, y: 24 } },
     ],
-    recording: { src: '/recordings/agent-canvas.mp4', poster: '/recordings/agent-canvas.jpg', caption: 'An agent run, end to end.' },
+    recording: { src: '/recordings/agent-canvas.mp4', poster: '/recordings/agent-canvas.jpg', caption: 'A real agent run, filmed end to end.' },
   },
   {
     id: 'pi-dash',
@@ -60,7 +60,7 @@ export const camps: Camp[] = [
     screenshotWidth: 2560,
     screenshotHeight: 1600,
     repoUrl: 'https://github.com/kanishka-namdeo/pi-dash',
-    stack: ['TypeScript', 'React', 'Next.js', 'Orchestration'],
+    stack: ['TypeScript', 'React', 'Electron', 'xterm.js'],
     year: '2026',
     steps: [
       { heading: 'What hurt', body: 'Running five agents means five terminals, five logs, five places to lose the thread.' },
@@ -71,7 +71,7 @@ export const camps: Camp[] = [
       { selector: '[data-anno="agents"]', note: 'live agents at a glance', pos: { x: 25, y: 25 } },
       { selector: '[data-anno="timeline"]', note: 'run history — what happened, and when', pos: { x: 70, y: 70 } },
     ],
-    recording: { src: '/recordings/pi-dash.mp4', poster: '/recordings/pi-dash.jpg', caption: 'A dashboard sweep.' },
+    recording: { src: '/recordings/pi-dash.mp4', poster: '/recordings/pi-dash.jpg', caption: 'The fleet, live — launch, steer, review.' },
   },
   {
     id: 'thetell',
@@ -93,6 +93,6 @@ export const camps: Camp[] = [
       { selector: '[data-anno="debate"]', note: 'the debate: two agents argue, scores settle it', pos: { x: 35, y: 30 } },
       { selector: '[data-anno="graph"]', note: 'claims live in Neo4j, scored', pos: { x: 75, y: 65 } },
     ],
-    recording: { src: '/recordings/thetell.mp4', poster: '/recordings/thetell.jpg', caption: 'The signal debate, visualized.' },
+    recording: { src: '/recordings/thetell.mp4', poster: '/recordings/thetell.jpg', caption: 'Two agents argue the tape — every call scored.' },
   },
 ];

@@ -35,8 +35,8 @@ describe('BaseCamp', () => {
   });
   it('renders annotation labels pinned to the screenshot regions', () => {
     render(<BaseCamp camp={camps[0]} />);
-    expect(screen.getByText(/agents are nodes/i)).toHaveAttribute('data-anno', 'canvas');
-    expect(screen.getByText('typed ports: every join is checked')).toBeInTheDocument();
+    expect(screen.getByText(/the agent builds here/i)).toHaveAttribute('data-anno', 'canvas');
+    expect(screen.getByText('layers & properties — every element editable')).toBeInTheDocument();
   });
   it('does not autoplay under reduced motion — poster with a play control instead', () => {
     render(<BaseCamp camp={camps[0]} />);
@@ -72,7 +72,7 @@ describe('BaseCamp', () => {
   });
   it('renders all steps as readable text', () => {
     render(<BaseCamp camp={camps[0]} />);
-    expect(screen.getByText(/Agent workflows live in YAML files/i)).toBeInTheDocument();
+    expect(screen.getByText(/Design requests live in chat threads/i)).toBeInTheDocument();
   });
   it('renders the camp title as a heading so camps appear in the heading outline', () => {
     render(<BaseCamp camp={camps[0]} />);
