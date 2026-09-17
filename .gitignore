@@ -83,3 +83,6 @@ master_data.json
 
 # scratch held by a zombie process; delete when free
 .mock/
+
+# field-recording capture rig (scripts/capture-recordings.mjs)
+.recordings-tmp/

@@ -174,7 +174,6 @@ When the user requests a durable behavior change, record it here or in the relev
 - `data/` — Static data layer: camps, journey chapters, dispatches, RentLz case study document
 - `e2e/` — Playwright end-to-end tests
 - `hooks/` — Custom React hooks (useActiveEra, useVisitedEras)
-- `public/` — Static assets: images, icons, fonts, PWA manifest
-- `remotion/` — Remotion video generation and compositions
-- `scripts/` — Build scripts: brand assets, map generation (dieted contours.svg), image optimization
+- `public/` — Static assets: images, icons, fonts, PWA manifest, camp recordings (real screen captures — regenerate with `pnpm recordings` against locally running base-camp apps)
+- `scripts/` — Build scripts: brand assets, map generation (dieted contours.svg), image optimization, field-recording capture (Playwright + ffmpeg)
 
