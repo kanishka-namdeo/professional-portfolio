@@ -49,7 +49,9 @@ export function TrailProgress() {
   const jumpTo = (index: number) => {
     const era = eras[Math.max(0, Math.min(eras.length - 1, index))];
     if (!era) return;
-    if (lenis) lenis.scrollTo(`#era-${era.id}`, { immediate: true });
+    // offset -80 matches the anchor-click offset configured in layout.tsx so
+    // keyboard jumps land with the same breathing room as anchor clicks.
+    if (lenis) lenis.scrollTo(`#era-${era.id}`, { immediate: true, offset: -80 });
     else document.getElementById(`era-${era.id}`)?.scrollIntoView();
   };
 
@@ -57,7 +59,7 @@ export function TrailProgress() {
   // The non-Lenis fallback respects reduced motion (no animated scroll).
   const travelMouse = (era: (typeof eras)[number]) => {
     const target = `#era-${era.id}`;
-    if (lenis) lenis.scrollTo(target);
+    if (lenis) lenis.scrollTo(target, { offset: -80 });
     else
       document.querySelector(target)?.scrollIntoView({
         behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
@@ -150,7 +152,13 @@ export function TrailProgress() {
         </p>
         <button
           type="button"
-          onClick={() => window.dispatchEvent(new Event(OPEN_PALETTE_EVENT))}
+          onClick={(event) => {
+            // Safari does not focus buttons on mouse click — focus it manually
+            // so the palette's close restores the keyboard position here
+            // instead of dropping the reader back at the page top.
+            event.currentTarget.focus();
+            window.dispatchEvent(new Event(OPEN_PALETTE_EVENT));
+          }}
           className="mt-2 flex min-h-[24px] w-full items-center justify-end text-right font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink-muted)] hover:text-[var(--color-rust)] focus-visible:text-[var(--color-rust)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
           aria-label="Open the waypoint jumper"
           aria-haspopup="dialog"

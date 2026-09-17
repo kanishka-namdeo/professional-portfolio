@@ -20,7 +20,8 @@ describe('Hero', () => {
     render(<Hero />);
     const cta = screen.getByRole('button', { name: /follow the trail/i });
     fireEvent.click(cta);
-    expect(mockScrollTo).toHaveBeenCalledWith('#era-origin');
+    // offset -80 matches the anchor-click offset configured in layout.tsx.
+    expect(mockScrollTo).toHaveBeenCalledWith('#era-origin', { offset: -80 });
   });
   it('states the role and headline metrics in visible text (5-second rule)', () => {
     render(<Hero />);

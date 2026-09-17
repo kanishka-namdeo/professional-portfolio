@@ -14,7 +14,8 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState, type ComponentType } from 'react';
-import { useModalLock } from '@/hooks/useModalLock';
+import { createPortal } from 'react-dom';
+import { useBackgroundInert, useModalLock } from '@/hooks/useModalLock';
 import type { CaseStudyDoc } from '@/data/caseStudy';
 
 type CaseStudyArticleComponent = ComponentType<{ doc: CaseStudyDoc; titleAs?: 'h1' | 'h2' }>;
@@ -30,6 +31,67 @@ export function CaseStudyDossier({ href, label }: { href: string; label: string 
   // the trail behind the dossier; body overflow guards non-Lenis fallbacks.
   // The shared lock keeps this composable with the ⌘K palette if both are up.
   useModalLock(open);
+
+  // Document-level keyboard handling while open. A React onKeyDown on the
+  // dialog div only sees events that bubble THROUGH that div — but clicking
+  // the article's non-focusable text parks focus on a focusable ancestor
+  // OUTSIDE the dialog, and keydowns then target that ancestor: Escape died
+  // and Tab roamed the background while the reader stayed locked inside
+  // (verified in Chromium). Document-level listeners work no matter where
+  // focus sits, and a focusin reclaim pulls stray focus back into the panel
+  // (belt-and-braces for browsers without `inert` support).
+  // Declared before the focus-restore effect so the listeners are detached
+  // before that effect's cleanup moves focus back to the stamp link.
+  useEffect(() => {
+    if (!open) return;
+    const onDocKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setOpen(false);
+        return;
+      }
+      if (event.key !== 'Tab' || !panelRef.current) return;
+      const focusables = panelRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+      const inside = panelRef.current.contains(active);
+      // Wrap in both directions, including Tab from outside the panel (focus
+      // parked on an ancestor by a text click) — forward Tab must re-enter
+      // the panel at the first item, never leak past it.
+      if (event.shiftKey) {
+        if (active === first || !inside) {
+          event.preventDefault();
+          last.focus();
+        }
+      } else if (active === last || !inside) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    const onFocusIn = (event: FocusEvent) => {
+      // Focus changes that stay inside the panel are fine…
+      if (event.target instanceof Node && panelRef.current?.contains(event.target)) return;
+      // …anything else (background click, programmatic focus) gets reclaimed
+      // into the dossier's close button.
+      closeRef.current?.focus();
+    };
+    document.addEventListener('keydown', onDocKeyDown);
+    document.addEventListener('focusin', onFocusIn);
+    return () => {
+      document.removeEventListener('keydown', onDocKeyDown);
+      document.removeEventListener('focusin', onFocusIn);
+    };
+  }, [open]);
+
+  // Everything behind the portal-rendered dialog leaves the tab order and
+  // the accessibility tree while it is open (WAI-ARIA modal dialog pattern).
+  // Must detach before the focus-restore effect below runs, so the stamp
+  // link is focusable again (not inert) at the moment focus returns to it.
+  useBackgroundInert(open);
 
   // Load document + renderer on first open, guarded against unmount.
   useEffect(() => {
@@ -48,41 +110,28 @@ export function CaseStudyDossier({ href, label }: { href: string; label: string 
     };
   }, [open, article]);
 
+  const openFromLink = () => {
+    // Capture the trigger at interaction time — the background-inert effect
+    // (see useBackgroundInert) kicks focus off the stamp link before an
+    // open-effect could read it (inert content can't hold focus).
+    restoreFocus.current = document.activeElement;
+    setOpen(true);
+  };
+
+  // Focus handling: move focus to the close button after paint, and restore
+  // the trigger on close (every close path — the cleanup runs on unmount too,
+  // so route changes can't strand focus).
   useEffect(() => {
     if (!open) return;
-    restoreFocus.current = document.activeElement;
     const raf = requestAnimationFrame(() => closeRef.current?.focus());
     return () => {
       cancelAnimationFrame(raf);
+      // Runs after the inert release's cleanup (declared earlier), so the
+      // stamp link is focusable again by now.
       if (restoreFocus.current instanceof HTMLElement) restoreFocus.current.focus();
       restoreFocus.current = null;
     };
   }, [open]);
-
-  // Confine Tab to the dossier panel (close button + links inside the article);
-  // Esc closes and returns the reader to their exact place on the trail.
-  const onKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      setOpen(false);
-      return;
-    }
-    if (event.key !== 'Tab' || !panelRef.current) return;
-    const focusables = panelRef.current.querySelectorAll<HTMLElement>(
-      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-    );
-    if (focusables.length === 0) return;
-    const first = focusables[0];
-    const last = focusables[focusables.length - 1];
-    const active = document.activeElement;
-    if (event.shiftKey && (active === first || !panelRef.current.contains(active))) {
-      event.preventDefault();
-      last.focus();
-    } else if (!event.shiftKey && active === last) {
-      event.preventDefault();
-      first.focus();
-    }
-  };
 
   return (
     <>
@@ -95,7 +144,7 @@ export function CaseStudyDossier({ href, label }: { href: string; label: string 
         onClick={(event) => {
           if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
           event.preventDefault();
-          setOpen(true);
+          openFromLink();
         }}
         aria-haspopup="dialog"
         aria-expanded={open}
@@ -104,20 +153,27 @@ export function CaseStudyDossier({ href, label }: { href: string; label: string 
         {label}
       </Link>
 
-      {open && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={article?.doc.title ?? label}
-          data-modal-dialog="dossier"
-          onKeyDown={onKeyDown}
-          className="fixed inset-0 z-[70] bg-[var(--color-ink)]/40"
-        >
+      {open &&
+        createPortal(
           <div
-            ref={panelRef}
-            className="h-full overflow-y-auto bg-[var(--color-parchment)]"
-            style={{ paddingTop: 'env(safe-area-inset-top)' }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={article?.doc.title ?? label}
+            data-modal-dialog="dossier"
+            className="fixed inset-0 z-[70] bg-[var(--color-ink)]/40"
           >
+            <div
+              ref={panelRef}
+              // data-lenis-prevent: while this dialog is open Lenis is STOPPED,
+              // and a stopped Lenis preventDefaults every wheel event unless
+              // it starts inside a data-lenis-prevent element — without this
+              // the article could not be wheel-scrolled at all (same reason
+              // the palette's listbox carries it). overscroll-contain stops
+              // scroll chaining at the panel's boundaries.
+              data-lenis-prevent
+              className="h-full overflow-y-auto overscroll-contain bg-[var(--color-parchment)]"
+              style={{ paddingTop: 'env(safe-area-inset-top)' }}
+            >
             <div className="sticky top-0 z-10 border-b border-[var(--color-inkline)] bg-[var(--color-parchment)]/95 backdrop-blur-sm">
               <div className="mx-auto flex max-w-[760px] items-center justify-between gap-4 px-6 py-3">
                 <p className="truncate font-[family-name:var(--font-data)] text-[10.5px] uppercase tracking-[0.2em] text-[var(--color-ink-muted)]">
@@ -142,9 +198,10 @@ export function CaseStudyDossier({ href, label }: { href: string; label: string 
                 </p>
               )}
             </div>
-          </div>
-        </div>
-      )}
+            </div>
+          </div>,
+          document.body,
+        )}
     </>
   );
 }

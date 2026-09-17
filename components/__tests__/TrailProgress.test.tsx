@@ -33,6 +33,7 @@ describe('TrailProgress', () => {
   it('scrolls to the matching era when a waypoint number is clicked', () => {
     render(<TrailProgress />);
     fireEvent.click(screen.getByRole('button', { name: `Travel to ${eras[1].company} (${eras[1].number})` }));
-    expect(mockScrollTo).toHaveBeenCalledWith('#era-logistics');
+    // offset -80 matches the anchor-click offset configured in layout.tsx.
+    expect(mockScrollTo).toHaveBeenCalledWith('#era-logistics', { offset: -80 });
   });
 });

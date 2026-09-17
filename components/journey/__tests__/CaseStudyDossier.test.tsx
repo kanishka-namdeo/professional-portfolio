@@ -76,4 +76,70 @@ describe('CaseStudyDossier', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     await waitFor(() => expect(link).toHaveFocus());
   });
+
+  // ── Regression: the dead-dialog bug ────────────────────────────────────
+  // Clicking the article's non-focusable text parks focus on a focusable
+  // ancestor OUTSIDE the dialog; keydowns then never bubble through the
+  // dialog div. Escape and Tab must still work — handled at document level
+  // while open. (Live-verified before the fix: a reader who clicked a
+  // paragraph was locked in a scroll-frozen page with a dead Escape key.)
+
+  it('closes on Escape even when focus has left the panel (clicked text parked it outside)', async () => {
+    renderDossier();
+    await openDossier();
+    fireEvent.keyDown(document.body, { key: 'Escape' });
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+    expect(mockStart).toHaveBeenCalled();
+    expect(document.body.style.overflow).not.toBe('hidden');
+  });
+
+  it('sweeps forward Tab back into the panel when focus sits outside it', async () => {
+    renderDossier();
+    await openDossier();
+    const close = screen.getByRole('button', { name: /close/i });
+    close.blur(); // park focus on <body>, the click-on-text aftermath
+    fireEvent.keyDown(document.body, { key: 'Tab' });
+    // Forward Tab from outside must re-enter the panel at its first focusable
+    // (the close button) — never leak past the panel into the background.
+    await waitFor(() => expect(close).toHaveFocus());
+  });
+
+  it('sweeps Shift+Tab back into the panel when focus sits outside it', async () => {
+    renderDossier();
+    await openDossier();
+    const close = screen.getByRole('button', { name: /close/i });
+    close.blur();
+    fireEvent.keyDown(document.body, { key: 'Tab', shiftKey: true });
+    await waitFor(() => expect(close).toHaveFocus());
+  });
+
+  it('reclaims focus that lands outside the panel while open', async () => {
+    renderDossier();
+    await openDossier();
+    const close = screen.getByRole('button', { name: /close/i });
+    close.blur();
+    // focusin firing on an outside element (what an inert-less browser does
+    // when a background click steals focus) must be reclaimed into the panel.
+    fireEvent.focusIn(document.body);
+    await waitFor(() => expect(close).toHaveFocus());
+  });
+
+  it('inerts the page behind the panel while open, and restores it on close', async () => {
+    const { container } = renderDossier();
+    await openDossier();
+    expect(container.hasAttribute('inert')).toBe(true);
+    fireEvent.click(screen.getByRole('button', { name: /close/i }));
+    await waitFor(() => expect(container.hasAttribute('inert')).toBe(false));
+  });
+
+  it('keeps the article panel wheel-scrollable: data-lenis-prevent + overscroll containment', async () => {
+    // Regression: a stopped Lenis preventDefaults every wheel event unless it
+    // starts inside a data-lenis-prevent element — without the attribute the
+    // whole case study was unscrollable by mouse wheel while open.
+    renderDossier();
+    await openDossier();
+    const panel = screen.getByRole('dialog').querySelector('[data-lenis-prevent]');
+    expect(panel).toBeInTheDocument();
+    expect(panel).toHaveClass('overscroll-contain');
+  });
 });

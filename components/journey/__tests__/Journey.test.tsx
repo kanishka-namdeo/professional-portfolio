@@ -20,9 +20,23 @@ jest.mock('motion/react', () => ({
       get: (_, tag) =>
         tag === 'path'
           ? 'path'
-          : ({ ...rest }: Record<string, unknown>) => (
-              <div {...rest} />
-            ),
+          : ({ ...rest }: Record<string, unknown>) => {
+              // Strip motion-only props before they hit a plain div — React 19
+              // warns "React does not recognize the `whileInView` prop" for
+              // every unknown prop leaked to the DOM.
+              const {
+                initial, animate, exit, transition, variants,
+                whileHover, whileTap, whileInView, whileFocus, whileDrag,
+                viewport, layout, layoutId, drag, dragConstraints,
+                onViewportEnter, onViewportLeave, onAnimationStart, onAnimationComplete,
+                ...domProps
+              } = rest;
+              void initial; void animate; void exit; void transition; void variants;
+              void whileHover; void whileTap; void whileInView; void whileFocus; void whileDrag;
+              void viewport; void layout; void layoutId; void drag; void dragConstraints;
+              void onViewportEnter; void onViewportLeave; void onAnimationStart; void onAnimationComplete;
+              return <div {...domProps} />;
+            },
     }
   ),
 }));

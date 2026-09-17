@@ -219,7 +219,12 @@ export function BaseCamp({ camp, index, total }: { camp: Camp; index: number; to
   useEffect(() => {
     const dlg = dialogRef.current;
     if (!dlg || lightbox === null) return;
-    restoreFocusRef.current = (document.activeElement as HTMLElement | null) ?? null;
+    // Capture the trigger only on the closed→open transition. Re-capturing on
+    // an index change would record an element inside the dialog and strand
+    // focus on an unmounted node after close.
+    if (restoreFocusRef.current === null) {
+      restoreFocusRef.current = (document.activeElement as HTMLElement | null) ?? null;
+    }
     if (typeof dlg.showModal === 'function') dlg.showModal();
     else dlg.setAttribute('open', ''); // jsdom / engines without showModal
   }, [lightbox]);
@@ -338,7 +343,11 @@ export function BaseCamp({ camp, index, total }: { camp: Camp; index: number; to
                     if (!video) return;
                     if (video.paused) {
                       userPaused.current = false;
-                      void video.play();
+                      // play() can reject (autoplay policy mid-transition,
+                      // decoder warm-up) — swallow so it never surfaces as an
+                      // unhandled rejection; onPlay/onPause keep the label true.
+                      const played: unknown = video.play();
+                      if (played instanceof Promise) played.catch(() => {});
                     } else {
                       userPaused.current = true;
                       video.pause();
@@ -361,6 +370,12 @@ export function BaseCamp({ camp, index, total }: { camp: Camp; index: number; to
                 <motion.div
                   key={stagedIndex}
                   className="absolute inset-1.5"
+                  // pointer-events: none — the plate layer has no interactive
+                  // children, but during its 350ms exit fade it sits ABOVE the
+                  // newly staged recording and would otherwise swallow clicks
+                  // aimed at the play/pause control underneath ("ghost clicks"
+                  // on an exit-animated overlay).
+                  style={{ pointerEvents: 'none' }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -499,6 +514,15 @@ export function BaseCamp({ camp, index, total }: { camp: Camp; index: number; to
               tabIndex={0}
               onMouseEnter={() => activateStep(i)}
               onFocus={() => activateStep(i)}
+              // Focus itself stages the step, but a focusable element owes
+              // Enter/Space parity (keyboard contract): both also re-claim the
+              // stage from a filmstrip pin, same as a mouse hover.
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  activateStep(i);
+                }
+              }}
               className="focus-visible:outline focus-visible:-outline-offset-4 focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
             >
               <StepBlock index={i} onEnter={activateStep} heading={s.heading} body={s.body} active={step === i} />
@@ -508,10 +532,21 @@ export function BaseCamp({ camp, index, total }: { camp: Camp; index: number; to
       </div>
 
       {/* lightbox — native dialog: top layer + inert background + ESC for
-          free; useModalLock stops Lenis and locks body scroll while open. */}
+          free; useModalLock stops Lenis and locks body scroll while open.
+          data-modal-dialog: the palette's stacking guard matches open native
+          dialogs so ⌘K can't spawn an invisible palette behind the top layer. */}
       <dialog
         ref={dialogRef}
+        data-modal-dialog="lightbox"
         aria-labelledby={`camp-${camp.id}-lightbox-caption`}
+        // Clicks on ::backdrop target the <dialog> element itself. Light-dismiss
+        // like every other overlay — but never while the reader is mid-selection
+        // (a drag from the media out over the backdrop is not a dismissal).
+        onClick={(event) => {
+          if (event.target !== event.currentTarget) return;
+          if (window.getSelection()?.toString()) return;
+          closeLightbox();
+        }}
         className="m-auto max-h-[92vh] w-[min(92vw,1080px)] border-2 border-[var(--color-ink)] bg-[var(--color-parchment)] p-3 shadow-[6px_6px_0_var(--color-shadow-hard)] [&::backdrop]:bg-[#241C10]/85"
       >
         {lightbox !== null && <LightboxBody media={camp.media[lightbox]} camp={camp} onClose={closeLightbox} />}

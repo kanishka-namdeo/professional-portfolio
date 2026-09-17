@@ -31,7 +31,13 @@ export function MobileTrailChip() {
   return (
     <button
       type="button"
-      onClick={() => window.dispatchEvent(new Event(OPEN_PALETTE_EVENT))}
+      onClick={(event) => {
+        // Safari does not focus buttons on tap — focus it manually so the
+        // palette's close restores the keyboard position here instead of
+        // dropping the reader back at the page top.
+        event.currentTarget.focus();
+        window.dispatchEvent(new Event(OPEN_PALETTE_EVENT));
+      }}
       aria-haspopup="dialog"
       // Label in Name (WCAG 2.5.3): the accessible name must contain the
       // visible readout ("03 · MoveInSync · 41%") so speech input matches.

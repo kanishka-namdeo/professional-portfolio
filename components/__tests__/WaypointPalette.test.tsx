@@ -1,6 +1,6 @@
 // components/__tests__/WaypointPalette.test.tsx
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { WaypointPalette } from '../WaypointPalette';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { WaypointPalette, OPEN_PALETTE_EVENT } from '../WaypointPalette';
 
 const mockScrollTo = jest.fn();
 const mockStop = jest.fn();
@@ -69,7 +69,7 @@ describe('WaypointPalette', () => {
       target: { value: 'medulla' },
     });
     fireEvent.keyDown(screen.getByRole('combobox', { name: /search destinations/i }), { key: 'Enter' });
-    expect(mockScrollTo).toHaveBeenCalledWith('#era-language', { immediate: true });
+    expect(mockScrollTo).toHaveBeenCalledWith('#era-language', { immediate: true, offset: -80 });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
@@ -120,5 +120,91 @@ describe('WaypointPalette', () => {
     expect(mockStop).toHaveBeenCalledTimes(1);
     fireEvent.keyDown(screen.getByRole('combobox', { name: /search destinations/i }), { key: 'Escape' });
     expect(mockStart).toHaveBeenCalledTimes(1);
+  });
+
+  // ── Regression: the dead-dialog bug ────────────────────────────────────
+  // Clicking the dialog's non-focusable chrome (footer hint, list gutters)
+  // parks focus on a focusable ancestor OUTSIDE the dialog; keydowns then
+  // never bubble through the dialog div. Escape and Tab must still work —
+  // handled at document level while open. (Live-verified before the fix.)
+
+  it('closes on Escape even when focus has left the dialog (clicked chrome parked it outside)', () => {
+    render(<WaypointPalette />);
+    openWithCtrlK();
+    // Keydown targets something outside the dialog div — before the fix the
+    // React onKeyDown on the dialog never fired and the palette hung open.
+    fireEvent.keyDown(document.body, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('reclaims Tab into the dialog when focus sits outside it', async () => {
+    render(<WaypointPalette />);
+    openWithCtrlK();
+    const input = screen.getByRole('combobox', { name: /search destinations/i });
+    await focusPaletteInput();
+    input.blur(); // park focus on <body>, the click-on-chrome aftermath
+    fireEvent.keyDown(document.body, { key: 'Tab' });
+    expect(input).toHaveFocus();
+  });
+
+  it('sweeps focus back into the dialog when it lands outside while open', async () => {
+    render(<WaypointPalette />);
+    openWithCtrlK();
+    const input = screen.getByRole('combobox', { name: /search destinations/i });
+    await focusPaletteInput();
+    // focusin firing on an outside element (what an inert-less browser does
+    // when a background click steals focus) must be reclaimed.
+    fireEvent.focusIn(document.body);
+    await waitFor(() => expect(input).toHaveFocus());
+  });
+
+  it('inerts the page behind the dialog while open, and restores it on close', () => {
+    const { container } = render(<WaypointPalette />);
+    openWithCtrlK();
+    expect(screen.getByRole('dialog', { name: /jump to a waypoint/i })).toBeInTheDocument();
+    // The render container (standing in for the page) is a body child without
+    // data-modal-dialog — it must be inert while the dialog is open.
+    expect(container.hasAttribute('inert')).toBe(true);
+    fireEvent.keyDown(screen.getByRole('combobox', { name: /search destinations/i }), { key: 'Escape' });
+    expect(container.hasAttribute('inert')).toBe(false);
+  });
+
+  it('ignores open requests while another modal dialog holds the page (no stacking)', () => {
+    render(<WaypointPalette />);
+    // Stand in for the dossier: a div-based dialog mounted in the DOM.
+    const dossier = document.createElement('div');
+    dossier.setAttribute('data-modal-dialog', 'dossier');
+    document.body.appendChild(dossier);
+    try {
+      act(() => {
+        window.dispatchEvent(new Event(OPEN_PALETTE_EVENT));
+      });
+      expect(screen.queryByRole('dialog', { name: /jump to a waypoint/i })).not.toBeInTheDocument();
+    } finally {
+      dossier.remove();
+    }
+    // Once the other dialog is gone, the palette opens again.
+    act(() => {
+      window.dispatchEvent(new Event(OPEN_PALETTE_EVENT));
+    });
+    expect(screen.getByRole('dialog', { name: /jump to a waypoint/i })).toBeInTheDocument();
+  });
+
+  it('ignores the shortcut while a native lightbox dialog is open', () => {
+    render(<WaypointPalette />);
+    // Stand in for the camp lightbox: a native <dialog> that is ALWAYS in the
+    // DOM — the guard must match it only in its open state.
+    const lightbox = document.createElement('dialog');
+    lightbox.setAttribute('data-modal-dialog', 'lightbox');
+    lightbox.setAttribute('open', '');
+    document.body.appendChild(lightbox);
+    try {
+      openWithCtrlK();
+      expect(screen.queryByRole('dialog', { name: /jump to a waypoint/i })).not.toBeInTheDocument();
+    } finally {
+      lightbox.remove();
+    }
+    openWithCtrlK();
+    expect(screen.getByRole('dialog', { name: /jump to a waypoint/i })).toBeInTheDocument();
   });
 });

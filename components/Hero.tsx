@@ -38,9 +38,10 @@ export default function Hero() {
           type="button"
           onClick={() => {
             // Lenis respects reduced motion itself; the pre-hydration fallback
-            // must check it before animating.
+            // must check it before animating. offset -80 matches the
+            // anchor-click offset configured in layout.tsx.
             if (lenis) {
-              lenis.scrollTo('#era-origin');
+              lenis.scrollTo('#era-origin', { offset: -80 });
               return;
             }
             const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

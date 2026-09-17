@@ -37,3 +37,36 @@ export function useModalLock(open: boolean) {
     };
   }, [open, lenis]);
 }
+
+// ── Background inertness for portal-rendered dialogs ─────────────────────
+//
+// While a div-based dialog (palette/dossier) is open, everything behind it
+// must leave the tab order and the accessibility tree (WAI-ARIA modal dialog
+// pattern). Those dialogs render through portals as direct <body> children
+// tagged [data-modal-dialog], so every OTHER body child is background.
+// `inert` is used instead of aria-hidden: it removes the subtree from the a11y
+// tree without aria-hidden's "ancestor of the focused element" footgun, and
+// browsers that don't support it simply ignore it (the document-level Tab
+// trap and focus reclaim in each dialog cover the keyboard path there).
+// The camp lightbox does not use this: a native <dialog> shown with
+// showModal() already inerts the background via the top layer.
+let inertCount = 0;
+
+export function useBackgroundInert(open: boolean) {
+  useEffect(() => {
+    if (!open) return;
+    const background = Array.from(document.body.children).filter(
+      (el) => !(el instanceof HTMLElement && el.hasAttribute('data-modal-dialog')),
+    );
+    inertCount += 1;
+    if (inertCount === 1) {
+      background.forEach((el) => el.setAttribute('inert', ''));
+    }
+    return () => {
+      inertCount -= 1;
+      if (inertCount === 0) {
+        background.forEach((el) => el.removeAttribute('inert'));
+      }
+    };
+  }, [open]);
+}

@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useLenis } from 'lenis/react';
-import { modalLockCount, useModalLock } from '@/hooks/useModalLock';
+import { modalLockCount, useBackgroundInert, useModalLock } from '@/hooks/useModalLock';
 import { eras } from '@/data/journey';
 import { camps } from '@/data/camps';
 import { writing } from '@/data/ledger';
@@ -59,7 +60,10 @@ export function WaypointPalette() {
   const lenis = useLenis();
   const inputRef = useRef<HTMLInputElement>(null);
   const listboxRef = useRef<HTMLUListElement>(null);
-  const restoreFocus = useRef<Element | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  // Shared with the global opener below (which captures the trigger at
+  // interaction time) — a ref, not state, so the opener never re-renders.
+  const restoreFocusRef = useRef<Element | null>(null);
   const items = useMemo(() => buildItems(), []);
 
   // Mirrors `open` for the global key listener, which is registered once.
@@ -87,11 +91,17 @@ export function WaypointPalette() {
     };
     const inPaletteInput = (target: EventTarget | null) =>
       !!(target as HTMLElement | null)?.closest?.('[data-palette-input]');
-    // Another overlay (the case-study dossier) holds a modal lock — never
-    // stack this palette on top of an open dialog: it would trap focus twice
-    // and travel() would scroll a page the reader can't see.
+    // Another overlay (the case-study dossier, or the camp lightbox) holds a
+    // modal lock — never stack this palette on top of an open dialog: it
+    // would trap focus twice and travel() would scroll a page the reader
+    // can't see. Div-based dialogs only exist in the DOM while open, but the
+    // lightbox is a native <dialog> that is ALWAYS mounted — match it only
+    // in its open state.
     const otherModalOpen = () =>
-      !!document.querySelector('[data-modal-dialog]:not([data-modal-dialog="palette"])');
+      !!(
+        document.querySelector('[data-modal-dialog]:not([data-modal-dialog="palette"]):not(dialog)') ||
+        document.querySelector('dialog[open][data-modal-dialog]:not([data-modal-dialog="palette"])')
+      );
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target;
       const typing = isTypingTarget(target);
@@ -104,15 +114,27 @@ export function WaypointPalette() {
         }
         if (typing || otherModalOpen()) return;
         event.preventDefault();
+        // Capture the trigger at interaction time — the background-inert
+        // effect (see useBackgroundInert) kicks focus off the element before
+        // an open-effect could read it.
+        restoreFocusRef.current = document.activeElement;
         setOpen(true);
         return;
       }
       if (event.key === '/' && !typing && !otherModalOpen()) {
         event.preventDefault();
+        if (!openRef.current) restoreFocusRef.current = document.activeElement;
         setOpen((prev) => !prev);
       }
     };
-    const onOpenEvent = () => setOpen(true);
+    // The rail's ⌘K button and the mobile chip dispatch this event; the same
+    // no-stacking rule applies (a lightbox or dossier may have opened since
+    // the listener was registered — always re-check, never assume).
+    const onOpenEvent = () => {
+      if (otherModalOpen()) return;
+      restoreFocusRef.current = document.activeElement;
+      setOpen(true);
+    };
     window.addEventListener('keydown', onKeyDown);
     window.addEventListener(OPEN_PALETTE_EVENT, onOpenEvent);
     return () => {
@@ -128,16 +150,60 @@ export function WaypointPalette() {
   // lock keeps this composable with the case-study dossier if both are open.
   useModalLock(open);
 
+  // Document-level keyboard handling while open. The React onKeyDown on the
+  // dialog div only sees events that bubble THROUGH that div — but clicking
+  // the dialog's non-focusable chrome (footer hint, list gutters) parks focus
+  // on a focusable ancestor OUTSIDE the dialog, and keydowns then target that
+  // ancestor: Escape died and Tab roamed the background while the palette
+  // stayed open (verified in Chromium). Handling Escape + the Tab trap at
+  // document level works no matter where focus sits, and a focusin reclaim
+  // pulls stray focus back into the dialog (belt-and-braces for browsers
+  // without `inert` support).
+  useEffect(() => {
+    if (!open) return;
+    const onDocKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setOpen(false);
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      // The input is the dialog's only focusable element, so confining Tab
+      // to it is the whole focus trap.
+      event.preventDefault();
+      inputRef.current?.focus();
+    };
+    const onFocusIn = (event: FocusEvent) => {
+      // Focus changes that stay inside the dialog are fine…
+      if (event.target instanceof Node && dialogRef.current?.contains(event.target)) return;
+      // …anything else (background click, programmatic focus) gets reclaimed
+      // into the dialog's only focusable element.
+      inputRef.current?.focus();
+    };
+    document.addEventListener('keydown', onDocKeyDown);
+    document.addEventListener('focusin', onFocusIn);
+    return () => {
+      document.removeEventListener('keydown', onDocKeyDown);
+      document.removeEventListener('focusin', onFocusIn);
+    };
+  }, [open]);
+
+  // Everything behind the portal-rendered dialog leaves the tab order and
+  // the accessibility tree while it is open (WAI-ARIA modal dialog pattern).
+  useBackgroundInert(open);
+
   useEffect(() => {
     if (open) {
-      restoreFocus.current = document.activeElement;
+      // The trigger was already captured by the opener (interaction time);
+      // here the dialog just resets and takes focus after paint.
       setQuery('');
       setActive(0);
-      // Focus after paint so the dialog is in the DOM.
       requestAnimationFrame(() => inputRef.current?.focus());
-    } else if (restoreFocus.current instanceof HTMLElement) {
-      restoreFocus.current.focus();
-      restoreFocus.current = null;
+    } else if (restoreFocusRef.current instanceof HTMLElement) {
+      // Runs in the create phase — after every cleanup (incl. the background
+      // inert release), so the trigger is focusable again by now.
+      restoreFocusRef.current.focus();
+      restoreFocusRef.current = null;
     }
   }, [open]);
 
@@ -168,19 +234,14 @@ export function WaypointPalette() {
     if (!item.scrollTo) return;
     if (lenis) {
       // Keyboard travel is instant (house rule, same as the rail); mouse is
-      // smooth. Lenis itself forces immediate under reduced motion.
-      lenis.scrollTo(item.scrollTo, opts?.immediate ? { immediate: true } : undefined);
+      // smooth. Lenis itself forces immediate under reduced motion. The -80
+      // offset matches the anchor-click offset configured in layout.tsx so
+      // button-driven jumps keep the same breathing room below the header.
+      const offset = { offset: -80 };
+      lenis.scrollTo(item.scrollTo, opts?.immediate ? { immediate: true, ...offset } : offset);
     } else {
       document.querySelector(item.scrollTo)?.scrollIntoView({ behavior: opts?.immediate ? 'auto' : 'smooth' });
     }
-  };
-
-  // The input is the dialog's only focusable element, so confining Tab to it
-  // is the whole focus trap.
-  const trapFocus = (event: React.KeyboardEvent) => {
-    if (event.key !== 'Tab') return;
-    event.preventDefault();
-    inputRef.current?.focus();
   };
 
   const onKeyDown = (event: React.KeyboardEvent) => {
@@ -208,13 +269,13 @@ export function WaypointPalette() {
     }
   };
 
-  return (
+  return createPortal(
     <div
+      ref={dialogRef}
       role="dialog"
       aria-modal="true"
       aria-label="Jump to a waypoint"
       data-modal-dialog="palette"
-      onKeyDown={trapFocus}
       // Desktop keeps the centred drop panel (items-start + 12vh); below md it
       // docks to the bottom edge as a full-width sheet (thumb reach, and the
       // panel never covers the MobileTrailChip the tap came from).
@@ -223,7 +284,7 @@ export function WaypointPalette() {
         if (event.target === event.currentTarget) setOpen(false);
       }}
     >
-      <div className="max-h-[80dvh] w-full max-w-lg overflow-y-auto rounded-t-lg border border-[var(--color-ink)] bg-[var(--color-parchment)] shadow-[6px_6px_0_var(--color-shadow-hard)] md:max-h-none md:overflow-visible md:rounded-none">
+      <div className="max-h-[80dvh] w-full max-w-lg select-none overflow-y-auto rounded-t-lg border border-[var(--color-ink)] bg-[var(--color-parchment)] shadow-[6px_6px_0_var(--color-shadow-hard)] md:max-h-none md:overflow-visible md:rounded-none">
         <div className="flex items-center gap-3 border-b border-[var(--color-inkline)] px-4 py-3">
           <span aria-hidden className="font-[family-name:var(--font-data)] text-xs text-[var(--color-rust)]">⌘K</span>
           <input
@@ -246,7 +307,7 @@ export function WaypointPalette() {
             aria-autocomplete="list"
             aria-controls="palette-list"
             aria-activedescendant={results[active] ? `palette-${results[active].id}` : undefined}
-            className="w-full bg-transparent font-[family-name:var(--font-data)] text-sm text-[var(--color-ink)] outline-none placeholder:text-[var(--color-ink-muted)] focus-visible:outline focus-visible:-outline-offset-4 focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
+            className="w-full select-text bg-transparent font-[family-name:var(--font-data)] text-sm text-[var(--color-ink)] outline-none placeholder:text-[var(--color-ink-muted)] focus-visible:outline focus-visible:-outline-offset-4 focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
           />
         </div>
         {/* data-lenis-prevent: while this dialog is open Lenis is STOPPED, and a
@@ -291,10 +352,11 @@ export function WaypointPalette() {
             </li>
           ))}
         </ul>
-        <p className="border-t border-[var(--color-inkline)] px-4 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink-muted)] md:pb-2">
+        <p className="select-none border-t border-[var(--color-inkline)] px-4 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] font-[family-name:var(--font-data)] text-[10px] text-[var(--color-ink-muted)] md:pb-2">
           ↑↓ move · ↵ travel · esc / ⌘K close — also on the trail rail: ↑↓ jumps between waypoints
         </p>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

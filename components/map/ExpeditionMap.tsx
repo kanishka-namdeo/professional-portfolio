@@ -362,7 +362,9 @@ export function ExpeditionMap({
 
   const travel = (era: Era) => {
     const target = `#era-${era.id}`;
-    if (lenis) lenis.scrollTo(target);
+    // offset -80 matches the anchor-click offset configured in layout.tsx so
+    // map jumps land with the same breathing room as anchor clicks.
+    if (lenis) lenis.scrollTo(target, { offset: -80 });
     else
       // Pre-hydration fallback: no animated scroll under reduced motion.
       document.querySelector(target)?.scrollIntoView({
