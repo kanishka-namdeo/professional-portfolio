@@ -99,6 +99,14 @@ export function trailProgressAt(scrollY: number, anchors: TrailAnchor[]): number
 export const LEAD_IN_VIEWPORTS = 0.75;
 
 /**
+ * Minimum trail-progress change (fraction of the total path length) worth a
+ * stroke repaint — ~2px on the journey trail. Sub-epsilon spring tail deltas
+ * are skipped so the paint idles once the draw settles (see the journey
+ * stroke writer in ExpeditionMap).
+ */
+export const STROKE_EPSILON = 0.001;
+
+/**
  * Chapter anchors plus the set-off lead-in: one anchor at fraction 0, 0.75
  * viewports before chapter 01 centres, so the traveller fades in and walks to
  * the origin pin as the journey scrolls into view — instead of popping on at
@@ -156,27 +164,31 @@ export function ExpeditionMap({
   // We use the actual path length (computed after mount) instead of pathLength="1"
   // to avoid coordinate system conflicts.
   const [totalLength, setTotalLength] = useState(0);
-  // Use motion values for the draw animation
-  const strokeDasharrayMotion = useTransform(pathProgress, (v) => totalLength > 0 ? `${v * totalLength} ${totalLength}` : '0 0');
-  const strokeDashoffsetMotion = useTransform(pathProgress, (v) => totalLength > 0 ? (1 - v) * totalLength : 0);
-  // Apply directly to DOM for reliable SVG rendering
+  // ── Journey stroke writes, epsilon-gated ── the spring (170/26) keeps
+  // emitting sub-pixel deltas long after the draw looks settled, and each one
+  // repainted the whole trail path. Writes are skipped until progress moves
+  // STROKE_EPSILON (0.1% of the path ≈ 2px) or reaches either end — the
+  // trailhead and destination always write, so anchor hits stay exact — and
+  // the paint idles once the draw settles instead of running every frame for
+  // the rest of the session. The traveller marker is driven separately
+  // (transform-only, compositor-friendly) and stays per-frame. Applied
+  // directly to the DOM for reliable SVG rendering.
   useEffect(() => {
-    if (!pathRef.current || isHero || reduceMotion) return;
-    const unsubscribe = strokeDasharrayMotion.on('change', (val) => {
-      if (pathRef.current) {
-        pathRef.current.style.strokeDasharray = String(val);
-      }
-    });
-    const unsubscribe2 = strokeDashoffsetMotion.on('change', (val) => {
-      if (pathRef.current) {
-        pathRef.current.style.strokeDashoffset = String(val);
-      }
-    });
-    return () => {
-      unsubscribe?.();
-      unsubscribe2?.();
+    if (isHero || reduceMotion) return;
+    let last = -1;
+    const write = (v: number) => {
+      const path = pathRef.current;
+      if (!path || totalLength <= 0) return;
+      const clamped = Math.max(0, Math.min(1, v));
+      if (clamped > 0 && clamped < 1 && Math.abs(clamped - last) < STROKE_EPSILON) return;
+      last = clamped;
+      path.style.strokeDasharray = `${clamped * totalLength} ${totalLength}`;
+      path.style.strokeDashoffset = String((1 - clamped) * totalLength);
     };
-  }, [strokeDasharrayMotion, strokeDashoffsetMotion, isHero, reduceMotion]);
+    write(pathProgress.get());
+    const unsubscribe = pathProgress.on('change', write);
+    return () => unsubscribe?.();
+  }, [pathProgress, isHero, reduceMotion, totalLength]);
 
   // The "you are here" marker rides the trail: with the hero's load draw, and with
   // scroll progress in the journey map. Positioned by direct DOM writes from a

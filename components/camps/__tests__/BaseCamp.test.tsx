@@ -138,6 +138,32 @@ describe('BaseCamp', () => {
     hoverStep(2);
     expect(screen.getByTestId('camp-recording')).toBeInTheDocument();
   });
+  it('keeps the recording mounted while a still is staged — no decoder churn mid-scroll', () => {
+    // Remounting a <video> per stage swap forced the browser to rebuild its
+    // decoder mid-scroll (a whole-screen flicker + jank trigger). The recording
+    // layer must stay mounted under the crossfading stills, but go INERT and
+    // hidden from assistive tech while a still owns the stage — the hidden
+    // play/pause button must not become a ghost tab stop.
+    render(<BaseCamp camp={camps[0]} index={0} total={3} />);
+    hoverStep(0);
+    const video = screen.getByTestId('camp-recording');
+    expect(video).toBeInTheDocument();
+    expect(video).toHaveAttribute('src', '/recordings/agent-canvas.mp4');
+    expect(video).toHaveAttribute('poster', '/recordings/agent-canvas.jpg');
+    const layer = video.closest('div[class*="inset-1.5"], [inert]');
+    expect(layer?.hasAttribute('inert')).toBe(true);
+    expect(layer?.getAttribute('aria-hidden')).toBe('true');
+    // And the still really owns the stage.
+    expect(screen.getByAltText(/design canvas with the layers/i)).toBeInTheDocument();
+  });
+  it('restores the recording layer to interactivity when it re-takes the stage', () => {
+    render(<BaseCamp camp={camps[0]} index={0} total={3} />);
+    hoverStep(0);
+    hoverStep(2); // the recording is camp[0] step 3's media
+    const layer = screen.getByTestId('camp-recording').closest('div[class*="inset-1.5"], [inert]');
+    expect(layer?.hasAttribute('inert')).toBe(false);
+    expect(layer?.getAttribute('aria-hidden')).not.toBe('true');
+  });
   it('activates a step on focus, not just hover (keyboard drives the stage)', () => {
     render(<BaseCamp camp={camps[0]} index={0} total={3} />);
     fireEvent.focus(document.querySelector('ol > li[data-step="0"]') as HTMLElement);

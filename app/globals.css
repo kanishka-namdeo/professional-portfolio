@@ -77,6 +77,13 @@
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* `clip`, never `hidden`: overflow-x:hidden on body propagated to the
+     viewport and made it a programmatically scrollable container — the repro
+     shape of a Chromium compositor bug where layers promoted by sticky +
+     z-index flash during scroll (issuetracker.google.com/issues/497855639).
+     clip clips without creating a scroll container, keeping the document on
+     the compositor's fast path. Nothing here scrolls horizontally. */
+  overflow-x: clip;
 }
 
 body {
@@ -85,8 +92,6 @@ body {
   font-family: var(--font-voice);
   line-height: 1.6;
   font-size: 18px;
-  /* Prevent horizontal overflow on mobile. */
-  overflow-x: hidden;
 }
 
 /* Film grain — fixed, non-interactive, applied once on body::after. */
@@ -98,6 +103,13 @@ body::after {
   z-index: 60;
   opacity: var(--grain-opacity);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  /* translateZ(0): the grain is a full-viewport layer living above the whole
+     page for the entire session. Video decode layers and stage crossfades
+     spike GPU memory; under that pressure the compositor can evict and
+     re-raster this layer mid-scroll, which reads as the whole screen
+     flashing ("the monitor itself flickers"). The explicit promotion hint
+     pins the grain to one stable texture so it never re-rasterizes. */
+  transform: translateZ(0);
 }
 
 /* Screen-reader-only utility (used for the SEO h1 in app/page.tsx). */

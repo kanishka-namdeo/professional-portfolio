@@ -108,13 +108,19 @@ export function BaseCamp({ camp, index, total }: { camp: Camp; index: number; to
   useEffect(() => setMounted(true), []);
 
   const recordingIndex = camp.media.length - 1; // data contract: recording is last
+  // The persistent recording layer (see the stage below) always renders the
+  // LAST media item, whatever is staged right now.
+  const recording = camp.media[recordingIndex];
   const stagedIndex = pinned ?? (step >= 0 ? camp.steps[step].mediaIndex : recordingIndex);
   const media = camp.media[stagedIndex];
+  // Whether the recording layer owns the stage at the moment (staging a still
+  // fades the recording out — it stays mounted, paused and inert, underneath).
+  const stagingRecording = media.kind === 'recording';
 
   // Spec guardrails: reduced-motion -> poster + play control; mobile -> tap to
   // play; desktop -> muted autoplay loop, but only while the recording is the
   // staged media AND the camp is on screen.
-  const autoPlay = mounted && isDesktop && !reduceMotion && videoInView && media.kind === 'recording';
+  const autoPlay = mounted && isDesktop && !reduceMotion && videoInView && stagingRecording;
 
   // Whether playback was ever auto-started: only an auto-started video pauses
   // on viewport exit — a tap-to-play video (mobile/reduced motion) keeps
@@ -283,101 +289,118 @@ export function BaseCamp({ camp, index, total }: { camp: Camp; index: number; to
               onto the paper instead of stretching, and annotations anchor to
               the media box, never to the letterbox bars. */}
           <div className="relative mt-4 aspect-video border border-[var(--color-ink)] bg-[var(--color-paper)] p-1.5 shadow-[3px_3px_0_var(--color-shadow-soft)]">
+            {/* Layer 0 — the field recording, PERSISTENTLY mounted. Remounting
+                a <video> on every stage swap forced the browser to tear down
+                and rebuild its decoder (and juggle hardware overlay planes)
+                mid-scroll — a classic whole-screen flicker and jank spike.
+                The layer never unmounts: it fades in when the recording owns
+                the stage and goes inert otherwise (the autoplay gate pauses
+                it the moment a still takes over). */}
+            <motion.div
+              className="absolute inset-1.5"
+              initial={false}
+              animate={{ opacity: stagingRecording ? 1 : 0 }}
+              transition={{ duration: reduceMotion ? 0 : 0.35 }}
+              inert={!stagingRecording}
+              aria-hidden={!stagingRecording}
+              style={{ pointerEvents: stagingRecording ? 'auto' : 'none' }}
+            >
+              <div className="relative h-full w-full">
+                <video
+                  data-testid="camp-recording"
+                  // Intrinsic 1280x720 (poster size) so the browser
+                  // reserves the right box before metadata loads —
+                  // kills layout shift (CLS).
+                  width={recording.width}
+                  height={recording.height}
+                  className="block h-full w-full object-cover"
+                  src={recording.src}
+                  poster={recording.poster}
+                  autoPlay={autoPlay}
+                  muted
+                  loop
+                  playsInline
+                  preload="none"
+                  aria-label={recording.alt}
+                  onPlay={() => setPaused(false)}
+                  onPause={() => setPaused(true)}
+                  ref={(el) => {
+                    videoRef.current = el;
+                    if (!el) return;
+                    el.muted = true; // runtime guarantee: the field recording stays silent
+                    el.setAttribute('muted', ''); // React sets `muted` as a property only, never the content attribute
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const video = videoRef.current;
+                    if (!video) return;
+                    if (video.paused) {
+                      userPaused.current = false;
+                      void video.play();
+                    } else {
+                      userPaused.current = true;
+                      video.pause();
+                    }
+                  }}
+                  aria-label={paused ? `Play recording: ${camp.title}` : `Pause recording: ${camp.title}`}
+                  className="absolute inset-0 flex cursor-pointer items-end justify-start p-3 focus-visible:outline focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
+                >
+                  <span className="border border-[var(--color-ink)] bg-[var(--color-parchment)] px-3 py-1.5 font-[family-name:var(--font-data)] text-[11px] uppercase tracking-[0.2em] text-[var(--color-rust)] shadow-[2px_2px_0_var(--color-shadow-hard)]">
+                    {paused ? 'Play' : 'Pause'} recording
+                  </span>
+                </button>
+              </div>
+            </motion.div>
+
+            {/* Layer 1 — plates and frames crossfade ABOVE the recording.
+                Cheap image swaps only; the heavy media below never churns. */}
             <AnimatePresence initial={false}>
-              <motion.div
-                key={stagedIndex}
-                className="absolute inset-1.5"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: reduceMotion ? 0 : 0.35 }}
-              >
-                <div className="flex h-full w-full items-center justify-center">
-                  <div
-                    className={`relative max-h-full max-w-full ${widescreen ? 'w-full' : 'h-full'}`}
-                    style={{ aspectRatio: `${media.width} / ${media.height}` }}
-                  >
-                    {media.kind === 'still' ? (
-                      <>
-                        <Image
-                          src={media.src}
-                          alt={media.alt}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 60vw"
-                          className="object-contain"
-                        />
-                        {/* field-note labels pinned to regions of the media;
-                            rough-notation underlines each label. Edge-aware
-                            anchoring (left edge on the left half, right edge on
-                            the right half) keeps labels inside the plate. */}
-                        {media.annotations.map((a) => (
-                          <span
-                            key={a.selector}
-                            data-anno={annoName(a.selector)}
-                            className="absolute z-10 block max-w-[70%] border border-[var(--color-ink)] bg-[var(--color-parchment)] px-1.5 py-0.5 font-[family-name:var(--font-data)] text-[11px] leading-tight text-[var(--color-rust)]"
-                            style={{
-                              left: `${a.pos.x}%`,
-                              top: `${a.pos.y}%`,
-                              transform:
-                                a.pos.x < 50 ? 'translate(0, -50%)' : 'translate(-100%, -50%)',
-                            }}
-                          >
-                            {a.note}
-                          </span>
-                        ))}
-                      </>
-                    ) : (
-                      <div className="relative h-full w-full">
-                        <video
-                          data-testid="camp-recording"
-                          // Intrinsic 1280x720 (poster size) so the browser
-                          // reserves the right box before metadata loads —
-                          // kills layout shift (CLS).
-                          width={media.width}
-                          height={media.height}
-                          className="block h-full w-full object-cover"
-                          src={media.src}
-                          poster={media.poster}
-                          autoPlay={autoPlay}
-                          muted
-                          loop
-                          playsInline
-                          preload="none"
-                          aria-label={media.alt}
-                          onPlay={() => setPaused(false)}
-                          onPause={() => setPaused(true)}
-                          ref={(el) => {
-                            videoRef.current = el;
-                            if (!el) return;
-                            el.muted = true; // runtime guarantee: the field recording stays silent
-                            el.setAttribute('muted', ''); // React sets `muted` as a property only, never the content attribute
+              {!stagingRecording && (
+                <motion.div
+                  key={stagedIndex}
+                  className="absolute inset-1.5"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: reduceMotion ? 0 : 0.35 }}
+                >
+                  <div className="flex h-full w-full items-center justify-center">
+                    <div
+                      className={`relative max-h-full max-w-full ${widescreen ? 'w-full' : 'h-full'}`}
+                      style={{ aspectRatio: `${media.width} / ${media.height}` }}
+                    >
+                      <Image
+                        src={media.src}
+                        alt={media.alt}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 60vw"
+                        className="object-contain"
+                      />
+                      {/* field-note labels pinned to regions of the media;
+                          rough-notation underlines each label. Edge-aware
+                          anchoring (left edge on the left half, right edge on
+                          the right half) keeps labels inside the plate. */}
+                      {media.annotations.map((a) => (
+                        <span
+                          key={a.selector}
+                          data-anno={annoName(a.selector)}
+                          className="absolute z-10 block max-w-[70%] border border-[var(--color-ink)] bg-[var(--color-parchment)] px-1.5 py-0.5 font-[family-name:var(--font-data)] text-[11px] leading-tight text-[var(--color-rust)]"
+                          style={{
+                            left: `${a.pos.x}%`,
+                            top: `${a.pos.y}%`,
+                            transform:
+                              a.pos.x < 50 ? 'translate(0, -50%)' : 'translate(-100%, -50%)',
                           }}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const video = videoRef.current;
-                            if (!video) return;
-                            if (video.paused) {
-                              userPaused.current = false;
-                              void video.play();
-                            } else {
-                              userPaused.current = true;
-                              video.pause();
-                            }
-                          }}
-                          aria-label={paused ? `Play recording: ${camp.title}` : `Pause recording: ${camp.title}`}
-                          className="absolute inset-0 flex cursor-pointer items-end justify-start p-3 focus-visible:outline focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
                         >
-                          <span className="border border-[var(--color-ink)] bg-[var(--color-parchment)] px-3 py-1.5 font-[family-name:var(--font-data)] text-[11px] uppercase tracking-[0.2em] text-[var(--color-rust)] shadow-[2px_2px_0_var(--color-shadow-hard)]">
-                            {paused ? 'Play' : 'Pause'} recording
-                          </span>
-                        </button>
-                      </div>
-                    )}
+                          {a.note}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              )}
             </AnimatePresence>
 
             {/* slate — the archive label of whatever is staged */}

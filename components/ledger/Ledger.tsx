@@ -47,7 +47,17 @@ export function Ledger() {
   return (
     // tabIndex={-1}: skip/anchor jumps land focus here (see [tabindex='-1']
     // in globals.css).
-    <section id="ledger" aria-labelledby="ledger-title" className="border-t border-[var(--color-inkline)] py-24 [content-visibility:auto] [contain-intrinsic-size:auto_1000px]" tabIndex={-1}>
+    <section
+      id="ledger"
+      aria-labelledby="ledger-title"
+      className="border-t border-[var(--color-inkline)] py-24"
+      tabIndex={-1}
+    >
+      {/* No content-visibility:auto here, deliberately: its ~1000px placeholder
+          swaps to the real height the moment the section first renders
+          mid-scroll — a one-frame layout jump while Lenis is mid-lerp, which
+          reads as a flash. The section is ~20 rows + 5 cards; rendering it
+          eagerly costs nothing. */}
       <div className="mx-auto max-w-4xl px-6">
         <h2 id="ledger-title" className="font-[family-name:var(--font-data)] text-xs tracking-[0.2em] text-[var(--color-rust)]">THE LEDGER — everything else, plainly</h2>
         <ul className="mt-8 divide-y divide-[var(--color-inkline)]">

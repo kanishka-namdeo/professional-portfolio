@@ -30,9 +30,16 @@ export function TrailProgress() {
   const percentRef = useRef<HTMLSpanElement>(null);
 
   // Honest readout: how much of the page (the trail) has been travelled.
+  // Integer-gated: assigning the same textContent still swaps the text node
+  // and invalidates layout, and this sits inside an aria-live region — one
+  // write per whole percent is plenty for eyes and screen readers alike.
+  const lastPercentRef = useRef(-1);
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    const pct = Math.round(Math.max(0, Math.min(1, v)) * 100);
+    if (pct === lastPercentRef.current) return;
+    lastPercentRef.current = pct;
     if (percentRef.current) {
-      percentRef.current.textContent = `${String(Math.round(Math.max(0, Math.min(1, v)) * 100)).padStart(2, '0')}%`;
+      percentRef.current.textContent = `${String(pct).padStart(2, '0')}%`;
     }
   });
 

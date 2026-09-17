@@ -12,6 +12,7 @@ Ledger and dispatches components for tracking portfolio artifacts. Provides the 
 - Tests co-located in __tests__/
 - Ledger components present chronological records and dispatches
 - Repo rows: the one-liner grid column carries `min-w-0` so the row can shrink on narrow viewports (keeps 320px free of horizontal overflow); writing-strip card links use the rust inside-outline focus pattern (`-outline-offset` — the scroll strip clips outside outlines)
+- NO `content-visibility:auto` on the ledger section, deliberately: the `contain-intrinsic-size` placeholder swaps to the real height the moment the section first renders mid-scroll — a one-frame layout jump while Lenis is mid-lerp that reads as a flash. The section is small enough to render eagerly; do not re-add it
 
 ## Work Guidance
 - Ledger components manage artifact presentation

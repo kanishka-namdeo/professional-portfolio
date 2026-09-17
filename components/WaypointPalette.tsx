@@ -249,7 +249,18 @@ export function WaypointPalette() {
             className="w-full bg-transparent font-[family-name:var(--font-data)] text-sm text-[var(--color-ink)] outline-none placeholder:text-[var(--color-ink-muted)] focus-visible:outline focus-visible:-outline-offset-4 focus-visible:outline-2 focus-visible:outline-[var(--color-rust)]"
           />
         </div>
-        <ul id="palette-list" role="listbox" aria-label="Destinations" className="max-h-[50vh] overflow-y-auto py-2" ref={listboxRef}>
+        {/* data-lenis-prevent: while this dialog is open Lenis is STOPPED, and a
+            stopped Lenis preventDefaults every wheel event unless it starts
+            inside a data-lenis-prevent element — without this the listbox
+            could not be wheel-scrolled at all. */}
+        <ul
+          id="palette-list"
+          role="listbox"
+          aria-label="Destinations"
+          data-lenis-prevent
+          className="max-h-[50vh] overflow-y-auto py-2"
+          ref={listboxRef}
+        >
           {results.length === 0 && (
             // role="presentation": a listbox's children must be options — the
             // empty-state row must not read as a phantom option.
