@@ -1,7 +1,6 @@
 // components/journey/Journey.tsx
 'use client';
 
-import { useRef } from 'react';
 import { eras } from '@/data/journey';
 import { useActiveEra } from '@/hooks/useActiveEra';
 import { ExpeditionMap } from '../map/ExpeditionMap';
@@ -11,22 +10,21 @@ import { JourneyChapter } from './JourneyChapter';
  * The Journey: sticky expedition map on desktop, chapters beside it;
  * on mobile the chapters stack with a left timeline line and the map is hidden.
  * Active-chapter tracking lives in useActiveEra (shared with the progress rail).
+ * The trail draw needs no scroll target from here: ExpeditionMap anchors each
+ * waypoint to the scroll position where its chapter centres, so the draw and
+ * the pin highlights share the same definition of “which chapter is active”.
  */
 export function Journey() {
   const activeId = useActiveEra();
-  // Ref for the journey section — passed to ExpeditionMap so the trail-draw
-  // spring tracks the reader's progress through the chapters, not the tiny map
-  // container's own scroll-through-viewport (which would finish instantly).
-  const journeyRef = useRef<HTMLElement>(null);
 
   return (
     // tabIndex={-1}: skip/anchor jumps land focus here (see [tabindex='-1']
     // in globals.css).
-    <section id="journey" aria-label="The journey" className="relative py-10" ref={journeyRef} tabIndex={-1}>
+    <section id="journey" aria-label="The journey" className="relative py-10" tabIndex={-1}>
       <div className="mx-auto grid max-w-7xl gap-10 px-6 md:grid-cols-[minmax(0,34rem)_1fr] lg:gap-14">
         <div className="hidden md:block">
           <div className="sticky top-24">
-            <ExpeditionMap activeId={activeId} className="aspect-[4/3]" scrollTargetRef={journeyRef} mapLabel="journey map" />
+            <ExpeditionMap activeId={activeId} className="aspect-[4/3]" mapLabel="journey map" />
             <p className="mt-3 font-[family-name:var(--font-data)] text-[11px] text-[var(--color-ink-muted)]">
               The trail draws itself as you travel.
             </p>

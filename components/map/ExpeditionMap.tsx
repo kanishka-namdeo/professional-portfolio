@@ -33,12 +33,71 @@ function trailD(): string {
     .join(' ');
 }
 
+/** Trail sync anchor: a page scroll position paired with the trail progress it must produce. */
+export interface TrailAnchor {
+  /** Page scrollY (px) at which the trail reaches fraction f. */
+  y: number;
+  /** Path-length fraction (0–1) of the trail at that scroll position. */
+  f: number;
+}
+
+/**
+ * Cumulative path-length fraction of each era's waypoint, from the mount-time
+ * sample cache. The trail visits waypoints in order, so each nearest-sample
+ * search starts where the previous one ended (monotonic); the jittered Q
+ * control points sit off the curve and cannot steal a match because waypoints
+ * are ~20 units apart against at most 1.6 units of jitter.
+ */
+export function waypointFractions(samples: Pt[]): number[] {
+  const fallback = eras.map((_, i) => (eras.length === 1 ? 0 : i / (eras.length - 1)));
+  if (samples.length < 2) return fallback;
+  const fractions: number[] = [];
+  let from = 0;
+  for (const era of eras) {
+    let best = from;
+    let bestDist = Infinity;
+    for (let i = from; i < samples.length; i++) {
+      const dx = samples[i].x - era.coords.x;
+      const dy = samples[i].y - era.coords.y;
+      const dist = dx * dx + dy * dy;
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = i;
+      }
+    }
+    fractions.push(best / (samples.length - 1));
+    from = best;
+  }
+  return fractions;
+}
+
+/**
+ * Piecewise-linear scroll → trail-progress map over the chapter anchors.
+ * Below the first anchor the traveller waits at the trailhead; above the last
+ * it rests at the destination — the story, not the section's viewport transit,
+ * defines 0 and 1. Between anchors it interpolates proportionally to scroll,
+ * so the traveller crosses each segment while the reader scrolls between the
+ * two chapters that bracket it.
+ */
+export function trailProgressAt(scrollY: number, anchors: TrailAnchor[]): number {
+  if (anchors.length === 0) return 0;
+  if (scrollY <= anchors[0].y) return anchors[0].f;
+  for (let i = 1; i < anchors.length; i++) {
+    const a = anchors[i - 1];
+    const b = anchors[i];
+    if (scrollY <= b.y) {
+      const t = b.y === a.y ? 1 : (scrollY - a.y) / (b.y - a.y);
+      return a.f + (b.f - a.f) * t;
+    }
+  }
+  return anchors[anchors.length - 1].f;
+}
+
 export function ExpeditionMap({
   activeId,
   className = 'aspect-[3/2]',
   priority = false,
   showLabels = true,
-  scrollTargetRef,
   mapLabel,
 }: {
   activeId: string | null;
@@ -53,26 +112,24 @@ export function ExpeditionMap({
    * destination is announced twice with no way to tell them apart.
    */
   mapLabel?: string;
-  /**
-   * Optional ref to the scroll container that should drive the trail-draw progress.
-   * The Journey section passes its own ref so the trail draws as the reader scrolls
-   * through the chapters. When omitted (Hero instance), the map's own container is
-   * used — fine there because the hero trail is a one-shot load animation, not
-   * scroll-driven.
-   */
-  scrollTargetRef?: React.RefObject<HTMLElement | null>;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
   const reduceMotion = useReducedMotion();
   const isHero = priority;
   // Hero: the trail draws itself once on load. Journey: it draws as you travel.
-  // The scroll target is the journey section (passed in) for the sticky map, or
-  // the map container itself for the hero (where scroll progress only drives the
-  // contour parallax, not the trail).
-  const scrollTarget = scrollTargetRef ?? ref;
-  const { scrollYProgress } = useScroll({ target: scrollTarget, offset: ['start end', 'end start'] });
-  const pathProgress = useSpring(scrollYProgress, { stiffness: 60, damping: 20 });
+  // This viewport-transit scroll pass drives ONLY the hero's contour parallax
+  // (one establishing scene) — it must never drive the journey trail: its
+  // ['start end','end start'] window includes the section's enter/exit phases,
+  // which desyncs the draw from the active chapter (the bug this replaces).
+  const { scrollYProgress: viewProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const contourY = useTransform(viewProgress, [0, 1], ['-1.6%', '1.6%']);
+  // Journey trail: page scroll mapped through the chapter anchors (below).
+  const { scrollY } = useScroll();
+  const rawProgress = useMotionValue(0);
+  // Near-critical damping (ζ ≈ 1): smooths scroll jitter without trailing the
+  // story. The previous 60/20 spring lagged the active chapter by ~0.5s.
+  const pathProgress = useSpring(rawProgress, { stiffness: 130, damping: 23 });
   // Manually compute stroke-dasharray/offset for the draw animation.
   // We use the actual path length (computed after mount) instead of pathLength="1"
   // to avoid coordinate system conflicts.
@@ -113,6 +170,11 @@ export function ExpeditionMap({
   // units (0-100) are literally % of the box — % maps to px via these.
   const sizeRef = useRef<{ w: number; h: number } | null>(null);
   const lastProgressRef = useRef(0);
+  // Story-sync state: anchor list (scrollY ↔ trail fraction per chapter) and
+  // whether the reader has reached the first chapter — the traveller is shown
+  // at the trailhead from that moment on, even at fraction 0.
+  const anchorsRef = useRef<TrailAnchor[]>([]);
+  const storyStartedRef = useRef(false);
 
   // Positions the traveller from the sample cache. Pure DOM writes — safe to
   // call on every frame and again on resize. Stable identity: it only touches
@@ -132,7 +194,10 @@ export function ExpeditionMap({
     const y = samples[i].y + (samples[j].y - samples[i].y) * t;
     // The old translate(-50%, -50%) centring folds into the same transform.
     marker.style.transform = `translate(calc(${(x / 100) * size.w}px - 50%), calc(${(y / 100) * size.h}px - 50%))`;
-    marker.style.opacity = clamped < 0.005 ? '0' : '1';
+    // Visible once the draw has started — or, for the journey map, from the
+    // moment the story starts (the traveller stands on the origin waypoint
+    // while chapter 1 is active, at fraction 0).
+    marker.style.opacity = clamped < 0.005 && !storyStartedRef.current ? '0' : '1';
     lastProgressRef.current = clamped;
   }, []);
 
@@ -164,6 +229,55 @@ export function ExpeditionMap({
     observer.observe(container);
     return () => observer.disconnect();
   }, [applyMarker]);
+
+  // ── Story sync (journey instance) ─────────────────────────────────────────
+  // The trail is a function of the story, not of the section's viewport
+  // transit. Each waypoint's path fraction (waypointFractions over the sample
+  // cache) is anchored to the page scrollY at which its chapter centres — the
+  // same moment useActiveEra's centre band highlights the pin — and the
+  // traveller interpolates between anchors as the reader scrolls between
+  // chapters. Anchors recompute on window resize and whenever a chapter changes
+  // height (the press-ledger fold), via a ResizeObserver per chapter.
+  useEffect(() => {
+    if (isHero || reduceMotion) return;
+    const chapters = Array.from(document.querySelectorAll<HTMLElement>('[data-era]'));
+    if (chapters.length === 0) return;
+    const fallback = chapters.map((_, i) => (chapters.length === 1 ? 0 : i / (chapters.length - 1)));
+    const recompute = () => {
+      const fractions = samplesRef.current ? waypointFractions(samplesRef.current) : fallback;
+      anchorsRef.current = chapters.map((chapter, i) => {
+        const rect = chapter.getBoundingClientRect();
+        return {
+          y: rect.top + window.scrollY + rect.height / 2 - window.innerHeight / 2,
+          f: fractions[i] ?? fallback[i] ?? 0,
+        };
+      });
+      const y = scrollY.get();
+      storyStartedRef.current = y >= anchorsRef.current[0].y;
+      rawProgress.set(trailProgressAt(y, anchorsRef.current));
+    };
+    recompute();
+    const unsubscribe = scrollY.on('change', (y) => {
+      const anchors = anchorsRef.current;
+      storyStartedRef.current = anchors.length > 0 && y >= anchors[0].y;
+      rawProgress.set(trailProgressAt(y, anchors));
+    });
+    window.addEventListener('resize', recompute);
+    const observers: ResizeObserver[] = [];
+    if (typeof ResizeObserver !== 'undefined') {
+      // jsdom guard — matches the marker cache observer above.
+      for (const chapter of chapters) {
+        const observer = new ResizeObserver(recompute);
+        observer.observe(chapter);
+        observers.push(observer);
+      }
+    }
+    return () => {
+      unsubscribe?.();
+      window.removeEventListener('resize', recompute);
+      for (const observer of observers) observer.disconnect();
+    };
+  }, [isHero, reduceMotion, scrollY, rawProgress]);
 
   const heroDraw = useMotionValue(0);
   const driver = isHero ? heroDraw : pathProgress;
@@ -205,9 +319,6 @@ export function ExpeditionMap({
     if (!marker || !samplesRef.current) return; // jsdom/geometry guard
     applyMarker(1);
   }, [reduceMotion, applyMarker]);
-
-  // One establishing scene of parallax (the hero map), per the motion guidelines.
-  const contourY = useTransform(scrollYProgress, [0, 1], ['-1.6%', '1.6%']);
 
   const travel = (era: Era) => {
     const target = `#era-${era.id}`;

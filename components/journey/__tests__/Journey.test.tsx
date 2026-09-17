@@ -3,7 +3,10 @@ import { render, screen } from '@testing-library/react';
 import { Journey } from '../Journey';
 
 jest.mock('motion/react', () => ({
-  useScroll: () => ({ scrollYProgress: { on: jest.fn(), get: () => 0 } }),
+  useScroll: () => ({
+    scrollYProgress: { on: jest.fn(), get: () => 0 },
+    scrollY: { on: jest.fn(), get: () => 0 },
+  }),
   useSpring: (v: unknown) => v,
   useReducedMotion: () => false,
   useInView: () => true,
