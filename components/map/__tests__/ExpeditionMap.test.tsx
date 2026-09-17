@@ -1,11 +1,16 @@
 // components/map/__tests__/ExpeditionMap.test.tsx
 import { render, screen } from '@testing-library/react';
-import { ExpeditionMap, buildTrailAnchors, trailProgressAt, waypointFractions } from '../ExpeditionMap';
+import { ExpeditionMap, buildTrailAnchors, trailDasharray, trailDashoffset, trailProgressAt, waypointFractions } from '../ExpeditionMap';
 import type { TrailAnchor } from '../ExpeditionMap';
 
 // useMotionValueEvent captures the per-frame change callback so a test can fire
 // real frames at the handler (the plain jest.fn() stub never fires it).
 const mockChangeHandlers: Array<(v: number) => void> = [];
+// useMotionValue(.on) captures raw motion-value subscriptions the same way —
+// for the journey instance that is the epsilon-gated stroke writer itself.
+// The returned unsubscribe really removes the handler so effect re-runs
+// (e.g. when totalLength arrives) leave exactly the live writer captured.
+const mockMotionValueHandlers: Array<(v: number) => void> = [];
 jest.mock('motion/react', () => ({
   useScroll: () => ({
     scrollYProgress: { on: jest.fn(), get: () => 0 },
@@ -13,7 +18,17 @@ jest.mock('motion/react', () => ({
   }),
   useSpring: (v: unknown) => v,
   useReducedMotion: () => false,
-  useMotionValue: (v: unknown) => ({ get: () => v, set: jest.fn(), on: jest.fn() }),
+  useMotionValue: (v: unknown) => ({
+    get: () => v,
+    set: jest.fn(),
+    on: (_evt: string, cb: (v: number) => void) => {
+      mockMotionValueHandlers.push(cb);
+      return () => {
+        const i = mockMotionValueHandlers.indexOf(cb);
+        if (i !== -1) mockMotionValueHandlers.splice(i, 1);
+      };
+    },
+  }),
   useMotionValueEvent: (_mv: unknown, _evt: string, cb: (v: number) => void) => {
     mockChangeHandlers.push(cb);
   },
@@ -165,6 +180,124 @@ describe('waypointFractions', () => {
 
   it('degrades to even fractions without samples (jsdom / no geometry)', () => {
     expect(waypointFractions([])).toEqual([0, 0.25, 0.5, 0.75, 1]);
+  });
+});
+
+// The drawn line must track the traveller: the stroke uses the classic
+// draw-on pair — a constant full-length dash revealed by its offset — so at
+// progress f the painted arc is exactly [0, f·L]. (The bug this pins: a
+// shrinking dash paired with the same offset paints [2f, 3f) below f=0.5,
+// nothing at f=0.5 and [0, 2f−1) above it, desyncing line from marker.)
+describe('trail draw stroke', () => {
+  // jsdom's getTotalLength stub measures the path at exactly 100.
+  const L = 100;
+
+  const strokeWriter = () => mockMotionValueHandlers[mockMotionValueHandlers.length - 1];
+  const readDash = () => {
+    const path = document.querySelector('path') as SVGPathElement;
+    const [d1, d2] = (path.style.strokeDasharray || '').split(/[ ,]+/).map(Number);
+    return { d1, d2, offset: Number(path.style.strokeDashoffset) };
+  };
+
+  it('paints [0, f·L] at every fraction — the drawn tip rides the traveller', () => {
+    mockMotionValueHandlers.length = 0;
+    render(<ExpeditionMap activeId={null} />);
+    const write = strokeWriter();
+    expect(typeof write).toBe('function');
+    for (const f of [0, 0.001, 0.035, 0.12, 0.2412, 0.4623, 0.5, 0.527, 0.6985, 0.9, 0.999, 1]) {
+      write(f);
+      const { d1, d2, offset } = readDash();
+      // The dash pattern is constant and full-length — never a zero-length
+      // dash (a round linecap would paint it as a dot at the trailhead).
+      expect(d1).toBeCloseTo(L, 5);
+      expect(d2).toBeCloseTo(L, 5);
+      // SVG dash model: pattern position at arc-length s is (s + offset) mod
+      // (d1 + d2); s is painted iff that is < d1. Sample mid-cell so the
+      // assertion never sits on the reveal tip itself.
+      const patternLength = d1 + d2;
+      for (let k = 0; k < 200; k++) {
+        const s = ((k + 0.5) * L) / 200;
+        if (Math.abs(s - f * L) < L / 400) continue; // skip the tip boundary
+        const painted = (s + offset) % patternLength < d1;
+        expect(painted).toBe(s < f * L);
+      }
+    }
+  });
+
+  it('writes the canonical pair: dasharray `${L} ${L}`, offset (1−f)·L', () => {
+    mockMotionValueHandlers.length = 0;
+    render(<ExpeditionMap activeId={null} />);
+    const write = strokeWriter();
+    const path = document.querySelector('path') as SVGPathElement;
+    write(0.25);
+    expect(path.style.strokeDasharray).toBe(`${L} ${L}`);
+    expect(parseFloat(path.style.strokeDashoffset)).toBeCloseTo(75, 5);
+    write(1);
+    expect(path.style.strokeDasharray).toBe(`${L} ${L}`);
+    expect(parseFloat(path.style.strokeDashoffset)).toBeCloseTo(0, 5);
+    write(0);
+    expect(path.style.strokeDasharray).toBe(`${L} ${L}`);
+    expect(parseFloat(path.style.strokeDashoffset)).toBeCloseTo(L, 5);
+  });
+
+  it('hides the trail completely at f=0 without a trailhead dot', () => {
+    mockMotionValueHandlers.length = 0;
+    render(<ExpeditionMap activeId={null} />);
+    strokeWriter()(0);
+    const { d1, d2, offset } = readDash();
+    // Non-zero dash (no round-cap dot) + full offset (nothing on the path).
+    expect(d1).toBeGreaterThan(0);
+    const patternLength = d1 + d2;
+    for (let k = 0; k < 100; k++) {
+      const s = ((k + 0.5) * L) / 100;
+      expect((s + offset) % patternLength < d1).toBe(false);
+    }
+  });
+
+  it('skips sub-epsilon stroke writes but always writes at the ends', () => {
+    mockMotionValueHandlers.length = 0;
+    render(<ExpeditionMap activeId={null} />);
+    const write = strokeWriter();
+    write(0.5);
+    const mid = readDash().offset;
+    expect(mid).toBeCloseTo(50, 5);
+    // 0.0005 progress ≈ 0.05px of draw head — skipped.
+    write(0.5005);
+    expect(readDash().offset).toBe(mid);
+    // 0.002 progress ≈ 0.2px — repainted.
+    write(0.502);
+    expect(readDash().offset).not.toBe(mid);
+    // The ends always write, even from an epsilon away.
+    write(1);
+    expect(readDash().offset).toBeCloseTo(0, 5);
+    write(0.9995); // sub-epsilon from 1, but not an end — skipped
+    expect(readDash().offset).toBeCloseTo(0, 5);
+    write(0);
+    expect(readDash().offset).toBeCloseTo(L, 5);
+  });
+
+  it('hero instance never writes dash styles before its load draw fires', () => {
+    mockMotionValueHandlers.length = 0;
+    render(<ExpeditionMap priority activeId={null} />);
+    const path = document.querySelector('path') as SVGPathElement;
+    // Subscription-only until the draw animates: the '0 0' pre-measure
+    // sentinel (which would render SOLID) must never reach the DOM.
+    expect(path.style.strokeDasharray).toBe('');
+    expect(path.style.strokeDashoffset).toBe('');
+  });
+});
+
+describe('trailDasharray / trailDashoffset', () => {
+  it('trailDasharray is the constant full-length pair', () => {
+    expect(trailDasharray(118.237)).toBe('118.237 118.237');
+    expect(trailDasharray(0)).toBe('0 0');
+  });
+  it('trailDashoffset reveals [0, f] and clamps the story range', () => {
+    expect(trailDashoffset(0, 100)).toBeCloseTo(100, 5);
+    expect(trailDashoffset(0.25, 100)).toBeCloseTo(75, 5);
+    expect(trailDashoffset(1, 100)).toBeCloseTo(0, 5);
+    expect(trailDashoffset(1.5, 100)).toBeCloseTo(0, 5);
+    expect(trailDashoffset(-0.5, 100)).toBeCloseTo(100, 5);
   });
 });
 

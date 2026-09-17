@@ -107,6 +107,30 @@ export const LEAD_IN_VIEWPORTS = 0.75;
 export const STROKE_EPSILON = 0.001;
 
 /**
+ * The draw-on stroke pair (Jake Archibald's classic): a CONSTANT full-length
+ * dash, with the reveal carried entirely by the offset. At progress f the
+ * pattern starts (1−f)·L into itself, so the dash paints exactly the arc
+ * [0, f·L) — trailhead to traveller — and at f=0 nothing paints at all.
+ *
+ * The two values are a matched pair. Pairing a SHRINKING dash (`f·L L`) with
+ * this offset double-counts the progress: the dash then paints [2f, 3f)
+ * below f=0.5, NOTHING at f=0.5, and [0, 2f−1) above it — the trailing line
+ * slides ahead of the traveller, vanishes mid-story and re-draws from the
+ * trailhead at half rate (the desync this replaces). At f=0 the shrinking
+ * variant would also leave a zero-length dash, which a round linecap paints
+ * as a dot at the trailhead.
+ */
+export function trailDasharray(totalLength: number): string {
+  return `${totalLength} ${totalLength}`;
+}
+
+/** Offset half of the draw-on pair: (1−f)·L, clamped to the story range. */
+export function trailDashoffset(fraction: number, totalLength: number): number {
+  const clamped = Math.max(0, Math.min(1, fraction));
+  return (1 - clamped) * totalLength;
+}
+
+/**
  * Chapter anchors plus the set-off lead-in: one anchor at fraction 0, 0.75
  * viewports before chapter 01 centres, so the traveller fades in and walks to
  * the origin pin as the journey scrolls into view — instead of popping on at
@@ -167,12 +191,15 @@ export function ExpeditionMap({
   // ── Journey stroke writes, epsilon-gated ── the spring (170/26) keeps
   // emitting sub-pixel deltas long after the draw looks settled, and each one
   // repainted the whole trail path. Writes are skipped until progress moves
-  // STROKE_EPSILON (0.1% of the path ≈ 2px) or reaches either end — the
-  // trailhead and destination always write, so anchor hits stay exact — and
-  // the paint idles once the draw settles instead of running every frame for
-  // the rest of the session. The traveller marker is driven separately
-  // (transform-only, compositor-friendly) and stays per-frame. Applied
-  // directly to the DOM for reliable SVG rendering.
+  // STROKE_EPSILON (0.1% of the path ≈ 2px of draw head) or reaches either
+  // end — the trailhead and destination always write, so anchor hits stay
+  // exact — and the paint idles once the draw settles instead of running
+  // every frame for the rest of the session. The stroke is the draw-on pair
+  // from trailDasharray/trailDashoffset: a constant full-length dash plus a
+  // (1−f)·L offset paints [0, f·L], so the drawn tip rides the traveller at
+  // every fraction. The traveller marker is driven separately (transform-only,
+  // compositor-friendly) and stays per-frame. Applied directly to the DOM for
+  // reliable SVG rendering.
   useEffect(() => {
     if (isHero || reduceMotion) return;
     let last = -1;
@@ -182,8 +209,8 @@ export function ExpeditionMap({
       const clamped = Math.max(0, Math.min(1, v));
       if (clamped > 0 && clamped < 1 && Math.abs(clamped - last) < STROKE_EPSILON) return;
       last = clamped;
-      path.style.strokeDasharray = `${clamped * totalLength} ${totalLength}`;
-      path.style.strokeDashoffset = String((1 - clamped) * totalLength);
+      path.style.strokeDasharray = trailDasharray(totalLength);
+      path.style.strokeDashoffset = String(trailDashoffset(clamped, totalLength));
     };
     write(pathProgress.get());
     const unsubscribe = pathProgress.on('change', write);
@@ -321,9 +348,12 @@ export function ExpeditionMap({
 
   const heroDraw = useMotionValue(0);
   const driver = isHero ? heroDraw : pathProgress;
-  // For hero: animate stroke-dasharray/offset directly
-  const heroStrokeDasharrayMotion = useTransform(heroDraw, (v) => totalLength > 0 ? `${v * totalLength} ${totalLength}` : '0 0');
-  const heroStrokeDashoffsetMotion = useTransform(heroDraw, (v) => totalLength > 0 ? (1 - v) * totalLength : 0);
+  // For hero: animate the draw-on pair directly. The dasharray is the constant
+  // full-length pattern (the '0 0' sentinel only exists pre-measurement and is
+  // never written to the DOM — all-zero dash lists render SOLID); the load
+  // draw animates only the offset, exactly like the journey writer.
+  const heroStrokeDasharrayMotion = useTransform(heroDraw, () => (totalLength > 0 ? trailDasharray(totalLength) : '0 0'));
+  const heroStrokeDashoffsetMotion = useTransform(heroDraw, (v) => (totalLength > 0 ? trailDashoffset(v, totalLength) : 0));
   // Apply directly to DOM for reliable SVG rendering
   useEffect(() => {
     if (!pathRef.current || !isHero || reduceMotion) return;
