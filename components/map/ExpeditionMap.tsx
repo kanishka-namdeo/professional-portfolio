@@ -72,12 +72,13 @@ export function waypointFractions(samples: Pt[]): number[] {
 }
 
 /**
- * Piecewise-linear scroll → trail-progress map over the chapter anchors.
- * Below the first anchor the traveller waits at the trailhead; above the last
- * it rests at the destination — the story, not the section's viewport transit,
- * defines 0 and 1. Between anchors it interpolates proportionally to scroll,
- * so the traveller crosses each segment while the reader scrolls between the
- * two chapters that bracket it.
+ * Piecewise, smoothstep-eased scroll → trail-progress map over the chapter
+ * anchors. Below the first anchor the traveller waits at the trailhead; above
+ * the last it rests at the destination — the story, not the section's viewport
+ * transit, defines 0 and 1. Within a segment the ease makes the traveller
+ * DWELL at the waypoint while its chapter is centred (zero velocity at every
+ * anchor) and glide across between chapters — station-to-station, not a
+ * conveyor belt. Anchor hits stay exact: smoothstep(0)=0, smoothstep(1)=1.
  */
 export function trailProgressAt(scrollY: number, anchors: TrailAnchor[]): number {
   if (anchors.length === 0) return 0;
@@ -86,11 +87,32 @@ export function trailProgressAt(scrollY: number, anchors: TrailAnchor[]): number
     const a = anchors[i - 1];
     const b = anchors[i];
     if (scrollY <= b.y) {
-      const t = b.y === a.y ? 1 : (scrollY - a.y) / (b.y - a.y);
+      const linear = b.y === a.y ? 1 : (scrollY - a.y) / (b.y - a.y);
+      const t = linear * linear * (3 - 2 * linear);
       return a.f + (b.f - a.f) * t;
     }
   }
   return anchors[anchors.length - 1].f;
+}
+
+/** Viewport heights of approach before chapter 01 centres where the traveller sets off. */
+export const LEAD_IN_VIEWPORTS = 0.75;
+
+/**
+ * Chapter anchors plus the set-off lead-in: one anchor at fraction 0, 0.75
+ * viewports before chapter 01 centres, so the traveller fades in and walks to
+ * the origin pin as the journey scrolls into view — instead of popping on at
+ * the chapter centre. Pure so tests can pin the construction.
+ */
+export function buildTrailAnchors(
+  chapterCenters: number[],
+  fractions: number[],
+  leadInViewports: number,
+  viewportHeight: number
+): TrailAnchor[] {
+  const chapters = chapterCenters.map((y, i) => ({ y, f: fractions[i] ?? 0 }));
+  if (chapters.length === 0) return chapters;
+  return [{ y: chapters[0].y - leadInViewports * viewportHeight, f: 0 }, ...chapters];
 }
 
 export function ExpeditionMap({
@@ -127,9 +149,9 @@ export function ExpeditionMap({
   // Journey trail: page scroll mapped through the chapter anchors (below).
   const { scrollY } = useScroll();
   const rawProgress = useMotionValue(0);
-  // Near-critical damping (ζ ≈ 1): smooths scroll jitter without trailing the
-  // story. The previous 60/20 spring lagged the active chapter by ~0.5s.
-  const pathProgress = useSpring(rawProgress, { stiffness: 130, damping: 23 });
+  // Near-critical damping (ζ ≈ 1.0, ~0.3s settle): tight enough to track the
+  // story through the mid-segment glide, smooth enough to take scroll jitter.
+  const pathProgress = useSpring(rawProgress, { stiffness: 170, damping: 26 });
   // Manually compute stroke-dasharray/offset for the draw animation.
   // We use the actual path length (computed after mount) instead of pathLength="1"
   // to avoid coordinate system conflicts.
@@ -174,7 +196,10 @@ export function ExpeditionMap({
   // whether the reader has reached the first chapter — the traveller is shown
   // at the trailhead from that moment on, even at fraction 0.
   const anchorsRef = useRef<TrailAnchor[]>([]);
-  const storyStartedRef = useRef(false);
+  // Whether the traveller has set off (crossed the lead-in anchor). Drives the
+  // fade-in: from that moment it stands visible at the trailhead, even at
+  // fraction 0.
+  const departedRef = useRef(false);
 
   // Positions the traveller from the sample cache. Pure DOM writes — safe to
   // call on every frame and again on resize. Stable identity: it only touches
@@ -194,10 +219,10 @@ export function ExpeditionMap({
     const y = samples[i].y + (samples[j].y - samples[i].y) * t;
     // The old translate(-50%, -50%) centring folds into the same transform.
     marker.style.transform = `translate(calc(${(x / 100) * size.w}px - 50%), calc(${(y / 100) * size.h}px - 50%))`;
-    // Visible once the draw has started — or, for the journey map, from the
-    // moment the story starts (the traveller stands on the origin waypoint
-    // while chapter 1 is active, at fraction 0).
-    marker.style.opacity = clamped < 0.005 && !storyStartedRef.current ? '0' : '1';
+    // Visible once the draw has started — or, once set off, from the trailhead
+    // (the traveller stands on the origin waypoint while chapter 01 is active,
+    // at fraction ~0). The class-level transition fades the flip in/out.
+    marker.style.opacity = clamped < 0.005 && !departedRef.current ? '0' : '1';
     lastProgressRef.current = clamped;
   }, []);
 
@@ -230,14 +255,15 @@ export function ExpeditionMap({
     return () => observer.disconnect();
   }, [applyMarker]);
 
-  // ── Story sync (journey instance) ─────────────────────────────────────────
+  // ── Story sync (journey instance) ─────────────────────────────────
   // The trail is a function of the story, not of the section's viewport
   // transit. Each waypoint's path fraction (waypointFractions over the sample
   // cache) is anchored to the page scrollY at which its chapter centres — the
-  // same moment useActiveEra's centre band highlights the pin — and the
-  // traveller interpolates between anchors as the reader scrolls between
-  // chapters. Anchors recompute on window resize and whenever a chapter changes
-  // height (the press-ledger fold), via a ResizeObserver per chapter.
+  // same moment useActiveEra's centre band highlights the pin — with a
+  // lead-in anchor 0.75 viewports earlier so the traveller sets off as the
+  // journey scrolls into view. Anchors recompute on window resize and whenever
+  // a chapter changes height (the press-ledger fold), via a ResizeObserver
+  // per chapter.
   useEffect(() => {
     if (isHero || reduceMotion) return;
     const chapters = Array.from(document.querySelectorAll<HTMLElement>('[data-era]'));
@@ -245,21 +271,23 @@ export function ExpeditionMap({
     const fallback = chapters.map((_, i) => (chapters.length === 1 ? 0 : i / (chapters.length - 1)));
     const recompute = () => {
       const fractions = samplesRef.current ? waypointFractions(samplesRef.current) : fallback;
-      anchorsRef.current = chapters.map((chapter, i) => {
-        const rect = chapter.getBoundingClientRect();
-        return {
-          y: rect.top + window.scrollY + rect.height / 2 - window.innerHeight / 2,
-          f: fractions[i] ?? fallback[i] ?? 0,
-        };
-      });
+      anchorsRef.current = buildTrailAnchors(
+        chapters.map((chapter) => {
+          const rect = chapter.getBoundingClientRect();
+          return rect.top + window.scrollY + rect.height / 2 - window.innerHeight / 2;
+        }),
+        fractions,
+        LEAD_IN_VIEWPORTS,
+        window.innerHeight
+      );
       const y = scrollY.get();
-      storyStartedRef.current = y >= anchorsRef.current[0].y;
+      departedRef.current = y >= anchorsRef.current[0].y;
       rawProgress.set(trailProgressAt(y, anchorsRef.current));
     };
     recompute();
     const unsubscribe = scrollY.on('change', (y) => {
       const anchors = anchorsRef.current;
-      storyStartedRef.current = anchors.length > 0 && y >= anchors[0].y;
+      departedRef.current = anchors.length > 0 && y >= anchors[0].y;
       rawProgress.set(trailProgressAt(y, anchors));
     });
     window.addEventListener('resize', recompute);
@@ -374,11 +402,13 @@ export function ExpeditionMap({
       </span>
       {/* the traveller: rides the trail with the draw / with scroll. Anchored
           at left:0/top:0 and moved via transform from the px cache; the
-          (-50%,-50%) centring is folded into the per-frame transform. */}
+          (-50%,-50%) centring is folded into the per-frame transform. The
+          opacity transition fades it in at set-off (and out when scrolled back
+          above the lead-in) — suppressed under reduced motion. */}
       <span
         ref={markerRef}
         aria-hidden
-        className="pointer-events-none absolute z-10 h-3.5 w-3.5 rounded-full border-2 border-[var(--color-rust)] bg-[var(--color-parchment)] shadow-[0_0_0_3px_rgba(243,237,226,0.85)]"
+        className={`pointer-events-none absolute z-10 h-3.5 w-3.5 rounded-full border-2 border-[var(--color-rust)] bg-[var(--color-parchment)] shadow-[0_0_0_3px_rgba(243,237,226,0.85)]${!reduceMotion ? ' transition-opacity duration-300' : ''}`}
         style={{ left: 0, top: 0, opacity: 0, transform: 'translate(-50%, -50%)' }}
       >
         <span className="absolute inset-[2px] rounded-full bg-[var(--color-rust)]" />

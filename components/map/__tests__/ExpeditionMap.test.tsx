@@ -1,6 +1,6 @@
 // components/map/__tests__/ExpeditionMap.test.tsx
 import { render, screen } from '@testing-library/react';
-import { ExpeditionMap, trailProgressAt, waypointFractions } from '../ExpeditionMap';
+import { ExpeditionMap, buildTrailAnchors, trailProgressAt, waypointFractions } from '../ExpeditionMap';
 import type { TrailAnchor } from '../ExpeditionMap';
 
 // useMotionValueEvent captures the per-frame change callback so a test can fire
@@ -62,8 +62,9 @@ describe('ExpeditionMap', () => {
   });
 });
 
-// The sync contract: the trail is a piecewise-linear function of page scroll
-// anchored to the chapters, NOT of the journey section's viewport transit.
+// The sync contract: the trail is a smoothstep-eased piecewise function of
+// page scroll anchored to the chapters (with a set-off lead-in), NOT of the
+// journey section's viewport transit.
 describe('trail sync mapping', () => {
   // Realistic shape: uneven chapter heights (press ledgers make chapters 1 and
   // 4 tall) and uneven waypoint spacing along the path.
@@ -88,11 +89,25 @@ describe('trail sync mapping', () => {
     expect(trailProgressAt(5000, anchors)).toBe(1);
   });
 
-  it('interpolates between chapters proportionally to scroll', () => {
-    // Halfway between chapters 1 and 2 in scroll → halfway in trail fraction.
+  it('eases across segments — dwells at waypoints, glides between (smoothstep)', () => {
+    // Segment 1→2 spans 1000→2000 with f 0→0.27. Quarter-scroll sits near the
+    // waypoint (dwell), three-quarter near the next: smoothstep(0.25)=0.15625,
+    // smoothstep(0.75)=0.84375. The midpoint is an invariant: 0.5 maps to 0.5.
+    expect(trailProgressAt(1250, anchors)).toBeCloseTo(0.27 * 0.15625, 5);
     expect(trailProgressAt(1500, anchors)).toBeCloseTo(0.135);
-    // Chapters 3→4 span 2600→4200; at 3400 the trail is halfway across segment 3→4.
-    expect(trailProgressAt(3400, anchors)).toBeCloseTo(0.55 + (0.81 - 0.55) * 0.5);
+    expect(trailProgressAt(1750, anchors)).toBeCloseTo(0.27 * 0.84375, 5);
+    // Chapters 3→4 span 2600→4200: midpoint still halfway in fraction.
+    expect(trailProgressAt(3400, anchors)).toBeCloseTo(0.68);
+  });
+
+  it('stays monotonic across a dense sweep — no backtracking mid-story', () => {
+    let prev = -1;
+    for (let y = 800; y <= 5200; y += 50) {
+      const v = trailProgressAt(y, anchors);
+      expect(v).toBeGreaterThanOrEqual(prev);
+      prev = v;
+    }
+    expect(prev).toBe(1);
   });
 
   it('rests at the destination once the last chapter has centred', () => {
@@ -150,5 +165,31 @@ describe('waypointFractions', () => {
 
   it('degrades to even fractions without samples (jsdom / no geometry)', () => {
     expect(waypointFractions([])).toEqual([0, 0.25, 0.5, 0.75, 1]);
+  });
+});
+
+describe('buildTrailAnchors', () => {
+  it('prepends the set-off lead-in: fraction 0, 0.75 viewports before chapter 01', () => {
+    const anchors = buildTrailAnchors([1000, 2000, 3000], [0.1, 0.5, 1], 0.75, 800);
+    expect(anchors).toEqual([
+      { y: 1000 - 600, f: 0 },
+      { y: 1000, f: 0.1 },
+      { y: 2000, f: 0.5 },
+      { y: 3000, f: 1 },
+    ]);
+  });
+
+  it('returns empty for no chapters (standalone map — no story to sync to)', () => {
+    expect(buildTrailAnchors([], [], 0.75, 800)).toEqual([]);
+  });
+
+  it('never places the lead-in after the first chapter (short-page clamp)', () => {
+    // A lead-in longer than the approach distance just moves the set-off
+    // earlier — the anchor stays ordered because only the first y shifts down.
+    const anchors = buildTrailAnchors([100], [0.2], 2, 800);
+    expect(anchors[0]).toEqual({ y: 100 - 1600, f: 0 });
+    expect(anchors[1]).toEqual({ y: 100, f: 0.2 });
+    // Fraction stays clamped at the trailhead until the set-off point.
+    expect(trailProgressAt(-2000, anchors)).toBe(0);
   });
 });
