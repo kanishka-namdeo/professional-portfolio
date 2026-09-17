@@ -140,8 +140,8 @@ export default function Home() {
       {/* Base Camps — the built-in-public receipts. tabIndex={-1} lets the
           skip/anchor jump land focus here (see [tabindex='-1'] in globals.css). */}
       <section id="camps" aria-label="Base camps" tabIndex={-1}>
-        {camps.map((camp) => (
-          <BaseCamp key={camp.id} camp={camp} />
+        {camps.map((camp, i) => (
+          <BaseCamp key={camp.id} camp={camp} index={i} total={camps.length} />
         ))}
       </section>
 

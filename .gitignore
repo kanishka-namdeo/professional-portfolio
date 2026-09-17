@@ -86,3 +86,4 @@ master_data.json
 
 # field-recording capture rig (scripts/capture-recordings.mjs)
 .recordings-tmp/
+.stills-tmp/

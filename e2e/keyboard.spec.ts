@@ -90,6 +90,11 @@ test.describe('keyboard navigation', () => {
     await gotoReady(page);
     const camp = page.locator('#camp-agent-canvas');
     await camp.scrollIntoViewIfNeeded();
+    // Stage the field recording deterministically via the contact sheet —
+    // scroll position alone may land the stage on an earlier artifact.
+    // (^Field anchors to the filmstrip thumb; "Enlarge … field recording"
+    // would also match a loose regex.)
+    await camp.getByRole('button', { name: /^Field recording/i }).click();
     const video = camp.locator('video');
     // Desktop autoplay: the control must read "Pause" within a couple of seconds.
     await expect
